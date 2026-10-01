@@ -1,0 +1,7 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,total_s_75_queries_sequential,s_per_1000_queries_extrapolated,min_per_1000_queries_extrapolated,mean_calls_per_query
+kev4b_noul,75,14.58,9.30,46.21,2.45,81.34,1093.4,14579,243.0,18.4
+kev4b_score,75,15.59,10.09,46.93,3.64,83.72,1169.3,15590,259.8,18.4
+kev9b_noul,75,11.18,7.66,33.59,1.56,57.36,838.7,11183,186.4,18.4
+kev9b_score,75,11.96,8.09,37.33,2.48,50.03,896.9,11959,199.3,18.4
+kev27b_noul,75,25.62,17.07,81.28,4.25,142.45,1921.2,25616,426.9,18.4
+kev27b_score,75,27.27,18.31,84.60,6.70,143.59,2045.2,27269,454.5,18.4

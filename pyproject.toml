@@ -1,0 +1,41 @@
+[project]
+name = "jev-tracker"
+version = "0.1.0"
+description = "Leaderboard of Jev alternatives on Rox's frozen 75-case reranking benchmark."
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "matplotlib>=3.11.0",
+    "modal>=1.5.1",
+    "petname>=2.9",
+    "pydantic>=2.13.4",
+    "pyyaml>=6.0.3",
+    "tqdm>=4.67",
+]
+
+[dependency-groups]
+dev = ["pytest>=9.1.1", "ruff>=0.15.14"]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "N"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N802"]  # conformance tests are named test_R<n>_... after docs/SPEC.md
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+markers = [
+    "modal: tests that deploy to Modal and spend GPU time (skipped unless -m modal is passed)",
+]
+addopts = "-m 'not modal'"

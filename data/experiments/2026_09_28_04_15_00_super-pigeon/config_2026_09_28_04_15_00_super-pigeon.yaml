@@ -1,0 +1,39 @@
+# CLM-8B vs Kev-4B vs Jev vs production on the 75 cases, kept-mass@k for k = 50..200 step 10.
+# Every model answers the same SystemOneRequests (systemone.py); a method fixes how a case's children
+# are asked about. Jev's answers are the committed ones from its earlier run; Kev and CLM are scored
+# now on Modal, each method dealt over `shards` GPUs.
+name: clm_kev4b_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: projects/reranker_alts/data/jev/noul_query_in_state.json
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: projects/reranker_alts/data/jev/score_query_in_question.json
+  kev4b_noul:
+    source: kev
+    model: jaredpalmer/kev-4b
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev4b_score:
+    source: kev
+    model: jaredpalmer/kev-4b
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  # CLM: the state head embeds query + question, the action head embeds each child, and the case
+  # is ranked by cosine between them (P(child) = softmax of exp(scale) * cosine over the case).
+  # `choice_over_children` is the only method that asks this; the per-child methods would dot the
+  # state against yes/no or level sentences instead, so ClmSource rejects them.
+  clm8b_cosine:
+    source: clm
+    shards: 10

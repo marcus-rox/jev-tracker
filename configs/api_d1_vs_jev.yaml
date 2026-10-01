@@ -1,0 +1,39 @@
+# A hosted System One endpoint through the generic `api` source: Liquid AI's d1 on all 75 cases
+# next to Jev's committed answers. The key is read inside the Modal container from the Modal
+# Secret `liquid-api` (variable LIQUID_API_KEY); nothing here holds it. d1 takes 128 questions per
+# request and 32,768 tokens per question; 110,000 characters of children stays under it.
+# rox-research reference: 2026_09_30_01_11_06_key-kiwi (every d1 arm failed there).
+name: api_d1_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  d1_noul:
+    source: api
+    url: https://api.liquid.ai/decisions/v1/systemone
+    model: d1:free
+    secret: liquid-api
+    key_env: LIQUID_API_KEY
+    method: noul_query_in_state
+    max_items: 128
+    max_chars: 110000
+    concurrency: 8
+  d1_score:
+    source: api
+    url: https://api.liquid.ai/decisions/v1/systemone
+    model: d1:free
+    secret: liquid-api
+    key_env: LIQUID_API_KEY
+    method: score_query_in_question
+    max_items: 128
+    max_chars: 110000
+    concurrency: 8

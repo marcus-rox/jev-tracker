@@ -1,0 +1,71 @@
+# The three official Laya checkpoints on all 75 cases (4 L4s per arm), next to Jev's committed
+# answers. _noul / _score = Jev's exact wording; _noul_reworded = the query moved into the noul
+# question (noul_query_in_question).
+name: laya_sizes
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  laya421m_noul:
+    source: laya
+    model: convaiinnovations/laya
+    method: noul_query_in_state
+    shards: 4
+    forward_batch: 64
+  laya421m_score:
+    source: laya
+    model: convaiinnovations/laya
+    method: score_query_in_question
+    shards: 4
+    forward_batch: 64
+  laya421m_noul_reworded:
+    source: laya
+    model: convaiinnovations/laya
+    method: noul_query_in_question
+    shards: 4
+    forward_batch: 64
+  laya322m_multilingual_noul:
+    source: laya
+    model: convaiinnovations/laya-multilingual
+    method: noul_query_in_state
+    shards: 4
+    forward_batch: 64
+  laya322m_multilingual_score:
+    source: laya
+    model: convaiinnovations/laya-multilingual
+    method: score_query_in_question
+    shards: 4
+    forward_batch: 64
+  laya322m_multilingual_noul_reworded:
+    source: laya
+    model: convaiinnovations/laya-multilingual
+    method: noul_query_in_question
+    shards: 4
+    forward_batch: 64
+  laya421m_typed_noul:
+    source: laya
+    model: convaiinnovations/laya-typed-decisions
+    method: noul_query_in_state
+    shards: 4
+    forward_batch: 64
+  laya421m_typed_score:
+    source: laya
+    model: convaiinnovations/laya-typed-decisions
+    method: score_query_in_question
+    shards: 4
+    forward_batch: 64
+  laya421m_typed_noul_reworded:
+    source: laya
+    model: convaiinnovations/laya-typed-decisions
+    method: noul_query_in_question
+    shards: 4
+    forward_batch: 64

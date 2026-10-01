@@ -1,0 +1,35 @@
+# Batched serving on Kev-27B: 16 requests in flight per container so Kev's server runs them as
+# fused batches, 3 long-lived H200 containers. Requests are 12 children (~3k tokens): Kev's
+# graphed passes only admit states <= 4,096 tokens, a 25-child request runs eagerly one at a time.
+# rox-research reference: 2026_09_28_22_15_35_pretty-sawfly (~$30, ~1 h).
+#   uv run python -m jev_tracker.experiment run configs/kev27b_batched.yaml --wait
+name: kev27b_batched
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+  kev27b_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16

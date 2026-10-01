@@ -1,0 +1,59 @@
+# Kev size ablation: Kev-4B / 9B / 27B (noul + score) vs Jev vs production on the 75 cases,
+# kept-mass@k for k = 50..200 step 10. Same requests for every model (systemone.py, methods.py);
+# GPU per model in modal_app.GPU_FOR (4B L40S, 9B H100, 27B H200).
+name: kev_sizes
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: projects/reranker_alts/data/jev/noul_query_in_state.json
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: projects/reranker_alts/data/jev/score_query_in_question.json
+  kev4b_noul:
+    source: kev
+    model: jaredpalmer/kev-4b
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev4b_score:
+    source: kev
+    model: jaredpalmer/kev-4b
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev9b_noul:
+    source: kev
+    model: jaredpalmer/kev-9b
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev9b_score:
+    source: kev
+    model: jaredpalmer/kev-9b
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev27b_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10

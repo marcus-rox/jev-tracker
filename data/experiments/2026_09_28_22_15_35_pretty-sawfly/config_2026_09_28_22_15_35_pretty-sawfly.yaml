@@ -1,0 +1,38 @@
+# Serving discipline A1 + A2 (notes/kev_cost_report.html, Appendix A) on Kev-27B: 16 requests in
+# flight per container so Kev's server runs them as fused batches (A1), 3 long-lived containers
+# instead of 10 (A2); A3 (host-RAM reservation) unchanged. Requests are 12 children (~3k tokens)
+# instead of 25: Kev's graphed passes only admit states <= 4,096 tokens (kev.cuda_graphs
+# BANK_WIDTH), a 25-child request runs eagerly one at a time whatever the concurrency
+# (kev27b_batch_ablation_smoke.yaml: 12 children halve the GPU-s, same kept-mass). Compare with
+# 2026_09_28_17_56_26_actual-clam (25 children, 1 request at a time, 10 containers).
+#   uv run python -m projects.reranker_alts.experiment run projects/reranker_alts/configs/kev27b_batched.yaml --wait
+name: kev27b_batched
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: projects/reranker_alts/data/jev/noul_query_in_state.json
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: projects/reranker_alts/data/jev/score_query_in_question.json
+  kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+  kev27b_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16

@@ -1,0 +1,133 @@
+# Rerun of kev27b_bank_width.yaml on all 75 cases (was 6), otherwise identical: same arms, GPU, batching.
+# H-1 bank width: Kev-27B's server with its CUDA-graph state bank at 4,096 x 16 (Kev's own, run twice:
+# the second run is the re-run noise R-2 compares against), 8,192 x 16 and 8,192 x 8 (same memory as
+# 4,096 x 16), at 12 / 18 / 24 children per request, all 75 cases, one H100 80GB each ("H100!").
+# A request whose state is over the bank width runs alone and eagerly; 18 and 24 children are
+# ~4.5k-6k tokens. Verdict: hypotheses.py h1 <id>.
+#   uv run python -m projects.reranker_alts.experiment run projects/reranker_alts/configs/kev27b_bank_width.yaml --wait
+name: kev27b_bank_width_full
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  kev27b_noul_c12_w4096x16:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 4096, slots: 16}
+  kev27b_noul_c12_w4096x16_rerun:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 4096, slots: 16}
+  kev27b_noul_c12_w8192x16:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 8192, slots: 16}
+  kev27b_noul_c12_w8192x8:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 8192, slots: 8}
+  kev27b_noul_c18_w4096x16:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 18
+    max_chars: 18000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 4096, slots: 16}
+  kev27b_noul_c18_w4096x16_rerun:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 18
+    max_chars: 18000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 4096, slots: 16}
+  kev27b_noul_c18_w8192x16:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 18
+    max_chars: 18000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 8192, slots: 16}
+  kev27b_noul_c18_w8192x8:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 18
+    max_chars: 18000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 8192, slots: 8}
+  kev27b_noul_c24_w4096x16:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 24
+    max_chars: 24000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 4096, slots: 16}
+  kev27b_noul_c24_w4096x16_rerun:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 24
+    max_chars: 24000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 4096, slots: 16}
+  kev27b_noul_c24_w8192x16:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 24
+    max_chars: 24000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 8192, slots: 16}
+  kev27b_noul_c24_w8192x8:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 24
+    max_chars: 24000
+    shards: 1
+    concurrency: 16
+    gpu: H100!
+    bank: {width: 8192, slots: 8}

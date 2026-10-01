@@ -1,0 +1,56 @@
+# Kev-27B with the backbone's fused projection GEMMs in FP8 (projects/reranker_alts/kev_fp8.py),
+# kev27b_FP8_w8a8_* (e4m3 weights + dynamic per-token e4m3 activations, torch._scaled_mm) against
+# bf16 re-measured in the same run. Serving is identical to kev27b_batched.yaml (12 children, 16 in
+# flight, 3 containers) so precision is the only difference. The weight-only recipe (kev27b_FP8_wo_*)
+# is not run at full scale on H200: in the 6-case smoke (caring-jay) it matched bf16 quality but took
+# 2x the GPU-seconds (it dequantises every pass), so it only pays where memory is the constraint
+# (kev27b_fp8_h100.yaml).
+#   uv run python -m projects.reranker_alts.experiment run projects/reranker_alts/configs/kev27b_fp8.yaml --wait
+name: kev27b_fp8
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: projects/reranker_alts/data/jev/noul_query_in_state.json
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: projects/reranker_alts/data/jev/score_query_in_question.json
+  kev27b_bf16_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+  kev27b_bf16_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+  kev27b_FP8_w8a8_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+    fp8: w8a8
+  kev27b_FP8_w8a8_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+    fp8: w8a8

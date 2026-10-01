@@ -1,0 +1,4 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,total_s_75_queries_sequential,s_per_1000_queries_extrapolated,min_per_1000_queries_extrapolated,mean_calls_per_query,total_retries,total_failed_calls
+production,75,6.21,4.07,23.07,2.28,50.31,465.4,6206.0,103.4,22.8,0,0
+jev_noul,75,0.21,0.2,0.32,0.1,0.47,15.5,207.0,3.4,6.1,0,0
+jev_score,75,0.27,0.25,0.42,0.16,0.58,20.0,267.0,4.4,6.1,0,0

@@ -1,0 +1,937 @@
+# Row labels for the site's tables: one entry per (experiment, reranker) shown in the
+# kev_cost_report tables (quality / cost / latency / appendix). Edited by hand; numbers
+# are never stored here, they are read from data/experiments/<id>/*.json.
+experiments:
+  2026_09_29_08_47_55_good-midge: 'kev27b_timed: Kev-27B batched, 3 x H100, R-1 timers (baseline)'
+  2026_09_28_17_56_26_actual-clam: 'kev_sizes: Kev 4B / 9B / 27B, first (sequential) run'
+  2026_09_28_04_15_00_super-pigeon: 'clm_kev4b_jev: CLM-8B cosine'
+  2026_09_28_22_15_35_pretty-sawfly: 'kev27b_batched: batched serving on H200'
+  2026_09_28_23_23_53_dear-pony: 'kev27b_fp8: FP8 W8A8 on H200'
+  2026_09_28_23_33_26_busy-sawfly: 'kev27b_fp8_h100: bf16 vs FP8 on H100'
+  2026_09_29_00_07_02_cuddly-horse: 'kev27b_fp8_bigbatch_h100: 32 / 64 requests in flight'
+  2026_09_29_00_31_07_real-koi: 'kev27b_cheap_gpu: batched on H100 / A100 / RTX PRO 6000 / L40S'
+  2026_09_29_22_00_38_super-orca: 'kev27b_bank_width_full: H-1 wider CUDA-graph buffer, 75 cases'
+  2026_09_29_21_56_46_pumped-egret: 'kev27b_vllm_full: H-2 vLLM, 75 cases (readout arm killed)'
+  2026_09_29_21_57_06_exact-jay: 'kev27b_sglang_full: H-3 SGLang, 75 cases (readout arm killed)'
+  2026_09_29_09_45_47_causal-urchin: 'kev27b_vllm: H-2 vLLM, first 6 cases'
+  2026_09_29_10_43_20_united-snake: 'kev27b_sglang: H-3 SGLang, first 6 cases'
+  2026_09_29_21_58_31_top-ram: 'laya_sizes: the 3 Laya checkpoints, 75 cases, L4, batched'
+  2026_09_30_01_11_06_key-kiwi: 'liquid_d1_vs_jev: LiquidAI d1 via its API, 75 cases (failed)'
+  2026_09_30_01_06_44_true-coyote: 'liquid_d1_smoke: LiquidAI d1, first 2 cases'
+  2026_09_26_00_26_02_picked-bee: 'kev4b_vs_jev: Kev-4B vs Jev, first full run'
+rows:
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: oracle
+  label: oracle
+  family: oracle
+  serving: '-'
+  gpu: '-'
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  highlight: false
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: random
+  label: random (seed 0)
+  family: random
+  serving: '-'
+  gpu: '-'
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  highlight: false
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: prod
+  label: production
+  family: production
+  serving: gpt-5-mini, 3 listwise passes + RRF
+  gpu: API
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: true
+  api_usd_per_run: 4.73
+  api_usd_per_1k: 63.0
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: jev_noul
+  label: jev_noul
+  family: jev
+  serving: API
+  gpu: API
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: true
+  api_usd_per_run: 0.35
+  api_usd_per_1k: 4.7
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: jev_score
+  label: jev_score
+  family: jev
+  serving: API
+  gpu: API
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: true
+  api_usd_per_run: 0.46
+  api_usd_per_1k: 6.1
+- experiment: 2026_09_28_04_15_00_super-pigeon
+  reranker: clm8b_cosine
+  label: clm8b_cosine
+  family: clm8b
+  serving: earlier experiment
+  gpu: L40S
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  highlight: false
+- experiment: 2026_09_28_17_56_26_actual-clam
+  reranker: kev4b_noul
+  label: kev4b_noul
+  family: kev4b
+  serving: first run
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_17_56_26_actual-clam
+  reranker: kev4b_score
+  label: kev4b_score
+  family: kev4b
+  serving: first run
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_17_56_26_actual-clam
+  reranker: kev9b_noul
+  label: kev9b_noul
+  family: kev9b
+  serving: first run
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_17_56_26_actual-clam
+  reranker: kev9b_score
+  label: kev9b_score
+  family: kev9b
+  serving: first run
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_17_56_26_actual-clam
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: 'first run: 25 children, 1 in flight'
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_17_56_26_actual-clam
+  reranker: kev27b_score
+  label: kev27b_score
+  family: kev27b
+  serving: 'first run: 25 children, 1 in flight'
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_22_15_35_pretty-sawfly
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_22_15_35_pretty-sawfly
+  reranker: kev27b_score
+  label: kev27b_score
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_23_53_dear-pony
+  reranker: kev27b_FP8_w8a8_noul
+  label: kev27b_FP8_w8a8_noul
+  family: kev27b
+  serving: batched, FP8 W8A8
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_23_53_dear-pony
+  reranker: kev27b_FP8_w8a8_score
+  label: kev27b_FP8_w8a8_score
+  family: kev27b
+  serving: batched, FP8 W8A8
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_33_26_busy-sawfly
+  reranker: kev27b_bf16_noul
+  label: kev27b_bf16_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_33_26_busy-sawfly
+  reranker: kev27b_bf16_score
+  label: kev27b_bf16_score
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_33_26_busy-sawfly
+  reranker: kev27b_FP8_wo_noul
+  label: kev27b_FP8_wo_noul
+  family: kev27b
+  serving: batched, FP8 weight-only
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_33_26_busy-sawfly
+  reranker: kev27b_FP8_wo_score
+  label: kev27b_FP8_wo_score
+  family: kev27b
+  serving: batched, FP8 weight-only
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_33_26_busy-sawfly
+  reranker: kev27b_FP8_w8a8_noul
+  label: kev27b_FP8_w8a8_noul
+  family: kev27b
+  serving: batched, FP8 W8A8
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_28_23_33_26_busy-sawfly
+  reranker: kev27b_FP8_w8a8_score
+  label: kev27b_FP8_w8a8_score
+  family: kev27b
+  serving: batched, FP8 W8A8
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_07_02_cuddly-horse
+  reranker: kev27b_batched_c32_noul
+  label: kev27b_batched_c32_noul
+  family: kev27b
+  serving: 'batched: 12 children, 32 in flight'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_07_02_cuddly-horse
+  reranker: kev27b_FP8_w8a8_c32_noul
+  label: kev27b_FP8_w8a8_c32_noul
+  family: kev27b
+  serving: batched, FP8 W8A8, 32 in flight
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_07_02_cuddly-horse
+  reranker: kev27b_FP8_w8a8_c32_score
+  label: kev27b_FP8_w8a8_c32_score
+  family: kev27b
+  serving: batched, FP8 W8A8, 32 in flight
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_07_02_cuddly-horse
+  reranker: kev27b_FP8_w8a8_c64_noul
+  label: kev27b_FP8_w8a8_c64_noul
+  family: kev27b
+  serving: batched, FP8 W8A8, 64 in flight
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_07_02_cuddly-horse
+  reranker: kev27b_FP8_w8a8_c64_score
+  label: kev27b_FP8_w8a8_c64_score
+  family: kev27b
+  serving: batched, FP8 W8A8, 64 in flight
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_31_07_real-koi
+  reranker: kev27b_batched_H100_noul
+  label: kev27b_batched_H100_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_31_07_real-koi
+  reranker: kev27b_batched_A100_noul
+  label: kev27b_batched_A100_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: A100-80GB
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_31_07_real-koi
+  reranker: kev27b_batched_RTXPRO6000_noul
+  label: kev27b_batched_RTXPRO6000_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: RTX-PRO-6000
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_31_07_real-koi
+  reranker: kev27b_FP8_w8a8_RTXPRO6000_noul
+  label: kev27b_FP8_w8a8_RTXPRO6000_noul
+  family: kev27b
+  serving: batched, FP8 W8A8
+  gpu: RTX-PRO-6000
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_00_31_07_real-koi
+  reranker: kev27b_FP8_w8a8_L40S_noul
+  label: kev27b_FP8_w8a8_L40S_noul
+  family: kev27b
+  serving: 'batched, FP8 W8A8: could not load'
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+  blank: failed
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: batched, R-1 timers (baseline)
+  gpu: 3 x H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: true
+- experiment: 2026_09_29_08_47_55_good-midge
+  reranker: kev27b_score
+  label: kev27b_score
+  family: kev27b
+  serving: batched, R-1 timers (baseline)
+  gpu: 3 x H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: true
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c12_w4096x16
+  label: kev27b_noul_c12_w4096x16
+  family: kev27b
+  serving: 'H-1, 12 children: Kev''s server'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c12_w4096x16_rerun
+  label: kev27b_noul_c12_w4096x16_rerun
+  family: kev27b
+  serving: 'H-1, 12 children: Kev re-run'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c12_w8192x16
+  label: kev27b_noul_c12_w8192x16
+  family: kev27b
+  serving: 'H-1, 12 children: widened'
+  gpu: H100
+  buffer: 8,192 x 16
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c12_w8192x8
+  label: kev27b_noul_c12_w8192x8
+  family: kev27b
+  serving: 'H-1, 12 children: widened, same memory'
+  gpu: H100
+  buffer: 8,192 x 8
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c18_w4096x16
+  label: kev27b_noul_c18_w4096x16
+  family: kev27b
+  serving: 'H-1, 18 children: Kev''s server'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c18_w4096x16_rerun
+  label: kev27b_noul_c18_w4096x16_rerun
+  family: kev27b
+  serving: 'H-1, 18 children: Kev re-run'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c18_w8192x16
+  label: kev27b_noul_c18_w8192x16
+  family: kev27b
+  serving: 'H-1, 18 children: widened'
+  gpu: H100
+  buffer: 8,192 x 16
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c18_w8192x8
+  label: kev27b_noul_c18_w8192x8
+  family: kev27b
+  serving: 'H-1, 18 children: widened, same memory'
+  gpu: H100
+  buffer: 8,192 x 8
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c24_w4096x16
+  label: kev27b_noul_c24_w4096x16
+  family: kev27b
+  serving: 'H-1, 24 children: Kev''s server'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c24_w4096x16_rerun
+  label: kev27b_noul_c24_w4096x16_rerun
+  family: kev27b
+  serving: 'H-1, 24 children: Kev re-run'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c24_w8192x16
+  label: kev27b_noul_c24_w8192x16
+  family: kev27b
+  serving: 'H-1, 24 children: widened'
+  gpu: H100
+  buffer: 8,192 x 16
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_22_00_38_super-orca
+  reranker: kev27b_noul_c24_w8192x8
+  label: kev27b_noul_c24_w8192x8
+  family: kev27b
+  serving: 'H-1, 24 children: widened, same memory'
+  gpu: H100
+  buffer: 8,192 x 8
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_56_46_pumped-egret
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: 'H-2 vLLM: Kev''s server'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_56_46_pumped-egret
+  reranker: kev27b_rerun_noul
+  label: kev27b_rerun_noul
+  family: kev27b
+  serving: 'H-2 vLLM: Kev re-run'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_09_45_47_causal-urchin
+  reranker: kev27b_vllm_noul
+  label: kev27b_vllm_noul
+  family: kev27b
+  serving: 'H-2 vLLM: vLLM + Kev''s readout, 6 queries only (too slow for 75: killed)'
+  gpu: H100
+  buffer: '-'
+  queries: 6
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_57_06_exact-jay
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: 'H-3 SGLang: Kev''s server'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_57_06_exact-jay
+  reranker: kev27b_rerun_noul
+  label: kev27b_rerun_noul
+  family: kev27b
+  serving: 'H-3 SGLang: Kev re-run'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_10_43_20_united-snake
+  reranker: kev27b_sglang_noul
+  label: kev27b_sglang_noul
+  family: kev27b
+  serving: 'H-3 SGLang: SGLang + Kev''s readout, 6 queries only (too slow for 75: killed)'
+  gpu: H100
+  buffer: '-'
+  queries: 6
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya421m_noul
+  label: laya421m_noul
+  family: laya421m
+  serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya421m_score
+  label: laya421m_score
+  family: laya421m
+  serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya421m_noul_reworded
+  label: laya421m_noul_reworded
+  family: laya421m
+  serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya322m_multilingual_noul
+  label: laya322m_multilingual_noul
+  family: laya322m_multilingual
+  serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya322m_multilingual_score
+  label: laya322m_multilingual_score
+  family: laya322m_multilingual
+  serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya322m_multilingual_noul_reworded
+  label: laya322m_multilingual_noul_reworded
+  family: laya322m_multilingual
+  serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya421m_typed_noul
+  label: laya421m_typed_noul
+  family: laya421m_typed
+  serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya421m_typed_score
+  label: laya421m_typed_score
+  family: laya421m_typed
+  serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_58_31_top-ram
+  reranker: laya421m_typed_noul_reworded
+  label: laya421m_typed_noul_reworded
+  family: laya421m_typed
+  serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_30_01_11_06_key-kiwi
+  reranker: d1_noul
+  label: d1_noul
+  family: d1
+  serving: d1:free API, up to 105 children per request, 8 in flight
+  gpu: API
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+  blank: failed
+- experiment: 2026_09_30_01_11_06_key-kiwi
+  reranker: d1_score
+  label: d1_score
+  family: d1
+  serving: d1:free API, up to 105 children per request, 8 in flight
+  gpu: API
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+  blank: failed
+- experiment: 2026_09_30_01_11_06_key-kiwi
+  reranker: d1_noul_rerun
+  label: d1_noul_rerun
+  family: d1
+  serving: d1:free API, up to 105 children per request, 8 in flight
+  gpu: API
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+  blank: failed
+- experiment: 2026_09_29_21_56_46_pumped-egret
+  reranker: kev27b_vllm_floor_noul
+  label: kev27b_vllm_floor_noul
+  family: kev27b
+  serving: 'H-2 vLLM: vLLM, no readout (speed floor)'
+  gpu: H100
+  buffer: '-'
+  queries: 75
+  tables:
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_29_21_57_06_exact-jay
+  reranker: kev27b_sglang_floor_noul
+  label: kev27b_sglang_floor_noul
+  family: kev27b
+  serving: 'H-3 SGLang: SGLang, no readout (speed floor)'
+  gpu: H100
+  buffer: '-'
+  queries: 75
+  tables:
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_09_30_01_06_44_true-coyote
+  reranker: prod
+  label: production
+  family: production
+  serving: the frozen ranking
+  gpu: API
+  buffer: '-'
+  queries: 2
+  tables:
+  - appendix
+  highlight: false
+- experiment: 2026_09_30_01_06_44_true-coyote
+  reranker: jev_noul
+  label: jev_noul
+  family: jev
+  serving: its answers from the 75-query run
+  gpu: API
+  buffer: '-'
+  queries: 2
+  tables:
+  - appendix
+  highlight: false
+- experiment: 2026_09_30_01_06_44_true-coyote
+  reranker: jev_score
+  label: jev_score
+  family: jev
+  serving: its answers from the 75-query run
+  gpu: API
+  buffer: '-'
+  queries: 2
+  tables:
+  - appendix
+  highlight: false
+- experiment: 2026_09_30_01_06_44_true-coyote
+  reranker: d1_noul
+  label: d1_noul
+  family: d1
+  serving: d1:free API, 1 request at a time
+  gpu: API
+  buffer: '-'
+  queries: 2
+  tables:
+  - appendix
+  highlight: false
+- experiment: 2026_09_30_01_06_44_true-coyote
+  reranker: d1_score
+  label: d1_score
+  family: d1
+  serving: d1:free API, 1 request at a time
+  gpu: API
+  buffer: '-'
+  queries: 2
+  tables:
+  - appendix
+  highlight: false
