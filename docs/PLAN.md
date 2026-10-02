@@ -34,9 +34,9 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
 
 ## Next steps
 
-1. **Crawler + automation (Phase 3)**: prior-work survey (`docs/PRIOR_WORK.md`, done), then `crawler/`; then the daily Devin
-   automation that opens a PR. Falsifier: the first automation PR has no new candidate or fails
-   to regenerate the site.
+1. **Crawler + automation (Phase 3)**: ✅ prior-work survey (`docs/PRIOR_WORK.md`), ✅ `crawler/` (PR #4,
+   `tests/test_crawler.py`); next the daily Devin automation that opens a PR. Falsifier: the first
+   automation PR has no new candidate or fails to regenerate the site.
 
 ## Decided
 

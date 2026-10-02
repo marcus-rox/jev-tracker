@@ -1,0 +1,20 @@
+{
+ "total_count": 4450,
+ "incomplete_results": false,
+ "items": [
+  {
+   "full_name": "flaviomartil/herdr-jev",
+   "html_url": "https://github.com/flaviomartil/herdr-jev",
+   "description": "Jev-driven multi-model triage and Triad orchestration plugin for Herdr and AI-Harness",
+   "pushed_at": "2026-10-02T00:39:04Z",
+   "updated_at": "2026-10-02T00:39:07Z"
+  },
+  {
+   "full_name": "bonsai/janken",
+   "html_url": "https://github.com/bonsai/janken",
+   "description": "\u3058\u3083\u3093\u3051\u3093\u306e\u624b\u3092\u5224\u5b9a\u3067\u9078\u3076\uff08Jev \u306e Choice/Score/Noul\u30fb\u4e71\u6570\u306a\u3057\uff09",
+   "pushed_at": "2026-10-02T00:39:02Z",
+   "updated_at": "2026-10-02T00:39:06Z"
+  }
+ ]
+}

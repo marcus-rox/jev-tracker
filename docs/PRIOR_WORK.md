@@ -77,3 +77,15 @@ weights on 2026-09-30 while `jaredpalmer/kev-27b` stayed the same id — see `do
 Phase 1 (`docs/PLAN.md`) already established the two cases the crawler has to catch: a new Hub id
 (Kev-4B, Laya, Liquid d1) and a weights change under an existing id (Kev-27B v2). The `hf:<id>@<sha>`
 key covers both. Rox-research's `reranker_alts` had no crawler; candidates there came from Slack.
+
+## 5. Decisions taken in `crawler/`
+
+- One module per source with one `search(query, since) -> list[Candidate]` seam; a source can be
+  swapped (e.g. DuckDuckGo → Brave) without touching the run loop.
+- Queries live in `crawler/queries.yaml`, one list per source, because the Hub only matches ids
+  (phrases are useless there) while GitHub/arXiv/web take free text.
+- Dedupe on `url` with an append-only `crawler/seen.jsonl`; `first_seen` is the crawler's clock,
+  and the next run's default window starts at the last run's max `first_seen`.
+- Web results carry no dates, so the seen set alone defines "new" for that source.
+- A blocked source (DuckDuckGo 403/202 bot wall) returns `[]` and is logged; any other failure
+  is reported per (source, query) and the run exits 1 at the end.
