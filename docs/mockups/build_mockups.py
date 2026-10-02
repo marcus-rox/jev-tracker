@@ -177,8 +177,12 @@ function series(rows) {
   for (const r of rows) if (r.kept_mass && r.mean_kept_mass != null) {
     const f = fam(r); if (!best[f] || r.mean_kept_mass > best[f].mean_kept_mass) best[f] = r;
   }
-  return Object.values(best).sort((a, b) => b.mean_kept_mass - a.mean_kept_mass);
+  const all = Object.values(best).sort((a, b) => b.mean_kept_mass - a.mean_kept_mass);
+  const refs = all.filter(r => REFS.has(fam(r)));
+  const top = all.filter(r => !REFS.has(fam(r))).slice(0, TOP_N - refs.length);
+  return all.filter(r => refs.includes(r) || top.includes(r));
 }
+const TOP_N = 10, REFS = new Set(['jev', 'production', 'random']);
 
 function lineChart(rows, height) {
   const S = series(rows); const W = 900, H = height, L = 48, R = 36, T = 12, B = 30;
@@ -246,13 +250,13 @@ function render() {
   if (state.tab === 'summary') {
     g += statusWidget();
     g += numWidget(D.cards[0], 'high') + numWidget(D.cards[1], 'low') + numWidget(D.cards[2], 'low');
-    g += widget(8, 'Quality · kept-mass@k', lineChart(rows, 300), 'best run per model family · click a legend entry to hide it');
+    g += widget(8, 'Quality · kept-mass@k', lineChart(rows, 300), 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table · click a legend entry to hide it');
     g += widget(4, 'TLDR', `<div class="tldr">${D.tldr.split('\n').filter(l => l.trim()).map(l => `<p>${esc(l)}</p>`).join('')}</div>`, 'written by the daily run');
     g += widget(6, 'Cost · $ per 1k queries', hbars(rows, r => r.cost?.usd_per_1k, 2, true), 'cheapest run per family');
     g += widget(6, 'Latency · seconds per query', hbars(rows, r => r.latency?.s_per_query, 2, true), 'fastest run per family');
     g += widget(12, 'All runs', `<p class="hint">Click a column header to sort; again to reverse.</p>` + table(rows, COLS.summary), `${rows.length} rows · 75 frozen queries`);
   } else if (state.tab === 'quality') {
-    g += widget(12, 'Quality · kept-mass@k', lineChart(rows, 360), 'best run per model family');
+    g += widget(12, 'Quality · kept-mass@k', lineChart(rows, 360), 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table below');
     g += widget(12, 'Quality · all runs', table(rows.filter(r => r.tables.includes('quality')), COLS.quality));
   } else if (state.tab === 'cost') {
     g += widget(12, 'Cost · $ per 1k queries', hbars(rows, r => r.cost?.usd_per_1k, 2, true));
