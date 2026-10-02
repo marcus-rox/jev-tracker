@@ -15,6 +15,15 @@ a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: un
 .chip { border:1px solid var(--border); background:var(--panel); border-radius:14px; padding:2px 10px; font-size:12px; cursor:pointer; user-select:none; color:var(--text); }
 .chip.on { background:var(--chip); border-color:var(--chipborder); color:var(--accent); font-weight:600; }
 .chip.reset { border-style:dashed; color:var(--muted); }
+.dd { position:relative; }
+.dd > button { border:1px solid var(--border); background:var(--panel); color:var(--text); border-radius:6px; padding:5px 10px; font-size:13px; cursor:pointer; min-width:150px; text-align:left; display:flex; justify-content:space-between; gap:10px; }
+.dd > button .cnt { color:var(--accent); font-weight:600; }
+.dd .menu { display:none; position:absolute; z-index:5; top:34px; left:0; background:var(--panel); border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.18); padding:6px 0; min-width:260px; max-height:360px; overflow:auto; }
+.dd.open .menu { display:block; }
+.dd .menu label { display:flex; align-items:center; gap:8px; padding:5px 12px; font-size:13px; cursor:pointer; white-space:nowrap; }
+.dd .menu label:hover { background:var(--bg); }
+.dd .menu .all { color:var(--muted); font-size:12px; padding:4px 12px 6px; border-bottom:1px solid var(--grid); margin-bottom:4px; display:flex; gap:12px; }
+.dd .menu .all a { cursor:pointer; }
 .tabs { display:flex; gap:2px; padding:10px 20px 0; border-bottom:1px solid var(--border); margin:0 0 14px; }
 .tabs button { background:none; border:0; border-bottom:3px solid transparent; color:var(--muted); padding:8px 12px; font-size:14px; cursor:pointer; }
 .tabs button.on { color:var(--text); border-bottom-color:var(--accent); font-weight:600; }
@@ -63,7 +72,7 @@ td.dim { color: var(--muted); }
 <body>
 <header class="topbar"><span class="brand">jev-tracker</span><span class="crumb">Dashboards › Jev alternatives · 75 frozen queries</span>
   <div class="right"><span>Last updated 2026-10-01 20:29 PDT</span><span class="pill">↻ 1 min</span><span class="pill">light</span><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
-<div class="toolbar"><span class="label">model</span><span id="fams" style="display:contents"></span><span class="label" style="margin-left:14px">GPU</span><span id="gpus" style="display:contents"></span><span class="chip reset" id="reset">reset</span></div>
+<div class="toolbar"><div class="dd" id="fams"></div><div class="dd" id="gpus"></div><span class="chip reset" id="reset">reset</span><span class="label" id="shown"></span></div>
 <nav class="tabs"><button data-t="summary">Summary</button><button data-t="quality">Quality</button><button data-t="cost">Cost</button><button data-t="latency">Latency</button><button data-t="evaluate">Evaluate a new model</button></nav>
 <main class="grid" id="grid"></main>
 <p class="foot">Mockup rendered from site/public/data/rows.json (85 rows, 24 experiments). Widgets marked MOCK use placeholder data.</p>
@@ -83,10 +92,16 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 const pass = r => (state.fams.size === 0 || state.fams.has(fam(r))) && (state.gpus.size === 0 || state.gpus.has(r.gpu));
 const visible = () => ROWS.filter(pass);
 
-function chips(el, opts, set) {
-  el.innerHTML = opts.map(o => `<span class="chip ${set.has(o) ? 'on' : ''}" data-v="${esc(o)}">${esc(o)}</span>`).join('');
-  el.querySelectorAll('.chip').forEach(c => c.onclick = () => { const v = c.dataset.v; set.has(v) ? set.delete(v) : set.add(v); render(); });
+function dropdown(el, name, opts, set) {
+  const open = el.classList.contains('open');
+  el.innerHTML = `<button type="button">${name}${set.size ? ` <span class="cnt">${set.size} of ${opts.length}</span>` : ` <span style="color:var(--muted)">all</span>`}<span>▾</span></button><div class="menu"><div class="all"><a data-a="all">select all</a><a data-a="none">clear</a></div>${opts.map(o => `<label><input type="checkbox" ${set.has(o) ? 'checked' : ''} data-v="${esc(o)}">${esc(o)}</label>`).join('')}</div>`;
+  el.classList.toggle('open', open);
+  el.querySelector('button').onclick = e => { e.stopPropagation(); document.querySelectorAll('.dd').forEach(d => d !== el && d.classList.remove('open')); el.classList.toggle('open'); };
+  el.querySelector('.menu').onclick = e => e.stopPropagation();
+  el.querySelectorAll('input').forEach(c => c.onchange = () => { const v = c.dataset.v; set.has(v) ? set.delete(v) : set.add(v); render(); });
+  el.querySelectorAll('.all a').forEach(a => a.onclick = () => { set.clear(); if (a.dataset.a === 'all') opts.forEach(o => set.add(o)); render(); });
 }
+document.addEventListener('click', () => document.querySelectorAll('.dd.open').forEach(d => d.classList.remove('open')));
 
 // One line per model family: its best run by mean kept-mass among the visible rows.
 function series(rows) {
@@ -156,7 +171,8 @@ function statusWidget() {
 }
 
 function render() {
-  chips($('#fams'), FAMS, state.fams); chips($('#gpus'), GPUS, state.gpus);
+  dropdown($('#fams'), 'Model', FAMS, state.fams); dropdown($('#gpus'), 'GPU', GPUS, state.gpus);
+  $('#shown').textContent = `${visible().length} of ${ROWS.length} runs`;
   document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === state.tab));
   const rows = visible(); let g = '';
   if (state.tab === 'summary') {
