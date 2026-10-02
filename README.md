@@ -191,6 +191,7 @@ docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> -
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
 time, headline cards and a TLDR the daily run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
 free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next daily run triages it.
+The Suggestions tab lists every submission (newest first, sortable by date, first five words with an expand toggle).
 
 ## Crawler
 
