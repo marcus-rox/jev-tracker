@@ -18,6 +18,11 @@ un-batched (`concurrency: 1` with `forward_batch: 1`) gets stopped, its adapter 
 path it is missing, and it re-runs batched — the commit message records the kill and the re-run.
 A proposal whose adapter cannot be made batched in the session stays `queued`/`proposed` with
 the gap in its note; it never runs un-batched. Launch every runnable experiment in parallel.
+**Kill rule** (Marcus 2026-10-02): a run only exists to beat production — the `prod` baseline is
+$4.73 per 75-query run ($63/1k queries) and 6.21 s/query. Kill an experiment when its projected
+cost AND projected s/query both exceed those numbers (strictly worse buys nothing); cancel its
+Modal calls, mark it `failed` ("killed: over production cost+latency line"), and record the kill
+in the commit message. A run that is cheaper OR faster stays — report it.
 
 ## Steps
 
