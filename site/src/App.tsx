@@ -1,7 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import './App.css'
+import { HBars, LineChart } from './Chart'
+import Dropdown from './Dropdown'
 import Evaluate from './Evaluate'
-import { blob, type K, type Row, type SiteData } from './types'
+import { QueueBody, QueueSub } from './Queue'
+import { REFRESH_SECONDS, useQueue } from './queue'
+import Table, { type Col, type Sort } from './Table'
+import ThemeSelect from './Theme'
+import { REPO, blob, type Card, type K, type SiteData } from './types'
 
 type Tab = 'summary' | 'quality' | 'cost' | 'latency' | 'evaluate'
 const TABS: [Tab, string][] = [
@@ -11,28 +17,18 @@ const TABS: [Tab, string][] = [
   ['latency', 'Latency'],
   ['evaluate', 'Evaluate a new model'],
 ]
+const FROZEN_QUERIES = 75
+const CHART_SUB = 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table · click a legend entry to hide it'
 
-interface Col {
-  head: string
-  value: (r: Row) => number | null
-  fmt: (v: number) => string
-  source: (r: Row) => string | null
-}
+const f = (digits: number) => (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
-const f = (digits: number) => (v: number) =>
-  v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
-
-const keptCol = (k: K): Col => ({
-  head: k === '50' ? 'kept-mass @50' : `@${k}`,
-  value: (r) => r.kept_mass?.[k] ?? null,
-  fmt: f(3),
-  source: (r) => r.sources.kept_mass,
-})
+const keptCol = (k: K): Col => ({ head: `@${k}`, value: (r) => r.kept_mass?.[k] ?? null, fmt: f(3), source: (r) => r.sources.kept_mass })
+const MEAN: Col = { head: 'mean', value: (r) => r.mean_kept_mass, fmt: f(3), source: (r) => r.sources.kept_mass }
 const COST: Col[] = [
   { head: 'warm GPU-s', value: (r) => r.cost?.warm_gpu_s ?? null, fmt: f(0), source: (r) => r.sources.cost },
   { head: 'load s', value: (r) => r.cost?.load_s ?? null, fmt: f(0), source: (r) => r.sources.cost },
   { head: '$ / run', value: (r) => r.cost?.warm_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
-  { head: '$ / run with load', value: (r) => r.cost?.in_function_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
+  { head: '$ / run + load', value: (r) => r.cost?.in_function_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
   { head: '$ / query', value: (r) => r.cost?.usd_per_query ?? null, fmt: f(4), source: (r) => r.sources.cost },
   { head: '$ / 1k queries', value: (r) => r.cost?.usd_per_1k ?? null, fmt: f(1), source: (r) => r.sources.cost },
   { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost },
@@ -40,136 +36,122 @@ const COST: Col[] = [
 const LATENCY: Col[] = [
   { head: 'run (s)', value: (r) => r.latency?.run_s ?? null, fmt: f(0), source: (r) => r.sources.latency },
   { head: 's / query', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency },
-  { head: 'hours / 1k queries', value: (r) => r.latency?.h_per_1k ?? null, fmt: f(2), source: (r) => r.sources.latency },
+  { head: 'hours / 1k', value: (r) => r.latency?.h_per_1k ?? null, fmt: f(2), source: (r) => r.sources.latency },
 ]
-const MEAN: Col = { head: 'mean @50-200', value: (r) => r.mean_kept_mass, fmt: f(3), source: (r) => r.sources.kept_mass }
+const COST_PER_1K = COST[5], S_PER_QUERY = LATENCY[1]
 
-const LABELS: [string, (r: Row) => string][] = [
-  ['ranker', (r) => r.label],
-  ['serving', (r) => r.serving],
-  ['buffer', (r) => r.buffer],
-  ['GPU', (r) => r.gpu],
-  ['queries', (r) => String(r.queries)],
-]
-
-const servingKind = (r: Row) => r.serving.split(':')[0]
-const modelKey = (r: Row) => `${r.family} · ${servingKind(r)}`
 const uniq = (xs: string[]) => [...new Set(xs)]
-
-function Num({ row, col }: { row: Row; col: Col }) {
-  const v = col.value(row)
-  if (v === null) return <td className="n dim">{row.blank}</td>
-  const src = col.source(row)
-  return <td className="n">{src ? <a href={blob(src)} title={src} target="_blank" rel="noreferrer">{col.fmt(v)}</a> : col.fmt(v)}</td>
-}
-
-type Sort = { key: string; dir: 1 | -1 } | null
-
-function Table({ rows, cols, sort, setSort }: { rows: Row[]; cols: Col[]; sort: Sort; setSort: (s: Sort) => void }) {
-  const sorted = useMemo(() => {
-    if (!sort) return rows
-    const label = LABELS.find(([h]) => h === sort.key)?.[1]
-    const col = cols.find((c) => c.head === sort.key)
-    return [...rows].sort((a, b) => {
-      if (label) return label(a).localeCompare(label(b)) * sort.dir
-      const va = col?.value(a) ?? -Infinity, vb = col?.value(b) ?? -Infinity
-      return (va - vb) * sort.dir
-    })
-  }, [rows, cols, sort])
-  const click = (key: string) => setSort(sort?.key === key ? (sort.dir === 1 ? { key, dir: -1 } : null) : { key, dir: 1 })
-  const arrow = (key: string) => sort?.key === key ? <span className="dir">{sort.dir === 1 ? '▲' : '▼'}</span> : null
-  const group = (r: Row) => `${r.experiment}|${servingKind(r)}|${r.gpu}`
-  return (
-    <table>
-      <thead>
-        <tr>
-          {LABELS.map(([h]) => <th key={h} onClick={() => click(h)}>{h}{arrow(h)}</th>)}
-          {cols.map((c) => <th key={c.head} className="n" onClick={() => click(c.head)}>{c.head}{arrow(c.head)}</th>)}
-        </tr>
-      </thead>
-      <tbody>
-        {sorted.map((r, i) => (
-          <tr key={`${r.experiment}/${r.reranker}`} className={[r.highlight && 'hl', !sort && i > 0 && group(r) !== group(sorted[i - 1]) && 'sep'].filter(Boolean).join(' ')}>
-            {LABELS.map(([h, get], j) => <td key={h}>{j === 0 ? <a href={blob(r.sources.config)} title={r.experiment} target="_blank" rel="noreferrer">{get(r)}</a> : get(r)}</td>)}
-            {cols.map((c) => <Num key={c.head} row={r} col={c} />)}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
-
-function Checks({ title, options, on, toggle }: { title: string; options: string[]; on: Set<string>; toggle: (v: string) => void }) {
-  return (
-    <>
-      <h3>{title}</h3>
-      {options.map((o) => (
-        <label key={o} title={o}>
-          <input type="checkbox" checked={on.has(o)} onChange={() => toggle(o)} />{o}
-        </label>
-      ))}
-    </>
-  )
-}
-
 const toggled = (s: Set<string>, v: string) => {
   const n = new Set(s)
   if (!n.delete(v)) n.add(v)
   return n
 }
 
+function Widget({ span, title, sub, children }: { span: 4 | 6 | 8 | 12; title: string; sub?: ReactNode; children: ReactNode }) {
+  return (
+    <section className={`w s${span}`}>
+      <h2>{title}{sub && <span className="sub">{sub}</span>}</h2>
+      {children}
+    </section>
+  )
+}
+
+/** Card detail is "<who> · Jev <value>"; the label is "<name> (<unit>)". */
+function NumWidget({ card, higherIsBetter }: { card: Card; higherIsBetter: boolean }) {
+  const [who, jev] = card.detail.split(' · Jev ')
+  const v = parseFloat(card.value), j = parseFloat(jev)
+  const rel = (v - j) / j
+  const good = higherIsBetter ? v >= j : v <= j
+  const unit = card.label.match(/\((.*)\)/)?.[1] ?? ''
+  return (
+    <Widget span={4} title={card.label.split(' (')[0]}>
+      <div className="num">
+        <div className="v">{card.value}<span className={`delta ${good ? 'good' : 'bad'}`}>{rel >= 0 ? '+' : ''}{(100 * rel).toFixed(0)}% vs Jev</span></div>
+        <div className="who">{who}</div>
+        <div className="cmp">{unit} · Jev {jev}</div>
+      </div>
+    </Widget>
+  )
+}
+
 export default function App() {
   const [data, setData] = useState<SiteData | null>(null)
   const [tab, setTab] = useState<Tab>('summary')
-  const [models, setModels] = useState(new Set<string>())
-  const [gpus, setGpus] = useState(new Set<string>())
+  const [families, setFamilies] = useState<Set<string> | null>(null)
+  const [gpus, setGpus] = useState<Set<string> | null>(null)
+  const [hidden, setHidden] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
+  const queue = useQueue()
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/rows.json`).then((r) => r.json()).then(setData)
   }, [])
-  if (!data) return <p className="note">Loading data/rows.json…</p>
+  const all = useMemo(() => (data?.rows ?? []).filter((r) => r.queries === FROZEN_QUERIES), [data])
+  const FAMS = useMemo(() => uniq(all.map((r) => r.family)), [all])
+  const GPUS = useMemo(() => uniq(all.map((r) => r.gpu)), [all])
+  if (!data) return <p className="hint" style={{ padding: 20 }}>Loading data/rows.json…</p>
 
-  const all = data.rows
-  const pass = (r: Row) =>
-    (models.size === 0 || models.has(modelKey(r))) &&
-    (gpus.size === 0 || gpus.has(r.gpu)) &&
-    r.queries === 75
-  const rows = all.filter(pass)
-  const shownKs = data.ks
-  const kept = shownKs.map(keptCol)
+  const fams = families ?? new Set(FAMS)
+  const gpuSet = gpus ?? new Set(GPUS)
+  const rows = all.filter((r) => fams.has(r.family) && gpuSet.has(r.gpu))
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
-  const experiments = Object.keys(data.experiments).sort()
-  const reset = () => { setModels(new Set()); setGpus(new Set()); setSort(null) }
+  const kept = data.ks.map(keptCol)
+  const reset = () => { setFamilies(null); setGpus(null); setHidden(new Set()); setSort(null) }
+  const toggleHidden = (family: string) => setHidden(toggled(hidden, family))
+  const chart = (height: number) => <LineChart rows={rows} ks={data.ks} height={height} hidden={hidden} onToggle={toggleHidden} />
+  const costBars = <HBars rows={rows} value={(r) => r.cost?.usd_per_1k} digits={2} />
+  const latencyBars = <HBars rows={rows} value={(r) => r.latency?.s_per_query} digits={2} />
 
   return (
-    <div className="app">
-      <aside className="side">
-        <h1>jev-tracker</h1>
-        <p className="sub">{all.length} rows · {experiments.length} experiments · 75 frozen queries</p>
-        <button onClick={reset}>reset filters</button>
-        <Checks title="model · serving" options={uniq(all.map(modelKey))} on={models} toggle={(v) => setModels(toggled(models, v))} />
-        <Checks title="GPU" options={uniq(all.map((r) => r.gpu))} on={gpus} toggle={(v) => setGpus(toggled(gpus, v))} />
-      </aside>
-      <main className="main">
-        <nav className="tabs">
-          {TABS.map(([t, name]) => <button key={t} className={tab === t ? 'on' : ''} onClick={() => { setTab(t); setSort(null) }}>{name}</button>)}
-        </nav>
-        <p className="note">Click any column header to sort; click again to reverse, a third time to clear.</p>
+    <>
+      <header className="topbar">
+        <span className="brand">jev-tracker</span>
+        <span className="crumb">Dashboards › Jev alternatives · {FROZEN_QUERIES} frozen queries</span>
+        <div className="right">
+          <span>Last updated {data.updated}</span>
+          <span className="pill" title={`queue refreshes every ${REFRESH_SECONDS} s`}>↻ {REFRESH_SECONDS} s</span>
+          <ThemeSelect />
+          <a href={REPO} target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </header>
+      <div className="toolbar">
+        <Dropdown name="Model" options={FAMS} selected={fams} onChange={setFamilies} />
+        <Dropdown name="GPU" options={GPUS} selected={gpuSet} onChange={setGpus} />
+        <span className="chip reset" onClick={reset}>reset</span>
+        <span className="label">{rows.length} of {all.length} runs</span>
+      </div>
+      <nav className="tabs">
+        {TABS.map(([t, name]) => <button key={t} className={tab === t ? 'on' : ''} onClick={() => { setTab(t); setSort(null) }}>{name}</button>)}
+      </nav>
+      <main className="grid">
         {tab === 'summary' && <>
-          <p className="updated">Last updated {data.updated} (newest experiment) · TLDR written by the daily run, <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></p>
-          <div className="cards">
-            {data.cards.map((c) => <div key={c.label} className="card"><div className="v">{c.value}</div><div className="l">{c.label}</div><div className="d">{c.detail}</div></div>)}
-          </div>
-          <div className="tldr">{data.tldr.split('\n').filter((line) => line.trim() !== '').map((line, i) => <p key={i}>{line}</p>)}</div>
-          <p className="note">Every run: kept-mass at the chosen k, its mean, cost per 1k queries and seconds per query. Click a number for its source JSON.</p>
-          <Table rows={rows} cols={[...kept, MEAN, COST[5], LATENCY[1]]} sort={sort} setSort={setSort} />
+          <Widget span={12} title="Model evaluation queue" sub={<QueueSub state={queue} />}><QueueBody state={queue} /></Widget>
+          {data.cards.map((c, i) => <NumWidget key={c.label} card={c} higherIsBetter={i === 0} />)}
+          <Widget span={8} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(300)}</Widget>
+          <Widget span={4} title="TLDR" sub={<>written by the daily run · <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></>}>
+            <div className="tldr">{data.tldr.split('\n').filter((line) => line.trim() !== '').map((line, i) => <p key={i}>{line}</p>)}</div>
+          </Widget>
+          <Widget span={6} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>
+          <Widget span={6} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
+          <Widget span={12} title="All runs" sub={`${rows.length} rows · ${FROZEN_QUERIES} frozen queries`}>
+            <Table rows={rows} cols={[...kept, MEAN, COST_PER_1K, S_PER_QUERY]} sort={sort} setSort={setSort} />
+          </Widget>
         </>}
-        {tab === 'quality' && <Table rows={forTable('quality')} cols={kept} sort={sort} setSort={setSort} />}
-        {tab === 'cost' && <Table rows={forTable('cost')} cols={COST} sort={sort} setSort={setSort} />}
-        {tab === 'latency' && <Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={setSort} />}
-        {tab === 'evaluate' && <Evaluate />}
+        {tab === 'quality' && <>
+          <Widget span={12} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(360)}</Widget>
+          <Widget span={12} title="Quality · all runs"><Table rows={forTable('quality')} cols={kept} sort={sort} setSort={setSort} /></Widget>
+        </>}
+        {tab === 'cost' && <>
+          <Widget span={12} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>
+          <Widget span={12} title="Cost · all runs"><Table rows={forTable('cost')} cols={COST} sort={sort} setSort={setSort} /></Widget>
+        </>}
+        {tab === 'latency' && <>
+          <Widget span={12} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
+          <Widget span={12} title="Latency · all runs"><Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={setSort} /></Widget>
+        </>}
+        {tab === 'evaluate' && <Widget span={6} title="Evaluate a new model"><Evaluate /></Widget>}
       </main>
-    </div>
+      <p className="foot">{data.rows.length} rows · {Object.keys(data.experiments).length} experiments · data regenerated by the daily run from the committed experiments.</p>
+    </>
   )
 }

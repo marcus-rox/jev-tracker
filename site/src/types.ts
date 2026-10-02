@@ -52,3 +52,19 @@ export interface SiteData {
 
 export const REPO = 'https://github.com/marcus-rox/jev-tracker'
 export const blob = (path: string) => `${REPO}/blob/main/${path}`
+
+export type QueueStatus = 'queued' | 'running'
+
+export interface QueueItem {
+  config: string
+  label: string
+  source: string
+  url: string
+  status: QueueStatus
+  queued_at: string
+  started_at: string | null
+}
+
+export interface Queue {
+  items: QueueItem[]
+}
