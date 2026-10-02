@@ -65,9 +65,9 @@
    "label": "kev08b_ba_lora_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/Glax147/kev-0.8b-ba-lora",
-   "status": "proposed",
+   "status": "queued",
    "note": "over budget: general Kev-0.8B post-train (head.pt + LoRA on Qwen3.5-0.8B-Base) runs through the kev source, but today's 3-run cap is used; queue for a later day",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T17:13:01Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
