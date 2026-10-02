@@ -115,9 +115,9 @@
    "label": "clef_vs_jev",
    "source": "hackernews",
    "url": "https://news.ycombinator.com/item?id=49928301",
-   "status": "proposed",
+   "status": "queued",
    "note": "Clef open-weight decision models; own serving",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T08:13:13Z",
    "started_at": null
   },
   {
