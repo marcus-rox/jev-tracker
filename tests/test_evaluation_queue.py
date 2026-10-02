@@ -54,7 +54,7 @@ def test_lifecycle_queued_running_gone(tmp_path: Path) -> None:
 
 
 def test_proposed_needs_approval_before_it_is_queued() -> None:
-    queue = enqueued(Queue(), [PROPOSED, NO_CONFIG, RUNNABLE], NOW)
+    queue = enqueued(Queue(), [PROPOSED, NO_CONFIG, RUNNABLE, PROPOSED], NOW)  # one item per config
     assert [(i.label, i.status, i.note) for i in queue.items] == [
         ("clef9b", "proposed", "own serving stack; needs a clef source"),
         ("kev9b_v2", "queued", ""),

@@ -1651,7 +1651,7 @@
   verdict: needs_adapter
   reason: Jev-style decision model with its own architecture / serving (matilda_jev);
     no harness source for it
-  config: null
+  config: configs/matilda_jev_v1_vs_jev.yaml
 - key: https://huggingface.co/xuhaodev/Qwen3.5-4B-Jev
   url: https://huggingface.co/xuhaodev/Qwen3.5-4B-Jev
   verdict: needs_adapter
@@ -1718,7 +1718,7 @@
   verdict: needs_adapter
   reason: Jev-style decision model with its own architecture / serving (qwen3_5_text);
     no harness source for it
-  config: null
+  config: configs/autotrust_jev27b_vs_jev.yaml
 - key: https://huggingface.co/shgao/rsi-jev-v4.0-vl-qwen3.5-2b
   url: https://huggingface.co/shgao/rsi-jev-v4.0-vl-qwen3.5-2b
   verdict: needs_adapter
@@ -1843,7 +1843,7 @@
   verdict: needs_adapter
   reason: JevAny pointer LoRA on Qwen3.5-4B (instruct); card requires the JevAny code
     release, kev loader not verified on it
-  config: null
+  config: configs/jevany_qwen35_4b_vs_jev.yaml
 - key: https://huggingface.co/SimpleJev/JevAny-Gemma-4B-LoRA
   url: https://huggingface.co/SimpleJev/JevAny-Gemma-4B-LoRA
   verdict: needs_adapter
@@ -2014,7 +2014,7 @@
   verdict: needs_adapter
   reason: Jev-style decision model with its own architecture / serving (rsi-jev);
     no harness source for it
-  config: null
+  config: configs/rsi_jev_v3_2b_vs_jev.yaml
 - key: https://huggingface.co/TokenRhythm/NeoHorse-Jev-4B
   url: https://huggingface.co/TokenRhythm/NeoHorse-Jev-4B
   verdict: needs_adapter
@@ -2048,7 +2048,7 @@
   verdict: needs_adapter
   reason: LoRA on MiniCPM5-2B with its own /v1/systemone server; kev source only verified
     on Qwen3.5/3.8 bases
-  config: null
+  config: configs/minicpm5_2b_jev_vs_jev.yaml
 - key: https://huggingface.co/SargeDev/Jev_Qwen3.8-27B-r2-LoRA
   url: https://huggingface.co/SargeDev/Jev_Qwen3.8-27B-r2-LoRA
   verdict: needs_adapter
@@ -2269,14 +2269,14 @@
   reason: 'over budget: general Kev-0.8B post-train (head.pt + LoRA on Qwen3.5-0.8B-Base)
     runs through the kev source, but today''s 3-run cap is used; queue for a later
     day'
-  config: null
+  config: configs/kev08b_ba_lora_vs_jev.yaml
 - key: https://huggingface.co/Glax147/kev-4b-ba-lora
   url: https://huggingface.co/Glax147/kev-4b-ba-lora
   verdict: needs_adapter
   reason: 'over budget: general Kev-4B post-train (head.pt + LoRA on Qwen3.5-4B-Base)
     runs through the kev source, but today''s 3-run cap is used; queue for a later
     day'
-  config: null
+  config: configs/kev4b_ba_lora_vs_jev.yaml
 - key: https://huggingface.co/Kevin-Z/LEAP_Distilled_ViT
   url: https://huggingface.co/Kevin-Z/LEAP_Distilled_ViT
   verdict: not_jev
@@ -3183,7 +3183,7 @@
   verdict: needs_adapter
   reason: Jev-style decision model with its own architecture / serving (qwen3_5);
     no harness source for it
-  config: null
+  config: configs/startlux_decision_9b_vs_jev.yaml
 - key: https://huggingface.co/startlux-models/StartLux-Decision-4B
   url: https://huggingface.co/startlux-models/StartLux-Decision-4B
   verdict: needs_adapter
@@ -5881,7 +5881,7 @@
   url: https://huggingface.co/blog/hotchpotch/introducing-jev-reranker
   verdict: needs_adapter
   reason: jev-reranker (hotchpotch) small decision models; own architecture
-  config: null
+  config: configs/hotchpotch_jev_reranker_vs_jev.yaml
 - key: https://heym.run/templates/decision-model-rag-reranker
   url: https://heym.run/templates/decision-model-rag-reranker
   verdict: not_jev
@@ -5917,7 +5917,7 @@
   verdict: needs_adapter
   reason: 'over budget: Kev-0.5B (superseded Qwen2.5 Kev, head.pt + LoRA) would go
     through the kev source, but today''s 3-run cap is used'
-  config: null
+  config: configs/kev05b_vs_jev.yaml
 - key: https://x.com/jaredpalmer/all
   url: https://x.com/jaredpalmer/all
   verdict: runnable
@@ -6219,7 +6219,7 @@
   verdict: needs_adapter
   reason: Kev-4B on OpenRouter; api source needs an OpenRouter key as a Modal Secret
     (in-process Kev-4B already benchmarked)
-  config: null
+  config: configs/api_openrouter_kev4b_vs_jev.yaml
 - key: https://x.com/jaredpalmer/status/2103561780996039092
   url: https://x.com/jaredpalmer/status/2103561780996039092
   verdict: needs_adapter
@@ -6413,7 +6413,7 @@
   url: https://news.ycombinator.com/item?id=49928301
   verdict: needs_adapter
   reason: Clef open-weight decision models; own serving
-  config: null
+  config: configs/clef_vs_jev.yaml
 - key: https://news.ycombinator.com/item?id=49928275
   url: https://news.ycombinator.com/item?id=49928275
   verdict: not_jev
@@ -6520,7 +6520,7 @@
   verdict: needs_adapter
   reason: 'Liquid AI d1: configs/api_d1_vs_jev.yaml exists but its 75-case run failed
     (key-kiwi); fix the endpoint call before rerunning'
-  config: null
+  config: configs/api_d1_vs_jev.yaml
 - key: https://news.ycombinator.com/item?id=49901501
   url: https://news.ycombinator.com/item?id=49901501
   verdict: not_jev
@@ -7103,7 +7103,7 @@
   url: https://github.com/wfzyx/von
   verdict: needs_adapter
   reason: 'Von: open-source 395M System One model; own architecture / serving'
-  config: null
+  config: configs/von_395m_vs_jev.yaml
 - key: https://github.com/AnotiaWang/awesome-decision-models
   url: https://github.com/AnotiaWang/awesome-decision-models
   verdict: not_jev

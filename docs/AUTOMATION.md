@@ -6,7 +6,7 @@ one decision Devin makes, and it is written down as data so the PR shows it.
 **Schedule**: once a day. **Identity**: Marcus (his fine-grained PAT `MARCUS_SITE_GITHUB_TOKEN`
 for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` for Modal).
 **Output**: one PR `automation/<YYYY-MM-DD>` into `main`, or no PR when nothing is new.
-**Budget**: at most 3 new experiments per run; a config whose GPUs or shards exceed those of
+**Budget**: at most 10 new experiments per run; a config whose GPUs or shards exceed those of
 `configs/kev27b_batched.yaml` is left as `needs_adapter` with the reason "over budget".
 
 ## Steps
@@ -14,7 +14,9 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
 1. **Checkout**: clone `main` over HTTPS with the PAT (askpass helper; never print it), branch
    `automation/<date>`, `uv sync`, `export MODAL_TOKEN_ID=$MODAL_TOKEN_ID_ROX_RESEARCH
    MODAL_TOKEN_SECRET=$MODAL_TOKEN_SECRET_ROX_RESEARCH`.
-2. **Crawl**: `uv run python -m crawler` → `crawler/candidates/<date>.jsonl`, `crawler/seen.jsonl`.
+2. **Crawl**: `SLACK_USER_TOKEN=<token> uv run python -m crawler` → `crawler/candidates/<date>.jsonl`,
+   `crawler/seen.jsonl`. The Slack source (Rox workspace, `search.messages`) runs only when the
+   token is set; without it the crawler prints that it skipped `slack` and the other six run.
    Text submitted from the site (`requests/<date>/*.json`) comes along as source `submitted`.
    Exit 1 means a (source, query) failed; keep going, list the failures in the PR.
 3. **Triage** (the decision): read today's candidates and write `crawler/triage/<date>.yaml`, one
@@ -25,7 +27,10 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
      `configs/<slug>.yaml` next to `configs/kev4b_vs_jev.yaml` (same shape: prod + Jev answers +
      the new model, all 75 cases) and add the model's row labels to `data/registry.yaml`.
    - `needs_adapter`: a real Jev alternative the harness cannot call yet (new serving stack, new
-     request format, key not provisioned, over budget). Say what is missing in `reason`.
+     request format, key not provisioned, over budget). Say what is missing in `reason`. When it
+     looks worth the adapter work (a distinct open model family, a hosted endpoint that only needs
+     a key, a Kev/Laya variant the source almost loads), also set `config: configs/<slug>.yaml`
+     (the file does not exist yet): that makes it a *proposal* Marcus approves or skips on the site.
    - `not_jev`: unrelated hit (a person named Kev, a repo about something else). One-line reason.
    A `submitted` candidate is whatever a human typed into the site (usually a link): open or
    search for it, work out what it is (model, repo, paper, endpoint) and give it one of the three
@@ -34,15 +39,21 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    crawler/candidates/<date>.jsonl` must exit 0.
 3b. **Queue** (what the site shows while runs are going): `uv run python -m
    jev_tracker.evaluation_queue add crawler/triage/<date>.yaml` puts every runnable config in
-   `data/queue.json` as `queued`; then `… start configs/<a>.yaml configs/<b>.yaml` (the ≤3 that
-   step 5 will run) marks them `running`. Commit `data/queue.json` alone as the branch's first
+   `data/queue.json` as `queued` and every needs_adapter decision with a `config` as `proposed`;
+   then `… start configs/<a>.yaml configs/<b>.yaml` (the ≤10 that step 5 will run) marks them
+   `running`. Commit `data/queue.json` alone as the branch's first
    commit and push that one commit to `main` too (`git push origin HEAD:main`; the branch is
    `main` + this commit, so it is a fast-forward). This is the one write to `main` the run makes.
 4. **Issues**: `GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.evaluate_issues` turns open
    `evaluate` issues into `configs/issue_<n>_<slug>.yaml` (unauthenticated api.github.com is
    rate-limited from Devin VMs; the issue stays open until a human closes it, so the file-exists
    skip is what stops a rerun). Add registry rows for their rerankers as in step 3.
-5. **Run**: for each config written in steps 3–4 (max 3):
+4b. **Approvals**: `queued` items in `data/queue.json` whose config file does not exist are
+   proposals Marcus approved on the site since the last run (the site's server commits the click
+   to `main`). Approval means "build what the note says is missing": write the source / adapter /
+   Modal Secret wiring and the config, then run it like any other. One that cannot be finished in
+   the session stays `queued` with its note and the PR says what is left.
+5. **Run**: for each config written in steps 3–4b, approved ones first (max 10):
    `uv run python -m jev_tracker.experiment run configs/<name>.yaml --wait`. A failed run is
    reported in the PR, not retried. Afterwards `uv run python -m jev_tracker.evaluation_queue
    done configs/<name>.yaml …` for every config that ran (failed ones too; the PR says why): a
@@ -61,7 +72,10 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    items removed), `site/public/data`, `site/dist` (explicit
    paths, no `git add .`); push; open a PR titled `Daily <date>: <n> candidates, <m> runs` whose body
    has the triage counts per verdict, one line per run with kept-mass@50/200 and $/run, the crawler
-   failures if any, and `Closes #<n>` for each `evaluate` issue run. No Slack (Marcus: skip for now).
+   failures if any, and `Closes #<n>` for each `evaluate` issue run.
+9b. **Slack DM** to Marcus Dominguez-Kuhne (Slack user `U0BQQC4046P`), with the session's Slack
+   tools: the PR link, one line per model run today (kept-mass@50/200, $/run), and the list of
+   `proposed` items awaiting his approval on the site (label + note). No channel posts.
 10. **Nothing new** (no candidates, no issues, no submissions): stop without a PR and say so in the session's final
    message.
 
@@ -69,5 +83,7 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
 
 - Push to `main` (except the single `data/queue.json` fast-forward in step 3b), force-push, amend,
   or edit `docs/SPEC.md`.
-- Run more than 3 experiments or a config over the Kev-27B budget line.
+- Run more than 10 experiments or a config over the Kev-27B budget line.
+- Run a `needs_adapter` model Marcus has not approved on the site (or via
+  `jev_tracker.evaluation_queue approve`).
 - Print or commit a token.

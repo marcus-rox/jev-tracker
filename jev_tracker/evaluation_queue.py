@@ -61,19 +61,22 @@ def enqueued(queue: Queue, decisions: list[TriageDecision], now: datetime) -> Qu
     """`queue` plus one item per decision with a config not already in it: runnable -> queued,
     needs_adapter -> proposed (the config is the one Devin would write once approved)."""
     present = {item.config for item in queue.items}
-    added = [
-        QueueItem(
-            config=d.config,
-            label=d.config.stem,
-            source=d.key.split(":")[0] if ":" in d.key else "submitted",
-            url=d.url,
-            status=PROPOSED_BY[d.verdict],
-            note=d.reason if d.verdict == "needs_adapter" else "",
-            queued_at=now,
+    added: list[QueueItem] = []
+    for d in decisions:
+        if d.verdict not in PROPOSED_BY or d.config is None or d.config in present:
+            continue
+        present.add(d.config)
+        added.append(
+            QueueItem(
+                config=d.config,
+                label=d.config.stem,
+                source=d.key.split(":")[0] if ":" in d.key else "submitted",
+                url=d.url,
+                status=PROPOSED_BY[d.verdict],
+                note=d.reason if d.verdict == "needs_adapter" else "",
+                queued_at=now,
+            )
         )
-        for d in decisions
-        if d.verdict in PROPOSED_BY and d.config is not None and d.config not in present
-    ]
     return Queue(items=[*queue.items, *added])
 
 
