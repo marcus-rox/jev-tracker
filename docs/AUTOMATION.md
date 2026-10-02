@@ -28,8 +28,10 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    - `not_jev`: unrelated hit (a person named Kev, a repo about something else). One-line reason.
    Then `uv run python -m crawler.triage check crawler/triage/<date>.yaml
    crawler/candidates/<date>.jsonl` must exit 0.
-4. **Issues**: `uv run python -m jev_tracker.evaluate_issues` turns open `evaluate` issues into
-   `configs/issue_<n>_<slug>.yaml`. Add registry rows for their rerankers as in step 3.
+4. **Issues**: `GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.evaluate_issues` turns open
+   `evaluate` issues into `configs/issue_<n>_<slug>.yaml` (unauthenticated api.github.com is
+   rate-limited from Devin VMs; the issue stays open until a human closes it, so the file-exists
+   skip is what stops a rerun). Add registry rows for their rerankers as in step 3.
 5. **Run**: for each config written in steps 3–4 (max 3):
    `uv run python -m jev_tracker.experiment run configs/<name>.yaml --wait`. A failed run is
    reported in the PR, not retried.

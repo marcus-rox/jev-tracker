@@ -1,7 +1,8 @@
 # jev-tracker — a leaderboard of Jev alternatives on Rox's frozen 75-case benchmark
 
 **Status · 2026-10-02 · Phases 1–2 merged (PR #1, #2); Phase 3 crawler merged (PR #3, #4); Phase 3b
-(new sources, automation glue, daily automation) in progress in two parallel sessions + this one.** Harness ported from
+(twitter/hackernews/Tavily sources, `hf:<id>@<sha>` key, evaluate issues → configs, triage file, runbook)
+in one PR; the daily Devin automation exists, disabled until that PR merges.** Harness ported from
 `rox-research/projects/reranker_alts`; Kev-4B, Laya and batched Kev-27B (pinned to the 2026-09-24
 weights) reran on Modal within 0.002 kept-mass of rox-research at every k.
 
