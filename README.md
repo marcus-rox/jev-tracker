@@ -69,7 +69,8 @@ Legend: rectangles are processes, cylinders are data committed to the repo (or M
 the hexagon is the one step where an LLM (Devin) makes a judgment call, the rounded box is a person.
 Everything Devin changes reaches `main` only through a PR Marcus merges (one exception: the
 evaluation-queue file, so the site can show what is running and so Marcus's Approve / Skip clicks
-on the site land immediately). Models the harness cannot call yet are *proposed*, not run: the
+on the site land immediately; a Running card draws each shard's tqdm bar — requests done / total,
+elapsed < ETA, rate — which the Modal workers publish while they run). Models the harness cannot call yet are *proposed*, not run: the
 site lists them under "Awaiting your approval" and only an approved one is built and benchmarked.
 
 **Figure 2. One day's run, as a sequence diagram.**

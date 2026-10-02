@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { blob, type Decision, type Evidence, type QueueItem, type QueueStatus } from './types'
 import type { Decide, QueueState } from './queue'
 import { nextRun, untilText, whenText } from './schedule'
+import { useProgress, type ProgressState } from './progress'
+import { RunProgress } from './Progress'
 
 const MINUTE_MS = 60_000
 
@@ -87,14 +89,14 @@ const SOURCE_COLOR: Record<string, string> = {
   huggingface: '#f0a94a', github: '#9b6fd0', arxiv: '#c0d86a', web: '#6fcfe8', twitter: '#6fa8ea', hackernews: '#e8864a', slack: '#5ec9a6', submitted: '#b05fb8', manual: '#b05fb8',
 }
 
-function Card({ item, now, decide }: { item: QueueItem; now: Date; decide: Decide }) {
+function Card({ item, now, decide, progress }: { item: QueueItem; now: Date; decide: Decide; progress: ProgressState }) {
   return (
     <li className={`card ${item.status}`}>
       <div className="body">
         <div className="head"><span className="dot" /><span className="m">{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</span></div>
         <div className="meta">{since(item, now)}</div>
         {item.note && <div className="note" title={item.note}>{item.note}</div>}
-        {item.status === 'running' && <div className="bar"><i /></div>}
+        {item.status === 'running' && <RunProgress config={item.config} state={progress} />}
         {item.status === 'proposed' && <Actions item={item} decide={decide} />}
         {item.status === 'failed' && item.evidence && <EvidenceList evidence={item.evidence} />}
         {item.status === 'failed' && <Dismiss item={item} decide={decide} />}
@@ -119,6 +121,7 @@ function NextRun({ now }: { now: Date }) {
 }
 
 export function QueueBody({ state, decide }: { state: QueueState; decide: Decide }) {
+  const progress = useProgress(state.kind === 'ok' && state.queue.items.some((item) => item.status === 'running'))
   if (state.kind === 'loading') return <p className="hint">Loading…</p>
   if (state.kind === 'error') return <p className="hint">Queue unavailable: {state.message}.</p>
   if (state.queue.items.length === 0) return <p className="hint">Queue is empty — every runnable model has been evaluated; results are in the table below.</p>
@@ -131,7 +134,7 @@ export function QueueBody({ state, decide }: { state: QueueState; decide: Decide
             <h3><span className="ring" />{stage.title}<span className="count">{items.length}</span></h3>
             {stage.status === 'queued' && <NextRun now={state.at} />}
             <ul>
-              {items.length === 0 ? <li className="hint">{stage.empty}</li> : items.map((item) => <Card key={item.config} item={item} now={state.at} decide={decide} />)}
+              {items.length === 0 ? <li className="hint">{stage.empty}</li> : items.map((item) => <Card key={item.config} item={item} now={state.at} decide={decide} progress={progress} />)}
             </ul>
           </section>
         )

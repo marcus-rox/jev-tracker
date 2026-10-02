@@ -179,8 +179,11 @@ class Experiment(BaseModel):
     k: KGrid = KGrid()
     rerankers: dict[str, Source] = Field(min_length=1)  # table rows, in order; PROD for win-rates
 
-    def scoring_run(self, id: str, name: str, src: ModelSource) -> modal_app.ScoringRun:
+    def scoring_run(
+        self, id: str, name: str, src: ModelSource, config: str | None = None
+    ) -> modal_app.ScoringRun:
         return modal_app.ScoringRun(
+            config=config,
             experiment=id,
             reranker=name,
             engine=src.source,
@@ -247,7 +250,7 @@ def run(config: Path, wait: bool) -> str:
     shutil.copy(config, p.config)
     print(f"experiment {p.id}: {p.dir}")
     runs = [
-        exp.scoring_run(p.id, name, src)
+        exp.scoring_run(p.id, name, src, config.as_posix())
         for name, src in exp.rerankers.items()
         if isinstance(src, ModelSource)
     ]
