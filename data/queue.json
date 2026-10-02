@@ -85,18 +85,6 @@
    "evidence": null
   },
   {
-   "config": "configs/api_d1_vs_jev.yaml",
-   "label": "api_d1_vs_jev",
-   "source": "hackernews",
-   "url": "https://news.ycombinator.com/item?id=49904832",
-   "status": "proposed",
-   "note": "Liquid AI d1: configs/api_d1_vs_jev.yaml exists but its 75-case run failed (key-kiwi); fix the endpoint call before rerunning",
-   "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/von_395m_vs_jev.yaml",
    "label": "von_395m_vs_jev",
    "source": "github",
