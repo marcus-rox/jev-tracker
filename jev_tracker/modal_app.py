@@ -42,6 +42,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Literal
 
+import httpx
 import modal
 from pydantic import BaseModel
 from tqdm import tqdm
@@ -201,6 +202,26 @@ API = "API"  # gpu of a hosted-API scorer: no GPU is attached or billed
 API_TRANSIENT = {429, 500, 502, 503, 504}
 API_RETRIES = 16  # waits 2, 4, ... 60 s, about 12 min in all
 API_BACKOFF_S, API_MAX_WAIT_S = 2.0, 60.0
+API_TIMEOUT = httpx.Timeout(600.0, connect=10.0)
+# github.com/ggml-org/llama.cpp release b11351 (2026-10-02): first build with /v1/systemone (#29818),
+# prebuilt against CUDA 12.8; a flat dir of llama-server + its .so files (rpath $ORIGIN).
+LLAMA_CPP_BUILD = "b11351"
+LLAMA_CPP_TGZ = (
+    "https://github.com/ggml-org/llama.cpp/releases/download/"
+    f"{LLAMA_CPP_BUILD}/llama-{LLAMA_CPP_BUILD}-bin-ubuntu-cuda-12.8-x64.tar.gz"
+)
+LLAMA_CPP_DIR = "/opt/llama.cpp"
+CUDA_IMAGE = "nvidia/cuda:12.8.1-runtime-ubuntu24.04"  # the libcudart / libcublas 12 it links
+LLAMA_CPP_APT = ("curl", "ca-certificates", "libgomp1", "libssl3")  # tar fetch; OpenMP + TLS libs
+HF_HUB_PKG = "huggingface_hub>=0.30"
+LLAMA_URL = "http://127.0.0.1:8080"
+LLAMA_LOG = Path("/tmp/llama-server.log")
+LLAMA_START_TIMEOUT_S = 10 * 60  # includes reading a 5 GB file from the Volume
+LLAMA_POLL_S = 2.0
+LLAMA_CTX_PER_SLOT = (
+    8192  # tokens per in-flight request; --ctx-size is shared over --parallel slots
+)
+DEFAULT_GGUF_GPU = "L40S"
 
 
 class ApiEndpoint(BaseModel):
@@ -256,6 +277,8 @@ class ScoringRun(BaseModel):
     def gpu_type(self) -> str:
         if self.engine == "api":
             return API
+        if self.engine == "gguf":
+            return self.gpu or DEFAULT_GGUF_GPU
         return self.gpu or GPU_FOR.get(self.repo, DEFAULT_KEV_GPU)
 
     @property
@@ -331,6 +354,17 @@ jevany_image = _mount(_base().pip_install(*JEVANY_PKGS))
 rsi_jev_image = _mount(_base().pip_install(*RSI_JEV_PKGS))
 minicpm_jev_image = _mount(_base().pip_install(*MINICPM_JEV_PKGS))
 api_image = _mount(_base())
+gguf_image = _mount(
+    modal.Image.from_registry(CUDA_IMAGE, add_python=PYTHON_VERSION)
+    .apt_install(*LLAMA_CPP_APT)
+    .run_commands(
+        f"mkdir -p {LLAMA_CPP_DIR}",
+        f"curl -fsSL {LLAMA_CPP_TGZ} | tar xz --strip-components=1 -C {LLAMA_CPP_DIR}",
+    )
+    .pip_install(*RUNTIME_DEPS, HF_HUB_PKG)
+    .env({"HF_HOME": HF_CACHE_DIR})
+    .workdir(REMOTE_DIR)
+)
 progress_image = _mount(_base().pip_install(FASTAPI_PKG))
 
 runs_volume = modal.Volume.from_name(RUNS_VOLUME_NAME, create_if_missing=True)
@@ -1047,15 +1081,49 @@ def score_cases_minicpm_jev(job_json: str) -> str:
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 
+def _post_answer(
+    client: httpx.Client,
+    url: str,
+    out: Path,
+    method: Method,
+    model: str,
+    write: threading.Lock,
+    case: DataPoint,
+    bi: int,
+    batch: list[Item],
+) -> None:
+    """Post one batch's System One request to `url` and append the record to the shard file.
+
+    A batch the endpoint rejects as over its input limit (400/422) is split in two, as
+    score_cases does on Kev's 422. A transient error is retried with exponential backoff; a
+    record's latency is its successful attempt."""
+    body = request(method, case.input.query, batch, model).body()
+    for attempt in range(API_RETRIES + 1):
+        t = time.time()
+        r = client.post(url, json=body)
+        if r.status_code not in API_TRANSIENT or attempt == API_RETRIES:
+            break
+        print(f"{case.id} batch {bi}: HTTP {r.status_code}, retry {attempt + 1}", flush=True)
+        time.sleep(min(API_BACKOFF_S * 2**attempt, API_MAX_WAIT_S))
+    if r.status_code in (400, 422) and len(batch) > 1:
+        half = len(batch) // 2
+        _post_answer(client, url, out, method, model, write, case, bi, batch[:half])
+        _post_answer(client, url, out, method, model, write, case, bi, batch[half:])
+        return
+    if r.status_code != 200:
+        raise RuntimeError(f"{case.id} batch {bi}: HTTP {r.status_code}: {r.text[:300]}")
+    rec = record(
+        method, case.id, bi, batch, SystemOneResponse.model_validate(r.json()), time.time() - t, t
+    )
+    with write:
+        append_jsonl_gz(out, rec)
+
+
 @app.function(image=api_image, timeout=4 * HOUR, single_use_containers=True, volumes=VOLUMES)
 def score_cases_api(job_json: str) -> str:
     """Post every batch of this shard's cases to a hosted System One endpoint; resumable.
 
-    `run.concurrency` requests in flight. A batch the endpoint rejects as over its input limit
-    (400/422) is split in two, as score_cases does on Kev's 422. A transient error is retried
-    with exponential backoff; a record's latency is its successful attempt."""
-    import httpx
-
+    `run.concurrency` requests in flight (see _post_answer for splitting and retries)."""
     job = ShardJob.model_validate_json(job_json)
     run = job.run
     if run.api is None:
@@ -1067,37 +1135,10 @@ def score_cases_api(job_json: str) -> str:
     headers = {}
     if run.api.secret is not None:
         headers["Authorization"] = f"Bearer {os.environ[run.api.key_env]}"
-    client = httpx.Client(headers=headers, timeout=httpx.Timeout(600.0, connect=10.0))
-    write = threading.Lock()
-
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
-        body = request(method, case.input.query, batch, run.model).body()
-        for attempt in range(API_RETRIES + 1):
-            t = time.time()
-            r = client.post(run.api.url, json=body)
-            if r.status_code not in API_TRANSIENT or attempt == API_RETRIES:
-                break
-            print(f"{case.id} batch {bi}: HTTP {r.status_code}, retry {attempt + 1}", flush=True)
-            time.sleep(min(API_BACKOFF_S * 2**attempt, API_MAX_WAIT_S))
-        if r.status_code in (400, 422) and len(batch) > 1:
-            half = len(batch) // 2
-            answer(case, bi, batch[:half])
-            answer(case, bi, batch[half:])
-            return
-        if r.status_code != 200:
-            raise RuntimeError(f"{case.id} batch {bi}: HTTP {r.status_code}: {r.text[:300]}")
-        rec = record(
-            method,
-            case.id,
-            bi,
-            batch,
-            SystemOneResponse.model_validate(r.json()),
-            time.time() - t,
-            t,
-        )
-        with write:
-            append_jsonl_gz(out, rec)
-
+    client = httpx.Client(headers=headers, timeout=API_TIMEOUT)
+    answer = functools.partial(
+        _post_answer, client, run.api.url, out, method, run.model, threading.Lock()
+    )
     loaded = time.time()
     n = _answer_shard(job, done, answer)
     scored = time.time()
@@ -1112,6 +1153,105 @@ def score_cases_api(job_json: str) -> str:
         requests=n,
         resumed=len(done),
     ).model_dump_json()
+
+
+def _start_llama_server(model_path: str, parallel: int) -> subprocess.Popen:
+    """llama-server at LLAMA_URL with every layer on the GPU; returns once /health answers 200."""
+    cmd = [
+        f"{LLAMA_CPP_DIR}/llama-server",
+        *("--model", model_path),
+        *("--host", LLAMA_URL.split("//")[1].split(":")[0]),
+        *("--port", LLAMA_URL.rsplit(":", 1)[1]),
+        *("--n-gpu-layers", "999"),
+        *("--parallel", str(parallel)),
+        *("--ctx-size", str(LLAMA_CTX_PER_SLOT * parallel)),
+        "--no-webui",
+    ]
+    print(" ".join(cmd), flush=True)
+    proc = subprocess.Popen(cmd, stdout=LLAMA_LOG.open("w"), stderr=subprocess.STDOUT)
+    deadline = time.time() + LLAMA_START_TIMEOUT_S
+    while time.time() < deadline and proc.poll() is None:
+        try:
+            if httpx.get(f"{LLAMA_URL}/health", timeout=LLAMA_POLL_S).status_code == 200:
+                return proc
+        except httpx.HTTPError:
+            pass
+        time.sleep(LLAMA_POLL_S)
+    proc.kill()
+    raise RuntimeError(
+        f"llama-server not healthy after {LLAMA_START_TIMEOUT_S}s (exit {proc.poll()}):\n"
+        + LLAMA_LOG.read_text()[-3000:]
+    )
+
+
+@app.function(
+    image=gguf_image,
+    gpu=DEFAULT_GGUF_GPU,
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_gguf(job_json: str) -> str:
+    """Answer every batch with a GGUF decision model behind llama.cpp's /v1/systemone; resumable.
+
+    `run.file` of the Hub repo `run.model` (repo@revision) is downloaded into the HF-cache Volume
+    (tqdm; reused next time), llama-server serves it on localhost with `run.concurrency` slots,
+    and the API posting loop is pointed at it, so the shard files are those of every scorer and
+    kept-mass, warm GPU-seconds, $/1k and latency need no new code. Load time = download + server
+    start; warm time = the posting loop."""
+    from huggingface_hub import hf_hub_download
+    from huggingface_hub.errors import EntryNotFoundError
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    if run.file is None:
+        raise ValueError(f"{job.desc}: gguf source without a file")
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+    t0 = time.time()
+    repo, _, revision = run.model.partition("@")
+    try:
+        path = hf_hub_download(repo, run.file, revision=revision or None)
+    except EntryNotFoundError as e:
+        raise FileNotFoundError(f"{job.desc}: no file {run.file} in {run.model}") from e
+    hf_cache.commit()
+    server = _start_llama_server(path, run.concurrency)
+    client = httpx.Client(timeout=API_TIMEOUT)
+    answer = functools.partial(
+        _post_answer, client, f"{LLAMA_URL}/v1/systemone", out, method, run.model, threading.Lock()
+    )
+    loaded = time.time()
+    try:
+        n = _answer_shard(job, done, answer)
+    finally:
+        client.close()
+        server.terminate()
+    scored = time.time()
+    return ShardSummary(
+        reranker=run.reranker,
+        shard=job.shard,
+        gpu=run.gpu_type,
+        load_s=loaded - t0,
+        warm_s=scored - loaded,
+        total_s=time.time() - t0,
+        requests=n,
+        resumed=len(done),
+    ).model_dump_json()
+
+
+SCORERS = {
+    "kev": score_cases,
+    "laya": score_cases_laya,
+    "clef": score_cases_clef,
+    "matilda": score_cases_matilda,
+    "autotrust": score_cases_autotrust,
+    "jevany": score_cases_jevany,
+    "rsi_jev": score_cases_rsi_jev,
+    "minicpm_jev": score_cases_minicpm_jev,
+    "api": score_cases_api,
+    "gguf": score_cases_gguf,
+}
 
 
 @app.function(image=progress_image)
@@ -1138,17 +1278,6 @@ def spawn(run: ScoringRun, calls_file: Path) -> None:
 
 def spawn_shard(job: ShardJob, calls_file: Path) -> None:
     """Spawn (or re-spawn: done batches on the Volume are skipped) one shard and record its call."""
-    score = {
-        "kev": score_cases,
-        "laya": score_cases_laya,
-        "clef": score_cases_clef,
-        "matilda": score_cases_matilda,
-        "autotrust": score_cases_autotrust,
-        "jevany": score_cases_jevany,
-        "rsi_jev": score_cases_rsi_jev,
-        "minicpm_jev": score_cases_minicpm_jev,
-        "api": score_cases_api,
-    }
     run = job.run
     options: dict = {"memory": MEMORY_MB_FOR.get(run.repo)}
     if run.engine == "api":
@@ -1156,7 +1285,7 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
             options["secrets"] = [modal.Secret.from_name(run.api.secret)]
     else:
         options["gpu"] = run.gpu_type
-    fn = score[run.engine].with_options(**options)
+    fn = SCORERS[run.engine].with_options(**options)
     call = fn.spawn(job.model_dump_json())
     rec = CallRecord(
         job=job,
