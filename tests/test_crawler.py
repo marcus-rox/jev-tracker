@@ -12,7 +12,7 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from crawler import arxiv, github, hackernews, huggingface, twitter, web
+from crawler import arxiv, github, hackernews, huggingface, submitted, twitter, web
 from crawler.contract import (
     DEFAULT_WINDOW,
     Candidate,
@@ -188,3 +188,16 @@ def test_R8_since_defaults_to_last_run_else_7_days():
         Seen(url="https://b", key="https://b", first_seen=NOW - timedelta(days=1)),
     ]
     assert default_since(seen, NOW) == NOW - timedelta(days=1)
+
+
+def test_R8_submitted_requests_become_candidates(tmp_path: Path):
+    day = tmp_path / "requests" / "2026-10-02"
+    day.mkdir(parents=True)
+    (day / "070509_hf.json").write_text(
+        '{"text": "https://huggingface.co/org/model", "submitted_at": "2026-10-02T07:05:09Z"}\n'
+    )
+    (tmp_path / "requests" / "README.md").write_text("ignored\n")
+    [c] = submitted.load(tmp_path / "requests")
+    assert (c.source, c.key, c.url) == ("submitted", "https://huggingface.co/org/model", c.url)
+    assert c.first_seen == datetime(2026, 10, 2, 7, 5, 9, tzinfo=UTC)
+    assert submitted.load(tmp_path / "nowhere") == []

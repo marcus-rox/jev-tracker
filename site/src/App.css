@@ -30,3 +30,12 @@ form.eval .inline label { display: inline; font-weight: normal; margin-right: 16
 pre.yaml { background: #f6f8fa; padding: 12px; border-radius: 6px; overflow-x: auto; }
 .btn { display: inline-block; background: #1f883d; color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 600; }
 .btn:hover { text-decoration: none; background: #197a33; }
+.updated { color: #666; font-size: 13px; margin: 0 0 10px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.card { border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; background: #fafafa; }
+.card .v { font-size: 22px; font-weight: 600; }
+.card .l { font-size: 13px; color: #333; }
+.card .d { font-size: 12px; color: #777; }
+.tldr p { margin: 0 0 6px; max-width: 80ch; }
+.tldr { margin-bottom: 14px; }
+.err { color: #b42318; }

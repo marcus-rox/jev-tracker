@@ -15,8 +15,16 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-Source = Literal["github", "huggingface", "arxiv", "web", "twitter", "hackernews"]
-SOURCES: tuple[Source, ...] = ("github", "huggingface", "arxiv", "web", "twitter", "hackernews")
+Source = Literal["github", "huggingface", "arxiv", "web", "twitter", "hackernews", "submitted"]
+SOURCES: tuple[Source, ...] = (
+    "github",
+    "huggingface",
+    "arxiv",
+    "web",
+    "twitter",
+    "hackernews",
+    "submitted",
+)
 DEFAULT_WINDOW = timedelta(days=7)
 HTTP_TIMEOUT_SECONDS = 30.0
 

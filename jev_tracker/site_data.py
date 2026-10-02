@@ -8,8 +8,11 @@ row's `sources`, so the browser can link each cell to where it came from.
 
 import csv
 import json
+import re
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -18,6 +21,11 @@ from jev_tracker.experiment import EXPERIMENTS_DIR, REPO_DIR, Paths
 REGISTRY = REPO_DIR / "data" / "registry.yaml"
 API_TIMING = REPO_DIR / "data" / "timing_summary_prod_jev.csv"
 OUT = REPO_DIR / "site" / "public" / "data" / "rows.json"
+TLDR = REPO_DIR / "data" / "tldr.md"
+BASELINE_FAMILIES = frozenset({"jev", "production", "oracle", "random"})
+BENCHMARK_QUERIES = 75
+PACIFIC = ZoneInfo("America/Los_Angeles")
+EXPERIMENT_STAMP = re.compile(r"^(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_")
 KS = ("50", "100", "150", "200")
 SECONDS_PER_HOUR = 3600
 
@@ -96,7 +104,77 @@ def read_api_timing(path: Path) -> dict[str, dict[str, str]]:
         return {r["method"]: r for r in csv.DictReader(f)}
 
 
-def build(registry: dict, experiments_dir: Path, api_timing: dict[str, dict[str, str]]) -> dict:
+def updated(experiment_ids: list[str]) -> str:
+    """When the newest experiment ran, from its id (YYYY_MM_DD_HH_MM_SS_<petname>, UTC), as Pacific text."""
+    stamps = [m for m in (EXPERIMENT_STAMP.match(e) for e in experiment_ids) if m]
+    if not stamps:
+        raise ValueError(f"no experiment id carries a timestamp: {experiment_ids}")
+    newest = datetime(*map(int, max(m.groups() for m in stamps)), tzinfo=UTC)
+    return f"{newest.astimezone(PACIFIC):%Y-%m-%d %H:%M %Z}"
+
+
+def _pick(rows: list[dict], value, lowest: bool) -> dict | None:
+    scored = [(value(r), r) for r in rows if value(r) is not None]
+    if not scored:
+        return None
+    return (min if lowest else max)(scored, key=lambda t: t[0])[1]
+
+
+def _card(
+    label: str, rows: list[dict], jev: list[dict], value, fmt: str, lowest: bool, unit: str
+) -> dict:
+    best, ref = _pick(rows, value, lowest), _pick(jev, value, lowest)
+    return {
+        "label": label,
+        "value": format(value(best), fmt) + unit if best else "-",
+        "detail": (
+            f"{best['label']} · Jev {format(value(ref), fmt)}{unit}" if best and ref else "-"
+        ),
+    }
+
+
+def cards(rows: list[dict]) -> list[dict]:
+    """Pure: the best Jev alternative on each axis, over the 75-query rows, with Jev's own number.
+
+    A zero cost or latency means the run was never timed, not that it was free.
+    """
+    full = [r for r in rows if r["queries"] == BENCHMARK_QUERIES]
+    open_rows = [r for r in full if r["family"] not in BASELINE_FAMILIES]
+    jev = [r for r in full if r["family"] == "jev"]
+    return [
+        _card(
+            "best quality (mean kept-mass)",
+            open_rows,
+            jev,
+            lambda r: r["mean_kept_mass"],
+            ".3f",
+            False,
+            "",
+        ),
+        _card(
+            "cheapest ($ / 1k queries)",
+            open_rows,
+            jev,
+            lambda r: (r["cost"]["usd_per_1k"] or None) if r["cost"] else None,
+            ".2f",
+            True,
+            "",
+        ),
+        _card(
+            "fastest (s / query)",
+            open_rows,
+            jev,
+            lambda r: (r["latency"]["s_per_query"] or None) if r["latency"] else None,
+            ".2f",
+            True,
+            "",
+        ),
+    ]
+
+
+def build(
+    registry: dict, experiments_dir: Path, api_timing: dict[str, dict[str, str]], tldr: str = ""
+) -> dict:
     """Pure: one site row per registry row, numbers read from that experiment's committed JSONs."""
     rows = []
     for r in registry["rows"]:
@@ -133,11 +211,22 @@ def build(registry: dict, experiments_dir: Path, api_timing: dict[str, dict[str,
                 },
             }
         )
-    return {"ks": list(KS), "experiments": registry["experiments"], "rows": rows}
+    experiments = registry["experiments"]
+    return {
+        "ks": list(KS),
+        "experiments": experiments,
+        "rows": rows,
+        "updated": updated(list(experiments)),
+        "cards": cards(rows),
+        "tldr": tldr,
+    }
 
 
 def main(out: Path = OUT) -> None:
-    data = build(yaml.safe_load(REGISTRY.read_text()), EXPERIMENTS_DIR, read_api_timing(API_TIMING))
+    tldr = TLDR.read_text() if TLDR.exists() else ""
+    data = build(
+        yaml.safe_load(REGISTRY.read_text()), EXPERIMENTS_DIR, read_api_timing(API_TIMING), tldr
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, indent=1) + "\n")
     print(f"{len(data['rows'])} rows, {len(data['experiments'])} experiments -> {_rel(out)}")

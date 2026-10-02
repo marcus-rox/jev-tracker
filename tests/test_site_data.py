@@ -2,14 +2,22 @@
 attached kev_cost_report's numbers unchanged."""
 
 import json
+import re
+from datetime import UTC, datetime
 
 import pytest
 import yaml
 
-from jev_tracker.experiment import EXPERIMENTS_DIR, REPO_DIR, load_config
-from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, build, read_api_timing
+from jev_tracker.experiment import EXPERIMENTS_DIR
+from jev_tracker.server import parse_request, request_path
+from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, TLDR, build, read_api_timing, updated
 
-DATA = build(yaml.safe_load(REGISTRY.read_text()), EXPERIMENTS_DIR, read_api_timing(API_TIMING))
+DATA = build(
+    yaml.safe_load(REGISTRY.read_text()),
+    EXPERIMENTS_DIR,
+    read_api_timing(API_TIMING),
+    TLDR.read_text(),
+)
 
 
 def _row(experiment: str, reranker: str) -> dict:
@@ -72,51 +80,50 @@ def test_R6_every_shown_number_names_its_source() -> None:
             assert r["sources"]["cost"] and r["sources"]["latency"], r["reranker"]
 
 
-# R-7 lives in the browser (site/src/evaluate_config.ts); this pins the two things Python can check.
-EVALUATE_TS = REPO_DIR / "site" / "src" / "evaluate_config.ts"
-
-# What the form emits for source=kev, name=newkev, both methods: keep in step with evaluate_config.ts.
-FORM_YAML = """name: newkev
-cases: null
-k: {start: 50, stop: 200, step: 10}
-rerankers:
-  prod:
-    source: production
-  jev_noul:
-    source: answers
-    method: noul_query_in_state
-    path: data/jev/noul_query_in_state.json.gz
-  jev_score:
-    source: answers
-    method: score_query_in_question
-    path: data/jev/score_query_in_question.json.gz
-  newkev_noul:
-    source: kev
-    model: org/new-kev
-    max_items: 12
-    max_chars: 12000
-    shards: 3
-    concurrency: 16
-    method: noul_query_in_state
-  newkev_score:
-    source: kev
-    model: org/new-kev
-    max_items: 12
-    max_chars: 12000
-    shards: 3
-    concurrency: 16
-    method: score_query_in_question
-"""
+# R-7: the server takes the box's text and files it under requests/ (the GitHub write is not tested).
+def test_R7_parse_request_accepts_any_text() -> None:
+    assert (
+        parse_request(b'{"text": " https://huggingface.co/org/model "}')
+        == "https://huggingface.co/org/model"
+    )
+    assert parse_request(b'{"text": "try the new Kev 30B"}') == "try the new Kev 30B"
 
 
-def test_R7_issue_url(tmp_path) -> None:
-    src = EVALUATE_TS.read_text()
-    assert "/issues/new?labels=evaluate" in src
-    assert "token" not in src.lower()
-    for line in FORM_YAML.splitlines():
-        if line.startswith("    ") and "org/new-kev" not in line and "method:" not in line:
-            assert line in src, line
-    path = tmp_path / "newkev.yaml"
-    path.write_text(FORM_YAML)
-    exp = load_config(path)
-    assert set(exp.rerankers) == {"prod", "jev_noul", "jev_score", "newkev_noul", "newkev_score"}
+@pytest.mark.parametrize(
+    "body, message",
+    [
+        (b"not json", "body is not JSON"),
+        (b'{"url": "https://x.y"}', "expected {'text'"),
+        (b'{"text": "   "}', "expected {'text'"),
+    ],
+)
+def test_R7_parse_request_rejects(body: bytes, message: str) -> None:
+    with pytest.raises(ValueError, match=re.escape(message)):
+        parse_request(body)
+
+
+def test_R7_request_path_is_dated_and_slugged() -> None:
+    now = datetime(2026, 10, 2, 7, 5, 9, tzinfo=UTC)
+    path = request_path("https://huggingface.co/Org/Model-Name?x=1", now)
+    assert path == "requests/2026-10-02/070509_huggingface_co_org_model_name_x_1.json"
+    assert (
+        request_path("try the new Kev 30B", now)
+        == "requests/2026-10-02/070509_try_the_new_kev_30b.json"
+    )
+
+
+def test_R6_updated_and_cards() -> None:
+    assert (
+        updated(["2026_10_02_03_29_11_above-dog", "2026_09_28_01_00_00_old-cat"])
+        == "2026-10-01 20:29 PDT"
+    )
+    with pytest.raises(ValueError, match="no experiment id carries a timestamp"):
+        updated(["nostamp"])
+    data = json.loads(OUT.read_text())
+    assert [c["label"] for c in data["cards"]] == [
+        "best quality (mean kept-mass)",
+        "cheapest ($ / 1k queries)",
+        "fastest (s / query)",
+    ]
+    assert all("Jev" in c["detail"] for c in data["cards"])
+    assert data["updated"] == updated(list(data["experiments"]))
