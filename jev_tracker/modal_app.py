@@ -221,9 +221,19 @@ class ScoringRun(BaseModel):
     experiment: str  # experiment id; answers live under raw/<experiment>/<reranker>/ on the Volume
     reranker: str
     engine: Literal[
-        "kev", "laya", "clef", "matilda", "autotrust", "jevany", "rsi_jev", "minicpm_jev", "api"
+        "kev",
+        "laya",
+        "clef",
+        "matilda",
+        "autotrust",
+        "jevany",
+        "rsi_jev",
+        "minicpm_jev",
+        "api",
+        "gguf",
     ]
     model: str
+    file: str | None = None  # gguf only: the .gguf file inside the `model` repo (Q4_K_M, Q8_0, ...)
     method: str
     max_items: int | None  # children per System One request; None = the whole case
     max_chars: int | None  # characters of child text per request; None = no limit
@@ -251,6 +261,8 @@ class ScoringRun(BaseModel):
     @property
     def name(self) -> str:
         short = self.model.split("/")[-1]
+        if self.file is not None:
+            short = Path(self.file).stem
         i = "all" if self.max_items is None else self.max_items
         c = "all" if self.max_chars is None else self.max_chars
         return f"{short}_{self.method}_i{i}_c{c}"
