@@ -33,12 +33,13 @@ Modal credentials come from MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the environme
 import functools
 import gzip
 import io
+import json
 import os
 import shutil
 import subprocess
 import threading
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Literal
@@ -223,6 +224,17 @@ LLAMA_CTX_PER_SLOT = (
     8192  # tokens per in-flight request; --ctx-size is shared over --parallel slots
 )
 DEFAULT_GGUF_GPU = "L40S"
+# ghcr.io/ollaya-dev/ollaya:cuda12 of 2026-10-02 (Ollaya 0.9.0: /usr/bin/ollaya + ONNX Runtime CUDA 12
+# libraries), pinned by digest. cuda12 rather than cuda: the CUDA 13 pack needs an R580+ driver.
+OLLAYA_IMAGE = "ghcr.io/ollaya-dev/ollaya@sha256:e613df044a10c4deb2b29a6996c96d83ef2bc897670369234f321eec99a04c47"
+OLLAYA_BIN = "/usr/bin/ollaya"
+OLLAYA_URL = "http://127.0.0.1:11435"
+OLLAYA_MODELS_DIR = f"{HF_CACHE_DIR}/ollaya/models"  # the model store, on the HF-cache Volume
+OLLAYA_LOG = Path("/tmp/ollaya.log")
+OLLAYA_START_TIMEOUT_S = 60
+OLLAYA_LOAD_TIMEOUT = "30m"  # bf16 Kev-9B is ~20 GB read from the Volume into ORT; default 5m
+OLLAYA_PULL_TIMEOUT = httpx.Timeout(HOUR, connect=10.0)
+DEFAULT_OLLAYA_GPU = "H100"
 
 
 class ApiEndpoint(BaseModel):
@@ -253,6 +265,7 @@ class ScoringRun(BaseModel):
         "minicpm_jev",
         "api",
         "gguf",
+        "ollaya",
     ]
     model: str
     file: str | None = None  # gguf only: the .gguf file inside the `model` repo (Q4_K_M, Q8_0, ...)
@@ -280,6 +293,8 @@ class ScoringRun(BaseModel):
             return API
         if self.engine == "gguf":
             return self.gpu or DEFAULT_GGUF_GPU
+        if self.engine == "ollaya":
+            return self.gpu or DEFAULT_OLLAYA_GPU
         return self.gpu or GPU_FOR.get(self.repo, DEFAULT_KEV_GPU)
 
     @property
@@ -391,6 +406,20 @@ gguf_image = _mount(
     .pip_install(*RUNTIME_DEPS, HF_HUB_PKG)
     .run_function(_build_llama_server, cpu=LLAMA_CPP_BUILD_CPUS, memory=64 * 1024, timeout=HOUR)
     .env({"HF_HOME": HF_CACHE_DIR})
+    .workdir(REMOTE_DIR)
+)
+ollaya_image = _mount(
+    modal.Image.from_registry(OLLAYA_IMAGE, add_python=PYTHON_VERSION)
+    .pip_install(*RUNTIME_DEPS)
+    .env(
+        {
+            "OLLAYA_HOST": OLLAYA_URL.split("//")[1],
+            "OLLAYA_MODELS": OLLAYA_MODELS_DIR,
+            "OLLAYA_DEVICE": "cuda",  # fail loudly rather than fall back to the CPU
+            "OLLAYA_KEEP_ALIVE": "-1",
+            "OLLAYA_LOAD_TIMEOUT": OLLAYA_LOAD_TIMEOUT,
+        }
+    )
     .workdir(REMOTE_DIR)
 )
 progress_image = _mount(_base().pip_install(FASTAPI_PKG))
@@ -1274,6 +1303,123 @@ def score_cases_gguf(job_json: str) -> str:
     ).model_dump_json()
 
 
+def _start_ollaya() -> subprocess.Popen:
+    """The Ollaya daemon at OLLAYA_URL (env from ollaya_image); returns once GET / answers 200."""
+    Path(OLLAYA_MODELS_DIR).mkdir(parents=True, exist_ok=True)
+    proc = subprocess.Popen(
+        [OLLAYA_BIN, "serve"], stdout=OLLAYA_LOG.open("w"), stderr=subprocess.STDOUT
+    )
+    started = time.time()
+    while time.time() - started < OLLAYA_START_TIMEOUT_S and proc.poll() is None:
+        try:
+            if httpx.get(OLLAYA_URL, timeout=LLAMA_POLL_S).status_code == 200:
+                return proc
+        except httpx.HTTPError:
+            pass
+        time.sleep(LLAMA_POLL_S)
+    proc.kill()
+    raise RuntimeError(
+        f"ollaya serve not up after {time.time() - started:.0f}s (exit {proc.poll()}):\n"
+        + OLLAYA_LOG.read_text()[-3000:]
+    )
+
+
+def pull_progress(lines: Iterable[str], bars: dict[str, tqdm]) -> None:
+    """Drive one tqdm bar per blob from /api/pull's NDJSON stream (`pulling <digest>` lines carry
+    total and completed bytes); the stream must end in {"status": "success"}, else it was cut."""
+    last: dict | None = None
+    for line in lines:
+        if not line:
+            continue
+        last = json.loads(line)
+        if "error" in last:
+            raise RuntimeError(f"ollaya pull: {last['error']}")
+        digest = last.get("digest")
+        if digest is None:
+            continue
+        if digest not in bars:
+            bars[digest] = tqdm(
+                total=last["total"],
+                desc=f"pull {digest[7:19]}",
+                unit="B",
+                unit_scale=True,
+                mininterval=PROGRESS_EVERY_S,
+            )
+        bars[digest].update(last["completed"] - bars[digest].n)
+    if last is None or last.get("status") != "success":
+        raise RuntimeError(f"ollaya pull: stream ended without success (last line {last})")
+
+
+def _pull_ollaya_model(client: httpx.Client, model: str) -> None:
+    """`ollaya pull`: the ONNX graph and the upstream weight files it points at, into the store."""
+    bars: dict[str, tqdm] = {}
+    with client.stream(
+        "POST", f"{OLLAYA_URL}/api/pull", json={"model": model}, timeout=OLLAYA_PULL_TIMEOUT
+    ) as r:
+        if r.status_code != 200:
+            r.read()
+            raise RuntimeError(f"ollaya pull {model}: HTTP {r.status_code}: {r.text[:300]}")
+        try:
+            pull_progress(r.iter_lines(), bars)
+        finally:
+            for bar in bars.values():
+                bar.close()
+
+
+@app.function(
+    image=ollaya_image,
+    gpu=DEFAULT_OLLAYA_GPU,
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_ollaya(job_json: str) -> str:
+    """Answer every batch with an ONNX decision model behind Ollaya's /v1/systemone; resumable.
+
+    `run.model` is an Ollaya name (kev:9b, laya:en, ...): the daemon pulls its ONNX graph and the
+    upstream weight files into the store on the HF-cache Volume (tqdm; reused next time) and runs
+    it with ONNX Runtime CUDA. Load time = pull + daemon start + one warm-up request (which loads
+    the model onto the GPU); warm time = the posting loop, as for every API-shaped scorer."""
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+    t0 = time.time()
+    server = _start_ollaya()
+    client = httpx.Client(timeout=API_TIMEOUT)
+    url = f"{OLLAYA_URL}/v1/systemone"
+    answer = functools.partial(_post_answer, client, url, out, method, run.model, threading.Lock())
+    try:
+        _pull_ollaya_model(client, run.model)
+        hf_cache.commit()
+        cases = run.shard_cases(job.shard)
+        if cases:
+            first = batches(cases[0].input, run.max_items, run.max_chars)[0]
+            body = request(method, cases[0].input.query, first, run.model).body()
+            r = client.post(url, json=body, timeout=OLLAYA_PULL_TIMEOUT)
+            if r.status_code != 200:
+                raise RuntimeError(f"{job.desc}: warm-up HTTP {r.status_code}: {r.text[:300]}")
+        loaded = time.time()
+        print(f"loaded {run.model} in {loaded - t0:.0f}s", flush=True)
+        n = _answer_shard(job, done, answer)
+    finally:
+        client.close()
+        server.terminate()
+        print(OLLAYA_LOG.read_text()[-2500:], flush=True)
+    scored = time.time()
+    return ShardSummary(
+        reranker=run.reranker,
+        shard=job.shard,
+        gpu=run.gpu_type,
+        load_s=loaded - t0,
+        warm_s=scored - loaded,
+        total_s=time.time() - t0,
+        requests=n,
+        resumed=len(done),
+    ).model_dump_json()
+
+
 SCORERS = {
     "kev": score_cases,
     "laya": score_cases_laya,
@@ -1285,6 +1431,7 @@ SCORERS = {
     "minicpm_jev": score_cases_minicpm_jev,
     "api": score_cases_api,
     "gguf": score_cases_gguf,
+    "ollaya": score_cases_ollaya,
 }
 
 

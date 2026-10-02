@@ -19,7 +19,8 @@ Rerankers are declared by `source`: `production` (the frozen ranking in the data
 (raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust`, `jevany`,
 `rsi_jev` or `minicpm_jev`
 (scored now, in-process on Modal, sharded over GPUs), `gguf` (one quantized .gguf file served by
-llama.cpp on a Modal GPU) or `api` (any hosted model that answers the System One request at a URL,
+llama.cpp on a Modal GPU), `ollaya` (an ONNX decision model served by the Ollaya daemon on a Modal
+GPU) or `api` (any hosted model that answers the System One request at a URL,
 from a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
 modal_app.py; the metric is untouched.
 """
@@ -270,6 +271,23 @@ class GgufSource(BaseModel):
     gpu: str | None = None  # None = modal_app.DEFAULT_GGUF_GPU
 
 
+class OllayaSource(BaseModel):
+    """An ONNX decision model served by the Ollaya daemon (ONNX Runtime CUDA) on a Modal GPU.
+    `model` is an Ollaya registry name (kev:9b, kev:4b, laya:en, ...); the registry manifest pins
+    the graph and the upstream weight files, the Modal image pins the daemon."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["ollaya"]
+    method: str
+    model: str
+    max_items: int | None = 25
+    max_chars: int | None = 24_000
+    shards: int = 1
+    concurrency: int = 8  # requests in flight per container; the daemon queues them
+    gpu: str | None = None  # None = modal_app.DEFAULT_OLLAYA_GPU
+
+
 ModelSource = (
     KevSource
     | LayaSource
@@ -281,6 +299,7 @@ ModelSource = (
     | MiniCpmJevSource
     | ApiSource
     | GgufSource
+    | OllayaSource
 )
 Source = Annotated[ProductionSource | AnswersSource | ModelSource, Field(discriminator="source")]
 
