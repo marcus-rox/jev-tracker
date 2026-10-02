@@ -91,16 +91,6 @@
    "started_at": null
   },
   {
-   "config": "configs/kev05b_vs_jev.yaml",
-   "label": "kev05b_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/jaredpalmer/kev-0.5b",
-   "status": "running",
-   "note": "over budget: Kev-0.5B (superseded Qwen2.5 Kev, head.pt + LoRA) would go through the kev source, but today's 3-run cap is used",
-   "queued_at": "2026-10-02T08:13:23Z",
-   "started_at": "2026-10-02T09:39:02Z"
-  },
-  {
    "config": "configs/api_openrouter_kev4b_vs_jev.yaml",
    "label": "api_openrouter_kev4b_vs_jev",
    "source": "twitter",
@@ -109,16 +99,6 @@
    "note": "Kev-4B on OpenRouter; api source needs an OpenRouter key as a Modal Secret (in-process Kev-4B already benchmarked)",
    "queued_at": "2026-10-02T08:13:17Z",
    "started_at": null
-  },
-  {
-   "config": "configs/clef_vs_jev.yaml",
-   "label": "clef_vs_jev",
-   "source": "hackernews",
-   "url": "https://news.ycombinator.com/item?id=49928301",
-   "status": "running",
-   "note": "Clef open-weight decision models; own serving",
-   "queued_at": "2026-10-02T08:13:13Z",
-   "started_at": "2026-10-02T09:39:02Z"
   },
   {
    "config": "configs/api_d1_vs_jev.yaml",

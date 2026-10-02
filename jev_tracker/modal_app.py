@@ -10,6 +10,8 @@ validated into the same `SystemOneResponse`:
   ``kev.serve.Server.answer`` (its model thread batches whatever is queued).
 * Laya (``score_cases_laya``): the ModernBERT decision encoder, many one-child requests per
   forward pass (laya_batch).
+* Clef (``score_cases_clef``): Cloudflare's Qwen3.5 backbone + joint schema head, asked through
+  the release's own ``joint_schema_model.systemone`` (one request per forward pass).
 * API (``score_cases_api``): any hosted model that answers the System One request at a URL; a CPU
   container posts the bodies unchanged with a bearer key from a Modal Secret. The only scorer
   that leaves the container.
@@ -70,16 +72,33 @@ LAYA_SUBFOLDER = {
 }
 LAYA_REVISION = "1c5edc17a7acd8701df6fc341c0d179f1c62c982"
 LAYA_FILES = ["rl_agent_config.json", "model.safetensors", "tokenizer/*", "encoder/*"]
+# huggingface.co/Cloudflare/clef{,-flash}: the release card is "tested with torch 2.11 and
+# transformers 5.10.2"; torchvision + pillow back its image/video processor.
+CLEF_PKGS = (
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "transformers==5.10.2",
+    "accelerate>=1.10",
+    "safetensors>=0.6",
+    "pillow>=11",
+)
+# model id -> pinned Hub revision (2026-10-02); weights + joint head + joint_schema_model.py.
+CLEF_REVISION = {
+    "Cloudflare/clef": "2f3de3dd85f379784083b0814d997ab627200f0c",  # 27.4B, 55 GB bf16
+    "Cloudflare/clef-flash": "17f0b0ad64efb65d273590632833508766b2aae6",  # 9.4B, 19 GB bf16
+}
 GPU_FOR = {
     "jaredpalmer/kev-0.8b": "L4",
     "jaredpalmer/kev-4b": "L40S",
     "jaredpalmer/kev-9b": "H100",
     "jaredpalmer/kev-27b": "H200",  # 55 GB bf16 weights; 25-item states OOM an 80 GB H100
     **{m: "L4" for m in LAYA_SUBFOLDER},
+    "Cloudflare/clef": "H200",  # as Kev-27B: the budget line
+    "Cloudflare/clef-flash": "H100",
 }
 DEFAULT_KEV_GPU = "H100"  # a Kev checkpoint not in GPU_FOR
 # Kev-27B stages its bf16 weights through host memory while loading (upstream: --memory-mb 131072).
-MEMORY_MB_FOR = {"jaredpalmer/kev-27b": 131_072}
+MEMORY_MB_FOR = {"jaredpalmer/kev-27b": 131_072, "Cloudflare/clef": 131_072}
 API = "API"  # gpu of a hosted-API scorer: no GPU is attached or billed
 API_TRANSIENT = {429, 500, 502, 503, 504}
 API_RETRIES = 16  # waits 2, 4, ... 60 s, about 12 min in all
@@ -103,7 +122,7 @@ class ScoringRun(BaseModel):
 
     experiment: str  # experiment id; answers live under raw/<experiment>/<reranker>/ on the Volume
     reranker: str
-    engine: Literal["kev", "laya", "api"]
+    engine: Literal["kev", "laya", "clef", "api"]
     model: str
     method: str
     max_items: int | None  # children per System One request; None = the whole case
@@ -192,6 +211,7 @@ kev_image = _mount(
     .env({"TRITON_CACHE_DIR": f"{HF_CACHE_DIR}/triton-cache"})
 )
 laya_image = _mount(_base().pip_install(LAYA_PKG))  # brings torch + transformers
+clef_image = _mount(_base().pip_install(*CLEF_PKGS))
 api_image = _mount(_base())
 
 runs_volume = modal.Volume.from_name(RUNS_VOLUME_NAME, create_if_missing=True)
@@ -396,6 +416,68 @@ def _answer_laya_shard(
     return n, passes
 
 
+@app.function(
+    image=clef_image,
+    gpu="H100",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_clef(job_json: str) -> str:
+    """Answer every batch of this shard's cases with Clef in-process; resumable like score_cases.
+
+    The release's `joint_schema_model.systemone` takes the /v1/systemone request body unchanged
+    and runs one forward pass per request, so `run.concurrency` is 1 (ClefSource)."""
+    import sys
+
+    import torch
+    from huggingface_hub import snapshot_download
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    path = snapshot_download(run.repo, revision=CLEF_REVISION[run.repo])
+    sys.path.insert(0, path)
+    import joint_schema_model  # the release's own loader and /v1/systemone answerer
+
+    model, processor = joint_schema_model.load_release_model(path, device="cuda")
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(f"loaded {run.repo}@{CLEF_REVISION[run.repo][:12]} in {loaded - t0:.0f}s", flush=True)
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, run.model).body()
+        t = time.time()
+        resp = SystemOneResponse.model_validate(
+            joint_schema_model.systemone(model, processor, body)
+        )
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, resp.usage.input_tokens)
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    scored = time.time()
+    return ShardSummary(
+        reranker=run.reranker,
+        shard=job.shard,
+        gpu=run.gpu_type.rstrip("!"),
+        load_s=loaded - t0,
+        warm_s=scored - loaded,
+        total_s=time.time() - t0,
+        requests=n,
+        resumed=len(done),
+        device=torch.cuda.get_device_name(),
+        resident_gb=resident_gb,
+        peak_gb=torch.cuda.max_memory_allocated() / 1e9,
+        forward_passes=n,
+    ).model_dump_json()
+
+
 @app.function(image=api_image, timeout=4 * HOUR, single_use_containers=True, volumes=VOLUMES)
 def score_cases_api(job_json: str) -> str:
     """Post every batch of this shard's cases to a hosted System One endpoint; resumable.
@@ -477,7 +559,12 @@ def spawn(run: ScoringRun, calls_file: Path) -> None:
 
 def spawn_shard(job: ShardJob, calls_file: Path) -> None:
     """Spawn (or re-spawn: done batches on the Volume are skipped) one shard and record its call."""
-    score = {"kev": score_cases, "laya": score_cases_laya, "api": score_cases_api}
+    score = {
+        "kev": score_cases,
+        "laya": score_cases_laya,
+        "clef": score_cases_clef,
+        "api": score_cases_api,
+    }
     run = job.run
     options: dict = {"memory": MEMORY_MB_FOR.get(run.repo)}
     if run.engine == "api":
