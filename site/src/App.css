@@ -42,6 +42,12 @@ select.theme option { color: #16191f; }
 @keyframes slide { from { margin-left:0 } to { margin-left:65% } }
 .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; background:var(--good); box-shadow:0 0 0 3px rgba(29,129,2,.18); }
 .queued .dot { background:var(--muted); box-shadow:none; }
+.proposals { margin-top:14px; } .proposals h3 { font-size:14px; margin:0 0 4px; }
+.proposed { border-style:dashed; } .proposed .note { font-size:12px; margin-top:4px; }
+.actions { display:flex; gap:8px; margin-top:8px; }
+.actions button { border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; cursor:pointer; background:var(--panel); color:var(--text); }
+.actions .approve { background:var(--accent); border-color:var(--accent); color:#fff; }
+.actions button:disabled { opacity:.5; cursor:default; }
 svg text { fill: var(--muted); font-size:11px; }
 svg .axis { stroke: var(--border); } svg .gridline { stroke: var(--grid); }
 .legend { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12px; margin-top:6px; }
