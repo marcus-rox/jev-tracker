@@ -12,7 +12,7 @@ interface Style { stroke: string; dash: string; width: number; marker: Marker }
 
 const REF_STYLE: Record<string, Style> = {
   jev: { stroke: 'var(--text)', dash: '', width: 2.5, marker: 'circle' },
-  production: { stroke: 'var(--text)', dash: '7 4', width: 2, marker: 'square' },
+  production: { stroke: 'var(--prod)', dash: '7 4', width: 2, marker: 'square' },
   random: { stroke: 'var(--muted)', dash: '2 4', width: 2, marker: 'triangle' },
   oracle: { stroke: 'var(--muted)', dash: '1 5', width: 1.5, marker: 'diamond' },
 }
@@ -164,7 +164,7 @@ export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
 
 interface BarProps { rows: Row[]; value: (r: Row) => number | null | undefined; digits: number }
 
-/** Lowest value per family, as horizontal bars; Jev's bar is the reference. */
+/** Lowest value per family, as horizontal bars; the Jev and production bars are the references. */
 export function HBars({ rows, value, digits }: BarProps) {
   const { tip, show, clear, node } = useTip()
   const best = new Map<string, { v: number; r: Row }>()
@@ -178,12 +178,13 @@ export function HBars({ rows, value, digits }: BarProps) {
   if (arr.length === 0) return <p className="hint">No rows match the filters.</p>
   const max = Math.max(...arr.map((a) => a.v))
   const jev = arr.find((a) => a.r.family === 'jev')
+  const prod = arr.find((a) => a.r.family === 'production')
   return (
     <div className="chartwrap" onPointerLeave={clear}>
       <div className="hbar">
         {arr.map((a) => {
           const text = `${who(a.r)}: ${a.v.toFixed(digits)}`
-          const cls = `${a === jev ? 'jev' : ''} ${tip?.text === text ? 'hot' : ''}`
+          const cls = `${a === jev ? 'jev' : a === prod ? 'prod' : ''} ${tip?.text === text ? 'hot' : ''}`
           return (
             <div key={a.r.family} className={cls} style={{ display: 'contents' }} onPointerMove={show(text)}>
               <span className="lbl">{a.r.family} <span className="muted">{a.r.gpu}</span></span>
