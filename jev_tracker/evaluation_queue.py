@@ -9,13 +9,13 @@
     uv run python -m jev_tracker.evaluation_queue show
 
 One item per config. `proposed` is a model Devin wants Marcus's approval to run (usually one that
-needs adapter work first; `note` says what); `queued` runs in the next daily run's budget; several
+needs adapter work first; `note` says what); `queued` runs in the next hourly run's budget; several
 items may be running at once; a finished one leaves the queue and exists only as its rows in the
 site data. `done` first runs `jev_tracker.experiment verify` on the experiment: an item leaves the
 queue only when every Modal call finished, every reranker answered every case and the kept-mass
-table exists; otherwise it becomes `failed` and carries that evidence until Marcus skips it. `data/queue.json` is the single source of truth: the daily run commits the `start`
+table exists; otherwise it becomes `failed` and carries that evidence until Marcus skips it. `data/queue.json` is the single source of truth: the hourly run commits the `start`
 state straight to `main` so the site shows it while runs are going, the site's server commits
-approvals to `main` (jev_tracker.server), and the run's PR carries the `done` removal.
+approvals to `main` (jev_tracker.server), and the run's final commit carries the `done` removal.
 """
 
 import argparse

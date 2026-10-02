@@ -1,13 +1,13 @@
 # jev-tracker
 
 Leaderboard of Jev alternatives on Rox's frozen 75-case reranking benchmark. The data lives in
-this repository; a daily automation reruns new models on Modal and opens a PR with the numbers.
+this repository; an hourly automation runs new models on Modal and pushes the numbers to `main`.
 
 - `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
 - `docs/PLAN.md` — phases, decisions, next steps
 - `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
-- `docs/AUTOMATION.md` — the daily automation's runbook (R-9): crawl, triage, run, regenerate, open a PR
-- `docs/DAILY_RUN.html` — how the daily run works: block diagram, sequence diagram, steps, triage verdicts, guardrails (open in a browser)
+- `docs/AUTOMATION.md` — the hourly automation's runbook (R-9): crawl, triage, run, regenerate, push to `main`
+- `docs/DAILY_RUN.html` — how an automation run works: block diagram, sequence diagram, steps, triage verdicts, guardrails (open in a browser)
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
   experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
 - `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
@@ -24,7 +24,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 ## How it works
 
 Three parts share one repository: the **benchmark harness** scores a model on the 75 frozen cases,
-the **daily run** finds and benchmarks new models, and the **site** shows the results.
+the **hourly run** finds and benchmarks new models, and the **site** shows the results.
 
 **Figure 1. Block diagram of the system.**
 
@@ -38,7 +38,7 @@ flowchart TB
     CAND[(Today's candidates)]
   end
   subgraph Decide["2. Decide and run"]
-    DEVIN{{Devin daily session: triage}}
+    DEVIN{{Devin hourly session: triage}}
     TRI[(Triage verdicts)]
     CFG[(Experiment configs)]
     RUN[Runner]
@@ -67,9 +67,9 @@ flowchart TB
 
 Legend: rectangles are processes, cylinders are data committed to the repo (or Modal storage),
 the hexagon is the one step where an LLM (Devin) makes a judgment call, the rounded box is a person.
-Everything Devin changes reaches `main` only through a PR Marcus merges (one exception: the
-evaluation-queue file, so the site can show what is running and so Marcus's Approve / Skip clicks
-on the site land immediately; a Running card draws each shard's tqdm bar — requests done / total,
+Everything Devin changes is pushed straight to `main` as fast-forward commits, so the site
+redeploys without a merge (the evaluation-queue file is pushed first, so the site shows what is
+running, and Marcus's Approve / Skip clicks on the site land there immediately; a Running card draws each shard's tqdm bar — requests done / total,
 elapsed < ETA, rate — which the Modal workers publish while they run). Models the harness cannot call yet are *proposed*, not run: the
 site lists them under "Awaiting your approval" and only an approved one is built and benchmarked.
 
@@ -78,13 +78,12 @@ site lists them under "Awaiting your approval" and only an approved one is built
 ```mermaid
 sequenceDiagram
   autonumber
-  participant A as Devin Automation (daily 06:17 PT)
+  participant A as Devin Automation (hourly, at :17)
   participant C as Crawler
   participant S as 7 sources (6 public + Rox Slack)
   participant R as Repository
   participant M as Modal GPUs
-  participant P as Pull request
-  A->>R: clone main, branch automation/DATE
+  A->>R: clone main
   A->>C: crawl since last run
   loop every (source, query) pair (~43)
     C->>S: search(query, since)
@@ -102,9 +101,9 @@ sequenceDiagram
     A->>R: score kept-mass, cost, latency
   end
   A->>R: rewrite TLDR, regenerate site data + build
-  A->>P: open PR "Daily DATE: n candidates, m runs"
-  A->>A: Slack DM to Marcus: today's runs + models awaiting approval
-  Note over P: Marcus reviews and merges, then Render redeploys the site
+  A->>R: push commit "Run DATE TIME: n candidates, m runs" to main
+  A->>A: Slack DM to Marcus (when something was pushed or failed): runs + models awaiting approval
+  Note over R: Render redeploys the site from main
 ```
 
 Legend: solid arrows are calls, dashed arrows are replies, boxes marked `loop` repeat. Steps 3–7 are
@@ -139,7 +138,7 @@ Legend: diamonds are decisions. The key is the URL, except Hugging Face models, 
 | Web | Tavily (keyless) | any page | whole days back |
 | X / Twitter | Tavily + `site:x.com` | posts on x.com / twitter.com | whole days back |
 | Hacker News | Algolia | stories and comments; quoted phrases only | server-side |
-| Slack | Rox workspace via the Slack MCP search the daily Devin session runs (results handed to the crawler) | messages in channels and DMs Marcus can see | server-side (`after:`) |
+| Slack | Rox workspace via the Slack MCP search the hourly Devin session runs (results handed to the crawler) | messages in channels and DMs Marcus can see | server-side (`after:`) |
 | Submitted | the site's text box | whatever a person typed | none |
 
 Queries live in `crawler/queries.yaml`: the model names (`jev`, `kev`, `laya`, `systemone`,
@@ -189,8 +188,8 @@ docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> -
 ```
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
-time, headline cards and a TLDR the daily run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
-free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next daily run triages it.
+time, headline cards and a TLDR the hourly run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
+free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next hourly run triages it.
 The Suggestions tab lists every submission (newest first, sortable by date, first five words with an expand toggle).
 
 ## Crawler
@@ -210,14 +209,14 @@ where it is `hf:<id>@<sha>` so new weights under an existing model id surface on
 (source, query) is printed and skipped; the exit code is 1 if any failed. `web` and `twitter` use
 Tavily's keyless mode (no API key; `twitter` appends `site:x.com`); when Tavily rate-limits with
 HTTP 429 the source logs and returns nothing. `slack` is Rox's own workspace: the crawler holds no
-Slack credentials, so the daily Devin session runs each Slack query through its Slack MCP search
+Slack credentials, so the hourly Devin session runs each Slack query through its Slack MCP search
 tool, saves the results as `<query slug>.md`, and passes the directory with `--slack-results`;
 without that flag the source is skipped (printed, not a failure). Prior-work survey: `docs/PRIOR_WORK.md`.
 
 ## Automation
 
-A Devin Automation runs `docs/AUTOMATION.md` once a day and opens a PR; nothing lands on `main`
-without a merge. Devin's decisions are data in that PR: `crawler/triage/<date>.yaml` (a verdict
+A Devin Automation runs `docs/AUTOMATION.md` once an hour (at :17) and pushes its commit straight to
+`main`; Render redeploys the site from it. Devin's decisions are data in that commit: `crawler/triage/<date>.yaml` (a verdict
 per candidate) and the `configs/*.yaml` it wrote for runnable ones.
 
 ```bash

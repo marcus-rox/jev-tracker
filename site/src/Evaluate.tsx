@@ -30,7 +30,7 @@ export default function Evaluate() {
     <form className="eval" onSubmit={go}>
       <p className="hint">
         Paste one link (a Hugging Face model, a GitHub repo, a paper, an API page) or describe the model. It is saved under{' '}
-        <a href={blob('requests')} target="_blank" rel="noreferrer">requests/</a>; the next daily run picks it up and Devin works out how to evaluate it.
+        <a href={blob('requests')} target="_blank" rel="noreferrer">requests/</a>; the next hourly run picks it up and Devin works out how to evaluate it.
       </p>
       <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="text here:" />
       <button type="submit" disabled={state.kind === 'busy' || text.trim() === ''}>{state.kind === 'busy' ? 'Submitting…' : 'Submit'}</button>
