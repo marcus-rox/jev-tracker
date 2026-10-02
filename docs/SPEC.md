@@ -1,6 +1,6 @@
 # jev-tracker — specification
 
-**Status · 2026-10-02 · 9 requirements, 8 bound (R-1..R-4 Phase 1, R-5..R-7 Phase 2, R-8 Phase 3), 1 unbound (automation).** Approved by Marcus on
+**Status · 2026-10-02 · 9 requirements, 9 bound (R-1..R-4 Phase 1, R-5..R-7 Phase 2, R-8 Phase 3, R-9 Phase 3b).** Approved by Marcus on
 2026-10-01 with four decisions (raw answers in the repo under `data/`; automation opens a PR; one
 batched Kev-27B revalidation; no Slack report). Only Marcus edits this file after that.
 
@@ -117,4 +117,4 @@ None.
 | R-6 | `jev_tracker.site_data` | `tests/test_site_data.py::test_R6_*` | bound |
 | R-7 | `site/` | `tests/test_site_data.py::test_R7_*` | bound |
 | R-8 | `crawler/` | `tests/test_crawler.py::test_R8_*` | bound |
-| R-9 | automation | `docs/AUTOMATION.md`; manual: first PR opened by the automation | unbound |
+| R-9 | automation | `docs/AUTOMATION.md`; manual: first PR opened by the automation (https://github.com/marcus-rox/jev-tracker/pull/9, 2026-10-02) | bound |
