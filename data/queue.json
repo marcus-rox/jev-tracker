@@ -3,7 +3,7 @@
   {
    "config": "configs/matilda_jev_v1_vs_jev.yaml",
    "label": "matilda_jev_v1_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/Maincode/matilda-jev-v1",
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (matilda_jev); no harness source for it",
@@ -13,7 +13,7 @@
   {
    "config": "configs/autotrust_jev27b_vs_jev.yaml",
    "label": "autotrust_jev27b_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/autotrust/JEV-27B",
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (qwen3_5_text); no harness source for it",
@@ -23,7 +23,7 @@
   {
    "config": "configs/jevany_qwen35_4b_vs_jev.yaml",
    "label": "jevany_qwen35_4b_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/SimpleJev/JevAny-Qwen3.5-4B-LoRA",
    "status": "proposed",
    "note": "JevAny pointer LoRA on Qwen3.5-4B (instruct); card requires the JevAny code release, kev loader not verified on it",
@@ -33,7 +33,7 @@
   {
    "config": "configs/rsi_jev_v3_2b_vs_jev.yaml",
    "label": "rsi_jev_v3_2b_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/shgao/rsi-jev-v3.0-qwen3.5-2b",
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (rsi-jev); no harness source for it",
@@ -43,7 +43,7 @@
   {
    "config": "configs/minicpm5_2b_jev_vs_jev.yaml",
    "label": "minicpm5_2b_jev_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/ytbai/MiniCPM5-2B-Jev",
    "status": "proposed",
    "note": "LoRA on MiniCPM5-2B with its own /v1/systemone server; kev source only verified on Qwen3.5/3.8 bases",
@@ -53,7 +53,7 @@
   {
    "config": "configs/kev08b_ba_lora_vs_jev.yaml",
    "label": "kev08b_ba_lora_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/Glax147/kev-0.8b-ba-lora",
    "status": "proposed",
    "note": "over budget: general Kev-0.8B post-train (head.pt + LoRA on Qwen3.5-0.8B-Base) runs through the kev source, but today's 3-run cap is used; queue for a later day",
@@ -63,7 +63,7 @@
   {
    "config": "configs/kev4b_ba_lora_vs_jev.yaml",
    "label": "kev4b_ba_lora_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/Glax147/kev-4b-ba-lora",
    "status": "proposed",
    "note": "over budget: general Kev-4B post-train (head.pt + LoRA on Qwen3.5-4B-Base) runs through the kev source, but today's 3-run cap is used; queue for a later day",
@@ -73,7 +73,7 @@
   {
    "config": "configs/startlux_decision_9b_vs_jev.yaml",
    "label": "startlux_decision_9b_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/startlux-models/StartLux-Decision-9B",
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (qwen3_5); no harness source for it",
@@ -83,7 +83,7 @@
   {
    "config": "configs/hotchpotch_jev_reranker_vs_jev.yaml",
    "label": "hotchpotch_jev_reranker_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/blog/hotchpotch/introducing-jev-reranker",
    "status": "proposed",
    "note": "jev-reranker (hotchpotch) small decision models; own architecture",
@@ -93,7 +93,7 @@
   {
    "config": "configs/kev05b_vs_jev.yaml",
    "label": "kev05b_vs_jev",
-   "source": "https",
+   "source": "huggingface",
    "url": "https://huggingface.co/jaredpalmer/kev-0.5b",
    "status": "proposed",
    "note": "over budget: Kev-0.5B (superseded Qwen2.5 Kev, head.pt + LoRA) would go through the kev source, but today's 3-run cap is used",
@@ -103,7 +103,7 @@
   {
    "config": "configs/api_openrouter_kev4b_vs_jev.yaml",
    "label": "api_openrouter_kev4b_vs_jev",
-   "source": "https",
+   "source": "twitter",
    "url": "https://x.com/OpenRouter/status/2103560670205886744",
    "status": "proposed",
    "note": "Kev-4B on OpenRouter; api source needs an OpenRouter key as a Modal Secret (in-process Kev-4B already benchmarked)",
@@ -113,7 +113,7 @@
   {
    "config": "configs/clef_vs_jev.yaml",
    "label": "clef_vs_jev",
-   "source": "https",
+   "source": "hackernews",
    "url": "https://news.ycombinator.com/item?id=49928301",
    "status": "proposed",
    "note": "Clef open-weight decision models; own serving",
@@ -123,7 +123,7 @@
   {
    "config": "configs/api_d1_vs_jev.yaml",
    "label": "api_d1_vs_jev",
-   "source": "https",
+   "source": "hackernews",
    "url": "https://news.ycombinator.com/item?id=49904832",
    "status": "proposed",
    "note": "Liquid AI d1: configs/api_d1_vs_jev.yaml exists but its 75-case run failed (key-kiwi); fix the endpoint call before rerunning",
@@ -133,7 +133,7 @@
   {
    "config": "configs/von_395m_vs_jev.yaml",
    "label": "von_395m_vs_jev",
-   "source": "https",
+   "source": "github",
    "url": "https://github.com/wfzyx/von",
    "status": "proposed",
    "note": "Von: open-source 395M System One model; own architecture / serving",

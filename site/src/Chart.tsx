@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
+import { useLayoutEffect, useRef, useState, type PointerEvent, type RefObject } from 'react'
 import type { K, Row } from './types'
 
 const TOP_N = 10
@@ -58,6 +58,23 @@ const Swatch = ({ st }: { st: Style }) => (
 
 interface Tip { text: string; x: number; y: number }
 
+const FALLBACK_WIDTH = 900
+
+/** Rendered width of `ref`, tracked with a ResizeObserver so the SVG is drawn in real pixels instead of stretched. */
+function useWidth(ref: RefObject<HTMLDivElement | null>): number {
+  const [width, setWidth] = useState(FALLBACK_WIDTH)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => setWidth(el.clientWidth || FALLBACK_WIDTH)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref])
+  return width
+}
+
 /** Tooltip positioned relative to the wrapping `.chartwrap`; set from pointer events, cleared on leave. */
 function useTip() {
   const [tip, setTip] = useState<Tip | null>(null)
@@ -88,11 +105,12 @@ interface LineProps { rows: Row[]; ks: K[]; height: number; hidden: Set<string>;
 
 export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
   const { tip, show, clear, node } = useTip()
+  const wrap = useRef<HTMLDivElement>(null)
+  const W = useWidth(wrap)
   const S = series(rows)
-  if (S.length === 0) return <p className="hint">No rows match the filters.</p>
   const styles = chartStyles(S)
   const styleOf = (family: string) => REF_STYLE[family] ?? styles.get(family)!
-  const W = 900, H = height, L = 48, R = 36, T = 12, B = 30
+  const H = height, L = 48, R = 36, T = 12, B = 30
   const kept = (r: Row, k: K) => r.kept_mass?.[k] ?? 0
   const hot = tip?.text.split(' @')[0]
   const nearestK = (e: PointerEvent<Element>) => {
@@ -107,9 +125,10 @@ export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
   const y = (v: number) => T + (H - T - B) * (1 - (v - y0) / (y1 - y0))
   const ticks: number[] = []
   for (let v = Math.ceil(y0 * 10) / 10; v <= y1 + 1e-9; v += 0.1) ticks.push(v)
+  if (S.length === 0) return <div className="chartwrap" ref={wrap}><p className="hint">No rows match the filters.</p></div>
   return (
-    <div className="chartwrap" onPointerLeave={clear}>
-      <svg viewBox={`0 0 ${W} ${H}`} width="100%" preserveAspectRatio="none" style={{ height: H }}>
+    <div className="chartwrap" ref={wrap} onPointerLeave={clear}>
+      <svg width={W} height={H}>
         {ticks.map((v) => (
           <g key={v}>
             <line className="gridline" x1={L} x2={W - R} y1={y(v)} y2={y(v)} />

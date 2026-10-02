@@ -20,6 +20,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
 from pydantic import BaseModel
 
@@ -57,6 +58,26 @@ def write_queue(path: Path, queue: Queue) -> None:
     path.write_text(queue.model_dump_json(indent=1) + "\n")
 
 
+HOST_SOURCE = {
+    "github.com": "github",
+    "huggingface.co": "huggingface",
+    "arxiv.org": "arxiv",
+    "x.com": "twitter",
+    "twitter.com": "twitter",
+    "news.ycombinator.com": "hackernews",
+}
+
+
+def source_of(key: str, url: str) -> str:
+    """Crawler source a triage decision came from: `hf:` keys are Hugging Face, otherwise by host."""
+    if key.startswith("hf:"):
+        return "huggingface"
+    host = urlsplit(url).hostname or ""
+    if host.endswith(".slack.com"):
+        return "slack"
+    return HOST_SOURCE.get(host.removeprefix("www."), "web")
+
+
 def enqueued(queue: Queue, decisions: list[TriageDecision], now: datetime) -> Queue:
     """`queue` plus one item per decision with a config not already in it: runnable -> queued,
     needs_adapter -> proposed (the config is the one Devin would write once approved)."""
@@ -70,7 +91,7 @@ def enqueued(queue: Queue, decisions: list[TriageDecision], now: datetime) -> Qu
             QueueItem(
                 config=d.config,
                 label=d.config.stem,
-                source=d.key.split(":")[0] if ":" in d.key else "submitted",
+                source=source_of(d.key, d.url),
                 url=d.url,
                 status=PROPOSED_BY[d.verdict],
                 note=d.reason if d.verdict == "needs_adapter" else "",

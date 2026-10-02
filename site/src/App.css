@@ -34,17 +34,29 @@ select.theme option { color: #16191f; }
 .num .cmp { color:var(--muted); font-size:12px; }
 .num .delta { font-size:12px; font-weight:600; margin-left:6px; }
 .good { color:var(--good); } .bad { color:var(--bad); }
-.status { display:flex; gap:12px; flex-wrap:wrap; align-items:stretch; }
-.job { flex:1 1 220px; border:1px solid var(--border); border-radius:6px; padding:8px 10px; background:var(--bg); }
-.job .m { font-weight:600; } .job .meta { color:var(--muted); font-size:12px; }
+.pipeline { display:grid; gap:0 8px; align-items:start; }
+.stagewrap { position:relative; min-width:0; }
+.stage { border:1px solid var(--border); border-radius:6px; background:var(--bg); padding:8px 10px; }
+.stage h3 { font-size:13px; margin:0 0 6px; display:flex; align-items:center; gap:6px; }
+.stage .count { font-size:11px; color:var(--muted); background:var(--grid); border-radius:10px; padding:0 7px; }
+.stage ul { list-style:none; margin:0; padding:0; max-height:380px; overflow:auto; }
+.stage .hint { margin:4px 0 2px; }
+.arrow { position:absolute; left:-12px; top:8px; width:16px; text-align:center; color:var(--muted); font-size:13px; }
+.row { padding:6px 0; border-top:1px solid var(--border); }
+.row:first-child { border-top:0; }
+.row .head { display:flex; align-items:center; gap:6px; }
+.row .m { font-weight:600; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.row .meta { color:var(--muted); font-size:12px; white-space:nowrap; }
+.row .head .meta { flex:none; }
+.row .note { white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.row > .meta { white-space:normal; }
 .bar { height:6px; background:var(--grid); border-radius:3px; margin-top:6px; overflow:hidden; }
 .bar i { display:block; height:100%; width:35%; background:var(--accent); animation: slide 1.6s ease-in-out infinite alternate; }
 @keyframes slide { from { margin-left:0 } to { margin-left:65% } }
 .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; background:var(--good); box-shadow:0 0 0 3px rgba(29,129,2,.18); }
 .queued .dot { background:var(--muted); box-shadow:none; }
-.proposals { margin-top:14px; } .proposals h3 { font-size:14px; margin:0 0 4px; }
-.proposed { border-style:dashed; } .proposed .note { font-size:12px; margin-top:4px; }
-.actions { display:flex; gap:8px; margin-top:8px; }
+.proposed .dot { background:transparent; box-shadow:none; border:1px dashed var(--muted); }
+.actions { display:flex; gap:8px; margin-top:6px; }
 .actions button { border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; cursor:pointer; background:var(--panel); color:var(--text); }
 .actions .approve { background:var(--accent); border-color:var(--accent); color:#fff; }
 .actions button:disabled { opacity:.5; cursor:default; }

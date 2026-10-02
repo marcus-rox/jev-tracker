@@ -1,8 +1,15 @@
 import { useState } from 'react'
-import { blob, type Decision, type QueueItem } from './types'
+import { blob, type Decision, type QueueItem, type QueueStatus } from './types'
 import type { Decide, QueueState } from './queue'
 
 const MINUTE_MS = 60_000
+
+/** The queue read left to right: a model enters as a proposal, is queued once approved, runs, then leaves for the Model list. */
+const STAGES: { status: QueueStatus; title: string; empty: string }[] = [
+  { status: 'proposed', title: 'Awaiting your approval', empty: 'nothing to approve' },
+  { status: 'queued', title: 'Queued', empty: 'nothing queued' },
+  { status: 'running', title: 'Running', empty: 'nothing running' },
+]
 
 function age(fromIso: string, now: Date): string {
   const minutes = Math.max(0, Math.round((now.getTime() - new Date(fromIso).getTime()) / MINUTE_MS))
@@ -11,21 +18,13 @@ function age(fromIso: string, now: Date): string {
   return `${Math.round(minutes / 1440)} d`
 }
 
-function Job({ item, now }: { item: QueueItem; now: Date }) {
-  const running = item.status === 'running'
-  return (
-    <div className={`job ${item.status}`}>
-      <div className="m"><span className="dot" />{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</div>
-      <div className="meta">
-        {running && item.started_at ? `running · started ${age(item.started_at, now)} ago` : `queued · waiting ${age(item.queued_at, now)}`} · from {item.source}
-      </div>
-      {running && <div className="bar"><i /></div>}
-    </div>
-  )
+function since(item: QueueItem, now: Date): string {
+  if (item.status === 'running') return item.started_at ? `started ${age(item.started_at, now)} ago` : 'starting'
+  return `${item.status === 'proposed' ? 'proposed' : 'queued'} ${age(item.queued_at, now)} ago`
 }
 
-/** A model Devin wants approval to run; Approve queues it for the next daily run, Skip drops it. */
-function Proposal({ item, now, decide }: { item: QueueItem; now: Date; decide: Decide }) {
+/** Approve queues the model for the next daily run (which builds whatever the note says is missing); Skip drops it. */
+function Actions({ item, decide }: { item: QueueItem; decide: Decide }) {
   const [pending, setPending] = useState<Decision | null>(null)
   const [error, setError] = useState<string | null>(null)
   const act = (decision: Decision) => {
@@ -37,47 +36,65 @@ function Proposal({ item, now, decide }: { item: QueueItem; now: Date; decide: D
     })
   }
   return (
-    <div className="job proposed">
-      <div className="m">{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</div>
-      <div className="meta">proposed {age(item.queued_at, now)} ago · from {item.source}</div>
-      {item.note && <div className="note">{item.note}</div>}
+    <>
       <div className="actions">
-        <button type="button" className="approve" disabled={pending !== null} onClick={() => act('approve')}>{pending === 'approve' ? 'Queueing…' : 'Approve — run it'}</button>
+        <button type="button" className="approve" disabled={pending !== null} onClick={() => act('approve')}>{pending === 'approve' ? 'Queueing…' : 'Approve'}</button>
         <button type="button" className="reject" disabled={pending !== null} onClick={() => act('reject')}>{pending === 'reject' ? 'Removing…' : 'Skip'}</button>
       </div>
       {error && <div className="meta bad">{error}</div>}
-    </div>
+    </>
+  )
+}
+
+function Row({ item, now, decide }: { item: QueueItem; now: Date; decide: Decide }) {
+  return (
+    <li className={`row ${item.status}`}>
+      <div className="head">
+        <span className="dot" />
+        <span className="m">{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</span>
+        <span className="meta">{since(item, now)}</span>
+      </div>
+      <div className="meta">from {item.source}{item.note && <> · <span className="note" title={item.note}>{item.note}</span></>}</div>
+      {item.status === 'running' && <div className="bar"><i /></div>}
+      {item.status === 'proposed' && <Actions item={item} decide={decide} />}
+    </li>
   )
 }
 
 export function QueueBody({ state, decide }: { state: QueueState; decide: Decide }) {
   if (state.kind === 'loading') return <p className="hint">Loading…</p>
   if (state.kind === 'error') return <p className="hint">Queue unavailable: {state.message}.</p>
-  const proposed = state.queue.items.filter((i) => i.status === 'proposed')
-  const active = state.queue.items.filter((i) => i.status !== 'proposed')
   if (state.queue.items.length === 0) return <p className="hint">Queue is empty — every runnable model has been evaluated; results are in the table below.</p>
+  const byStage = STAGES.map((stage) => state.queue.items.filter((item) => item.status === stage.status))
+  // A stage with more in it gets more width, capped so an empty stage still reads as a stage.
+  const columns = byStage.map((items) => `minmax(0, ${1 + Math.min(items.length, 3)}fr)`).join(' ')
   return (
-    <>
-      {active.length > 0 && <div className="status">{active.map((item) => <Job key={item.config} item={item} now={state.at} />)}</div>}
-      {proposed.length > 0 && (
-        <div className="proposals">
-          <h3>Awaiting your approval ({proposed.length})</h3>
-          <p className="hint">Devin found these but will not run them until you approve. Approve adds the model to the queue for the next daily run (which builds whatever the note says is missing); Skip removes it. Each click is a commit to data/queue.json on main.</p>
-          <div className="status">{proposed.map((item) => <Proposal key={item.config} item={item} now={state.at} decide={decide} />)}</div>
-        </div>
-      )}
-    </>
+    <div className="pipeline" style={{ gridTemplateColumns: columns }}>
+      {STAGES.map((stage, i) => {
+        const items = byStage[i]
+        return (
+          <div key={stage.status} className="stagewrap">
+            {i > 0 && <div className="arrow" aria-hidden="true">→</div>}
+            <section className={`stage ${stage.status}`}>
+              <h3>{stage.title} <span className="count">{items.length}</span></h3>
+              {items.length === 0 ? <p className="hint">{stage.empty}</p> : (
+                <ul>{items.map((item) => <Row key={item.config} item={item} now={state.at} decide={decide} />)}</ul>
+              )}
+            </section>
+          </div>
+        )
+      })}
+    </div>
   )
 }
 
 export function QueueSub({ state }: { state: QueueState }) {
   const items = state.kind === 'ok' ? state.queue.items : []
-  const running = items.filter((i) => i.status === 'running').length
-  const proposed = items.filter((i) => i.status === 'proposed').length
+  const count = (status: QueueStatus) => items.filter((i) => i.status === status).length
   return (
     <>
-      {state.kind === 'ok' && <span className="sub">{running} running · {items.length - running - proposed} waiting · {proposed} awaiting approval</span>}
-      <span className="sub">{state.kind === 'ok' && '· '}source: <a href={blob('data/queue.json')} target="_blank" rel="noreferrer">data/queue.json</a> · several can run at once · a finished model leaves the queue and appears in the Model list</span>
+      {state.kind === 'ok' && <span className="sub">{count('proposed')} awaiting approval · {count('queued')} queued · {count('running')} running</span>}
+      <span className="sub">{state.kind === 'ok' && '· '}source: <a href={blob('data/queue.json')} target="_blank" rel="noreferrer">data/queue.json</a> · Approve / Skip commit to it on main · a finished model leaves the queue and appears in the Model list below</span>
     </>
   )
 }
