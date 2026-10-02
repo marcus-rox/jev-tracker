@@ -244,17 +244,23 @@ def main() -> None:
         for k, t, need in BUCKETS
         if by_bucket.get(k, 0)
     )
+    funnel = [
+        ("Hits crawled (all sources)", n_hits),
+        ("Triaged not_jev (people, CISA KEV, apps on Jev…)", n_hits - n_alt),
+        ("Real Jev alternatives (runnable + needs_adapter)", n_alt),
+        ("Distinct Hugging Face models among them", n_models),
+        ("…never touched (no run, not in queue)", n_untouched_models),
+        ("Benchmarked hits", by_status.get("benchmarked", 0) + by_status.get("ran today", 0)),
+        ("In the approval queue (proposed)", queue_counts.get("proposed", 0)),
+    ]
+    funnel_bars = "\n".join(
+        f'<li class="jev-hbar"><span class="jev-hbar__label">{e(a)}</span>'
+        f'<span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:{100 * n / n_hits:.1f}%"></span></span>'
+        f'<span class="jev-hbar__value">{n:,}</span></li>'
+        for a, n in funnel
+    )
     funnel_rows = "\n".join(
-        f'<tr><th scope="row">{e(a)}</th><td data-numeric>{n}</td></tr>'
-        for a, n in [
-            ("Hits crawled (all sources)", n_hits),
-            ("Triaged not_jev (people, CISA KEV, apps on Jev…)", n_hits - n_alt),
-            ("Real Jev alternatives (runnable + needs_adapter)", n_alt),
-            ("Distinct Hugging Face models among them", n_models),
-            ("…never touched (no run, not in queue)", n_untouched_models),
-            ("Benchmarked hits", by_status.get("benchmarked", 0) + by_status.get("ran today", 0)),
-            ("In the approval queue (proposed)", queue_counts.get("proposed", 0)),
-        ]
+        f'<tr><th scope="row">{e(a)}</th><td data-numeric>{n}</td></tr>' for a, n in funnel
     )
     not_jev_rows = "\n".join(
         f'<tr><th scope="row">{e(k)}</th><td data-numeric>{n}</td></tr>'
@@ -307,11 +313,14 @@ def main() -> None:
 
 <section class="a-section" aria-labelledby="funnel-heading">
   <h2 class="a-section__title" id="funnel-heading">2. Funnel from crawl to queue</h2>
-  <figure class="a-panel" data-a-chart="bar" data-a-chart-label="Hits at each stage from crawl to approval queue">
-    <figcaption class="a-panel__title">Figure 1. Hits at each stage, crawl → triage → queue. Legend: one bar per stage; the value is a count of hits (or models where stated).</figcaption>
-    <div class="a-table-scroll"><table class="a-table"><caption class="a-visually-hidden">Funnel counts</caption>
-      <thead><tr><th scope="col">Stage</th><th scope="col" data-numeric>Count</th></tr></thead>
-      <tbody>{funnel_rows}</tbody></table></div>
+  <figure class="a-panel">
+    <figcaption class="a-panel__title">Figure 1. Hits at each stage, crawl → triage → queue. Legend: one bar per stage, length proportional to the count of hits (or of models where the label says so); the number is the count.</figcaption>
+    <ol class="jev-hbars" aria-label="Hits at each stage from crawl to approval queue">{funnel_bars}</ol>
+    <details class="a-disclosure"><summary>Data table</summary>
+      <div class="a-table-scroll"><table class="a-table"><caption class="a-visually-hidden">Funnel counts</caption>
+        <thead><tr><th scope="col">Stage</th><th scope="col" data-numeric>Count</th></tr></thead>
+        <tbody>{funnel_rows}</tbody></table></div>
+    </details>
   </figure>
   <div class="a-table-scroll">
     <table class="a-table">
@@ -369,6 +378,16 @@ def main() -> None:
   </div>
 </section>
 
+<style>
+.jev-hbars {{ list-style: none; margin: 16px 0 12px; padding: 0; display: grid; gap: 10px; }}
+.jev-hbar {{ display: grid; grid-template-columns: minmax(180px, 2fr) 5fr 4ch; align-items: center; gap: 12px; }}
+.jev-hbar__label {{ color: rgb(var(--text-secondary)); font-size: 14px; line-height: 1.3; }}
+.jev-hbar__track {{ height: 20px; background: rgb(var(--tint-tertiary)); border-radius: var(--radius-sm); overflow: hidden; }}
+.jev-hbar__fill {{ display: block; height: 100%; min-width: 3px; background: rgb(var(--bg-accent)); border-radius: inherit; }}
+.jev-hbar__value {{ font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }}
+@media (max-width: 640px) {{ .jev-hbar {{ grid-template-columns: 1fr; gap: 4px; }} .jev-hbar__value {{ text-align: left; }} }}
+@media print {{ .jev-hbar__fill {{ print-color-adjust: exact; -webkit-print-color-adjust: exact; }} }}
+</style>
 <script>
 document.querySelectorAll('[data-jev-filters]').forEach(function (bar) {{
   var table = document.querySelector(bar.getAttribute('data-jev-filters'));

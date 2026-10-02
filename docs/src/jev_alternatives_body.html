@@ -27,17 +27,26 @@
 
 <section class="a-section" aria-labelledby="funnel-heading">
   <h2 class="a-section__title" id="funnel-heading">2. Funnel from crawl to queue</h2>
-  <figure class="a-panel" data-a-chart="bar" data-a-chart-label="Hits at each stage from crawl to approval queue">
-    <figcaption class="a-panel__title">Figure 1. Hits at each stage, crawl → triage → queue. Legend: one bar per stage; the value is a count of hits (or models where stated).</figcaption>
-    <div class="a-table-scroll"><table class="a-table"><caption class="a-visually-hidden">Funnel counts</caption>
-      <thead><tr><th scope="col">Stage</th><th scope="col" data-numeric>Count</th></tr></thead>
-      <tbody><tr><th scope="row">Hits crawled (all sources)</th><td data-numeric>1942</td></tr>
+  <figure class="a-panel">
+    <figcaption class="a-panel__title">Figure 1. Hits at each stage, crawl → triage → queue. Legend: one bar per stage, length proportional to the count of hits (or of models where the label says so); the number is the count.</figcaption>
+    <ol class="jev-hbars" aria-label="Hits at each stage from crawl to approval queue"><li class="jev-hbar"><span class="jev-hbar__label">Hits crawled (all sources)</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:100.0%"></span></span><span class="jev-hbar__value">1,942</span></li>
+<li class="jev-hbar"><span class="jev-hbar__label">Triaged not_jev (people, CISA KEV, apps on Jev…)</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:74.2%"></span></span><span class="jev-hbar__value">1,440</span></li>
+<li class="jev-hbar"><span class="jev-hbar__label">Real Jev alternatives (runnable + needs_adapter)</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:25.8%"></span></span><span class="jev-hbar__value">502</span></li>
+<li class="jev-hbar"><span class="jev-hbar__label">Distinct Hugging Face models among them</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:8.3%"></span></span><span class="jev-hbar__value">161</span></li>
+<li class="jev-hbar"><span class="jev-hbar__label">…never touched (no run, not in queue)</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:7.5%"></span></span><span class="jev-hbar__value">145</span></li>
+<li class="jev-hbar"><span class="jev-hbar__label">Benchmarked hits</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:2.5%"></span></span><span class="jev-hbar__value">49</span></li>
+<li class="jev-hbar"><span class="jev-hbar__label">In the approval queue (proposed)</span><span class="jev-hbar__track"><span class="jev-hbar__fill" style="width:0.5%"></span></span><span class="jev-hbar__value">9</span></li></ol>
+    <details class="a-disclosure"><summary>Data table</summary>
+      <div class="a-table-scroll"><table class="a-table"><caption class="a-visually-hidden">Funnel counts</caption>
+        <thead><tr><th scope="col">Stage</th><th scope="col" data-numeric>Count</th></tr></thead>
+        <tbody><tr><th scope="row">Hits crawled (all sources)</th><td data-numeric>1942</td></tr>
 <tr><th scope="row">Triaged not_jev (people, CISA KEV, apps on Jev…)</th><td data-numeric>1440</td></tr>
 <tr><th scope="row">Real Jev alternatives (runnable + needs_adapter)</th><td data-numeric>502</td></tr>
 <tr><th scope="row">Distinct Hugging Face models among them</th><td data-numeric>161</td></tr>
 <tr><th scope="row">…never touched (no run, not in queue)</th><td data-numeric>145</td></tr>
 <tr><th scope="row">Benchmarked hits</th><td data-numeric>49</td></tr>
 <tr><th scope="row">In the approval queue (proposed)</th><td data-numeric>9</td></tr></tbody></table></div>
+    </details>
   </figure>
   <div class="a-table-scroll">
     <table class="a-table">
@@ -935,6 +944,16 @@
   </div>
 </section>
 
+<style>
+.jev-hbars { list-style: none; margin: 16px 0 12px; padding: 0; display: grid; gap: 10px; }
+.jev-hbar { display: grid; grid-template-columns: minmax(180px, 2fr) 5fr 4ch; align-items: center; gap: 12px; }
+.jev-hbar__label { color: rgb(var(--text-secondary)); font-size: 14px; line-height: 1.3; }
+.jev-hbar__track { height: 20px; background: rgb(var(--tint-tertiary)); border-radius: var(--radius-sm); overflow: hidden; }
+.jev-hbar__fill { display: block; height: 100%; min-width: 3px; background: rgb(var(--bg-accent)); border-radius: inherit; }
+.jev-hbar__value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+@media (max-width: 640px) { .jev-hbar { grid-template-columns: 1fr; gap: 4px; } .jev-hbar__value { text-align: left; } }
+@media print { .jev-hbar__fill { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+</style>
 <script>
 document.querySelectorAll('[data-jev-filters]').forEach(function (bar) {
   var table = document.querySelector(bar.getAttribute('data-jev-filters'));
