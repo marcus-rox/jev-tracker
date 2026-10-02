@@ -16,7 +16,7 @@ const TABS: [Tab, string][] = [
   ['quality', 'Quality'],
   ['cost', 'Cost'],
   ['latency', 'Latency'],
-  ['evaluate', 'Evaluate a new model'],
+  ['evaluate', 'Sprint board'],
 ]
 const FROZEN_QUERIES = 75
 const CHART_SUB = 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table · click a legend entry to hide it'
@@ -83,6 +83,8 @@ export default function App() {
   const [hidden, setHidden] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
   const [queue, decide] = useQueue()
+  const [side, setSide] = useState(() => localStorage.getItem('side') !== 'closed')
+  const toggleSide = () => { localStorage.setItem('side', side ? 'closed' : 'open'); setSide(!side) }
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/rows.json`).then((r) => r.json()).then(setData)
@@ -115,10 +117,13 @@ export default function App() {
           <a href={REPO} target="_blank" rel="noreferrer">GitHub</a>
         </div>
       </header>
-      <div className="layout">
+      <div className={`layout${side ? '' : ' closed'}`}>
       <aside className="side">
         <Widget span={12} title="Suggest a model to scrape"><Evaluate /></Widget>
       </aside>
+      <button className="rail" onClick={toggleSide} title={side ? 'Hide the suggestion panel' : 'Show the suggestion panel'} aria-expanded={side}>
+        <span className="arrow">{side ? '‹' : '›'}</span>
+      </button>
       <div className="content">
       <div className="toolbar">
         <Dropdown name="Model" options={FAMS} selected={fams} onChange={setFamilies} />
@@ -154,7 +159,7 @@ export default function App() {
           <Widget span={12} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
           <Widget span={12} title="Latency · all runs"><Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={setSort} /></Widget>
         </>}
-        {tab === 'evaluate' && <Widget span={12} title="Model evaluation queue" sub={<QueueSub state={queue} />}><QueueBody state={queue} decide={decide} /></Widget>}
+        {tab === 'evaluate' && <Widget span={12} title="Model evaluation sprint" sub={<QueueSub state={queue} />}><QueueBody state={queue} decide={decide} /></Widget>}
       </main>
       </div>
       </div>
