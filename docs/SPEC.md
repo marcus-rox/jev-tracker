@@ -1,6 +1,6 @@
 # jev-tracker — specification
 
-**Status · 2026-10-02 · 12 requirements, 9 bound, 3 unbound (R-1..R-4 Phase 1, R-5..R-7 Phase 2, R-8 Phase 3, R-9 Phase 3b, R-10..R-12 GGUF).** Approved by Marcus on
+**Status · 2026-10-02 · 9 requirements, 9 bound (R-1..R-4 Phase 1, R-5..R-7 Phase 2, R-8 Phase 3, R-9 Phase 3b).** Approved by Marcus on
 2026-10-01 with four decisions (raw answers in the repo under `data/`; automation opens a PR; one
 batched Kev-27B revalidation; no Slack report). Only Marcus edits this file after that.
 
@@ -10,10 +10,7 @@ batched Kev-27B revalidation; no Slack report). Only Marcus edits this file afte
 R-1   Any decision model can be scored on the frozen 75-case set           jev_tracker.experiment
 ├── R-2    Every scorer speaks the System One contract                    jev_tracker.systemone, methods
 ├── R-3    An experiment is fully recorded in the repository              jev_tracker.experiment
-├── R-4    The ported harness reproduces the committed results            tests/, data/experiments
-└── R-10   A quantized GGUF export can be scored like a bf16 model        jev_tracker.modal_app (gguf)
-    ├── R-11  A GGUF run's cost and latency are comparable to bf16       jev_tracker.experiment, modal_app
-    └── R-12  Model, size and quantization are chosen by configuration   jev_tracker.experiment
+└── R-4    The ported harness reproduces the committed results            tests/, data/experiments
 
 R-5   The three tables are one static website with filters               site/
 ├── R-6    The site is generated from the committed experiments           jev_tracker.site_data
@@ -25,7 +22,7 @@ R-8   New Jev mentions and open-source alternatives are found daily      crawler
 
 | Module | Level 1 | Level 2 |
 |---|---|---|
-| `jev_tracker.experiment`, `modal_app` | R-1 | R-3, R-10 (R-11, R-12 at Level 3) |
+| `jev_tracker.experiment`, `modal_app` | R-1 | R-3 |
 | `jev_tracker.systemone`, `methods`, `rerankers`, `kept_mass` | | R-2 |
 | `tests/`, `data/experiments` | | R-4 |
 | `site/` | R-5 | R-7 |
@@ -99,16 +96,6 @@ with the new data and the regenerated site.
   last-updated time on the summary tab), regenerate the site data, and open a PR to `main`. Python does the mechanical
   steps (`crawler`, `crawler.triage check`, `jev_tracker.evaluate_issues`, `jev_tracker.experiment`,
   `jev_tracker.site_data`); Devin only decides what to include. Runbook: `docs/AUTOMATION.md`.
-- **R-10 GGUF scoring.** `experiment run` SHALL score a quantized GGUF export of a decision model,
-  named in the config by its Hub repository pinned to a revision and the file inside it, on the
-  benchmark cases on Modal, through the System One contract, and leave the same artifacts a bf16 run
-  leaves. Scenarios, levels and rationale: `docs/GGUF_SPEC.html`. *(Approved in chat 2026-10-02.)*
-- **R-11 Comparable cost and latency.** A GGUF run's cost and latency SHALL be measured the same
-  way as a local bf16 run's: warm GPU-seconds × the GPU's list price, GPU-seconds per query, GPU
-  named on the row. `docs/GGUF_SPEC.html`.
-- **R-12 Choice by configuration.** Choosing a different GGUF model, size or quantization SHALL
-  require only a config edit (repository, revision, file, method, GPU, shards, concurrency, request
-  limits). `docs/GGUF_SPEC.html`.
 
 ## Not required
 
@@ -137,6 +124,3 @@ None.
 | R-7 | `site/`, `jev_tracker.server` | `tests/test_site_data.py::test_R7_*`; manual: submit from the site | bound |
 | R-8 | `crawler/` | `tests/test_crawler.py::test_R8_*` | bound |
 | R-9 | automation | `docs/AUTOMATION.md`; manual: first PR opened by the automation (https://github.com/marcus-rox/jev-tracker/pull/9, 2026-10-02) | bound |
-| R-10 | — | planned: `tests/test_gguf.py::test_R10_*` + 2-case Modal smoke run (`docs/GGUF_SPEC.html`) | unbound |
-| R-11 | — | planned: smoke experiment's cost table | unbound |
-| R-12 | — | planned: `tests/test_gguf.py::test_R12_*` | unbound |

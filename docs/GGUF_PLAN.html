@@ -1185,7 +1185,7 @@ details.a-disclosure[open] > summary::before {
       <header class="a-header">
         <div>
           <h1 class="a-header__title">GGUF scoring on Modal — plan</h1>
-          <p class="a-header__subtitle">What this slice is for, the bar it must beat (bf16 Kev-9B), what is decided, and the next four steps with their falsifiers and costs.</p>
+          <p class="a-header__subtitle">What this task is for, the bar it must beat (bf16 Kev-9B), what is decided, and the next four steps with their falsifiers and costs.</p>
         </div>
         <button
           type="button"
@@ -1249,10 +1249,10 @@ details.a-disclosure[open] > summary::before {
   <h2 class="a-section__title" id="status">1. Status</h2>
   <p class="a-prose">
     <strong>Status · 2026-10-02 · requirements approved, build starting.</strong> Marcus approved
-    the minimal set (R-10, R-11, R-12 in <code>docs/GGUF_SPEC.html</code>) in chat; no code exists
+    the minimal set (R-1..R-3 in <code>docs/GGUF_SPEC.html</code>) in chat; no code exists
     yet. First checkpoint is step 1 below: a GGUF decision model loaded on a Modal GPU and answering
-    one System One request. This plan is the GGUF slice of <code>docs/PLAN.md</code>, which keeps
-    the step numbering of the wider project; the steps here are numbered <em>GGUF step 1..4</em>.
+    one System One request. This is a standalone task with its own spec and plan (it does not extend the repository-wide
+    <code>docs/PLAN.md</code>); its steps are numbered <em>GGUF step 1..4</em>.
   </p>
 </section>
 
@@ -1299,18 +1299,18 @@ details.a-disclosure[open] > summary::before {
 
         <!-- laptop -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Configuration"
-          data-a-detail="One YAML file per experiment. A gguf source names the Hub repository pinned to a revision, the file inside it (for example the Q4_K_M file), the question method, GPU, shards, concurrency and request limits. Changing model, size or quantization is a configuration edit only (R-12).">
+          data-a-detail="One YAML file per experiment. A gguf source names the Hub repository pinned to a revision, the file inside it (for example the Q4_K_M file), the question method, GPU, shards, concurrency and request limits. Changing model, size or quantization is a configuration edit only (R-1).">
           <rect x="40" y="90" width="210" height="56" /><text class="a-node__title" x="54" y="114">Configuration</text><text class="a-node__sub" x="54" y="132">source: gguf · repo@rev · file</text></g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Spawn shards"
           data-a-detail="Deals the cases over the configured number of shards and spawns one GPU container per shard, recording each call so a failed shard can be respawned. Unchanged: the gguf engine is one more entry in the dispatch table.">
           <rect x="40" y="190" width="210" height="56" /><text class="a-node__title" x="54" y="214">Spawn shards</text><text class="a-node__sub" x="54" y="232">cases dealt over N GPUs</text></g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Pull and evaluate"
-          data-a-detail="Waits for the shards (tqdm), pulls the raw answers and the per-shard timers (load, warm, in-function seconds) from the runs volume, then derives kept-mass@k, $/1k from warm GPU-seconds times the GPU price, and s/query. Unchanged; this is what makes the GGUF row comparable to the bf16 row (R-11).">
+          data-a-detail="Waits for the shards (tqdm), pulls the raw answers and the per-shard timers (load, warm, in-function seconds) from the runs volume, then derives kept-mass@k, $/1k from warm GPU-seconds times the GPU price, and s/query. Unchanged; this is what makes the GGUF row comparable to the bf16 row (R-2).">
           <rect x="40" y="330" width="210" height="56" /><text class="a-node__title" x="54" y="354">Pull and evaluate</text><text class="a-node__sub" x="54" y="372">kept-mass · $/1k · s/query</text></g>
 
         <!-- container -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Fetch GGUF file"
-          data-a-detail="Downloads the one named file from the pinned Hub revision into the shared weights volume (tqdm), or reuses it when it is already there. Measured as load time, not warm time. Fails early, naming repository and file, when the file does not exist (R-10 scenario 3).">
+          data-a-detail="Downloads the one named file from the pinned Hub revision into the shared weights volume (tqdm), or reuses it when it is already there. Measured as load time, not warm time. Fails early, naming repository and file, when the file does not exist (R-2).">
           <rect x="330" y="90" width="340" height="56" /><text class="a-node__title" x="344" y="114">1 · Fetch the GGUF file</text><text class="a-node__sub" x="344" y="132">one file · pinned revision · cached in the weights volume</text></g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Local model server"
           data-a-detail="The GGUF runtime's own server, started inside the container with the file, all layers on the GPU and as many parallel slots as the configured concurrency. It implements the System One endpoint for the official decision-model families itself (prompt format, yes/no or level readout), so the harness writes no per-model adapter. Ready when its health check answers.">
@@ -1355,7 +1355,7 @@ details.a-disclosure[open] > summary::before {
   <p class="a-section__note">
     Legend. Numbers 1–4 are the order inside the container. The bold box is the only new runtime
     piece; the client loop, summary, volumes and evaluator are reused unchanged, which is what
-    makes R-11 hold by construction.
+    makes R-2's cost and latency comparable to bf16 by construction.
   </p>
 </section>
 
@@ -1403,7 +1403,7 @@ details.a-disclosure[open] > summary::before {
     </svg>
   </figure>
   <p class="a-section__note">
-    Legend. Steps 2–3 are load time; 4–5 are warm time and the only part that enters $/1k (R-11).
+    Legend. Steps 2–3 are load time; 4–5 are warm time and the only part that enters $/1k (R-2).
     Step 4's request body is the same one the hosted-API scorer sends today; the server, not the
     harness, turns it into a prompt and reads the answer tokens.
   </p>
@@ -1455,10 +1455,10 @@ details.a-disclosure[open] > summary::before {
       <caption class="a-visually-hidden">Next steps with requirement, falsifier and cost</caption>
       <thead><tr><th scope="col">Step</th><th scope="col">Serves</th><th scope="col">Falsifier</th><th scope="col">Cost</th></tr></thead>
       <tbody>
-        <tr><th scope="row">GGUF step 1 · a Modal GPU container loads Kev-9B Q4_K_M with the pinned runtime build and answers one System One request</th><td>R-10</td><td>The runtime cannot load the file, or rejects our request body, or returns answers that do not validate as a System One response</td><td>under $0.50 of L40S time; one session hour</td></tr>
-        <tr><th scope="row">GGUF step 2 · <code>gguf</code> source in configuration, dispatch to the new scorer, 2-case smoke config, unit tests without a GPU</th><td>R-10, R-12</td><td>Config parsing or dispatch tests fail; a quantization switch needs a code edit</td><td>no GPU; one session hour</td></tr>
-        <tr><th scope="row">GGUF step 3 · run the 2-case smoke on Modal; report load s, warm GPU-s per query and $/1k beside bf16 Kev-9B</th><td>R-10, R-11</td><td>The GGUF row is neither cheaper per 1k nor faster per query than bf16 Kev-9B (hypothesis refuted, recorded as such), or its cost cannot be computed by the shared formula</td><td>under $1</td></tr>
-        <tr><th scope="row">GGUF step 4 · all 75 cases, only on Marcus's go; then Q8_0 or 4B/0.8B by config edit if the result warrants</th><td>R-10, R-11, R-12</td><td>Kept-mass outside ±0.02 of the bf16 row, or the per-query numbers do not hold at 75 cases</td><td>about $3 per model</td></tr>
+        <tr><th scope="row">GGUF step 1 · a Modal GPU container loads Kev-9B Q4_K_M with the pinned runtime build and answers one System One request</th><td>R-2</td><td>The runtime cannot load the file, or rejects our request body, or returns answers that do not validate as a System One response</td><td>under $0.50 of L40S time; one session hour</td></tr>
+        <tr><th scope="row">GGUF step 2 · <code>gguf</code> source in configuration, dispatch to the new scorer, 2-case smoke config, unit tests without a GPU</th><td>R-1, R-3</td><td>Config parsing or dispatch tests fail; a quantization switch needs a code edit</td><td>no GPU; one session hour</td></tr>
+        <tr><th scope="row">GGUF step 3 · run the 2-case smoke on Modal; report load s, warm GPU-s per query and $/1k beside bf16 Kev-9B</th><td>R-2, R-3</td><td>The GGUF row is neither cheaper per 1k nor faster per query than bf16 Kev-9B (hypothesis refuted, recorded as such), or its cost cannot be computed by the shared formula</td><td>under $1</td></tr>
+        <tr><th scope="row">GGUF step 4 · all 75 cases, only on Marcus's go; then Q8_0 or 4B/0.8B by config edit if the result warrants</th><td>R-1, R-2</td><td>Kept-mass outside ±0.02 of the bf16 row, or the per-query numbers do not hold at 75 cases</td><td>about $3 per model</td></tr>
       </tbody>
     </table>
   </div>
@@ -1480,7 +1480,7 @@ details.a-disclosure[open] > summary::before {
 <section class="a-section" aria-labelledby="out">
   <h2 class="a-section__title" id="out">9. Out of scope</h2>
   <ul class="a-prose">
-    <li>StartLux GGUF: bare decoder, readout in the publisher's torch server; separate slice.</li>
+    <li>StartLux GGUF: bare decoder, readout in the publisher's torch server; separate task.</li>
     <li>ONNX and MLX exports: other runtimes; nearly all are repackagings of benchmarked bf16 models.</li>
     <li>A generic per-model prompt/readout adapter.</li>
     <li>Crawler and triage rule changes (re-triaging the 181 export hits), queue, dashboard, <code>data/</code>, <code>site/dist</code>.</li>
@@ -1498,7 +1498,7 @@ details.a-disclosure[open] > summary::before {
 </section>
 
 
-      <footer class="a-footnote">GGUF slice of docs/PLAN.md. Numbers quoted for the bar (bf16 Kev-9B: $5.6/1k, 5.1 GPU-s/query, kept-mass@50 0.753) are the committed experiment on the dashboard; GGUF numbers are not yet measured. Source: docs/src/gguf_plan_body.html.</footer>
+      <footer class="a-footnote">Standalone plan for the GGUF task. Numbers quoted for the bar (bf16 Kev-9B: $5.6/1k, 5.1 GPU-s/query, kept-mass@50 0.753) are the committed experiment on the dashboard; GGUF numbers are not yet measured. Source: docs/src/gguf_plan_body.html.</footer>
     </main>
     <script>
 /* Devin artifact kit — self-contained behavior for standalone HTML artifacts.
