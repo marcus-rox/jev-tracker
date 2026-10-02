@@ -37,7 +37,9 @@ NO_CONFIG = TriageDecision(
 
 def test_lifecycle_queued_running_gone(tmp_path: Path) -> None:
     queue = enqueued(Queue(), [RUNNABLE, SKIPPED], NOW)
-    assert [(i.label, i.status, i.source) for i in queue.items] == [("kev9b_v2", "queued", "hf")]
+    assert [(i.label, i.status, i.source) for i in queue.items] == [
+        ("kev9b_v2", "queued", "huggingface")
+    ]
     assert enqueued(queue, [RUNNABLE], LATER) == queue  # same config is not queued twice
 
     queue = started(queue, [RUNNABLE.config, Path("configs/manual.yaml")], LATER)
