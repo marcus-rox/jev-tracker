@@ -15,7 +15,7 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 - `data/benchmark/` — the 75 cases and labels (frozen)
 - `data/jev/` — Jev's committed answers
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
-- `data/registry.yaml` — row labels (model family, serving, GPU) for every reranker shown
+- `data/registry.yaml` — row labels (model family, serving, runtime, GPU) for every reranker shown
 - `site/` — Vite + React static site: summary / quality / cost / latency tables, filters,
   "Suggest a model to scrape" form in the left panel; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,

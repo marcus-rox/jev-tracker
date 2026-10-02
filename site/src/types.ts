@@ -22,6 +22,7 @@ export interface Row {
   label: string
   family: string
   serving: string
+  runtime: string
   gpu: string
   buffer: string
   queries: number

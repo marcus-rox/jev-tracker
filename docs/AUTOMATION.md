@@ -64,7 +64,9 @@ B2. **Triage** (the decision): read today's candidates and write `crawler/triage
      Kev-family checkpoints, `laya` for Laya) or a hosted endpoint with a URL + model name (`api`
      source; the key must already be a Modal Secret — otherwise `needs_adapter`). Write
      `configs/<slug>.yaml` next to `configs/kev4b_vs_jev.yaml` (same shape: prod + Jev answers +
-     the new model, all 75 cases) and add the model's row labels to `data/registry.yaml`.
+     the new model, all 75 cases) and add the model's row labels to `data/registry.yaml`, each with
+     its `runtime` (`PyTorch` for weights the harness loads in-process; the allowed values are
+     `RUNTIMES` in `jev_tracker/site_data.py`).
    - `needs_adapter`: a real Jev alternative the harness cannot call yet (new serving stack, new
      request format, key not provisioned, over budget). Say what is missing in `reason`. When it
      looks worth the adapter work (a distinct open model family, a hosted endpoint that only needs
