@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { blob, type Evidence, type QueueItem, type QueueStatus } from './types'
 import { SKIP_PHRASE, type Decide, type QueueState } from './queue'
 import { nextRun, untilText, whenText } from './schedule'
@@ -6,6 +6,9 @@ import { useProgress, type ProgressState } from './progress'
 import { RunProgress } from './Progress'
 
 const MINUTE_MS = 60_000
+/** Widget bottom padding + border + the grid's bottom padding, so the widget ends at the viewport edge. */
+const BOARD_BOTTOM_GAP_PX = 37
+const BOARD_MIN_HEIGHT_PX = 400
 
 /** The queue read left to right: a model enters as a proposal, is queued once approved, runs, then leaves for the Model list. */
 const STAGES: { status: QueueStatus; title: string; empty: string }[] = [
@@ -159,13 +162,30 @@ function NextRun({ now }: { now: Date }) {
   )
 }
 
+/** Sizes the board so it reaches the bottom of the viewport when the page is scrolled to the top. */
+function useFillViewport(ref: RefObject<HTMLDivElement | null>, active: boolean) {
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el || !active) return
+    const fit = () => {
+      const top = el.getBoundingClientRect().top + window.scrollY
+      el.style.height = `${Math.max(BOARD_MIN_HEIGHT_PX, window.innerHeight - top - BOARD_BOTTOM_GAP_PX)}px`
+    }
+    fit()
+    window.addEventListener('resize', fit)
+    return () => window.removeEventListener('resize', fit)
+  }, [ref, active])
+}
+
 export function QueueBody({ state, decide }: { state: QueueState; decide: Decide }) {
   const progress = useProgress(state.kind === 'ok' && state.queue.items.some((item) => item.status === 'running'))
+  const board = useRef<HTMLDivElement>(null)
+  useFillViewport(board, state.kind === 'ok' && state.queue.items.length > 0)
   if (state.kind === 'loading') return <p className="hint">Loading…</p>
   if (state.kind === 'error') return <p className="hint">Queue unavailable: {state.message}.</p>
   if (state.queue.items.length === 0) return <p className="hint">Queue is empty — every runnable model has been evaluated; results are in the table below.</p>
   return (
-    <div className="board">
+    <div ref={board} className="board">
       {STAGES.map((stage) => {
         const items = state.queue.items.filter((item) => item.status === stage.status)
         return (
