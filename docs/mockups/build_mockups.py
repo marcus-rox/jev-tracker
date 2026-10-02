@@ -112,7 +112,6 @@ a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: un
 svg text { fill: var(--muted); font-size:11px; }
 svg .axis { stroke: var(--border); } svg .gridline { stroke: var(--grid); }
 .legend { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12px; margin-top:6px; }
-.legend span i { display:inline-block; width:14px; height:3px; vertical-align:middle; margin-right:5px; border-radius:2px; }
 .legend span { cursor:pointer; } .legend span.off { opacity:.35; }
 .tldr p { margin:0 0 8px; } .tldr { font-size:13px; }
 table { border-collapse:collapse; width:100%%; font-size:13px; }
@@ -134,12 +133,31 @@ td.dim { color: var(--muted); }
 
 JS = r"""
 const D = DATA; const KS = D.ks; const ROWS = D.rows.filter(r => r.queries === 75);
-const PALETTE = ['#0972d3','#d13212','#1d8102','#8c4fff','#e07b00','#0891b2','#be185d','#65a30d','#7c3aed','#b45309','#0f766e','#9f1239'];
+// Okabe-Ito colorblind-safe palette; each family also gets its own marker shape and dash so colour is never the only cue.
+const PALETTE = ['#0072b2','#e69f00','#009e73','#d55e00','#56b4e9','#cc79a7','#b8a400'];
+const MARKERS = ['circle', 'square', 'triangle', 'diamond'];
+const REF_STYLE = {
+  jev: {stroke: 'var(--text)', dash: '', width: 2.5, marker: 'circle'},
+  production: {stroke: 'var(--text)', dash: '7 4', width: 2, marker: 'square'},
+  random: {stroke: 'var(--muted)', dash: '2 4', width: 2, marker: 'triangle'},
+  oracle: {stroke: 'var(--muted)', dash: '1 5', width: 1.5, marker: 'diamond'},
+};
 const fam = r => r.family;
 const sk = r => r.serving.split(':')[0];
 const FAMS = [...new Set(ROWS.map(fam))];
 const GPUS = [...new Set(ROWS.map(r => r.gpu))];
 const color = Object.fromEntries(FAMS.map((f, i) => [f, PALETTE[i % PALETTE.length]]));
+// Styles are assigned per chart, in rank order of the plotted series, so the ≤7 non-reference lines never share a colour.
+const chartStyles = S => Object.fromEntries(S.filter(r => !REF_STYLE[fam(r)]).map((r, i) => [fam(r), {
+  stroke: PALETTE[i % PALETTE.length], dash: i >= PALETTE.length ? '9 3' : '', width: 1.8, marker: MARKERS[i % MARKERS.length]
+}]));
+function marker(shape, cx, cy, fill, r = 3.5) {
+  if (shape === 'square') return `<rect x="${cx - r}" y="${cy - r}" width="${2 * r}" height="${2 * r}" fill="${fill}"/>`;
+  if (shape === 'triangle') return `<polygon points="${cx},${cy - r - 1} ${cx - r - 1},${cy + r} ${cx + r + 1},${cy + r}" fill="${fill}"/>`;
+  if (shape === 'diamond') return `<polygon points="${cx},${cy - r - 1} ${cx + r + 1},${cy} ${cx},${cy + r + 1} ${cx - r - 1},${cy}" fill="${fill}"/>`;
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}"/>`;
+}
+const swatch = (f, styles) => { const st = REF_STYLE[f] || styles[f]; return `<svg width="30" height="12" style="vertical-align:middle;margin-right:5px"><line x1="0" x2="30" y1="6" y2="6" stroke="${st.stroke}" stroke-width="${st.width}" ${st.dash ? `stroke-dasharray="${st.dash}"` : ''}/>${marker(st.marker, 15, 6, st.stroke, 3)}</svg>`; };
 const state = { tab: 'summary', fams: new Set(FAMS), gpus: new Set(GPUS), sort: null, hidden: new Set() };
 const fmt = (v, d) => v == null ? '–' : v.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
 const $ = s => document.querySelector(s);
@@ -172,7 +190,7 @@ function series(rows) {
 const TOP_N = 10, REFS = new Set(['jev', 'production', 'random']);
 
 function lineChart(rows, height) {
-  const S = series(rows); const W = 900, H = height, L = 48, R = 36, T = 12, B = 30;
+  const S = series(rows); const styles = chartStyles(S); const W = 900, H = height, L = 48, R = 36, T = 12, B = 30;
   const ys = S.flatMap(r => KS.map(k => r.kept_mass[k]));
   const y0 = Math.max(0, Math.floor(Math.min(...ys) * 10) / 10 - 0.05), y1 = 1.0;
   const x = i => L + i * (W - L - R) / (KS.length - 1), y = v => T + (H - T - B) * (1 - (v - y0) / (y1 - y0));
@@ -182,11 +200,11 @@ function lineChart(rows, height) {
   for (const r of S) {
     if (state.hidden.has(fam(r))) continue;
     const pts = KS.map((k, i) => `${x(i)},${y(r.kept_mass[k])}`).join(' ');
-    const base = ['jev', 'production', 'random', 'oracle'].includes(fam(r));
-    g += `<polyline fill="none" stroke="${color[fam(r)]}" stroke-width="${base ? 2.5 : 1.8}" ${base && fam(r) !== 'jev' ? 'stroke-dasharray="6 4"' : ''} points="${pts}"><title>${esc(r.label)} · ${esc(r.serving)}</title></polyline>`;
-    KS.forEach((k, i) => g += `<circle cx="${x(i)}" cy="${y(r.kept_mass[k])}" r="3" fill="${color[fam(r)]}"><title>${esc(r.label)} @${k}: ${r.kept_mass[k].toFixed(3)}</title></circle>`);
+    const st = REF_STYLE[fam(r)] || styles[fam(r)];
+    g += `<polyline fill="none" stroke="${st.stroke}" stroke-width="${st.width}" ${st.dash ? `stroke-dasharray="${st.dash}"` : ''} points="${pts}"><title>${esc(r.label)} · ${esc(r.serving)}</title></polyline>`;
+    KS.forEach((k, i) => g += `<g>${marker(st.marker, x(i), y(r.kept_mass[k]), st.stroke)}<title>${esc(r.label)} @${k}: ${r.kept_mass[k].toFixed(3)}</title></g>`);
   }
-  const legend = S.map(r => `<span class="${state.hidden.has(fam(r)) ? 'off' : ''}" data-f="${esc(fam(r))}"><i style="background:${color[fam(r)]}"></i>${esc(fam(r))} <span style="color:var(--muted)">${r.mean_kept_mass.toFixed(3)}</span></span>`).join('');
+  const legend = S.map(r => `<span class="${state.hidden.has(fam(r)) ? 'off' : ''}" data-f="${esc(fam(r))}">${swatch(fam(r), styles)}${esc(fam(r))} <span style="color:var(--muted)">${r.mean_kept_mass.toFixed(3)}</span></span>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="none" style="height:${H}px">${g}<line class="axis" x1="${L}" x2="${L}" y1="${T}" y2="${H - B}"/><line class="axis" x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}"/></svg><div class="legend">${legend}</div>`;
 }
 
@@ -211,7 +229,7 @@ function table(rows, cols) {
   if (s) { const lab = LABELS.find(l => l[0] === s.key)?.[1]; const col = cols.find(c => c[0] === s.key);
     sorted = [...rows].sort((a, b) => lab ? lab(a).localeCompare(lab(b)) * s.dir : (((col[1](a) ?? -Infinity) - (col[1](b) ?? -Infinity)) * s.dir)); }
   const ar = k => s?.key === k ? (s.dir === 1 ? ' ▲' : ' ▼') : '';
-  return `<div class="tablewrap"><table><thead><tr>${LABELS.map(l => `<th data-k="${l[0]}">${l[0]}${ar(l[0])}</th>`).join('')}${cols.map(c => `<th class="n" data-k="${esc(c[0])}">${esc(c[0])}${ar(c[0])}</th>`).join('')}</tr></thead><tbody>${
+  return `<p class="hint">Click a column header to sort; click again to reverse.</p><div class="tablewrap"><table><thead><tr>${LABELS.map(l => `<th data-k="${l[0]}">${l[0]}${ar(l[0])}</th>`).join('')}${cols.map(c => `<th class="n" data-k="${esc(c[0])}">${esc(c[0])}${ar(c[0])}</th>`).join('')}</tr></thead><tbody>${
     sorted.map(r => `<tr class="${r.highlight ? 'hl' : ''}">${LABELS.map(l => `<td title="${esc(r.experiment)}">${esc(l[1](r))}</td>`).join('')}${cols.map(c => { const v = c[1](r); return v == null ? '<td class="n dim">–</td>' : `<td class="n">${fmt(v, c[2])}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 
@@ -247,7 +265,7 @@ function render() {
     g += widget(4, 'TLDR', `<div class="tldr">${D.tldr.split('\n').filter(l => l.trim()).map(l => `<p>${esc(l)}</p>`).join('')}</div>`, 'written by the daily run');
     g += widget(6, 'Cost · $ per 1k queries', hbars(rows, r => r.cost?.usd_per_1k, 2, true), 'cheapest run per family');
     g += widget(6, 'Latency · seconds per query', hbars(rows, r => r.latency?.s_per_query, 2, true), 'fastest run per family');
-    g += widget(12, 'All runs', `<p class="hint">Click a column header to sort; again to reverse.</p>` + table(rows, COLS.summary), `${rows.length} rows · 75 frozen queries`);
+    g += widget(12, 'All runs', table(rows, COLS.summary), `${rows.length} rows · 75 frozen queries`);
   } else if (state.tab === 'quality') {
     g += widget(12, 'Quality · kept-mass@k', lineChart(rows, 360), 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table below');
     g += widget(12, 'Quality · all runs', table(rows.filter(r => r.tables.includes('quality')), COLS.quality));
