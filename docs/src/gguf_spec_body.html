@@ -1,0 +1,218 @@
+<section class="a-section" aria-labelledby="toc-heading">
+  <h2 class="a-section__title" id="toc-heading">Contents</h2>
+  <ul class="a-prose">
+    <li><a href="#status">1. Status</a></li>
+    <li><a href="#levels">2. Requirement levels (Figure 1, Table 1)</a></li>
+    <li><a href="#purpose">3. Purpose</a></li>
+    <li><a href="#requirements">4. Requirements R-10, R-11, R-12</a></li>
+    <li><a href="#not-required">5. Not required</a></li>
+    <li><a href="#clarifications">6. Clarifications</a></li>
+    <li><a href="#conformance">7. Conformance (Table 2)</a></li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="status">
+  <h2 class="a-section__title" id="status">1. Status</h2>
+  <p class="a-prose">
+    <strong>Status · 2026-10-02 · 3 new requirements (R-10, R-11, R-12), 3 unbound.</strong>
+    This is the GGUF slice of the jev-tracker specification. The three requirements were drafted
+    as the minimal set (R-1..R-3 of the approved proposal) and approved by Marcus in chat on
+    2026-10-02 ("Approve as-is, start building"). They extend <code>docs/SPEC.md</code>
+    (R-1..R-9), which stays the registry of requirement numbers; only Marcus edits either after this.
+  </p>
+  <div class="a-callout a-callout--decision">
+    <p class="a-prose" style="margin: 0">
+      Numbering. The proposal in chat used R-1..R-3 locally. In the repository those IDs were
+      already taken, so here they are <strong>R-10</strong> (scoring), <strong>R-11</strong>
+      (comparable cost and latency) and <strong>R-12</strong> (choice by configuration).
+      Proposal R-3 (smoke config and tests) is not a requirement; it is the conformance suite for
+      R-10 and R-12 and appears as Task 3 in the sprint tasks.
+    </p>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="levels">
+  <h2 class="a-section__title" id="levels">2. Requirement levels</h2>
+  <p class="a-section__note">
+    Figure 1. Where the three new requirements hang in the existing tree. A level says what rests
+    on a requirement, not how strongly it binds; every requirement is an obligation. Indentation is
+    "serves". The three new rows are marked <strong>new</strong>.
+  </p>
+  <figure class="a-panel" style="padding: 12px 16px">
+<pre class="a-prose" style="margin: 0; font-family: var(--font-mono); font-size: 13px; line-height: 1.5">R-1   Any decision model can be scored on the frozen 75-case set      experiment
+├── R-2    Every scorer speaks the System One contract                  systemone, methods
+├── R-3    An experiment is fully recorded in the repository            experiment
+├── R-4    The ported harness reproduces the committed results          tests, data/experiments
+└── R-10   A quantized GGUF export can be scored like a bf16 model      modal_app (gguf)   new
+    ├── R-11  A GGUF run's cost and latency are comparable to bf16     experiment, modal_app   new
+    └── R-12  Model, size and quantization are chosen by configuration experiment (config)   new</pre>
+  </figure>
+  <p class="a-section__note">
+    Legend. R-10 also serves R-2 (its answers go through the same contract) and R-3 (it leaves the
+    same artifacts). The pair that matters for review: <strong>R-10 green with R-11 red is a claim
+    resting on nothing</strong>: a GGUF row whose cost is measured differently from the bf16 row
+    cannot be compared to it, which is the whole reason the model is run.
+  </p>
+
+  <p class="a-section__note">Table 1. Module map for the new requirements.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Modules and the level at which each requirement binds them</caption>
+      <thead><tr><th scope="col">Module</th><th scope="col">Level 2</th><th scope="col">Level 3</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Modal scorer for GGUF (new function in the Modal app)</th><td>R-10</td><td>R-11</td></tr>
+        <tr><th scope="row">Experiment configuration and cost tables</th><td></td><td>R-11, R-12</td></tr>
+        <tr><th scope="row">Conformance tests (new test file)</th><td>R-10</td><td>R-12</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="purpose">
+  <h2 class="a-section__title" id="purpose">3. Purpose</h2>
+  <p class="a-prose">
+    The harness scores every decision model through one contract (System One: one child per
+    question, <code>noul</code> = probability of "yes" or <code>score</code> = expected ordinal
+    level) and derives quality, cost and latency from the saved answers. Until now every local model
+    was loaded as bf16 safetensors through its own Python package. A GGUF file is the same model
+    with its weights quantized (for example 4-bit), which needs less GPU memory and may run on a
+    cheaper GPU, faster. This slice lets a GGUF export of a decision model be named in an experiment
+    configuration and scored on Modal exactly as a bf16 model is, so that the dashboard can show the
+    two as comparable rows.
+  </p>
+</section>
+
+<section class="a-section" aria-labelledby="requirements">
+  <h2 class="a-section__title" id="requirements">4. Requirements</h2>
+
+  <article class="a-phase">
+    <div class="a-phase__index">R-10</div>
+    <div>
+      <div class="a-phase__head">
+        <h3 class="a-phase__title">R-10 — GGUF scoring</h3>
+        <span class="a-status" data-state="planned">unbound</span>
+      </div>
+      <p class="a-section__note"><em>Level 2 · Modal scorer for GGUF · serves R-1 · also serves R-2, R-3.</em></p>
+      <p class="a-prose">
+        <code>experiment run</code> SHALL score a quantized GGUF export of a decision model, named
+        in the configuration by its Hub repository pinned to a revision and the file inside it, on
+        the benchmark cases on Modal, through the System One contract, and leave the same artifacts
+        a bf16 run leaves (raw answers, kept-mass, cost, latency).
+      </p>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: a GGUF smoke run</h4>
+      <ul class="a-prose">
+        <li>GIVEN a configuration with a <code>gguf</code> source naming Kev-9B Q4_K_M and <code>cases: 2</code></li>
+        <li>WHEN <code>experiment run</code> finishes</li>
+        <li>THEN one experiment directory holds that model's raw answers for both cases and a kept-mass table beside production and Jev</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: the answers are indistinguishable downstream</h4>
+      <ul class="a-prose">
+        <li>GIVEN the GGUF run's raw answers and the bf16 run's raw answers for the same model</li>
+        <li>WHEN both are loaded by the evaluator</li>
+        <li>THEN they validate through the same types and give the same keys per case (R-2 holds)</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: a wrong file name</h4>
+      <ul class="a-prose">
+        <li>GIVEN a configuration whose file does not exist in the named repository</li>
+        <li>WHEN the run starts</li>
+        <li>THEN it fails naming the repository and the file, before any question is answered</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="a-phase">
+    <div class="a-phase__index">R-11</div>
+    <div>
+      <div class="a-phase__head">
+        <h3 class="a-phase__title">R-11 — Comparable cost and latency</h3>
+        <span class="a-status" data-state="planned">unbound</span>
+      </div>
+      <p class="a-section__note"><em>Level 3 · Modal scorer for GGUF, cost tables · serves R-10.</em></p>
+      <p class="a-prose">
+        A GGUF run's cost and latency SHALL be measured the same way as a local bf16 run's: cost from
+        warm GPU-seconds times the GPU's list price, latency as GPU-seconds per query, with the GPU
+        named on the row.
+      </p>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: two rows for one model</h4>
+      <ul class="a-prose">
+        <li>GIVEN a Kev-9B Q4_K_M run on an L40S and the committed Kev-9B bf16 run on an H100</li>
+        <li>WHEN the cost and latency tables are generated</li>
+        <li>THEN both rows show $/1k queries and s/query computed by the same formula, each naming its GPU</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: model loading is not billed as answering</h4>
+      <ul class="a-prose">
+        <li>GIVEN a GGUF shard that spent time downloading and loading the file before the first answer</li>
+        <li>WHEN its cost is computed</li>
+        <li>THEN load time is reported separately and only warm time enters $/1k, as for every other local scorer</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="a-phase">
+    <div class="a-phase__index">R-12</div>
+    <div>
+      <div class="a-phase__head">
+        <h3 class="a-phase__title">R-12 — Choice by configuration</h3>
+        <span class="a-status" data-state="planned">unbound</span>
+      </div>
+      <p class="a-section__note"><em>Level 3 · Experiment configuration · serves R-10.</em></p>
+      <p class="a-prose">
+        Choosing a different GGUF model, size or quantization SHALL require only a configuration
+        edit: repository, revision, file, method, GPU, shards, concurrency and request limits are all
+        configuration values, and no code changes.
+      </p>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: switch quantization</h4>
+      <ul class="a-prose">
+        <li>GIVEN the smoke configuration for Kev-9B Q4_K_M</li>
+        <li>WHEN only the file name is changed to the Q8_0 file</li>
+        <li>THEN the run proceeds with Q8_0 and the run's name shows the new file</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: a missing field is a configuration error</h4>
+      <ul class="a-prose">
+        <li>GIVEN a <code>gguf</code> source with no file named</li>
+        <li>WHEN the configuration is loaded</li>
+        <li>THEN loading fails with a message naming the missing field</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<section class="a-section" aria-labelledby="not-required">
+  <h2 class="a-section__title" id="not-required">5. Not required</h2>
+  <ul class="a-prose">
+    <li><strong>A per-model prompt and readout adapter inside the harness.</strong> The runtime
+      used to serve GGUF files already implements the System One readout for the official decision
+      model families (Kev, Laya, Lev, OpenJev, Julia-1); the harness only posts its existing
+      requests.</li>
+    <li><strong>StartLux GGUF exports.</strong> Their GGUF is a bare decoder; the readout lives in
+      the publisher's own serving code. A separate slice if wanted.</li>
+    <li><strong>ONNX and MLX exports.</strong> Different runtimes, and most hits are repackagings of
+      models already benchmarked in bf16.</li>
+    <li><strong>Crawler, triage rule, queue and dashboard changes.</strong> Not needed for the goals
+      G-1..G-3 of the proposal; a GGUF row appears on the dashboard through the existing registry.</li>
+    <li><strong>A quality bar for the GGUF row.</strong> Whether quantization costs kept-mass is the
+      question the run answers; it is a hypothesis, not a gate (benchmark noise is about ±0.02 at
+      75 cases).</li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="clarifications">
+  <h2 class="a-section__title" id="clarifications">6. Clarifications</h2>
+  <p class="a-prose">None.</p>
+</section>
+
+<section class="a-section" aria-labelledby="conformance">
+  <h2 class="a-section__title" id="conformance">7. Conformance</h2>
+  <p class="a-section__note">Table 2. One scenario is one test; a row is <code>unbound</code> until a module and a test have taken it on. ✅ and ❌ differ in shape, not only colour.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Requirement, module, test and status</caption>
+      <thead><tr><th scope="col">Req</th><th scope="col">Module</th><th scope="col">Test</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">R-10</th><td>—</td><td>planned: <code>tests/test_gguf.py::test_R10_*</code> (dispatch, response conversion) + the 2-case Modal smoke run</td><td>unbound</td></tr>
+        <tr><th scope="row">R-11</th><td>—</td><td>planned: cost table of the smoke experiment shows the GGUF row with GPU, $/1k and s/query by the shared formula</td><td>unbound</td></tr>
+        <tr><th scope="row">R-12</th><td>—</td><td>planned: <code>tests/test_gguf.py::test_R12_*</code> (config parsing, missing field)</td><td>unbound</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>

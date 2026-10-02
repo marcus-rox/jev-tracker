@@ -1,0 +1,481 @@
+<section class="a-section" aria-labelledby="toc-heading">
+  <h2 class="a-section__title" id="toc-heading">Contents</h2>
+  <ul class="a-prose">
+    <li><a href="#manifest">1. Table 1: manifest</a></li>
+    <li><a href="#coverage">2. Table 2: requirement coverage</a></li>
+    <li><a href="#waves">3. Table 3 and Figure 1: parallel execution plan</a></li>
+    <li><a href="#task-1">4. Task 1 — A GGUF decision model answers System One requests on a Modal GPU</a></li>
+    <li><a href="#task-2">5. Task 2 — A GGUF model is chosen by configuration alone</a></li>
+    <li><a href="#task-3">6. Task 3 — The GGUF path is proven without a GPU and has a smoke configuration</a></li>
+    <li><a href="#task-4">7. Task 4 — The first GGUF cost and latency numbers stand beside bf16</a></li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="manifest">
+  <h2 class="a-section__title" id="manifest">1. Table 1: manifest</h2>
+  <p class="a-prose">
+    The approved plan (<code>docs/GGUF_PLAN.html</code>) decomposed against the spec
+    (<code>docs/GGUF_SPEC.html</code>, R-10..R-12). Task numbers are assigned once for this batch
+    and are what a developer or a parallel agent is handed: "take Task 3". Priority is inferred from
+    the plan's step order (earlier is higher); the plan states no explicit priority.
+  </p>
+  <p class="a-section__note">Table 1. One row per task.</p>
+  <div class="a-table-scroll">
+    <table class="a-table" data-a-sticky-columns="1">
+      <caption class="a-visually-hidden">Tasks with the requirements they satisfy, parent plan step, dependencies and priority</caption>
+      <thead><tr><th scope="col">#</th><th scope="col">Task</th><th scope="col">Satisfies</th><th scope="col">Parent plan step</th><th scope="col">Depends on</th><th scope="col">Priority</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">1</th><td><a href="#task-1">A GGUF decision model answers System One requests on a Modal GPU</a></td><td>R-10, R-11</td><td>GGUF step 1</td><td>—</td><td>High (inferred)</td></tr>
+        <tr><th scope="row">2</th><td><a href="#task-2">A GGUF model is chosen by configuration alone</a></td><td>R-12</td><td>GGUF step 2</td><td>—</td><td>High (inferred)</td></tr>
+        <tr><th scope="row">3</th><td><a href="#task-3">The GGUF path is proven without a GPU and has a smoke configuration</a></td><td>R-10, R-12 (conformance)</td><td>GGUF step 2</td><td>1, 2</td><td>Medium (inferred)</td></tr>
+        <tr><th scope="row">4</th><td><a href="#task-4">The first GGUF cost and latency numbers stand beside bf16</a></td><td>R-11</td><td>GGUF step 3</td><td>3</td><td>Medium (inferred)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="coverage">
+  <h2 class="a-section__title" id="coverage">2. Table 2: requirement coverage</h2>
+  <p class="a-section__note">Table 2. The manifest read requirement-first: what this sprint makes true. A requirement the sprint targets but does not finish says so in the last column.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Requirement status now, tasks that address it, and status if the sprint lands</caption>
+      <thead><tr><th scope="col">Req</th><th scope="col">Status now</th><th scope="col">Tasks</th><th scope="col">Status if the sprint lands</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">R-10</th><td>unbound</td><td>1, 3</td><td>✅ at smoke scale (2 cases); the 75-case run is GGUF step 4, on Marcus's go</td></tr>
+        <tr><th scope="row">R-11</th><td>unbound</td><td>1, 4</td><td>✅</td></tr>
+        <tr><th scope="row">R-12</th><td>unbound</td><td>2, 3</td><td>✅</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="waves">
+  <h2 class="a-section__title" id="waves">3. Table 3 and Figure 1: parallel execution plan</h2>
+  <p class="a-section__note">Table 3. Wave(task) = 1 if it depends on nothing, else 1 + the largest wave among its dependencies. The largest wave has two tasks: two agents is the useful maximum.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Waves, tasks in each wave, and what blocks each wave</caption>
+      <thead><tr><th scope="col">Wave</th><th scope="col">Tasks</th><th scope="col">Blocked by</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">1</th><td>1, 2</td><td>—</td></tr>
+        <tr><th scope="row">2</th><td>3</td><td>Wave 1</td></tr>
+        <tr><th scope="row">3</th><td>4</td><td>Wave 2</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="a-section__note">Figure 1. The dependency graph. Boxes are tasks; arrows point from a task to the task that needs it; columns are waves. Tasks in one column run at the same time, each by its own agent on its own branch.</p>
+  <figure class="a-panel" style="padding: 8px 0 0">
+    <svg viewBox="0 0 900 230" role="img" style="width: 100%; height: auto; display: block"
+      aria-label="Dependency graph: Task 1 and Task 2 in wave 1 both feed Task 3 in wave 2, which feeds Task 4 in wave 3.">
+      <defs>
+        <marker id="dep-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
+        </marker>
+      </defs>
+      <g class="a-group"><rect x="20" y="20" width="270" height="190" /><text x="34" y="42">wave 1 · two agents</text></g>
+      <g class="a-group"><rect x="320" y="20" width="260" height="190" /><text x="334" y="42">wave 2</text></g>
+      <g class="a-group"><rect x="610" y="20" width="270" height="190" /><text x="624" y="42">wave 3 · Modal run</text></g>
+      <g class="a-node"><rect x="40" y="60" width="230" height="52" /><text class="a-node__title" x="54" y="82">Task 1 · GGUF scorer on Modal</text><text class="a-node__sub" x="54" y="100">R-10, R-11</text></g>
+      <g class="a-node"><rect x="40" y="140" width="230" height="52" /><text class="a-node__title" x="54" y="162">Task 2 · gguf source in config</text><text class="a-node__sub" x="54" y="180">R-12</text></g>
+      <g class="a-node"><rect x="340" y="100" width="220" height="52" /><text class="a-node__title" x="354" y="122">Task 3 · tests + smoke config</text><text class="a-node__sub" x="354" y="140">R-10, R-12 conformance</text></g>
+      <g class="a-node"><rect x="630" y="100" width="230" height="52" /><text class="a-node__title" x="644" y="122">Task 4 · 2-case smoke run</text><text class="a-node__sub" x="644" y="140">R-11 · first numbers</text></g>
+      <path class="a-edge" d="M270,86 H305 V126 H340" marker-end="url(#dep-arrow)" />
+      <path class="a-edge" d="M270,166 H305 V126 H340" marker-end="url(#dep-arrow)" />
+      <path class="a-edge" d="M560,126 H630" marker-end="url(#dep-arrow)" />
+    </svg>
+  </figure>
+  <p class="a-section__note">
+    Legend. Wave 1 is dispatched as two subagents at once (own worktree, own branch, own test
+    file); the coordinator merges each and runs the whole suite after each merge. Wave 2 opens when
+    both are merged; wave 3 is the only step that bills a GPU.
+  </p>
+</section>
+
+<!-- ============================ Task 1 ============================ -->
+<section class="a-section" aria-labelledby="task-1">
+  <h2 class="a-section__title" id="task-1">4. Task 1 — A GGUF decision model answers System One requests on a Modal GPU</h2>
+  <p class="a-prose"><strong>Satisfies:</strong> R-10, R-11.</p>
+
+  <h3 class="a-prose">User story</h3>
+  <p class="a-prose">As the experiment command run by Marcus (or by the daily automation), I want a scoring run whose source is a GGUF file to be answered by a Modal GPU container exactly as a bf16 run is, so that a quantized model's quality, cost and latency land on the dashboard without new evaluation code.</p>
+
+  <h3 class="a-prose">Context</h3>
+  <p class="a-prose">No Modal image in the harness can open a GGUF file, so every GGUF export is triaged <code>needs_adapter</code>. The GGUF runtime now implements the System One endpoint for the official decision-model families itself (plan: Previous steps row 3), so the container only needs to start that server and point the existing posting loop at it (plan: Decided rows 1–3). This is GGUF step 1, the cheapest disconfirming step.</p>
+
+  <h3 class="a-prose">Scope</h3>
+  <p class="a-prose">In scope:</p>
+  <ul class="a-prose">
+    <li>One Modal image: CUDA runtime plus the pinned pre-built runtime binary (b11351), plus the harness's runtime dependencies.</li>
+    <li>One Modal function for the <code>gguf</code> engine: download the one named file at the pinned revision into the shared weights volume (tqdm, skipped if cached), start the server with all layers on the GPU and slots equal to the configured concurrency, wait for health, then run the existing API posting loop against localhost and write the usual shard file and shard summary.</li>
+    <li>Load time (download + server start) measured separately from warm time.</li>
+  </ul>
+  <p class="a-prose">Out of scope:</p>
+  <ul class="a-prose">
+    <li>Any prompt-building or token-readout code in the harness (plan: Out of scope).</li>
+    <li>The configuration schema (Task 2) and tests (Task 3); this task may be exercised by a hand-built run object.</li>
+    <li>StartLux or any model family the runtime's endpoint does not serve.</li>
+  </ul>
+
+  <h3 class="a-prose">Requirements</h3>
+  <ul class="a-prose">
+    <li>The container fails before starting the server, naming repository and file, when the file is not in the pinned revision.</li>
+    <li>Each response is validated as a System One response; an invalid one is an error, not a silent skip.</li>
+    <li>The shard summary carries GPU type, load seconds, warm seconds and batch count with the same meanings as every local scorer.</li>
+    <li>Progress is visible: tqdm for the download and for the batch loop; shard progress published as today.</li>
+  </ul>
+
+  <h3 class="a-prose">Acceptance criteria</h3>
+  <ul class="a-prose">
+    <li>Given Kev-9B Q4_K_M at its pinned revision and an L40S, when one System One request with one state and several children is posted, then the answers validate and one probability per child is returned.</li>
+    <li>Given a run object with 2 cases, when the function completes, then the runs volume holds a gzipped shard file with a raw record per batch and a shard summary whose warm seconds exclude download and start-up.</li>
+    <li>Given a file name that does not exist in the repository, when the function starts, then it raises naming repository and file and no server is started.</li>
+    <li>Errors and edge cases: the server is not healthy within the start-up budget (fail with the server's last log lines); a 400/422 on a batch larger than one (split, as the API loop already does).</li>
+  </ul>
+
+  <h3 class="a-prose">Definition of Done</h3>
+  <ul class="a-prose">
+    <li>All acceptance criteria pass.</li>
+    <li>R-10 and R-11 are ✅ in the spec's conformance table at smoke scale, with the conformance suite unchanged (<code>git diff --exit-code tests/test_gguf.py</code> clean).</li>
+    <li>Code is reviewed and merged.</li>
+    <li>Lint, format check and the full test suite pass.</li>
+    <li>No secrets in the image or the repository; image build is reproducible from the pinned build number.</li>
+    <li>Documentation: README source list names <code>gguf</code>.</li>
+    <li>The change is deployed to the Modal app <code>jev-tracker</code> in the rox-research workspace.</li>
+    <li>No unresolved critical defects remain.</li>
+  </ul>
+
+  <h3 class="a-prose">Dependencies and constraints</h3>
+  <ul class="a-prose">
+    <li>Plan constraints: same contract and cost formula; pinned revision and pinned runtime build; tqdm; no per-model readout code.</li>
+    <li>Assumes the pre-built CUDA binary runs on Modal's L40S driver (unverified until step 1 runs; the fallback is the runtime's own CUDA container image).</li>
+    <li>Plan Open item 1 (does the endpoint batch children into one prefill) is <em>not</em> blocking this task; it is answered by Task 4.</li>
+  </ul>
+
+  <h3 class="a-prose">Proof of value</h3>
+  <div class="a-panel" style="padding: 12px 16px">
+    <p class="a-prose"><strong>Discharges:</strong> Plan → GGUF step 1 — "a Modal GPU container loads Kev-9B Q4_K_M with the pinned runtime build and answers one System One request", falsified if the runtime cannot load the file, rejects our request body, or returns answers that do not validate.</p>
+    <p class="a-prose"><strong>Claim:</strong> If every acceptance criterion of this task holds, then GGUF step 1's bar is met.</p>
+    <p class="a-prose"><strong>Premises:</strong></p>
+    <ol class="a-prose">
+      <li>A posted request with one state and several children returns validated answers, one per child — source: this task's Acceptance criteria.</li>
+      <li>A 2-case run leaves a shard file and a summary with warm seconds excluding load — source: this task's Acceptance criteria.</li>
+      <li>The request body posted is the one the hosted-API scorer sends today — source: Plan → Decided (reuse the posting loop).</li>
+      <li>The runtime's endpoint implements System One for Kev — source: Plan → Previous steps row 3 (upstream merge, 2026-10-02).</li>
+      <li>The pre-built binary runs on the chosen GPU — source: Assumption (unverified).</li>
+    </ol>
+    <p class="a-prose"><strong>Argument:</strong></p>
+    <ol class="a-prose">
+      <li>By premise 1 the file loaded and the endpoint accepted our body and answered validly, which is exactly the three failure modes the falsifier names.</li>
+      <li>By premise 2 the answers were produced by the harness's own loop and summary, so what was proved is the harness path, not a hand test.</li>
+      <li>Premise 3 means the body tested is the body production runs will send; premise 4 is why the endpoint exists; premise 5 is what makes 1 possible.</li>
+      <li>Therefore GGUF step 1's bar is met.</li>
+    </ol>
+    <p class="a-prose"><strong>Attempted counterexample:</strong> the server answers, but with probabilities that are all 0.5 (a wrong prompt template or an unsupported model treated as plain text). Every criterion above still holds. This is a real gap: a criterion is missing.</p>
+    <p class="a-prose"><strong>Falsifier:</strong> the 75-case run's kept-mass for the GGUF row is near random (about 0.5) while the bf16 row is 0.753.</p>
+    <p class="a-prose"><strong>Verdict:</strong> <strong>Open</strong> — counterexample found; the missing acceptance criterion is: <em>given the first smoke case, the GGUF answers rank the same children at the top as the committed bf16 Kev-9B answers for that case (spot check, not a tolerance).</em> Added to Task 4's acceptance criteria, where the comparison data exists; this task's verdict becomes Conditional on Task 4 performing that check.</p>
+  </div>
+
+  <h3 class="a-prose">References</h3>
+  <ul class="a-prose">
+    <li>Design: <code>docs/GGUF_PLAN.html</code> Figures 1–2.</li>
+    <li>Technical specification: <code>docs/GGUF_SPEC.html</code> R-10, R-11.</li>
+    <li>Related issues: Task 2 (parallel), Task 3 (depends on this), Task 4.</li>
+  </ul>
+
+  <h3 class="a-prose">Delivery</h3>
+  <dl class="a-meta-list">
+    <div><dt>Owner</dt><dd>Devin, wave-1 subagent A</dd></div>
+    <div><dt>Priority</dt><dd>High (inferred from plan step order)</dd></div>
+    <div><dt>Estimate</dt><dd>TBD</dd></div>
+    <div><dt>Sprint</dt><dd>GGUF sprint 1 (2026-10-02)</dd></div>
+    <div><dt>Parent epic</dt><dd>GGUF step 1</dd></div>
+  </dl>
+</section>
+
+<!-- ============================ Task 2 ============================ -->
+<section class="a-section" aria-labelledby="task-2">
+  <h2 class="a-section__title" id="task-2">5. Task 2 — A GGUF model is chosen by configuration alone</h2>
+  <p class="a-prose"><strong>Satisfies:</strong> R-12.</p>
+
+  <h3 class="a-prose">User story</h3>
+  <p class="a-prose">As Marcus editing an experiment configuration, I want to name a GGUF model by repository, revision and file next to the usual method, GPU, shards, concurrency and request limits, so that trying Q8_0 instead of Q4_K_M, or 4B instead of 9B, is a one-line edit and not a code change.</p>
+
+  <h3 class="a-prose">Context</h3>
+  <p class="a-prose">Every existing source is a configuration type with a fixed set of fields that the experiment loader turns into a scoring run (plan: Decided row 5). A GGUF source needs one new field, the file inside the repository, and the loader must carry it to the run and to the run's name so Q4 and Q8 rows are distinguishable. This is the configuration half of GGUF step 2.</p>
+
+  <h3 class="a-prose">Scope</h3>
+  <p class="a-prose">In scope:</p>
+  <ul class="a-prose">
+    <li>A <code>gguf</code> source type: <code>model</code> (repository@revision), <code>file</code>, <code>method</code>, <code>gpu</code>, <code>shards</code>, <code>concurrency</code>, <code>max_items</code>, <code>max_chars</code>, with the same defaults as the Kev source.</li>
+    <li>The scoring run carries the file; its name includes the file stem; its engine is <code>gguf</code>; dispatch maps the engine to Task 1's function.</li>
+    <li>README: <code>gguf</code> in the list of sources with the configuration shape.</li>
+  </ul>
+  <p class="a-prose">Out of scope:</p>
+  <ul class="a-prose">
+    <li>Registry or site changes: a GGUF row is labelled through the existing registry file like any other run.</li>
+    <li>A GPU table entry per GGUF repository; the GPU is a configuration value for this source (a default is allowed).</li>
+  </ul>
+
+  <h3 class="a-prose">Requirements</h3>
+  <ul class="a-prose">
+    <li>A <code>gguf</code> source without <code>file</code> fails to load with a message naming the field.</li>
+    <li>The run name distinguishes two files of the same repository.</li>
+    <li>No existing source's parsing changes.</li>
+  </ul>
+
+  <h3 class="a-prose">Acceptance criteria</h3>
+  <ul class="a-prose">
+    <li>Given the smoke configuration, when only <code>file</code> changes from the Q4_K_M file to the Q8_0 file, then the loaded run's file and name change accordingly and nothing else does.</li>
+    <li>Given a <code>gguf</code> source with no <code>file</code>, when the configuration is loaded, then loading fails and the message names <code>file</code>.</li>
+    <li>Given a scoring run with engine <code>gguf</code>, when a shard is spawned, then the GGUF function is the one called.</li>
+    <li>Errors and edge cases: <code>model</code> without <code>@revision</code> is accepted (the pin is a constraint of the plan, enforced by review, as for other sources); an unknown GPU name fails at cost time with the name, as today.</li>
+  </ul>
+
+  <h3 class="a-prose">Definition of Done</h3>
+  <ul class="a-prose">
+    <li>All acceptance criteria pass.</li>
+    <li>R-12 is ✅ in the spec's conformance table with the conformance suite unchanged.</li>
+    <li>Code is reviewed and merged.</li>
+    <li>Lint, format check and the full test suite pass.</li>
+    <li>README updated.</li>
+    <li>The change is deployed to the Modal app <code>jev-tracker</code> (the dispatch table ships with the app).</li>
+    <li>No unresolved critical defects remain.</li>
+  </ul>
+
+  <h3 class="a-prose">Dependencies and constraints</h3>
+  <ul class="a-prose">
+    <li>Interface shared with Task 1: the run object's engine literal <code>gguf</code> and its <code>file</code> field; agreed before the wave starts so both tasks compile against it.</li>
+    <li>Plan constraint: configuration is the source of truth for tunable values.</li>
+  </ul>
+
+  <h3 class="a-prose">Proof of value</h3>
+  <div class="a-panel" style="padding: 12px 16px">
+    <p class="a-prose"><strong>Discharges:</strong> Plan → GGUF step 2 — "a quantization switch needs a code edit" is the falsifier.</p>
+    <p class="a-prose"><strong>Claim:</strong> If every acceptance criterion of this task holds, then switching model, size or quantization needs no code edit.</p>
+    <p class="a-prose"><strong>Premises:</strong></p>
+    <ol class="a-prose">
+      <li>Changing <code>file</code> alone changes the run's file and name — source: this task's Acceptance criteria.</li>
+      <li>A missing <code>file</code> is a configuration error — source: this task's Acceptance criteria.</li>
+      <li>Engine <code>gguf</code> dispatches to the GGUF function — source: this task's Acceptance criteria.</li>
+      <li>The GGUF function reads repository, revision and file from the run, not from constants — source: Task 1 Scope.</li>
+    </ol>
+    <p class="a-prose"><strong>Argument:</strong></p>
+    <ol class="a-prose">
+      <li>By 1 and 4 the file the container fetches is the configured one; by the same route <code>model</code> selects repository and size.</li>
+      <li>By 3 the configured source reaches that function without a code path per model.</li>
+      <li>By 2 a configuration that could not select a file is rejected rather than silently defaulting.</li>
+      <li>Therefore a switch is a configuration edit.</li>
+    </ol>
+    <p class="a-prose"><strong>Attempted counterexample:</strong> a repository whose GGUF needs a different GPU than the default (Kev-27B Q4 would not fit an L40S). The switch still needs no code edit because <code>gpu</code> is a configuration field; it needs a second line edited. Not a counterexample.</p>
+    <p class="a-prose"><strong>Falsifier:</strong> a future GGUF repository that needs a model-specific server flag (for example a different chat template) and so a code change.</p>
+    <p class="a-prose"><strong>Verdict:</strong> <strong>Proved</strong> for the official Kev GGUF repositories; the falsifier names when to revisit.</p>
+  </div>
+
+  <h3 class="a-prose">References</h3>
+  <ul class="a-prose">
+    <li>Design: <code>docs/GGUF_PLAN.html</code> Decided row 5.</li>
+    <li>Technical specification: <code>docs/GGUF_SPEC.html</code> R-12.</li>
+    <li>Related issues: Task 1 (parallel), Task 3 (depends on this).</li>
+  </ul>
+
+  <h3 class="a-prose">Delivery</h3>
+  <dl class="a-meta-list">
+    <div><dt>Owner</dt><dd>Devin, wave-1 subagent B</dd></div>
+    <div><dt>Priority</dt><dd>High (inferred)</dd></div>
+    <div><dt>Estimate</dt><dd>TBD</dd></div>
+    <div><dt>Sprint</dt><dd>GGUF sprint 1 (2026-10-02)</dd></div>
+    <div><dt>Parent epic</dt><dd>GGUF step 2</dd></div>
+  </dl>
+</section>
+
+<!-- ============================ Task 3 ============================ -->
+<section class="a-section" aria-labelledby="task-3">
+  <h2 class="a-section__title" id="task-3">6. Task 3 — The GGUF path is proven without a GPU and has a smoke configuration</h2>
+  <p class="a-prose"><strong>Satisfies:</strong> R-10, R-12 (their conformance suite).</p>
+
+  <h3 class="a-prose">User story</h3>
+  <p class="a-prose">As the CI pipeline, I want the GGUF configuration parsing, dispatch and response conversion covered by tests that need no GPU, and a 2-case smoke configuration committed, so that a regression is caught on every pull request and the first Modal run has a known input.</p>
+
+  <h3 class="a-prose">Context</h3>
+  <p class="a-prose">The spec maps one scenario to one test, named for its requirement (R-10, R-12). The harness's existing tests build request bodies and convert answers without a model; the same style applies here. The smoke size is 2 cases, the existing smoke size (plan: Decided row 7).</p>
+
+  <h3 class="a-prose">Scope</h3>
+  <p class="a-prose">In scope:</p>
+  <ul class="a-prose">
+    <li><code>tests/test_gguf.py</code>: <code>test_R12_switch_quantization</code>, <code>test_R12_missing_file</code>, <code>test_R10_dispatch</code>, <code>test_R10_response_validates</code> (a recorded server response validates and records like an API response).</li>
+    <li><code>configs/kev9b_gguf_smoke.yaml</code>: 2 cases, production, Jev answers, and Kev-9B Q4_K_M on an L40S.</li>
+  </ul>
+  <p class="a-prose">Out of scope:</p>
+  <ul class="a-prose">
+    <li>Running anything on Modal (Task 4).</li>
+    <li>Rescoring tests for the smoke experiment (they attach once the experiment is committed).</li>
+  </ul>
+
+  <h3 class="a-prose">Requirements</h3>
+  <ul class="a-prose">
+    <li>Tests run in the existing suite command with no network and no GPU.</li>
+    <li>Each test is one scenario from the spec, GIVEN/WHEN/THEN as comments.</li>
+    <li>The smoke configuration loads and its run object names the file and GPU.</li>
+  </ul>
+
+  <h3 class="a-prose">Acceptance criteria</h3>
+  <ul class="a-prose">
+    <li>Given the repository, when the suite runs, then the four tests pass and the whole suite stays green.</li>
+    <li>Given the smoke configuration, when it is loaded, then its GGUF run has 2 cases, the Q4_K_M file and GPU L40S.</li>
+    <li>Errors and edge cases: a test must not download the GGUF file; a fixture holds the recorded response.</li>
+  </ul>
+
+  <h3 class="a-prose">Definition of Done</h3>
+  <ul class="a-prose">
+    <li>All acceptance criteria pass.</li>
+    <li>R-10 and R-12 rows in the conformance table name these tests; suite committed unchanged afterwards.</li>
+    <li>Code is reviewed and merged.</li>
+    <li>Lint, format check and the full test suite pass in CI.</li>
+    <li>Spec conformance table updated.</li>
+    <li>The change is deployed with the pull request (no runtime deployment).</li>
+    <li>No unresolved critical defects remain.</li>
+  </ul>
+
+  <h3 class="a-prose">Dependencies and constraints</h3>
+  <ul class="a-prose">
+    <li>Depends on Task 1 (function to dispatch to, response shape) and Task 2 (source type).</li>
+    <li>Spec rule: tests are drafted by Devin, owned by Marcus; once committed they are not edited to pass.</li>
+  </ul>
+
+  <h3 class="a-prose">Proof of value</h3>
+  <div class="a-panel" style="padding: 12px 16px">
+    <p class="a-prose"><strong>Discharges:</strong> Plan → GGUF step 2 — "config parsing or dispatch tests fail" is the falsifier.</p>
+    <p class="a-prose"><strong>Claim:</strong> If every acceptance criterion holds, then the configuration and dispatch path of GGUF step 2 is proven without a GPU and R-10/R-12 have a conformance suite.</p>
+    <p class="a-prose"><strong>Premises:</strong></p>
+    <ol class="a-prose">
+      <li>The four scenario tests pass in the normal suite — source: this task's Acceptance criteria.</li>
+      <li>The smoke configuration loads to the expected run — source: this task's Acceptance criteria.</li>
+      <li>One scenario is one test named for its requirement — source: spec-doc rule.</li>
+    </ol>
+    <p class="a-prose"><strong>Argument:</strong></p>
+    <ol class="a-prose">
+      <li>By 1 and 3 each R-10/R-12 scenario that can be checked without a GPU has a test that passes.</li>
+      <li>By 2 the input of GGUF step 3 is a committed, loadable configuration.</li>
+      <li>Therefore step 2's falsifier did not fire and the suite exists.</li>
+    </ol>
+    <p class="a-prose"><strong>Attempted counterexample:</strong> the tests pass against a recorded response, but the live server's response shape differs from the recording. The criteria hold and the path still breaks. This is why R-10's first scenario is bound to the Modal smoke run (Task 4), not to this task alone.</p>
+    <p class="a-prose"><strong>Falsifier:</strong> Task 4's run fails on response validation while this suite is green.</p>
+    <p class="a-prose"><strong>Verdict:</strong> <strong>Conditional</strong> on the recorded response being taken from the real server in Task 1 (listed in Dependencies).</p>
+  </div>
+
+  <h3 class="a-prose">References</h3>
+  <ul class="a-prose">
+    <li>Design: <code>docs/GGUF_PLAN.html</code> Table 2 step 2.</li>
+    <li>Technical specification: <code>docs/GGUF_SPEC.html</code> Table 2 (conformance).</li>
+    <li>Related issues: Task 1, Task 2 (both required), Task 4 (depends on this).</li>
+  </ul>
+
+  <h3 class="a-prose">Delivery</h3>
+  <dl class="a-meta-list">
+    <div><dt>Owner</dt><dd>Devin, coordinator</dd></div>
+    <div><dt>Priority</dt><dd>Medium (inferred)</dd></div>
+    <div><dt>Estimate</dt><dd>TBD</dd></div>
+    <div><dt>Sprint</dt><dd>GGUF sprint 1 (2026-10-02)</dd></div>
+    <div><dt>Parent epic</dt><dd>GGUF step 2</dd></div>
+  </dl>
+</section>
+
+<!-- ============================ Task 4 ============================ -->
+<section class="a-section" aria-labelledby="task-4">
+  <h2 class="a-section__title" id="task-4">7. Task 4 — The first GGUF cost and latency numbers stand beside bf16</h2>
+  <p class="a-prose"><strong>Satisfies:</strong> R-11 (and R-10 scenario 1 at smoke scale).</p>
+
+  <h3 class="a-prose">User story</h3>
+  <p class="a-prose">As Marcus deciding whether GGUF is worth a 75-case run, I want the 2-case smoke experiment run on Modal and its load seconds, warm GPU-seconds per query and $/1k reported next to the bf16 Kev-9B row, so that I can approve or stop the full run on a measured number.</p>
+
+  <h3 class="a-prose">Context</h3>
+  <p class="a-prose">This is GGUF step 3, the first step that bills a GPU and the one that answers the plan's hypothesis cheaply (under $1). The bar is the bf16 row: $5.6/1k and 5.1 GPU-s per query on an H100. It also answers plan Open item 1 (does the endpoint batch children) through the per-query warm time.</p>
+
+  <h3 class="a-prose">Scope</h3>
+  <p class="a-prose">In scope:</p>
+  <ul class="a-prose">
+    <li>Run the smoke configuration on Modal with tqdm visible; pull; evaluate.</li>
+    <li>Report: load s, warm GPU-s per query, $/1k, GPU, beside bf16 Kev-9B's committed numbers; plus the spot check from Task 1's proof (top children of case 1 agree with bf16).</li>
+    <li>Commit the experiment folder (config as run, calls, raw answers, kept-mass, costs, latency) and a registry row labelled with the file.</li>
+  </ul>
+  <p class="a-prose">Out of scope:</p>
+  <ul class="a-prose">
+    <li>The 75-case run (GGUF step 4, on Marcus's go).</li>
+    <li>Any quality claim from 2 cases: kept-mass at 2 cases is a smoke signal, not a result.</li>
+  </ul>
+
+  <h3 class="a-prose">Requirements</h3>
+  <ul class="a-prose">
+    <li>Cost uses the shared formula: warm GPU-seconds × the GPU's list price, extrapolated to 1k queries.</li>
+    <li>The report states which numbers are from 2 cases and which from 75.</li>
+    <li>A refuted hypothesis (GGUF slower and dearer) is reported as a result, not hidden.</li>
+  </ul>
+
+  <h3 class="a-prose">Acceptance criteria</h3>
+  <ul class="a-prose">
+    <li>Given the smoke configuration, when the run completes, then the experiment folder has the GGUF row's raw answers for 2 cases and the cost table shows GPU, $/1k and s/query for it by the same formula as the bf16 row.</li>
+    <li>Given case 1, when the GGUF and committed bf16 answers are compared, then the top-ranked children agree (spot check; a disagreement is reported, not a failure).</li>
+    <li>Given the report, when Marcus reads it, then it names load s, warm GPU-s/query and $/1k for GGUF beside bf16's, and states the 2-case caveat.</li>
+    <li>Errors and edge cases: a shard failure is reported with the server's last log lines; the run is respawnable from the recorded calls as today.</li>
+  </ul>
+
+  <h3 class="a-prose">Definition of Done</h3>
+  <ul class="a-prose">
+    <li>All acceptance criteria pass.</li>
+    <li>R-11 is ✅ in the conformance table (bound to the smoke experiment's cost table); R-10 scenario 1 ✅ at smoke scale, with the conformance suite unchanged.</li>
+    <li>Experiment folder and registry row reviewed and merged.</li>
+    <li>Full test suite (which rescores committed experiments) passes.</li>
+    <li>Plan status line and Previous steps updated with the step 3 row and its pointer.</li>
+    <li>The change is deployed as committed data in the repository; the dashboard row appears after site regeneration (existing step).</li>
+    <li>No unresolved critical defects remain.</li>
+  </ul>
+
+  <h3 class="a-prose">Dependencies and constraints</h3>
+  <ul class="a-prose">
+    <li>Depends on Task 3 (configuration and tests merged) and so on Tasks 1 and 2.</li>
+    <li>Plan constraint: smoke first, 75 only on Marcus's go; GPU budget under $1 for this task.</li>
+    <li>Modal credentials and the shared weights volume must be reachable from the session.</li>
+  </ul>
+
+  <h3 class="a-prose">Proof of value</h3>
+  <div class="a-panel" style="padding: 12px 16px">
+    <p class="a-prose"><strong>Discharges:</strong> Plan → GGUF step 3 — "report load s, warm GPU-s per query and $/1k beside bf16 Kev-9B"; falsified if the GGUF row is neither cheaper nor faster, or its cost cannot be computed by the shared formula.</p>
+    <p class="a-prose"><strong>Claim:</strong> If every acceptance criterion holds, then Marcus has the measured comparison GGUF step 3 promises, computed comparably (R-11).</p>
+    <p class="a-prose"><strong>Premises:</strong></p>
+    <ol class="a-prose">
+      <li>The cost table shows the GGUF row with GPU, $/1k and s/query by the shared formula — source: this task's Acceptance criteria.</li>
+      <li>The report names the three numbers beside bf16's and the 2-case caveat — source: this task's Acceptance criteria.</li>
+      <li>The spot check on case 1 is reported — source: this task's Acceptance criteria.</li>
+      <li>Load time is excluded from $/1k for every local scorer — source: Plan → Decided row 6.</li>
+      <li>Per-query warm time at 2 cases predicts per-query warm time at 75 — source: Assumption (unverified; warm time per query is roughly constant once the server is loaded).</li>
+    </ol>
+    <p class="a-prose"><strong>Argument:</strong></p>
+    <ol class="a-prose">
+      <li>By 1 and 4 the GGUF cost is computed exactly as the bf16 cost was, so the two rows are comparable (R-11).</li>
+      <li>By 2 the comparison reaches Marcus in the shape the step promises, with its scale stated.</li>
+      <li>By 3 the answers are shown to be model answers, not a degenerate readout (closes Task 1's Open verdict).</li>
+      <li>By 5 the number is informative about the 75-case run that the decision is about.</li>
+      <li>Therefore GGUF step 3 is discharged, whichever way the number falls.</li>
+    </ol>
+    <p class="a-prose"><strong>Attempted counterexample:</strong> with 2 cases and concurrency 1, the server never has more than one request in flight, so per-query time understates what a batched 75-case run would achieve, or overstates it if the endpoint serialises children. The criteria hold, the comparison is still fair (bf16's smoke would have the same shape), but premise 5 is weak.</p>
+    <p class="a-prose"><strong>Falsifier:</strong> the 75-case run's warm GPU-s per query differs from the smoke run's by more than the bf16 model's own smoke-to-full difference.</p>
+    <p class="a-prose"><strong>Verdict:</strong> <strong>Conditional</strong> on premise 5 (listed in Dependencies as "smoke per-query time is indicative"); the report must say so.</p>
+  </div>
+
+  <h3 class="a-prose">References</h3>
+  <ul class="a-prose">
+    <li>Design: <code>docs/GGUF_PLAN.html</code> section 2 (the bar) and Table 2 step 3.</li>
+    <li>Technical specification: <code>docs/GGUF_SPEC.html</code> R-11.</li>
+    <li>Related issues: Task 3 (required); Tasks 1 and 2 transitively.</li>
+  </ul>
+
+  <h3 class="a-prose">Delivery</h3>
+  <dl class="a-meta-list">
+    <div><dt>Owner</dt><dd>Devin, coordinator; Marcus reviews the number</dd></div>
+    <div><dt>Priority</dt><dd>Medium (inferred)</dd></div>
+    <div><dt>Estimate</dt><dd>TBD (GPU under $1)</dd></div>
+    <div><dt>Sprint</dt><dd>GGUF sprint 1 (2026-10-02)</dd></div>
+    <div><dt>Parent epic</dt><dd>GGUF step 3</dd></div>
+  </dl>
+</section>

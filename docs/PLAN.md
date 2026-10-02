@@ -39,6 +39,11 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
    key), `jev_tracker.evaluate_issues`, `crawler/triage.py`, `docs/AUTOMATION.md`, then the Devin
    automation that runs the runbook daily and opens a PR. Falsifier: the first automation PR has no
    new candidate or fails to regenerate the site.
+2. **GGUF scoring on Modal** (R-10..R-12): a quantized GGUF export served through the GGUF runtime's
+   own System One endpoint inside a Modal GPU container; first Kev-9B Q4_K_M on an L40S against the
+   bf16 Kev-9B row ($5.6/1k, 5.1 GPU-s/query). Steps, falsifiers, decisions: `docs/GGUF_PLAN.html`;
+   tickets: `docs/GGUF_SPRINT_TASKS.html`. Falsifier: the GGUF row is neither cheaper per 1k nor
+   faster per query than bf16.
 
 ## Decided
 

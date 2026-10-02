@@ -8,6 +8,7 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 - `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
 - `docs/AUTOMATION.md` — the hourly automation's runbook (R-9): crawl, triage, run, regenerate, push to `main`
 - `docs/DAILY_RUN.html` — how an automation run works: block diagram, sequence diagram, steps, triage verdicts, guardrails (open in a browser)
+- `docs/GGUF_SPEC.html`, `docs/GGUF_PLAN.html`, `docs/GGUF_SPRINT_TASKS.html` — the GGUF slice (R-10..R-12): spec, plan with block + sequence diagrams, and the four sprint tickets (bodies in `docs/src/gguf_*_body.html`)
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
   experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
 - `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
