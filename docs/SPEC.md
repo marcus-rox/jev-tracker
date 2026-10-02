@@ -1,6 +1,6 @@
 # jev-tracker — specification
 
-**Status · 2026-10-01 · 9 requirements, 4 bound (R-1..R-4, Phase 1), 5 unbound (site, crawler, automation).** Approved by Marcus on
+**Status · 2026-10-02 · 9 requirements, 7 bound (R-1..R-4 Phase 1, R-5..R-7 Phase 2), 2 unbound (crawler, automation).** Approved by Marcus on
 2026-10-01 with four decisions (raw answers in the repo under `data/`; automation opens a PR; one
 batched Kev-27B revalidation; no Slack report). Only Marcus edits this file after that.
 
@@ -109,8 +109,8 @@ None.
 | R-2 | `jev_tracker.systemone` | `tests/test_contract.py` | bound |
 | R-3 | `jev_tracker.experiment` | `tests/test_artifacts.py::test_R3_*` | bound |
 | R-4 | `data/experiments` | `tests/test_kept_mass.py::test_R4_*`, `tests/test_validation.py::test_R4_*` | bound |
-| R-5 | `site/` | manual (Marcus) + `tests/test_site_data.py` | unbound |
-| R-6 | `jev_tracker.site_data` | `tests/test_site_data.py::test_R6_*` | unbound |
-| R-7 | `site/` | `tests/test_site_data.py::test_R7_issue_url` | unbound |
+| R-5 | `site/` | `npm run build` + `python3 -m http.server -d site/dist` (checked 2026-10-02); manual (Marcus) | bound |
+| R-6 | `jev_tracker.site_data` | `tests/test_site_data.py::test_R6_*` | bound |
+| R-7 | `site/` | `tests/test_site_data.py::test_R7_*` | bound |
 | R-8 | `crawler/` | `tests/test_crawler.py::test_R8_*` | unbound |
 | R-9 | automation | manual: first PR opened by the automation | unbound |

@@ -5,6 +5,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 
 - `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
 - `docs/PLAN.md` — phases, decisions, next steps
+- `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
   experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
 - `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
@@ -12,6 +13,8 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `data/jev/` — Jev's committed answers
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
 - `data/registry.yaml` — row labels (model family, serving, GPU) for every reranker shown
+- `site/` — Vite + React static site: summary / quality / cost / latency tables, filters, compare,
+  "Evaluate a new model" form; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
   arXiv, web); `crawler/queries.yaml`, `crawler/seen.jsonl`, `crawler/candidates/<date>.jsonl`
 
@@ -26,6 +29,18 @@ uv run python -m jev_tracker.experiment finish <id>                    # pull ra
 uv run pytest                                                          # offline tests
 ```
 
+## Site
+
+```bash
+uv run python -m jev_tracker.site_data     # registry.yaml + data/experiments -> site/public/data/rows.json
+cd site && npm ci && npm run build          # -> site/dist (committed)
+python3 -m http.server -d site/dist 8000    # http://localhost:8000
+```
+
+Every number on the page links to the JSON it came from. "Evaluate a new model" writes the
+experiment YAML and opens a prefilled GitHub issue labelled `evaluate`; nothing is sent from the
+browser.
+
 ## Crawler
 
 ```bash
@@ -39,4 +54,4 @@ Queries are in `crawler/queries.yaml` (one list per source). Each run dedupes on
 (`source, url, title, snippet, first_seen, query`) to `crawler/candidates/<YYYY-MM-DD>.jsonl`.
 A failing (source, query) is printed and skipped; the exit code is 1 if any failed. DuckDuckGo
 answers with a bot challenge from some networks; that source then logs and returns nothing.
-Prior-work survey: `docs/CRAWLER_PRIOR_WORK.md`.
+Prior-work survey: `docs/PRIOR_WORK.md`.
