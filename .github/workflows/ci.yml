@@ -22,4 +22,5 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
-      - run: git diff --exit-code -- public/data dist || (echo "site/dist or rows.json is stale: run the Site commands in README" && exit 1)
+      - name: committed dist matches the build
+        run: git diff --exit-code -- public/data dist
