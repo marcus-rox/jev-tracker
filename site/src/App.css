@@ -37,8 +37,8 @@ select.theme option { color: #16191f; }
 .w { background:var(--panel); border:1px solid var(--border); border-radius:8px; padding:12px 14px; min-width:0; display:flex; flex-direction:column; }
 .w h2 { margin:0 0 8px; font-size:13px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .w h2 .sub { font-weight:400; color:var(--muted); }
-.s4 { grid-column: span 4; } .s6 { grid-column: span 6; } .s8 { grid-column: span 8; } .s12 { grid-column: span 12; }
-@media (max-width: 1000px) { .s4, .s6, .s8 { grid-column: span 12; } }
+.s3 { grid-column: span 3; } .s4 { grid-column: span 4; } .s6 { grid-column: span 6; } .s8 { grid-column: span 8; } .s9 { grid-column: span 9; } .s12 { grid-column: span 12; }
+@media (max-width: 1000px) { .s3, .s4, .s6, .s8, .s9 { grid-column: span 12; } }
 .num .v { font-size:34px; font-weight:700; line-height:1.1; font-variant-numeric: tabular-nums; }
 .num .who { margin-top:4px; font-weight:600; }
 .num .cmp { color:var(--muted); font-size:12px; }
@@ -84,11 +84,12 @@ svg .axis { stroke: var(--border); } svg .gridline { stroke: var(--grid); }
 .legend { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12px; margin-top:6px; }
 .legend span { cursor:pointer; } .legend span.off { opacity:.35; }
 .legend svg { vertical-align:middle; margin-right:5px; }
-.tldr { font-size:13px; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); grid-template-rows:auto auto; grid-auto-flow:column; gap:4px 28px; }
-.tldr h3 { margin:6px 0 4px; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
-.tldr p { margin:0 0 6px; } .tldr ul { margin:0 0 6px; padding-left:18px; } .tldr li { margin:0 0 3px; }
-.tldr table { margin:2px 0 6px; } .tldr th { cursor:default; position:static; } .tldr td { white-space:normal; }
-@media (max-width: 1000px) { .tldr { grid-template-columns:1fr; grid-auto-flow:row; } }
+.tldr { font-size:13px; line-height:1.4; }
+.tldr p { margin:0 0 6px; }
+.tldr ul { margin:0; padding-left:16px; }
+.tldr > ul > li { margin:0 0 8px; font-weight:600; }
+.tldr > ul > li > ul { margin-top:2px; }
+.tldr li li { font-weight:400; color:var(--muted); margin:0 0 1px; font-variant-numeric:tabular-nums; }
 table { border-collapse:collapse; width:100%; font-size:13px; }
 th, td { padding:5px 8px; border-bottom:1px solid var(--grid); text-align:left; white-space:nowrap; }
 th { color:var(--muted); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--panel); }
