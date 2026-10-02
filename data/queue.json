@@ -17,9 +17,9 @@
    "label": "autotrust_jev27b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/autotrust/JEV-27B",
-   "status": "proposed",
+   "status": "queued",
    "note": "Jev-style decision model with its own architecture / serving (qwen3_5_text); no harness source for it",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T10:21:25Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
