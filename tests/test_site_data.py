@@ -115,7 +115,7 @@ def test_R7_request_path_is_dated_and_slugged() -> None:
 def test_R6_updated_and_cards() -> None:
     assert (
         updated(["2026_10_02_03_29_11_above-dog", "2026_09_28_01_00_00_old-cat"])
-        == "2026-10-02 03:29 UTC"
+        == "2026-10-01 20:29 PDT"
     )
     with pytest.raises(ValueError, match="no experiment id carries a timestamp"):
         updated(["nostamp"])

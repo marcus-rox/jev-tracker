@@ -10,7 +10,9 @@ import csv
 import json
 import re
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -22,6 +24,7 @@ OUT = REPO_DIR / "site" / "public" / "data" / "rows.json"
 TLDR = REPO_DIR / "data" / "tldr.md"
 BASELINE_FAMILIES = frozenset({"jev", "production", "oracle", "random"})
 BENCHMARK_QUERIES = 75
+PACIFIC = ZoneInfo("America/Los_Angeles")
 EXPERIMENT_STAMP = re.compile(r"^(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_")
 KS = ("50", "100", "150", "200")
 SECONDS_PER_HOUR = 3600
@@ -102,12 +105,12 @@ def read_api_timing(path: Path) -> dict[str, dict[str, str]]:
 
 
 def updated(experiment_ids: list[str]) -> str:
-    """When the newest experiment ran, from its id (YYYY_MM_DD_HH_MM_SS_<petname>), as UTC text."""
+    """When the newest experiment ran, from its id (YYYY_MM_DD_HH_MM_SS_<petname>, UTC), as Pacific text."""
     stamps = [m for m in (EXPERIMENT_STAMP.match(e) for e in experiment_ids) if m]
     if not stamps:
         raise ValueError(f"no experiment id carries a timestamp: {experiment_ids}")
-    y, mo, d, h, mi, _ = max(m.groups() for m in stamps)
-    return f"{y}-{mo}-{d} {h}:{mi} UTC"
+    newest = datetime(*map(int, max(m.groups() for m in stamps)), tzinfo=UTC)
+    return f"{newest.astimezone(PACIFIC):%Y-%m-%d %H:%M %Z}"
 
 
 def _pick(rows: list[dict], value, lowest: bool) -> dict | None:
