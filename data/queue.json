@@ -29,9 +29,9 @@
    "label": "jevany_qwen35_4b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/SimpleJev/JevAny-Qwen3.5-4B-LoRA",
-   "status": "proposed",
+   "status": "queued",
    "note": "JevAny pointer LoRA on Qwen3.5-4B (instruct); card requires the JevAny code release, kev loader not verified on it",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T10:21:29Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
