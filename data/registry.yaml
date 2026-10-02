@@ -31,6 +31,9 @@ experiments:
   2026_10_02_09_46_36_holy-hare: 'kev05b_vs_jev: Kev-0.5B prototype @9ce2fd3, 3 x L4, batched (daily 2026-10-02 rerun)'
   2026_10_02_09_47_49_fair-lizard: 'clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)'
   2026_10_02_09_49_26_alert-jay: 'clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)'
+  2026_10_02_10_46_48_star-hare: 'matilda_jev_v1_vs_jev: Maincode MATILDA-jev v1 26.1B @c87f575, 3 x H200, own runtime (daily 2026-10-02)'
+  2026_10_02_10_47_08_loving-loon: 'autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)'
+  2026_10_02_10_47_28_fine-buck: 'jevany_qwen35_4b_vs_jev: JevAny Qwen3.5-4B LoRA @1c7aa9b, 3 x L40S (failed)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1207,3 +1210,83 @@ rows:
   - cost
   - latency
   highlight: false
+- experiment: 2026_10_02_10_46_48_star-hare
+  reranker: matilda_noul
+  label: matilda_noul
+  family: matilda
+  serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
+  gpu: H200
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_10_46_48_star-hare
+  reranker: matilda_score
+  label: matilda_score
+  family: matilda
+  serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
+  gpu: H200
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_10_47_08_loving-loon
+  reranker: autotrust_noul
+  label: autotrust_noul
+  family: autotrust
+  serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
+  gpu: H200
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_10_47_08_loving-loon
+  reranker: autotrust_score
+  label: autotrust_score
+  family: autotrust
+  serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
+  gpu: H200
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_10_47_28_fine-buck
+  reranker: jevany_noul
+  label: jevany_noul
+  family: jevany
+  serving: 'jevany JevModel: 12 children, 1 in flight'
+  gpu: L40S
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+  blank: failed
+- experiment: 2026_10_02_10_47_28_fine-buck
+  reranker: jevany_score
+  label: jevany_score
+  family: jevany
+  serving: 'jevany JevModel: 12 children, 1 in flight'
+  gpu: L40S
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+  blank: failed

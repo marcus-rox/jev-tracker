@@ -32,7 +32,10 @@
   "2026_10_02_03_29_51_immune-tick": "kev2b_per2021_vs_jev: per2021/kev-2b-qwen3.5 @ac97885 (unofficial), 3 x L4, batched (daily 2026-10-02)",
   "2026_10_02_09_46_36_holy-hare": "kev05b_vs_jev: Kev-0.5B prototype @9ce2fd3, 3 x L4, batched (daily 2026-10-02 rerun)",
   "2026_10_02_09_47_49_fair-lizard": "clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)",
-  "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)"
+  "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
+  "2026_10_02_10_46_48_star-hare": "matilda_jev_v1_vs_jev: Maincode MATILDA-jev v1 26.1B @c87f575, 3 x H200, own runtime (daily 2026-10-02)",
+  "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
+  "2026_10_02_10_47_28_fine-buck": "jevany_qwen35_4b_vs_jev: JevAny Qwen3.5-4B LoRA @1c7aa9b, 3 x L40S (failed)"
  },
  "rows": [
   {
@@ -3882,14 +3885,268 @@
     "latency": "data/experiments/2026_10_02_09_49_26_alert-jay/costs_2026_10_02_09_49_26_alert-jay.json",
     "config": "data/experiments/2026_10_02_09_49_26_alert-jay/config_2026_10_02_09_49_26_alert-jay.yaml"
    }
+  },
+  {
+   "experiment": "2026_10_02_10_46_48_star-hare",
+   "reranker": "matilda_noul",
+   "label": "matilda_noul",
+   "family": "matilda",
+   "serving": "maincode_jev_serve runtime: 1 child, 1 in flight",
+   "gpu": "H200",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.8567801662,
+    "100": 0.8879588621866666,
+    "150": 0.9165121999866667,
+    "200": 0.9502396793733333
+   },
+   "mean_kept_mass": 0.9028727269366666,
+   "cost": {
+    "warm_gpu_s": 3398.830022096634,
+    "load_s": 759.2884669303894,
+    "warm_usd": 5.251736196942835,
+    "in_function_usd": 6.424958365978574,
+    "usd_per_query": 0.07002314929257113,
+    "usd_per_1k": 70.02314929257113,
+    "peak_gb": 52.903665152
+   },
+   "latency": {
+    "run_s": 3398.830022096634,
+    "s_per_query": 45.31773362795512,
+    "h_per_1k": 12.588259341098645
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_46_48_star-hare/kept_mass_2026_10_02_10_46_48_star-hare.json",
+    "cost": "data/experiments/2026_10_02_10_46_48_star-hare/costs_2026_10_02_10_46_48_star-hare.json",
+    "latency": "data/experiments/2026_10_02_10_46_48_star-hare/costs_2026_10_02_10_46_48_star-hare.json",
+    "config": "data/experiments/2026_10_02_10_46_48_star-hare/config_2026_10_02_10_46_48_star-hare.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_10_46_48_star-hare",
+   "reranker": "matilda_score",
+   "label": "matilda_score",
+   "family": "matilda",
+   "serving": "maincode_jev_serve runtime: 1 child, 1 in flight",
+   "gpu": "H200",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.8760758584133334,
+    "100": 0.90058758212,
+    "150": 0.9243111936133334,
+    "200": 0.9519769835466667
+   },
+   "mean_kept_mass": 0.9132379044233334,
+   "cost": {
+    "warm_gpu_s": 3627.5383110046387,
+    "load_s": 754.0362088680267,
+    "warm_usd": 5.605127096631927,
+    "in_function_usd": 6.770233686600027,
+    "usd_per_query": 0.07473502795509236,
+    "usd_per_1k": 74.73502795509236,
+    "peak_gb": 52.91243264
+   },
+   "latency": {
+    "run_s": 3627.5383110046387,
+    "s_per_query": 48.36717748006185,
+    "h_per_1k": 13.435327077794959
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_46_48_star-hare/kept_mass_2026_10_02_10_46_48_star-hare.json",
+    "cost": "data/experiments/2026_10_02_10_46_48_star-hare/costs_2026_10_02_10_46_48_star-hare.json",
+    "latency": "data/experiments/2026_10_02_10_46_48_star-hare/costs_2026_10_02_10_46_48_star-hare.json",
+    "config": "data/experiments/2026_10_02_10_46_48_star-hare/config_2026_10_02_10_46_48_star-hare.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_10_47_08_loving-loon",
+   "reranker": "autotrust_noul",
+   "label": "autotrust_noul",
+   "family": "autotrust",
+   "serving": "bare prompt + 24-slot head: 1 child, 1 in flight",
+   "gpu": "H200",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.832422758,
+    "100": 0.85682349348,
+    "150": 0.8910466972133333,
+    "200": 0.92553882448
+   },
+   "mean_kept_mass": 0.8764579432933333,
+   "cost": {
+    "warm_gpu_s": 3875.8739652633667,
+    "load_s": 581.7387852668762,
+    "warm_usd": 5.988845416166343,
+    "in_function_usd": 6.8877249194512835,
+    "usd_per_query": 0.07985127221555123,
+    "usd_per_1k": 79.85127221555123,
+    "peak_gb": 54.90420992
+   },
+   "latency": {
+    "run_s": 3875.8739652633667,
+    "s_per_query": 51.67831953684489,
+    "h_per_1k": 14.355088760234691
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_47_08_loving-loon/kept_mass_2026_10_02_10_47_08_loving-loon.json",
+    "cost": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
+    "latency": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
+    "config": "data/experiments/2026_10_02_10_47_08_loving-loon/config_2026_10_02_10_47_08_loving-loon.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_10_47_08_loving-loon",
+   "reranker": "autotrust_score",
+   "label": "autotrust_score",
+   "family": "autotrust",
+   "serving": "bare prompt + 24-slot head: 1 child, 1 in flight",
+   "gpu": "H200",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.88292135292,
+    "100": 0.9098188573066667,
+    "150": 0.9366967041466666,
+    "200": 0.9592585537066667
+   },
+   "mean_kept_mass": 0.9221738670199999,
+   "cost": {
+    "warm_gpu_s": 3821.278553724289,
+    "load_s": 510.50653767585754,
+    "warm_usd": 5.904486770072622,
+    "in_function_usd": 6.6933010547750085,
+    "usd_per_query": 0.07872649026763497,
+    "usd_per_1k": 78.72649026763496,
+    "peak_gb": 54.914989568
+   },
+   "latency": {
+    "run_s": 3821.278553724289,
+    "s_per_query": 50.95038071632385,
+    "h_per_1k": 14.152883532312181
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_47_08_loving-loon/kept_mass_2026_10_02_10_47_08_loving-loon.json",
+    "cost": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
+    "latency": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
+    "config": "data/experiments/2026_10_02_10_47_08_loving-loon/config_2026_10_02_10_47_08_loving-loon.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_10_47_28_fine-buck",
+   "reranker": "jevany_noul",
+   "label": "jevany_noul",
+   "family": "jevany",
+   "serving": "jevany JevModel: 12 children, 1 in flight",
+   "gpu": "L40S",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "failed",
+   "kept_mass": null,
+   "mean_kept_mass": null,
+   "cost": {
+    "warm_gpu_s": 0.0,
+    "load_s": 0.0,
+    "warm_usd": 0.0,
+    "in_function_usd": 0.0,
+    "usd_per_query": 0.0,
+    "usd_per_1k": 0.0,
+    "peak_gb": null
+   },
+   "latency": {
+    "run_s": 0.0,
+    "s_per_query": 0.0,
+    "h_per_1k": 0.0
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_47_28_fine-buck/kept_mass_2026_10_02_10_47_28_fine-buck.json",
+    "cost": "data/experiments/2026_10_02_10_47_28_fine-buck/costs_2026_10_02_10_47_28_fine-buck.json",
+    "latency": "data/experiments/2026_10_02_10_47_28_fine-buck/costs_2026_10_02_10_47_28_fine-buck.json",
+    "config": "data/experiments/2026_10_02_10_47_28_fine-buck/config_2026_10_02_10_47_28_fine-buck.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_10_47_28_fine-buck",
+   "reranker": "jevany_score",
+   "label": "jevany_score",
+   "family": "jevany",
+   "serving": "jevany JevModel: 12 children, 1 in flight",
+   "gpu": "L40S",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "failed",
+   "kept_mass": null,
+   "mean_kept_mass": null,
+   "cost": {
+    "warm_gpu_s": 0.0,
+    "load_s": 0.0,
+    "warm_usd": 0.0,
+    "in_function_usd": 0.0,
+    "usd_per_query": 0.0,
+    "usd_per_1k": 0.0,
+    "peak_gb": null
+   },
+   "latency": {
+    "run_s": 0.0,
+    "s_per_query": 0.0,
+    "h_per_1k": 0.0
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_47_28_fine-buck/kept_mass_2026_10_02_10_47_28_fine-buck.json",
+    "cost": "data/experiments/2026_10_02_10_47_28_fine-buck/costs_2026_10_02_10_47_28_fine-buck.json",
+    "latency": "data/experiments/2026_10_02_10_47_28_fine-buck/costs_2026_10_02_10_47_28_fine-buck.json",
+    "config": "data/experiments/2026_10_02_10_47_28_fine-buck/config_2026_10_02_10_47_28_fine-buck.yaml"
+   }
   }
  ],
- "updated": "2026-10-02 02:49 PDT",
+ "updated": "2026-10-02 03:47 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",
-   "value": "0.917",
-   "detail": "kev27b_score \u00b7 Jev 0.926"
+   "value": "0.922",
+   "detail": "autotrust_score \u00b7 Jev 0.926"
   },
   {
    "label": "cheapest ($ / 1k queries)",
@@ -3902,5 +4159,5 @@
    "detail": "laya322m_multilingual_noul_reworded \u00b7 Jev 0.21"
   }
  ],
- "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Clef-27B is third.\n  - 0.880 / 0.946 kept-mass\n  - 0.013 behind at k=50\n  - Costs $9.05 per run.\n- Today adds three models.\n  - Clef-Flash: 0.782 / 0.918\n  - Kev-0.5B: 0.547 / 0.793\n  - Clef-Flash costs $3.26.\n  - Kev-0.5B costs $0.17.\n- Clef is new today.\n  - Clef uses a new adapter.\n  - Clef-27B passes Kev-9B v2.\n- k=50 separates models.\n  - k=200 does not.\n  - Random keeps 0.749 at k=200.\n"
+ "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- AutoTrust JEV-27B is third.\n  - 0.883 / 0.959 kept-mass\n  - 0.010 behind at k=50\n  - Costs $11.89 per run.\n- Today adds two models.\n  - AutoTrust: 0.883 / 0.959\n  - MATILDA: 0.876 / 0.952\n  - MATILDA costs $10.86.\n  - JevAny run failed.\n- AutoTrust passes Clef-27B.\n  - Clef-27B: 0.880 / 0.946\n  - MATILDA is below Clef-27B.\n- k=50 separates models.\n  - k=200 does not.\n  - Random keeps 0.749 at k=200.\n"
 }

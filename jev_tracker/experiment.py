@@ -16,8 +16,8 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
     uv run python -m jev_tracker.experiment verify <id>                # did Modal really do it?
 
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
-(raw answers already on disk, e.g. Jev's), `kev`, `laya` or `clef` (scored now, in-process on Modal,
-sharded over GPUs) or `api` (any hosted model that answers the System One request at a URL, from
+(raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust` or `jevany`
+(scored now, in-process on Modal, sharded over GPUs) or `api` (any hosted model that answers the System One request at a URL, from
 a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
 modal_app.py; the metric is untouched.
 """
@@ -133,6 +133,63 @@ class ClefSource(BaseModel):
     gpu: str | None = None
 
 
+class MatildaSource(BaseModel):
+    """Maincode MATILDA-jev v1: a 26.1B Qwen3.5 backbone plus a decision readout, answered by the
+    release's own runtime (`maincode_jev_serve.decide`, as its /v1/systemone server does).
+
+    The runtime repeats the state once per question, so a request holds one child: query + child,
+    one question, one forward pass (as Laya); one in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["matilda"]
+    method: str
+    model: Literal["Maincode/matilda-jev-v1"] = modal_app.MATILDA_MODEL
+    max_items: Literal[1] = 1
+    max_chars: None = None
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
+class AutoTrustSource(BaseModel):
+    """AutoTrust JEV-27B: Qwen3.8-27B + LoRA + a 24-slot decision head, asked through the release's
+    bare prompt one question at a time (jev_tracker.autotrust, the README's transformers path).
+
+    Each question repeats the whole state, so a request holds one child (as Laya); one in flight."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["autotrust"]
+    method: str
+    model: Literal["autotrust/JEV-27B"] = modal_app.AUTOTRUST_MODEL
+    max_items: Literal[1] = 1
+    max_chars: None = None
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
+class JevAnySource(BaseModel):
+    """JevAny: a pointer LoRA + head on a Qwen3.5 base, loaded by the JevAny release's own runtime
+    (`jevany.JevModel`), which answers the System One request body in-process.
+
+    The runtime packs the state once plus one branch per question into 8,192 tokens (and rejects,
+    not truncates, anything longer: such a request is split in two); 12 children / 12,000
+    characters per request matches configs/kev27b_batched.yaml. One in flight (it holds a lock)."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["jevany"]
+    method: str
+    model: Literal["SimpleJev/JevAny-Qwen3.5-4B-LoRA"]
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
 class ApiSource(BaseModel):
     """Any hosted model that answers the System One request body at `url` (Jev, Liquid d1, ...).
 
@@ -155,7 +212,9 @@ class ApiSource(BaseModel):
     concurrency: int = 8  # requests in flight per container
 
 
-ModelSource = KevSource | LayaSource | ClefSource | ApiSource
+ModelSource = (
+    KevSource | LayaSource | ClefSource | MatildaSource | AutoTrustSource | JevAnySource | ApiSource
+)
 Source = Annotated[ProductionSource | AnswersSource | ModelSource, Field(discriminator="source")]
 
 

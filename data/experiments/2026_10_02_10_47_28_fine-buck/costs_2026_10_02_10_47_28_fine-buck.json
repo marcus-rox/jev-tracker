@@ -1,0 +1,49 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "jevany_noul": {
+   "gpu": null,
+   "shards": 3,
+   "unmeasured": 3,
+   "resumed": 0,
+   "load_s": 0.0,
+   "warm_gpu_s": 0.0,
+   "in_function_s": 0.0,
+   "warm_usd": 0.0,
+   "in_function_usd": 0.0,
+   "requests": null,
+   "forward_passes": null,
+   "resident_gb": null,
+   "peak_gb": null,
+   "warm_usd_per_1k": 0.0
+  },
+  "jevany_score": {
+   "gpu": null,
+   "shards": 3,
+   "unmeasured": 3,
+   "resumed": 0,
+   "load_s": 0.0,
+   "warm_gpu_s": 0.0,
+   "in_function_s": 0.0,
+   "warm_usd": 0.0,
+   "in_function_usd": 0.0,
+   "requests": null,
+   "forward_passes": null,
+   "resident_gb": null,
+   "peak_gb": null,
+   "warm_usd_per_1k": 0.0
+  }
+ },
+ "shards": {
+  "jevany_noul": [
+   null,
+   null,
+   null
+  ],
+  "jevany_score": [
+   null,
+   null,
+   null
+  ]
+ }
+}

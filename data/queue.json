@@ -1,40 +1,49 @@
 {
  "items": [
   {
-   "config": "configs/matilda_jev_v1_vs_jev.yaml",
-   "label": "matilda_jev_v1_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/Maincode/matilda-jev-v1",
-   "status": "running",
-   "note": "Jev-style decision model with its own architecture / serving (matilda_jev); no harness source for it",
-   "queued_at": "2026-10-02T10:21:23Z",
-   "started_at": "2026-10-02T10:35:51Z",
-   "finished_at": null,
-   "evidence": null
-  },
-  {
-   "config": "configs/autotrust_jev27b_vs_jev.yaml",
-   "label": "autotrust_jev27b_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/autotrust/JEV-27B",
-   "status": "running",
-   "note": "Jev-style decision model with its own architecture / serving (qwen3_5_text); no harness source for it",
-   "queued_at": "2026-10-02T10:21:25Z",
-   "started_at": "2026-10-02T10:35:51Z",
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/jevany_qwen35_4b_vs_jev.yaml",
    "label": "jevany_qwen35_4b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/SimpleJev/JevAny-Qwen3.5-4B-LoRA",
-   "status": "running",
-   "note": "JevAny pointer LoRA on Qwen3.5-4B (instruct); card requires the JevAny code release, kev loader not verified on it",
+   "status": "failed",
+   "note": "modal call fc-01M3Y3KXAH83SRFBRVHJZYQC63: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXGZKJKXYSFYCEJK8MX6: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXR17T11DF628CNCF2QW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXXWPJJ585JWXF2WY7J8: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KY4ZR6JEHWD2H2KHV25A: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; jevany_noul: no raw answers; jevany_score: no raw answers",
    "queued_at": "2026-10-02T10:21:29Z",
    "started_at": "2026-10-02T10:35:51Z",
-   "finished_at": null,
-   "evidence": null
+   "finished_at": "2026-10-02T10:52:18Z",
+   "evidence": {
+    "experiment": "2026_10_02_10_47_28_fine-buck",
+    "calls": {
+     "fc-01M3Y3KXAH83SRFBRVHJZYQC63": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "fc-01M3Y3KXGZKJKXYSFYCEJK8MX6": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "fc-01M3Y3KXR17T11DF628CNCF2QW": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "fc-01M3Y3KXXWPJJ585JWXF2WY7J8": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "fc-01M3Y3KY4ZR6JEHWD2H2KHV25A": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf"
+    },
+    "rerankers": [
+     {
+      "name": "jev_noul",
+      "requests": 457,
+      "cases": 75
+     },
+     {
+      "name": "jev_score",
+      "requests": 457,
+      "cases": 75
+     }
+    ],
+    "kept_mass": true,
+    "problems": [
+     "modal call fc-01M3Y3KXAH83SRFBRVHJZYQC63: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "modal call fc-01M3Y3KXGZKJKXYSFYCEJK8MX6: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "modal call fc-01M3Y3KXR17T11DF628CNCF2QW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "modal call fc-01M3Y3KXXWPJJ585JWXF2WY7J8: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "modal call fc-01M3Y3KY4ZR6JEHWD2H2KHV25A: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "modal call fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "jevany_noul: no raw answers",
+     "jevany_score: no raw answers"
+    ]
+   }
   },
   {
    "config": "configs/rsi_jev_v3_2b_vs_jev.yaml",

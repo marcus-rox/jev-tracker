@@ -1,0 +1,3 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+matilda_noul,75,45.24,29.51,116.55,8.23,293.80,419.6
+matilda_score,75,48.30,32.28,115.55,9.61,344.34,419.6
