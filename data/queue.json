@@ -95,9 +95,9 @@
    "label": "kev05b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/jaredpalmer/kev-0.5b",
-   "status": "proposed",
+   "status": "queued",
    "note": "over budget: Kev-0.5B (superseded Qwen2.5 Kev, head.pt + LoRA) would go through the kev source, but today's 3-run cap is used",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T08:13:23Z",
    "started_at": null
   },
   {
