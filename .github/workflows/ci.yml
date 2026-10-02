@@ -8,10 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: astral-sh/setup-uv@v6
       - run: uv sync
       - run: uv run ruff check . && uv run ruff format --check .
-      - run: uv run pytest -q
+      - name: rescore only the experiments this PR touches (every one on main)
+        if: github.event_name == 'pull_request'
+        run: |
+          changed=$(git diff --name-only "origin/$GITHUB_BASE_REF...HEAD" -- data/experiments | cut -d/ -f3 | sort -u | paste -sd,)
+          echo "JEV_RESCORE_EXPERIMENTS=$changed" >> "$GITHUB_ENV"
+      - run: uv run pytest -q -n auto
   site:
     runs-on: ubuntu-latest
     defaults: { run: { working-directory: site } }
