@@ -239,3 +239,21 @@ def test_noul_query_in_question_moves_the_query_into_the_question() -> None:
     }
     old = request(METHODS["noul_query_in_state"], case.input.query, batch, "jev").body()
     assert "criteria" not in old["questions"]["i0"]  # Jev's committed request is unchanged
+
+
+def test_R2_pinned_hub_revision_keeps_the_models_gpu_and_memory() -> None:
+    """`repo@revision` is what kev's Checkpoint accepts; GPU and host-RAM lookups use the repo."""
+    from jev_tracker.modal_app import GPU_FOR, MEMORY_MB_FOR, ScoringRun
+
+    run = ScoringRun(
+        experiment="x",
+        reranker="r",
+        engine="kev",
+        model="jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195",
+        method="noul_query_in_state",
+        max_items=12,
+        max_chars=12000,
+    )
+    assert run.repo == "jaredpalmer/kev-27b"
+    assert run.gpu_type == GPU_FOR["jaredpalmer/kev-27b"]
+    assert MEMORY_MB_FOR.get(run.repo) == MEMORY_MB_FOR["jaredpalmer/kev-27b"]

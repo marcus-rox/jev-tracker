@@ -34,13 +34,13 @@ RERUNS = [
         "laya421m_score",
     ),
     (
-        "2026_10_01_23_53_25_fit-macaw",
+        "2026_10_02_00_08_39_safe-joey",
         "kev27b_noul",
         "2026_09_28_22_15_35_pretty-sawfly",
         "kev27b_noul",
     ),
     (
-        "2026_10_01_23_53_25_fit-macaw",
+        "2026_10_02_00_08_39_safe-joey",
         "kev27b_score",
         "2026_09_28_22_15_35_pretty-sawfly",
         "kev27b_score",

@@ -118,10 +118,15 @@ class ScoringRun(BaseModel):
     api: ApiEndpoint | None = None  # api only
 
     @property
+    def repo(self) -> str:
+        """The Hub repo id without any `@revision` pin (kev's Checkpoint accepts `repo@rev`)."""
+        return self.model.partition("@")[0]
+
+    @property
     def gpu_type(self) -> str:
         if self.engine == "api":
             return API
-        return self.gpu or GPU_FOR.get(self.model, DEFAULT_KEV_GPU)
+        return self.gpu or GPU_FOR.get(self.repo, DEFAULT_KEV_GPU)
 
     @property
     def name(self) -> str:
@@ -474,7 +479,7 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
     """Spawn (or re-spawn: done batches on the Volume are skipped) one shard and record its call."""
     score = {"kev": score_cases, "laya": score_cases_laya, "api": score_cases_api}
     run = job.run
-    options: dict = {"memory": MEMORY_MB_FOR.get(run.model)}
+    options: dict = {"memory": MEMORY_MB_FOR.get(run.repo)}
     if run.engine == "api":
         if run.api is not None and run.api.secret is not None:
             options["secrets"] = [modal.Secret.from_name(run.api.secret)]

@@ -19,6 +19,12 @@ experiments:
   2026_09_30_01_11_06_key-kiwi: 'liquid_d1_vs_jev: LiquidAI d1 via its API, 75 cases (failed)'
   2026_09_30_01_06_44_true-coyote: 'liquid_d1_smoke: LiquidAI d1, first 2 cases'
   2026_09_26_00_26_02_picked-bee: 'kev4b_vs_jev: Kev-4B vs Jev, first full run'
+  2026_10_01_23_53_13_keen-emu: 'kev4b_vs_jev: Kev-4B rerun (R-4 validation), 10 x L40S'
+  2026_10_01_23_53_20_frank-moray: 'laya_vs_jev: Laya 421M rerun (R-4 validation), 4 x L4, batched'
+  2026_10_02_00_08_39_safe-joey: 'kev27b_batched_v1: Kev-27B @01b8199 (2026-09-24 weights) rerun (R-4
+    validation), 3 x H200'
+  2026_10_01_23_53_25_fit-macaw: 'kev27b_batched: Kev-27B v2 (Hub main since 2026-09-30, round 23), 3
+    x H200'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -934,4 +940,108 @@ rows:
   queries: 2
   tables:
   - appendix
+  highlight: false
+- experiment: 2026_10_01_23_53_13_keen-emu
+  reranker: kev4b_noul
+  label: kev4b_noul
+  family: kev4b
+  serving: first run
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_01_23_53_13_keen-emu
+  reranker: kev4b_score
+  label: kev4b_score
+  family: kev4b
+  serving: first run
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_01_23_53_20_frank-moray
+  reranker: laya_noul
+  label: laya_noul
+  family: laya421m
+  serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_01_23_53_20_frank-moray
+  reranker: laya_score
+  label: laya_score
+  family: laya421m
+  serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_00_08_39_safe-joey
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_00_08_39_safe-joey
+  reranker: kev27b_score
+  label: kev27b_score
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_01_23_53_25_fit-macaw
+  reranker: kev27b_noul
+  label: kev27b_noul_v2
+  family: kev27b v2
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_01_23_53_25_fit-macaw
+  reranker: kev27b_score
+  label: kev27b_score_v2
+  family: kev27b v2
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
   highlight: false

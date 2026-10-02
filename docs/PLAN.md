@@ -2,7 +2,8 @@
 
 **Status · 2026-10-01 · Phase 1 done, awaiting PR review.** Harness ported from
 `rox-research/projects/reranker_alts` (branch `devin/1790714158-laya-harness`); Kev-4B, Laya and
-batched Kev-27B reran on Modal within 0.002 kept-mass of rox-research at every k.
+batched Kev-27B (pinned to the 2026-09-24 weights) reran on Modal within 0.002 kept-mass of
+rox-research at every k.
 
 ## The objective
 
@@ -61,6 +62,12 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
   experiments keep their ids so the report's references resolve.
 - **Kev-27B revalidation is the batched config only** (Marcus): the sequential and FP8 runs are
   not rerun.
+- **Pin the Hub revision when a model's `main` moves.** `jaredpalmer/kev-27b` got new weights on
+  2026-09-30 ("Kev-27B v2", round 23) after the rox-research runs (2026-09-24 weights, revision
+  `01b8199`). The unpinned rerun (`2026_10_01_23_53_25_fit-macaw`) is ~0.01 kept-mass lower at
+  k ≤ 150 and is kept as the v2 row; R-4 is checked against the pinned rerun
+  (`configs/kev27b_batched_v1.yaml`, `model: jaredpalmer/kev-27b@01b8199…`). Kev-4B's weights last
+  changed 2026-09-24, before its reference run, so it needed no pin.
 
 ## Out of scope
 
@@ -71,7 +78,7 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
 
 ## Open
 
-- Whether Kev-4B's and Laya's own rerun spread is within 0.002 (only Kev-27B's was measured);
-  resolved by step 2.
+- ~~Whether Kev-4B's and Laya's own rerun spread is within 0.002~~ — yes: both reran within 0.002
+  at every k (`tests/test_validation.py`).
 - Devin automation configuration (schedule, which playbook): resolved when Phase 3 starts, via the
   automation-management skill.
