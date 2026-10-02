@@ -16,7 +16,8 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
     uv run python -m jev_tracker.experiment verify <id>                # did Modal really do it?
 
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
-(raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust` or `jevany`
+(raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust`, `jevany`,
+`rsi_jev` or `minicpm_jev`
 (scored now, in-process on Modal, sharded over GPUs) or `api` (any hosted model that answers the System One request at a URL, from
 a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
 modal_app.py; the metric is untouched.
@@ -190,6 +191,44 @@ class JevAnySource(BaseModel):
     gpu: str | None = None
 
 
+class RsiJevSource(BaseModel):
+    """RSI-Jev: a fine-tuned Qwen3.5 tower + option scorer, loaded by the release's `load_release`
+    and scored with its `rsijev.evaluate.predict`, one encoded row (state + question) per question.
+
+    Its server does not cut a state (32,768 tokens per question); 12 children / 12,000 characters
+    per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["rsi_jev"]
+    method: str
+    model: Literal["shgao/rsi-jev-v3.0-qwen3.5-2b"]
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
+class MiniCpmJevSource(BaseModel):
+    """MiniCPM5-2B-Jev: a LoRA + letter readout on MiniCPM5-2B through the release's
+    `MiniCPMSystemOne`, which takes the request body (state once, one branch per question).
+
+    Its server keeps 2,560 state tokens (and trims beyond), so a request holds 8 children /
+    8,000 characters. One in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["minicpm_jev"]
+    method: str
+    model: Literal["ytbai/MiniCPM5-2B-Jev"]
+    max_items: int | None = 8
+    max_chars: int | None = 8_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
 class ApiSource(BaseModel):
     """Any hosted model that answers the System One request body at `url` (Jev, Liquid d1, ...).
 
@@ -213,7 +252,15 @@ class ApiSource(BaseModel):
 
 
 ModelSource = (
-    KevSource | LayaSource | ClefSource | MatildaSource | AutoTrustSource | JevAnySource | ApiSource
+    KevSource
+    | LayaSource
+    | ClefSource
+    | MatildaSource
+    | AutoTrustSource
+    | JevAnySource
+    | RsiJevSource
+    | MiniCpmJevSource
+    | ApiSource
 )
 Source = Annotated[ProductionSource | AnswersSource | ModelSource, Field(discriminator="source")]
 

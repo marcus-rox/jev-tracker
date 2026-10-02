@@ -35,7 +35,10 @@
   "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_10_46_48_star-hare": "matilda_jev_v1_vs_jev: Maincode MATILDA-jev v1 26.1B @c87f575, 3 x H200, own runtime (daily 2026-10-02)",
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
-  "2026_10_02_10_47_28_fine-buck": "jevany_qwen35_4b_vs_jev: JevAny Qwen3.5-4B LoRA @1c7aa9b, 3 x L40S (failed)"
+  "2026_10_02_10_47_28_fine-buck": "jevany_qwen35_4b_vs_jev: JevAny Qwen3.5-4B LoRA @1c7aa9b, 3 x L40S (failed)",
+  "2026_10_02_17_18_05_proven-shiner": "kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)",
+  "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
+  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)"
  },
  "rows": [
   {
@@ -4139,9 +4142,273 @@
     "latency": "data/experiments/2026_10_02_10_47_28_fine-buck/costs_2026_10_02_10_47_28_fine-buck.json",
     "config": "data/experiments/2026_10_02_10_47_28_fine-buck/config_2026_10_02_10_47_28_fine-buck.yaml"
    }
+  },
+  {
+   "experiment": "2026_10_02_17_18_05_proven-shiner",
+   "reranker": "kev08b_ba_lora_noul",
+   "label": "kev08b_ba_lora_noul",
+   "family": "kev08b_ba_lora",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.6484054313733333,
+    "100": 0.7155802298666667,
+    "150": 0.78567178368,
+    "200": 0.8513649359333333
+   },
+   "mean_kept_mass": 0.7502555952133333,
+   "cost": {
+    "warm_gpu_s": 491.01359701156616,
+    "load_s": 66.15329909324646,
+    "warm_usd": 0.10900501853656769,
+    "in_function_usd": 0.12371753122329712,
+    "usd_per_query": 0.0014534002471542358,
+    "usd_per_1k": 1.453400247154236,
+    "peak_gb": 4.757344768
+   },
+   "latency": {
+    "run_s": 491.01359701156616,
+    "s_per_query": 6.546847960154215,
+    "h_per_1k": 1.8185688778206153
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_18_05_proven-shiner/kept_mass_2026_10_02_17_18_05_proven-shiner.json",
+    "cost": "data/experiments/2026_10_02_17_18_05_proven-shiner/costs_2026_10_02_17_18_05_proven-shiner.json",
+    "latency": "data/experiments/2026_10_02_17_18_05_proven-shiner/costs_2026_10_02_17_18_05_proven-shiner.json",
+    "config": "data/experiments/2026_10_02_17_18_05_proven-shiner/config_2026_10_02_17_18_05_proven-shiner.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_17_18_05_proven-shiner",
+   "reranker": "kev08b_ba_lora_score",
+   "label": "kev08b_ba_lora_score",
+   "family": "kev08b_ba_lora",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.5512223362,
+    "100": 0.6285116335733333,
+    "150": 0.7101033009866666,
+    "200": 0.7956114022933334
+   },
+   "mean_kept_mass": 0.6713621682633333,
+   "cost": {
+    "warm_gpu_s": 611.8846323490143,
+    "load_s": 66.06608891487122,
+    "warm_usd": 0.13583838838148118,
+    "in_function_usd": 0.15057381564044953,
+    "usd_per_query": 0.0018111785117530825,
+    "usd_per_1k": 1.8111785117530825,
+    "peak_gb": 4.75808512
+   },
+   "latency": {
+    "run_s": 611.8846323490143,
+    "s_per_query": 8.158461764653524,
+    "h_per_1k": 2.266239379070423
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_18_05_proven-shiner/kept_mass_2026_10_02_17_18_05_proven-shiner.json",
+    "cost": "data/experiments/2026_10_02_17_18_05_proven-shiner/costs_2026_10_02_17_18_05_proven-shiner.json",
+    "latency": "data/experiments/2026_10_02_17_18_05_proven-shiner/costs_2026_10_02_17_18_05_proven-shiner.json",
+    "config": "data/experiments/2026_10_02_17_18_05_proven-shiner/config_2026_10_02_17_18_05_proven-shiner.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_17_22_11_merry-corgi",
+   "reranker": "minicpm5_jev_noul",
+   "label": "minicpm5_jev_noul",
+   "family": "minicpm5_jev",
+   "serving": "MiniCPMSystemOne: 8 children, 1 in flight",
+   "gpu": "L4",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.73088296252,
+    "100": 0.7809987322266667,
+    "150": 0.8391443449866667,
+    "200": 0.89199214112
+   },
+   "mean_kept_mass": 0.8107545452133333,
+   "cost": {
+    "warm_gpu_s": 4935.318799972534,
+    "load_s": 134.81608867645264,
+    "warm_usd": 1.0956407735939027,
+    "in_function_usd": 1.1255699457564354,
+    "usd_per_query": 0.014608543647918703,
+    "usd_per_1k": 14.608543647918703,
+    "peak_gb": 4.98081024
+   },
+   "latency": {
+    "run_s": 4935.318799972534,
+    "s_per_query": 65.80425066630046,
+    "h_per_1k": 18.278958518416793
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_22_11_merry-corgi/kept_mass_2026_10_02_17_22_11_merry-corgi.json",
+    "cost": "data/experiments/2026_10_02_17_22_11_merry-corgi/costs_2026_10_02_17_22_11_merry-corgi.json",
+    "latency": "data/experiments/2026_10_02_17_22_11_merry-corgi/costs_2026_10_02_17_22_11_merry-corgi.json",
+    "config": "data/experiments/2026_10_02_17_22_11_merry-corgi/config_2026_10_02_17_22_11_merry-corgi.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_17_22_11_merry-corgi",
+   "reranker": "minicpm5_jev_score",
+   "label": "minicpm5_jev_score",
+   "family": "minicpm5_jev",
+   "serving": "MiniCPMSystemOne: 8 children, 1 in flight",
+   "gpu": "L4",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.70024374612,
+    "100": 0.7673927166133333,
+    "150": 0.83354271332,
+    "200": 0.88564047772
+   },
+   "mean_kept_mass": 0.7967049134433333,
+   "cost": {
+    "warm_gpu_s": 4976.039284229279,
+    "load_s": 88.82610011100769,
+    "warm_usd": 1.1046807210988998,
+    "in_function_usd": 1.1244001159057617,
+    "usd_per_query": 0.014729076281318663,
+    "usd_per_1k": 14.729076281318665,
+    "peak_gb": 4.98081024
+   },
+   "latency": {
+    "run_s": 4976.039284229279,
+    "s_per_query": 66.34719045639038,
+    "h_per_1k": 18.429775126775105
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_22_11_merry-corgi/kept_mass_2026_10_02_17_22_11_merry-corgi.json",
+    "cost": "data/experiments/2026_10_02_17_22_11_merry-corgi/costs_2026_10_02_17_22_11_merry-corgi.json",
+    "latency": "data/experiments/2026_10_02_17_22_11_merry-corgi/costs_2026_10_02_17_22_11_merry-corgi.json",
+    "config": "data/experiments/2026_10_02_17_22_11_merry-corgi/config_2026_10_02_17_22_11_merry-corgi.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_18_00_38_large-corgi",
+   "reranker": "rsi_jev_noul",
+   "label": "rsi_jev_noul",
+   "family": "rsi_jev",
+   "serving": "rsijev predict: 12 children, 1 in flight",
+   "gpu": "L40S",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7345692525066667,
+    "100": 0.78595763024,
+    "150": 0.8351366962533333,
+    "200": 0.88971751188
+   },
+   "mean_kept_mass": 0.81134527272,
+   "cost": {
+    "warm_gpu_s": 9589.416823148727,
+    "load_s": 169.59343075752258,
+    "warm_usd": 5.197463918146609,
+    "in_function_usd": 5.289383558392524,
+    "usd_per_query": 0.06929951890862146,
+    "usd_per_1k": 69.29951890862147,
+    "peak_gb": 17.552602624
+   },
+   "latency": {
+    "run_s": 9589.416823148727,
+    "s_per_query": 127.85889097531637,
+    "h_per_1k": 35.51635860425455
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_18_00_38_large-corgi/kept_mass_2026_10_02_18_00_38_large-corgi.json",
+    "cost": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
+    "latency": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
+    "config": "data/experiments/2026_10_02_18_00_38_large-corgi/config_2026_10_02_18_00_38_large-corgi.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_18_00_38_large-corgi",
+   "reranker": "rsi_jev_score",
+   "label": "rsi_jev_score",
+   "family": "rsi_jev",
+   "serving": "rsijev predict: 12 children, 1 in flight",
+   "gpu": "L40S",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.73866895668,
+    "100": 0.7889410919866666,
+    "150": 0.8503487664533333,
+    "200": 0.89916012548
+   },
+   "mean_kept_mass": 0.81927973515,
+   "cost": {
+    "warm_gpu_s": 9724.867641925812,
+    "load_s": 165.557293176651,
+    "warm_usd": 5.270878261923789,
+    "in_function_usd": 5.360610315600871,
+    "usd_per_query": 0.07027837682565052,
+    "usd_per_1k": 70.27837682565053,
+    "peak_gb": 17.63234816
+   },
+   "latency": {
+    "run_s": 9724.867641925812,
+    "s_per_query": 129.66490189234415,
+    "h_per_1k": 36.01802830342893
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_18_00_38_large-corgi/kept_mass_2026_10_02_18_00_38_large-corgi.json",
+    "cost": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
+    "latency": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
+    "config": "data/experiments/2026_10_02_18_00_38_large-corgi/config_2026_10_02_18_00_38_large-corgi.yaml"
+   }
   }
  ],
- "updated": "2026-10-02 03:47 PDT",
+ "updated": "2026-10-02 11:00 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",
@@ -4159,5 +4426,5 @@
    "detail": "laya322m_multilingual_noul_reworded \u00b7 Jev 0.21"
   }
  ],
- "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Two models finish today.\n  - AutoTrust: 0.883 / 0.959\n  - AutoTrust costs $11.89.\n  - MATILDA: 0.876 / 0.952\n  - MATILDA costs $10.86.\n  - JevAny run failed.\n- AutoTrust passes Clef-27B.\n  - AutoTrust takes third place.\n  - 0.010 behind at k=50\n  - Clef-27B: 0.880 / 0.946\n  - MATILDA is below Clef-27B.\n- k=50 separates models.\n  - k=200 does not.\n  - Random keeps 0.749 at k=200.\n"
+ "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Three models finish today.\n  - RSI-Jev: 0.739 / 0.899\n  - RSI-Jev costs $10.47.\n  - MiniCPM5-Jev: 0.731 / 0.892\n  - MiniCPM5-Jev costs $2.20.\n  - Kev-0.8B BA-LoRA: 0.648 / 0.851\n  - Kev-0.8B BA-LoRA costs $0.25.\n- The top three stay.\n  - Jev, Kev-27B, AutoTrust lead.\n  - New models trail Jev.\n  - BA-LoRA is below production.\n  - Production keeps 0.711 at k=50.\n"
 }

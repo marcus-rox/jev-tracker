@@ -34,6 +34,9 @@ experiments:
   2026_10_02_10_46_48_star-hare: 'matilda_jev_v1_vs_jev: Maincode MATILDA-jev v1 26.1B @c87f575, 3 x H200, own runtime (daily 2026-10-02)'
   2026_10_02_10_47_08_loving-loon: 'autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)'
   2026_10_02_10_47_28_fine-buck: 'jevany_qwen35_4b_vs_jev: JevAny Qwen3.5-4B LoRA @1c7aa9b, 3 x L40S (failed)'
+  2026_10_02_17_18_05_proven-shiner: 'kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)'
+  2026_10_02_17_22_11_merry-corgi: 'minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)'
+  2026_10_02_18_00_38_large-corgi: 'rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1290,3 +1293,81 @@ rows:
   - latency
   highlight: false
   blank: failed
+- experiment: 2026_10_02_17_18_05_proven-shiner
+  reranker: kev08b_ba_lora_noul
+  label: kev08b_ba_lora_noul
+  family: kev08b_ba_lora
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_17_18_05_proven-shiner
+  reranker: kev08b_ba_lora_score
+  label: kev08b_ba_lora_score
+  family: kev08b_ba_lora
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_17_22_11_merry-corgi
+  reranker: minicpm5_jev_noul
+  label: minicpm5_jev_noul
+  family: minicpm5_jev
+  serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_17_22_11_merry-corgi
+  reranker: minicpm5_jev_score
+  label: minicpm5_jev_score
+  family: minicpm5_jev
+  serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
+  gpu: L4
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_18_00_38_large-corgi
+  reranker: rsi_jev_noul
+  label: rsi_jev_noul
+  family: rsi_jev
+  serving: 'rsijev predict: 12 children, 1 in flight'
+  gpu: L40S
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_18_00_38_large-corgi
+  reranker: rsi_jev_score
+  label: rsi_jev_score
+  family: rsi_jev
+  serving: 'rsijev predict: 12 children, 1 in flight'
+  gpu: L40S
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
