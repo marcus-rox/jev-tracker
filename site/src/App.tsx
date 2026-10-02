@@ -48,7 +48,7 @@ const toggled = (s: Set<string>, v: string) => {
   return n
 }
 
-function Widget({ span, title, sub, children }: { span: 4 | 6 | 8 | 12; title: string; sub?: ReactNode; children: ReactNode }) {
+function Widget({ span, title, sub, children }: { span: 3 | 4 | 6 | 8 | 9 | 12; title: string; sub?: ReactNode; children: ReactNode }) {
   return (
     <section className={`w s${span}`}>
       <h2>{title}{sub && <span className="sub">{sub}</span>}</h2>
@@ -137,10 +137,10 @@ export default function App() {
       <main className="grid">
         {tab === 'summary' && <>
           {data.cards.map((c, i) => <NumWidget key={c.label} card={c} higherIsBetter={i === 0} />)}
-          <Widget span={12} title="TLDR" sub={<>recap written by the daily run · <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></>}>
+          <Widget span={3} title="TLDR" sub={<>written by the daily run · <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></>}>
             <Tldr text={data.tldr} />
           </Widget>
-          <Widget span={12} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(300)}</Widget>
+          <Widget span={9} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(360)}</Widget>
           <Widget span={6} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>
           <Widget span={6} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
           <Widget span={12} title="All runs" sub={`${rows.length} rows · ${FROZEN_QUERIES} frozen queries`}>
