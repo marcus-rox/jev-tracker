@@ -5,10 +5,12 @@
    "label": "matilda_jev_v1_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/Maincode/matilda-jev-v1",
-   "status": "proposed",
+   "status": "queued",
    "note": "Jev-style decision model with its own architecture / serving (matilda_jev); no harness source for it",
-   "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "queued_at": "2026-10-02T10:21:23Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/autotrust_jev27b_vs_jev.yaml",
@@ -18,7 +20,9 @@
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (qwen3_5_text); no harness source for it",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/jevany_qwen35_4b_vs_jev.yaml",
@@ -28,7 +32,9 @@
    "status": "proposed",
    "note": "JevAny pointer LoRA on Qwen3.5-4B (instruct); card requires the JevAny code release, kev loader not verified on it",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/rsi_jev_v3_2b_vs_jev.yaml",
@@ -38,7 +44,9 @@
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (rsi-jev); no harness source for it",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/minicpm5_2b_jev_vs_jev.yaml",
@@ -48,7 +56,9 @@
    "status": "proposed",
    "note": "LoRA on MiniCPM5-2B with its own /v1/systemone server; kev source only verified on Qwen3.5/3.8 bases",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/kev08b_ba_lora_vs_jev.yaml",
@@ -58,7 +68,9 @@
    "status": "proposed",
    "note": "over budget: general Kev-0.8B post-train (head.pt + LoRA on Qwen3.5-0.8B-Base) runs through the kev source, but today's 3-run cap is used; queue for a later day",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/kev4b_ba_lora_vs_jev.yaml",
@@ -68,7 +80,9 @@
    "status": "proposed",
    "note": "over budget: general Kev-4B post-train (head.pt + LoRA on Qwen3.5-4B-Base) runs through the kev source, but today's 3-run cap is used; queue for a later day",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/startlux_decision_9b_vs_jev.yaml",
@@ -78,7 +92,9 @@
    "status": "proposed",
    "note": "Jev-style decision model with its own architecture / serving (qwen3_5); no harness source for it",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/hotchpotch_jev_reranker_vs_jev.yaml",
@@ -88,7 +104,9 @@
    "status": "proposed",
    "note": "jev-reranker (hotchpotch) small decision models; own architecture",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/api_openrouter_kev4b_vs_jev.yaml",
@@ -98,7 +116,9 @@
    "status": "queued",
    "note": "Kev-4B on OpenRouter; api source needs an OpenRouter key as a Modal Secret (in-process Kev-4B already benchmarked)",
    "queued_at": "2026-10-02T08:13:17Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/api_d1_vs_jev.yaml",
@@ -108,7 +128,9 @@
    "status": "proposed",
    "note": "Liquid AI d1: configs/api_d1_vs_jev.yaml exists but its 75-case run failed (key-kiwi); fix the endpoint call before rerunning",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/von_395m_vs_jev.yaml",
@@ -118,7 +140,9 @@
    "status": "proposed",
    "note": "Von: open-source 395M System One model; own architecture / serving",
    "queued_at": "2026-10-02T07:00:43Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/decider_vs_jev.yaml",
@@ -128,7 +152,9 @@
    "status": "proposed",
    "note": "decider family (Qwen3.5 / Gemma-4 fine-tunes, own decider-ai package and server); HN reports decider-4B above Kev at lower latency; needs a decider source",
    "queued_at": "2026-10-02T09:38:32Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   },
   {
    "config": "configs/api_openrouter_mercury_decide_vs_jev.yaml",
@@ -138,7 +164,9 @@
    "status": "proposed",
    "note": "Inception Mercury Decide, hosted structured decision model on OpenRouter; api source needs an OpenRouter key as a Modal Secret",
    "queued_at": "2026-10-02T09:38:32Z",
-   "started_at": null
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
