@@ -85,3 +85,10 @@ def test_R2_ollaya_response_validates_and_records() -> None:
     assert rec.model == "kev:9b"
     assert [s.child_index for s in rec.scores] == [0, 1]
     assert rec.usage.input_tokens == 211
+
+
+def test_R3_go_no_go_smoke_is_one_case_of_the_smallest_model() -> None:
+    exp = load_config(Path("configs/kev0.8b_ollaya_smoke.yaml"))
+    src = exp.rerankers["kev0.8b_onnx_noul"]
+    assert isinstance(src, OllayaSource)
+    assert exp.cases == 1 and src.model == "kev:0.8b"

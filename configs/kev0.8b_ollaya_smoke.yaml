@@ -1,0 +1,25 @@
+# Go/no-go smoke of the Ollaya (ONNX Runtime CUDA) producer at the smallest cost: first case only,
+# the registry's smallest decision model (kev:0.8b, 1.8 GB fp32) on 1 H100, noul only. ~17 requests;
+# tells whether the path runs and what one request costs, not how good the model is. Ceiling ~$0.30.
+name: kev0.8b_ollaya_smoke
+cases: 1
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev0.8b_onnx_noul:
+    source: ollaya
+    model: kev:0.8b
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    gpu: H100
+    concurrency: 8
