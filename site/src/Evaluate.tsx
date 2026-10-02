@@ -1,43 +1,42 @@
 import { useState } from 'react'
-import { configYaml, issueUrl, METHODS, type Method, type Source } from './evaluate_config'
+import { blob } from './types'
+
+type State = { kind: 'idle' } | { kind: 'busy' } | { kind: 'done'; html_url: string } | { kind: 'error'; message: string }
+
+const ENDPOINT = `${import.meta.env.BASE_URL}api/requests`
+
+async function submit(url: string): Promise<string> {
+  const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) })
+  if (res.status === 501 || res.status === 405) throw new Error('This page is served statically; start it with `uv run python -m jev_tracker.server` to accept submissions.')
+  const body = await res.json().catch(() => ({ error: `${res.status} ${res.statusText}` }))
+  if (!res.ok) throw new Error(body.error ?? `${res.status} ${res.statusText}`)
+  return body.html_url
+}
 
 export default function Evaluate() {
-  const [source, setSource] = useState<Source>('kev')
-  const [model, setModel] = useState('')
-  const [name, setName] = useState('')
-  const [keyEnv, setKeyEnv] = useState('')
-  const [methods, setMethods] = useState<Method[]>([...METHODS])
-  const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')
-  const ready = slug !== '' && model.trim() !== '' && methods.length > 0
-  const yaml = ready ? configYaml(slug, source, model.trim(), methods, keyEnv.trim()) : ''
+  const [url, setUrl] = useState('')
+  const [state, setState] = useState<State>({ kind: 'idle' })
+  const go = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setState({ kind: 'busy' })
+    try {
+      setState({ kind: 'done', html_url: await submit(url.trim()) })
+      setUrl('')
+    } catch (err) {
+      setState({ kind: 'error', message: err instanceof Error ? err.message : String(err) })
+    }
+  }
   return (
-    <form className="eval" onSubmit={(e) => e.preventDefault()}>
-      <p className="note">Fill this in to get the experiment config; "Open issue" opens a prefilled GitHub issue labelled <code>evaluate</code> that the automation picks up. Nothing is sent from this page.</p>
-      <label>source</label>
-      <select value={source} onChange={(e) => setSource(e.target.value as Source)}>
-        <option value="kev">kev — a Hugging Face Kev checkpoint, served in-process on Modal</option>
-        <option value="laya">laya — a Laya checkpoint (ModernBERT encoder)</option>
-        <option value="api">api — any hosted endpoint that answers the System One request</option>
-      </select>
-      <label>{source === 'api' ? 'endpoint URL' : 'Hugging Face id (optionally @revision)'}</label>
-      <input type="text" value={model} onChange={(e) => setModel(e.target.value)} placeholder={source === 'api' ? 'https://api.example.com/v1/systemone' : 'org/model-name'} />
-      <label>model name (becomes the ranker label)</label>
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="kev27b_v3" />
-      {source === 'api' && <>
-        <label>API key environment variable (read from a Modal Secret; never stored here)</label>
-        <input type="text" value={keyEnv} onChange={(e) => setKeyEnv(e.target.value)} placeholder="EXAMPLE_API_KEY" />
-      </>}
-      <label>methods</label>
-      <div className="inline">
-        {METHODS.map((m) => (
-          <label key={m}><input type="checkbox" checked={methods.includes(m)} onChange={() => setMethods(methods.includes(m) ? methods.filter((x) => x !== m) : [...methods, m])} /> {m}</label>
-        ))}
-      </div>
-      {ready && <>
-        <label>configs/{slug}.yaml</label>
-        <pre className="yaml">{yaml}</pre>
-        <a className="btn" href={issueUrl(slug, yaml)} target="_blank" rel="noreferrer">Open issue on GitHub</a>
-      </>}
+    <form className="eval" onSubmit={go}>
+      <p className="note">
+        Paste <b>one web link</b> (a Hugging Face model, a GitHub repo, a paper, an API page). Submitting saves it under{' '}
+        <a href={blob('requests')} target="_blank" rel="noreferrer">requests/</a> in the repository; the next daily run picks it up and Devin works out how to evaluate it.
+      </p>
+      <label>web link</label>
+      <input type="url" required value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://huggingface.co/org/model" />
+      <button className="btn" type="submit" disabled={state.kind === 'busy' || url.trim() === ''}>{state.kind === 'busy' ? 'Submitting…' : 'Submit'}</button>
+      {state.kind === 'done' && <p className="note">Saved: <a href={state.html_url} target="_blank" rel="noreferrer">{state.html_url}</a></p>}
+      {state.kind === 'error' && <p className="note err">{state.message}</p>}
     </form>
   )
 }

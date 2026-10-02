@@ -75,9 +75,12 @@ with the new data and the regenerated site.
 - **R-6 Site data.** `python -m jev_tracker.site_data` SHALL regenerate `site/public/data/*.json`
   from `data/experiments/` and `data/registry.yaml` with no hand edits; the attached report's
   numbers SHALL appear unchanged on day one.
-- **R-7 Submit.** The site SHALL have an "Evaluate a new model" form (URL or Hugging Face id, model
-  name, source type, methods) that produces the YAML config and opens a prefilled GitHub issue
-  labelled `evaluate` on this repository. No token is shipped to the browser.
+- **R-7 Submit.** The site SHALL have an "Evaluate a new model" box taking exactly one web link.
+  Submitting POSTs it to the site's server (`python -m jev_tracker.server`, which also serves
+  `site/dist`), which files it as `requests/<date>/<time>_<slug>.json` on `main` through the GitHub
+  API; the daily automation reads that folder and Devin decides how to evaluate the link. No token
+  is shipped to the browser. *(Rewritten 2026-10-02 at Marcus's request; the earlier form built the
+  YAML config and opened a prefilled `evaluate` issue, which the automation still accepts.)*
 - **R-8 Crawler.** `python -m crawler` SHALL search GitHub, Hugging Face Hub, arXiv, X (via web
   search, `site:x.com`), Hacker News and the web (Tavily keyless; DuckDuckGo is blocked from
   datacenter IPs) for new Jev / System One / decision-model mentions since the last run, dedupe
@@ -87,7 +90,8 @@ with the new data and the regenerated site.
   survey in `docs/`. *(Edited 2026-10-02 with Marcus's approval: fields, dedupe key, sources.)*
 - **R-9 Automation.** A daily Devin automation SHALL crawl, triage candidates (runnable now /
   needs adapter / not a Jev) into `crawler/triage/<date>.yaml`, run approved configs and `evaluate`
-  issues on Modal, regenerate the site data, and open a PR to `main`. Python does the mechanical
+  issues on Modal, write the site's TLDR (`data/tldr.md`, shown with headline cards and the
+  last-updated time on the summary tab), regenerate the site data, and open a PR to `main`. Python does the mechanical
   steps (`crawler`, `crawler.triage check`, `jev_tracker.evaluate_issues`, `jev_tracker.experiment`,
   `jev_tracker.site_data`); Devin only decides what to include. Runbook: `docs/AUTOMATION.md`.
 
@@ -115,6 +119,6 @@ None.
 | R-4 | `data/experiments` | `tests/test_kept_mass.py::test_R4_*`, `tests/test_validation.py::test_R4_*` | bound |
 | R-5 | `site/` | `npm run build` + `python3 -m http.server -d site/dist` (checked 2026-10-02); manual (Marcus) | bound |
 | R-6 | `jev_tracker.site_data` | `tests/test_site_data.py::test_R6_*` | bound |
-| R-7 | `site/` | `tests/test_site_data.py::test_R7_*` | bound |
+| R-7 | `site/`, `jev_tracker.server` | `tests/test_site_data.py::test_R7_*`; manual: submit from the site | bound |
 | R-8 | `crawler/` | `tests/test_crawler.py::test_R8_*` | bound |
 | R-9 | automation | `docs/AUTOMATION.md`; manual: first PR opened by the automation (https://github.com/marcus-rox/jev-tracker/pull/9, 2026-10-02) | bound |

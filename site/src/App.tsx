@@ -192,6 +192,11 @@ export default function App() {
         </nav>
         <p className="note">Click any column header to sort; click again to reverse, a third time to clear.</p>
         {tab === 'summary' && <>
+          <p className="updated">Last updated {data.updated} (newest experiment) · TLDR written by the daily run, <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></p>
+          <div className="cards">
+            {data.cards.map((c) => <div key={c.label} className="card"><div className="v">{c.value}</div><div className="l">{c.label}</div><div className="d">{c.detail}</div></div>)}
+          </div>
+          <div className="tldr">{data.tldr.split('\n').filter((line) => line.trim() !== '').map((line, i) => <p key={i}>{line}</p>)}</div>
           <p className="note">Every run: kept-mass at the chosen k, its mean, cost per 1k queries and seconds per query. Click a number for its source JSON.</p>
           <Table rows={rows} cols={[...kept, MEAN, COST[5], LATENCY[1]]} sort={sort} setSort={setSort} />
         </>}

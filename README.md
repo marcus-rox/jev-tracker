@@ -37,12 +37,13 @@ uv run pytest                                                          # offline
 ```bash
 uv run python -m jev_tracker.site_data     # registry.yaml + data/experiments -> site/public/data/rows.json
 cd site && npm ci && npm run build          # -> site/dist (committed)
-python3 -m http.server -d site/dist 8000    # http://localhost:8000
+GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.server   # http://localhost:8000, accepts form submissions
+python3 -m http.server -d site/dist 8000                 # read-only alternative (no submissions)
 ```
 
-Every number on the page links to the JSON it came from. "Evaluate a new model" writes the
-experiment YAML and opens a prefilled GitHub issue labelled `evaluate`; nothing is sent from the
-browser.
+Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
+time, headline cards and a TLDR the daily run writes to `data/tldr.md`. "Evaluate a new model" takes
+one web link; the server files it under `requests/<date>/` on `main` and the next daily run triages it.
 
 ## Crawler
 

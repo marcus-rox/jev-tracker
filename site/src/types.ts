@@ -35,10 +35,19 @@ export interface Row {
   sources: { kept_mass: string | null; cost: string; latency: string; config: string }
 }
 
+export interface Card {
+  label: string
+  value: string
+  detail: string
+}
+
 export interface SiteData {
   ks: K[]
   experiments: Record<string, string>
   rows: Row[]
+  updated: string
+  cards: Card[]
+  tldr: string
 }
 
 export const REPO = 'https://github.com/marcus-rox/jev-tracker'

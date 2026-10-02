@@ -8,6 +8,7 @@ row's `sources`, so the browser can link each cell to where it came from.
 
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +19,10 @@ from jev_tracker.experiment import EXPERIMENTS_DIR, REPO_DIR, Paths
 REGISTRY = REPO_DIR / "data" / "registry.yaml"
 API_TIMING = REPO_DIR / "data" / "timing_summary_prod_jev.csv"
 OUT = REPO_DIR / "site" / "public" / "data" / "rows.json"
+TLDR = REPO_DIR / "data" / "tldr.md"
+BASELINE_FAMILIES = frozenset({"jev", "production", "oracle", "random"})
+BENCHMARK_QUERIES = 75
+EXPERIMENT_STAMP = re.compile(r"^(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_")
 KS = ("50", "100", "150", "200")
 SECONDS_PER_HOUR = 3600
 
@@ -96,7 +101,57 @@ def read_api_timing(path: Path) -> dict[str, dict[str, str]]:
         return {r["method"]: r for r in csv.DictReader(f)}
 
 
-def build(registry: dict, experiments_dir: Path, api_timing: dict[str, dict[str, str]]) -> dict:
+def updated(experiment_ids: list[str]) -> str:
+    """When the newest experiment ran, from its id (YYYY_MM_DD_HH_MM_SS_<petname>), as UTC text."""
+    stamps = [m for m in (EXPERIMENT_STAMP.match(e) for e in experiment_ids) if m]
+    if not stamps:
+        raise ValueError(f"no experiment id carries a timestamp: {experiment_ids}")
+    y, mo, d, h, mi, _ = max(m.groups() for m in stamps)
+    return f"{y}-{mo}-{d} {h}:{mi} UTC"
+
+
+def _best(rows: list[dict]) -> dict | None:
+    scored = [r for r in rows if r["mean_kept_mass"] is not None]
+    return max(scored, key=lambda r: r["mean_kept_mass"], default=None)
+
+
+def cards(rows: list[dict], n_experiments: int) -> list[dict]:
+    """Pure: the summary tab's headline numbers, over the 75-query rows."""
+    full = [r for r in rows if r["queries"] == BENCHMARK_QUERIES]
+    open_rows = [r for r in full if r["family"] not in BASELINE_FAMILIES]
+    best_open, best_jev = _best(open_rows), _best([r for r in full if r["family"] == "jev"])
+    gpu_usd = sum(r["cost"]["warm_usd"] for r in rows if r["cost"] and r["cost"]["warm_gpu_s"])
+    return [
+        {
+            "label": "models evaluated",
+            "value": str(len({r["family"] for r in open_rows})),
+            "detail": "open or hosted alternatives, all 75 queries",
+        },
+        {
+            "label": "best alternative (mean kept-mass)",
+            "value": f"{best_open['mean_kept_mass']:.3f}" if best_open else "-",
+            "detail": (
+                f"{best_open['label']} · Jev {best_jev['mean_kept_mass']:.3f}"
+                if best_open and best_jev
+                else "-"
+            ),
+        },
+        {
+            "label": "experiments",
+            "value": str(n_experiments),
+            "detail": "committed under data/experiments",
+        },
+        {
+            "label": "GPU spend (warm)",
+            "value": f"${gpu_usd:,.2f}",
+            "detail": "sum of every GPU run's warm cost",
+        },
+    ]
+
+
+def build(
+    registry: dict, experiments_dir: Path, api_timing: dict[str, dict[str, str]], tldr: str = ""
+) -> dict:
     """Pure: one site row per registry row, numbers read from that experiment's committed JSONs."""
     rows = []
     for r in registry["rows"]:
@@ -133,11 +188,22 @@ def build(registry: dict, experiments_dir: Path, api_timing: dict[str, dict[str,
                 },
             }
         )
-    return {"ks": list(KS), "experiments": registry["experiments"], "rows": rows}
+    experiments = registry["experiments"]
+    return {
+        "ks": list(KS),
+        "experiments": experiments,
+        "rows": rows,
+        "updated": updated(list(experiments)),
+        "cards": cards(rows, len(experiments)),
+        "tldr": tldr,
+    }
 
 
 def main(out: Path = OUT) -> None:
-    data = build(yaml.safe_load(REGISTRY.read_text()), EXPERIMENTS_DIR, read_api_timing(API_TIMING))
+    tldr = TLDR.read_text() if TLDR.exists() else ""
+    data = build(
+        yaml.safe_load(REGISTRY.read_text()), EXPERIMENTS_DIR, read_api_timing(API_TIMING), tldr
+    )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(data, indent=1) + "\n")
     print(f"{len(data['rows'])} rows, {len(data['experiments'])} experiments -> {_rel(out)}")

@@ -1,6 +1,7 @@
 """python -m crawler [--since YYYY-MM-DD] [--out crawler/candidates/] [--queries crawler/queries.yaml]
 
-Runs every (source x query) from queries.yaml with tqdm, dedupes against crawler/seen.jsonl,
+Runs every (source x query) from queries.yaml with tqdm, adds the site's submissions from
+requests/ (source `submitted`), dedupes against crawler/seen.jsonl,
 appends the new keys to it and writes crawler/candidates/<YYYY-MM-DD>.jsonl. A failing
 (source, query) is printed and skipped; the exit code is 1 at the end if any failed.
 """
@@ -14,7 +15,7 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from crawler import arxiv, github, hackernews, huggingface, twitter, web
+from crawler import arxiv, github, hackernews, huggingface, submitted, twitter, web
 from crawler.contract import (
     SOURCES,
     Candidate,
@@ -72,6 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out", type=Path, default=HERE / "candidates")
     parser.add_argument("--queries", type=Path, default=HERE / "queries.yaml")
     parser.add_argument("--seen", type=Path, default=HERE / "seen.jsonl")
+    parser.add_argument("--requests", type=Path, default=HERE.parent / "requests")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -82,6 +84,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"since {since.isoformat()}  {len(jobs)} (source, query) jobs  {len(seen)} seen keys")
 
     found, failed = crawl(jobs, since)
+    if args.requests.exists():
+        found.extend(submitted.load(args.requests))
     fresh = new_candidates(found, seen)
     out = write_candidates(args.out, fresh, now)
     append_seen(args.seen, fresh)
