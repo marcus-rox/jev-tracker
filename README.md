@@ -39,6 +39,7 @@ uv run python -m jev_tracker.site_data     # registry.yaml + data/experiments ->
 cd site && npm ci && npm run build          # -> site/dist (committed)
 GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.server   # http://localhost:8000, accepts form submissions
 python3 -m http.server -d site/dist 8000                 # read-only alternative (no submissions)
+docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> jev-tracker  # what Render runs
 ```
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
