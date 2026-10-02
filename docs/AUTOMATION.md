@@ -66,7 +66,7 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    queued but not run today stay `queued` for tomorrow.
 6. **TLDR** (the second decision): rewrite `data/tldr.md` as nested markdown bullets for someone
    who opens the site cold. Two levels only: a top-level bullet is one claim, its children are the
-   numbers that support it. At most 7 words per bullet, aim for 5. No headings, no tables, no
+   numbers that support it. At most 5 words per bullet. No headings, no tables, no
    prose paragraphs. Order: who leads the benchmark, the closest alternative, what today's runs
    added, what changed since yesterday. Numbers come from `data/experiments` exactly as in the
    data. Write it in ASD-STE100 (Simplified Technical English) at about 90% compliance: one idea
@@ -81,10 +81,11 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    has the triage counts per verdict, one line per run with kept-mass@50/200 and $/run, the crawler
    failures if any, and `Closes #<n>` for each `evaluate` issue run.
 9b. **Slack DM** to Marcus Dominguez-Kuhne (Slack user `U0BQQC4046P`), with the session's Slack
-   tools: the PR link, one line per model run today (kept-mass@50/200, $/run), and the list of
-   `proposed` items awaiting his approval on the site (label + note). No channel posts.
-10. **Nothing new** (no candidates, no issues, no submissions): stop without a PR and say so in the session's final
-   message.
+   tools, on every run (also when a step failed). First line: `Please merge: <PR URL>` (or
+   `No PR today: nothing new`). Then one line per model run today (kept-mass@50/200, $/run), and
+   the list of `proposed` items awaiting his approval on the site (label + note). No channel posts.
+10. **Nothing new** (no candidates, no issues, no submissions): stop without a PR, send the step 9b
+   DM saying so, and say so in the session's final message.
 
 ## What the automation never does
 
