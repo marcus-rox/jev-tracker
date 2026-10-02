@@ -15,7 +15,7 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
     uv run python -m jev_tracker.experiment run configs/x.yaml --wait  # run + finish
 
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
-(raw answers already on disk, e.g. Jev's), `kev` or `laya` (scored now, in-process on Modal,
+(raw answers already on disk, e.g. Jev's), `kev`, `laya` or `clef` (scored now, in-process on Modal,
 sharded over GPUs) or `api` (any hosted model that answers the System One request at a URL, from
 a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
 modal_app.py; the metric is untouched.
@@ -112,6 +112,25 @@ class LayaSource(BaseModel):
     gpu: str | None = None
 
 
+class ClefSource(BaseModel):
+    """Cloudflare Clef / Clef-Flash: a Qwen3.5 backbone plus a joint schema head that answers the
+    System One request body in-process (the release's `joint_schema_model.systemone`).
+
+    One request per forward pass, so one in flight per GPU; the release reads up to 16,384
+    tokens, 12 children / 12,000 characters per request matches configs/kev27b_batched.yaml."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["clef"]
+    method: str
+    model: Literal["Cloudflare/clef", "Cloudflare/clef-flash"]
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
 class ApiSource(BaseModel):
     """Any hosted model that answers the System One request body at `url` (Jev, Liquid d1, ...).
 
@@ -134,7 +153,7 @@ class ApiSource(BaseModel):
     concurrency: int = 8  # requests in flight per container
 
 
-ModelSource = KevSource | LayaSource | ApiSource
+ModelSource = KevSource | LayaSource | ClefSource | ApiSource
 Source = Annotated[ProductionSource | AnswersSource | ModelSource, Field(discriminator="source")]
 
 

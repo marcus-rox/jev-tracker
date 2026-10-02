@@ -28,6 +28,9 @@ experiments:
   2026_10_02_03_29_11_above-dog: 'kev08b_vs_jev: Kev-0.8B @bf75a6a, 3 x L4, batched (daily 2026-10-02)'
   2026_10_02_03_29_31_humble-sawfly: 'kev9b_v2_vs_jev: Kev-9B v2 @db029f0, 3 x H100, batched (daily 2026-10-02)'
   2026_10_02_03_29_51_immune-tick: 'kev2b_per2021_vs_jev: per2021/kev-2b-qwen3.5 @ac97885 (unofficial), 3 x L4, batched (daily 2026-10-02)'
+  2026_10_02_09_46_36_holy-hare: 'kev05b_vs_jev: Kev-0.5B prototype @9ce2fd3, 3 x L4, batched (daily 2026-10-02 rerun)'
+  2026_10_02_09_47_49_fair-lizard: 'clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)'
+  2026_10_02_09_49_26_alert-jay: 'clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1120,6 +1123,84 @@ rows:
   serving: 'batched: 12 children, 16 in flight'
   gpu: L4
   buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_09_46_36_holy-hare
+  reranker: kev05b_noul
+  label: kev05b_noul
+  family: kev05b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_09_46_36_holy-hare
+  reranker: kev05b_score
+  label: kev05b_score
+  family: kev05b
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_09_47_49_fair-lizard
+  reranker: clef_flash_noul
+  label: clef_flash_noul
+  family: clef-flash
+  serving: 'joint schema head: 12 children, 1 in flight'
+  gpu: H100
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_09_47_49_fair-lizard
+  reranker: clef_flash_score
+  label: clef_flash_score
+  family: clef-flash
+  serving: 'joint schema head: 12 children, 1 in flight'
+  gpu: H100
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_09_49_26_alert-jay
+  reranker: clef_noul
+  label: clef_noul
+  family: clef
+  serving: 'joint schema head: 12 children, 1 in flight'
+  gpu: H200
+  buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_09_49_26_alert-jay
+  reranker: clef_score
+  label: clef_score
+  family: clef
+  serving: 'joint schema head: 12 children, 1 in flight'
+  gpu: H200
+  buffer: '-'
   queries: 75
   tables:
   - quality

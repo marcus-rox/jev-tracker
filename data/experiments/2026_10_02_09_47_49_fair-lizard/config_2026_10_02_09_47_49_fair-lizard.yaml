@@ -1,0 +1,29 @@
+# Clef-Flash (Cloudflare/clef-flash, 9.4B: Qwen3.5 backbone + joint schema head) vs Jev (committed answers) vs production, on the frozen 75 cases, kept-mass@k for
+# k = 50..200 step 10. In-process through the release's joint_schema_model.systemone (clef
+# source), one request per forward pass, 12 children / 12,000 characters per request, 3 H100 shards.
+# Approved on the site; added by the daily automation.
+#   uv run python -m jev_tracker.experiment run configs/clef_flash_vs_jev.yaml --wait
+name: clef_flash_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  clef_flash_noul:
+    source: clef
+    model: Cloudflare/clef-flash
+    method: noul_query_in_state
+    shards: 3
+  clef_flash_score:
+    source: clef
+    model: Cloudflare/clef-flash
+    method: score_query_in_question
+    shards: 3

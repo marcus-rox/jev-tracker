@@ -1,0 +1,139 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "clef_noul": {
+   "gpu": "H200",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 737.4288675785065,
+   "warm_gpu_s": 2676.887852191925,
+   "in_function_s": 3414.316789865494,
+   "warm_usd": 4.136220033692875,
+   "in_function_usd": 5.275665731028566,
+   "requests": 2790,
+   "forward_passes": 2790,
+   "resident_gb": 54.969685504,
+   "peak_gb": 57.634286592,
+   "warm_usd_per_1k": 55.149600449238335
+  },
+  "clef_score": {
+   "gpu": "H200",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 715.429151058197,
+   "warm_gpu_s": 3175.0648679733276,
+   "in_function_s": 3890.4941198825836,
+   "warm_usd": 4.905983231397666,
+   "in_function_usd": 6.011435894277772,
+   "requests": 2790,
+   "forward_passes": 2790,
+   "resident_gb": 54.969685504,
+   "peak_gb": 57.982385664,
+   "warm_usd_per_1k": 65.41310975196889
+  }
+ },
+ "shards": {
+  "clef_noul": [
+   {
+    "reranker": "clef_noul",
+    "shard": 0,
+    "gpu": "H200",
+    "load_s": 307.09451365470886,
+    "warm_s": 1003.8916935920715,
+    "total_s": 1310.9862258434296,
+    "requests": 1078,
+    "device": "NVIDIA H200",
+    "resident_gb": 54.969685504,
+    "peak_gb": 56.841061888,
+    "forward_passes": 1078,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "clef_noul",
+    "shard": 1,
+    "gpu": "H200",
+    "load_s": 220.13598370552063,
+    "warm_s": 765.1930184364319,
+    "total_s": 985.3290247917175,
+    "requests": 759,
+    "device": "NVIDIA H200",
+    "resident_gb": 54.969685504,
+    "peak_gb": 57.634286592,
+    "forward_passes": 759,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "clef_noul",
+    "shard": 2,
+    "gpu": "H200",
+    "load_s": 210.19837021827698,
+    "warm_s": 907.8031401634216,
+    "total_s": 1118.0015392303467,
+    "requests": 953,
+    "device": "NVIDIA H200",
+    "resident_gb": 54.969685504,
+    "peak_gb": 56.579244032,
+    "forward_passes": 953,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ],
+  "clef_score": [
+   {
+    "reranker": "clef_score",
+    "shard": 0,
+    "gpu": "H200",
+    "load_s": 224.14085865020752,
+    "warm_s": 1193.3926723003387,
+    "total_s": 1417.5335466861725,
+    "requests": 1078,
+    "device": "NVIDIA H200",
+    "resident_gb": 54.969685504,
+    "peak_gb": 57.151515136,
+    "forward_passes": 1078,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "clef_score",
+    "shard": 1,
+    "gpu": "H200",
+    "load_s": 230.27828454971313,
+    "warm_s": 891.7814450263977,
+    "total_s": 1122.0597500801086,
+    "requests": 759,
+    "device": "NVIDIA H200",
+    "resident_gb": 54.969685504,
+    "peak_gb": 57.982385664,
+    "forward_passes": 759,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "clef_score",
+    "shard": 2,
+    "gpu": "H200",
+    "load_s": 261.01000785827637,
+    "warm_s": 1089.8907506465912,
+    "total_s": 1350.9008231163025,
+    "requests": 953,
+    "device": "NVIDIA H200",
+    "resident_gb": 54.969685504,
+    "peak_gb": 56.84473088,
+    "forward_passes": 953,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ]
+ }
+}

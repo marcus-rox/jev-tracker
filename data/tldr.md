@@ -1,22 +1,21 @@
 - Jev leads the benchmark.
   - 0.893 kept-mass at k=50
   - 0.961 kept-mass at k=200
-  - No open model matches.
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-  - About 8x Jev's cost.
-  - v2 weights: 0.013 lower.
-- Today's run: three models.
-  - Kev-9B v2: 0.753 / 0.889
-  - Kev-2B per2021: 0.684 / 0.868
-  - Kev-0.8B: 0.642 / 0.846
-  - All under $0.60 per run.
-- Laya encoders: cheap, weak.
-  - Under $0.13 per run.
-  - Best 0.644 at k=50.
-- Production: 0.711 / 0.837.
-  - Most expensive run.
+- Clef-27B is third.
+  - 0.880 / 0.946 kept-mass
+  - 0.013 behind at k=50
+  - Costs $9.05 per run.
+- Today adds three models.
+  - Clef-Flash: 0.782 / 0.918
+  - Kev-0.5B: 0.547 / 0.793
+  - Clef-Flash costs $3.26.
+  - Kev-0.5B costs $0.17.
+- Clef is new today.
+  - Clef uses a new adapter.
+  - Clef-27B passes Kev-9B v2.
 - k=50 separates models.
   - k=200 does not.
   - Random keeps 0.749 at k=200.

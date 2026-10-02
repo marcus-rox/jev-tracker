@@ -1,0 +1,139 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "kev05b_noul": {
+   "gpu": "L4",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 49.68943119049072,
+   "warm_gpu_s": 315.6526577472687,
+   "in_function_s": 365.42088413238525,
+   "warm_usd": 0.07007489001989364,
+   "in_function_usd": 0.08112343627738952,
+   "requests": 2790,
+   "forward_passes": 352,
+   "resident_gb": 1.00667904,
+   "peak_gb": 1.804591104,
+   "warm_usd_per_1k": 0.9343318669319153
+  },
+  "kev05b_score": {
+   "gpu": "L4",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 53.918344020843506,
+   "warm_gpu_s": 467.36763620376587,
+   "in_function_s": 521.3661508560181,
+   "warm_usd": 0.10375561523723602,
+   "in_function_usd": 0.11574328549003601,
+   "requests": 2790,
+   "forward_passes": 352,
+   "resident_gb": 1.00667904,
+   "peak_gb": 1.9809664,
+   "warm_usd_per_1k": 1.383408203163147
+  }
+ },
+ "shards": {
+  "kev05b_noul": [
+   {
+    "reranker": "kev05b_noul",
+    "shard": 0,
+    "gpu": "L4",
+    "load_s": 17.36271357536316,
+    "warm_s": 118.4135639667511,
+    "total_s": 135.8149483203888,
+    "requests": 1078,
+    "device": "NVIDIA L4",
+    "resident_gb": 1.00667904,
+    "peak_gb": 1.566611968,
+    "forward_passes": 136,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev05b_noul",
+    "shard": 1,
+    "gpu": "L4",
+    "load_s": 16.73456573486328,
+    "warm_s": 88.733145236969,
+    "total_s": 105.47981643676758,
+    "requests": 759,
+    "device": "NVIDIA L4",
+    "resident_gb": 1.00667904,
+    "peak_gb": 1.804591104,
+    "forward_passes": 96,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev05b_noul",
+    "shard": 2,
+    "gpu": "L4",
+    "load_s": 15.592151880264282,
+    "warm_s": 108.50594854354858,
+    "total_s": 124.12611937522888,
+    "requests": 953,
+    "device": "NVIDIA L4",
+    "resident_gb": 1.00667904,
+    "peak_gb": 1.56844544,
+    "forward_passes": 120,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ],
+  "kev05b_score": [
+   {
+    "reranker": "kev05b_score",
+    "shard": 0,
+    "gpu": "L4",
+    "load_s": 16.859052419662476,
+    "warm_s": 175.7364842891693,
+    "total_s": 192.5972616672516,
+    "requests": 1078,
+    "device": "NVIDIA L4",
+    "resident_gb": 1.00667904,
+    "peak_gb": 1.733903872,
+    "forward_passes": 136,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev05b_score",
+    "shard": 1,
+    "gpu": "L4",
+    "load_s": 16.790610790252686,
+    "warm_s": 127.56177115440369,
+    "total_s": 144.40431952476501,
+    "requests": 759,
+    "device": "NVIDIA L4",
+    "resident_gb": 1.00667904,
+    "peak_gb": 1.9809664,
+    "forward_passes": 96,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev05b_score",
+    "shard": 2,
+    "gpu": "L4",
+    "load_s": 20.268680810928345,
+    "warm_s": 164.06938076019287,
+    "total_s": 184.36456966400146,
+    "requests": 953,
+    "device": "NVIDIA L4",
+    "resident_gb": 1.00667904,
+    "peak_gb": 1.725662208,
+    "forward_passes": 120,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ]
+ }
+}
