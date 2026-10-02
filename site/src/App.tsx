@@ -10,7 +10,7 @@ import { useSuggestions } from './suggestions'
 import Table, { type Col, type Sort } from './Table'
 import Tldr from './Tldr'
 import ThemeSelect from './Theme'
-import { REPO, blob, type Card, type K, type SiteData } from './types'
+import { REPO, blob, type Card, type K, type Row, type SiteData } from './types'
 
 type Tab = 'summary' | 'quality' | 'cost' | 'latency' | 'evaluate' | 'suggestions'
 const TABS: [Tab, string][] = [
@@ -43,6 +43,30 @@ const LATENCY: Col[] = [
   { head: 'hours / 1k', value: (r) => r.latency?.h_per_1k ?? null, fmt: f(2), source: (r) => r.sources.latency },
 ]
 const COST_PER_1K = COST[5], S_PER_QUERY = LATENCY[1]
+
+/** Quality is the conglomerate kept-mass: the mean over every k (@50 … @200), so no single k picks the winner. */
+type Metric = 'quality' | 'cost' | 'latency'
+const METRICS: [Metric, string, Col, 1 | -1][] = [
+  ['quality', 'quality (mean kept-mass)', MEAN, -1],
+  ['cost', 'cost ($ / 1k)', COST_PER_1K, 1],
+  ['latency', 'latency (s / query)', S_PER_QUERY, 1],
+]
+const BOUNDS = METRICS.filter(([m]) => m !== 'quality')
+const PROD_FAMILY = 'production'
+
+/** A zero cost or latency means the run was never timed, not that it was free. */
+const measured = (v: number | null) => (v === null || v === 0 ? null : v)
+const beatsProd = (r: Row, prod: Row, col: Col) => {
+  const v = measured(col.value(r)), p = measured(col.value(prod))
+  return v !== null && p !== null && v < p
+}
+const ranked = (rows: Row[], metric: Metric | null) => {
+  const m = METRICS.find(([k]) => k === metric)
+  if (!m) return rows
+  const [, , col, dir] = m
+  const missing = dir === 1 ? Infinity : -Infinity
+  return [...rows].sort((a, b) => ((measured(col.value(a)) ?? missing) - (measured(col.value(b)) ?? missing)) * dir)
+}
 
 const uniq = (xs: string[]) => [...new Set(xs)]
 const toggled = (s: Set<string>, v: string) => {
@@ -91,6 +115,8 @@ export default function App() {
   const [gpus, setGpus] = useState<Set<string> | null>(null)
   const [hidden, setHidden] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
+  const [bounds, setBounds] = useState(new Set<string>())
+  const [metric, setMetric] = useState<Metric | null>(null)
   const [queue, decide] = useQueue()
   const [side, setSide] = useState(() => localStorage.getItem('side') !== 'closed')
   const toggleSide = () => { localStorage.setItem('side', side ? 'closed' : 'open'); setSide(!side) }
@@ -105,10 +131,19 @@ export default function App() {
 
   const fams = families ?? new Set(FAMS)
   const gpuSet = gpus ?? new Set(GPUS)
-  const rows = all.filter((r) => fams.has(r.family) && gpuSet.has(r.gpu))
+  const prod = all.find((r) => r.family === PROD_FAMILY) ?? null
+  const active = BOUNDS.filter(([m]) => bounds.has(m))
+  const inBounds = (r: Row) => prod === null || active.every(([, , col]) => beatsProd(r, prod, col))
+  const rows = ranked(all.filter((r) => fams.has(r.family) && gpuSet.has(r.gpu) && inBounds(r)), metric)
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
   const kept = data.ks.map(keptCol)
-  const reset = () => { setFamilies(null); setGpus(null); setHidden(new Set()); setSort(null) }
+  const reset = () => { setFamilies(null); setGpus(null); setHidden(new Set()); setSort(null); setBounds(new Set()); setMetric(null) }
+  const sortTable = (s: Sort) => { setSort(s); setMetric(null) }
+  const pickMetric = (m: Metric) => { setMetric(metric === m ? null : m); setSort(null) }
+  const prodValue = (col: Col) => {
+    const p = prod === null ? null : measured(col.value(prod))
+    return p === null ? 'production was never timed' : `production: ${col.fmt(p)} ${col.head}`
+  }
   const toggleHidden = (family: string) => setHidden(toggled(hidden, family))
   const chart = (height: number) => <LineChart rows={rows} ks={data.ks} height={height} hidden={hidden} onToggle={toggleHidden} />
   const costBars = <HBars rows={rows} value={(r) => r.cost?.usd_per_1k} digits={2} />
@@ -137,6 +172,14 @@ export default function App() {
       <div className="toolbar">
         <Dropdown name="Model" options={FAMS} selected={fams} onChange={setFamilies} />
         <Dropdown name="GPU" options={GPUS} selected={gpuSet} onChange={setGpus} />
+        <span className="label">below prod</span>
+        {BOUNDS.map(([m, , col]) => (
+          <span key={m} className={`chip${bounds.has(m) ? ' on' : ''}`} title={prodValue(col)} onClick={() => setBounds(toggled(bounds, m))}>{m} &lt; prod</span>
+        ))}
+        <span className="label">sort by</span>
+        {METRICS.map(([m, name, , dir]) => (
+          <span key={m} className={`chip${metric === m ? ' on' : ''}`} title={dir === 1 ? 'lowest first' : 'highest first'} onClick={() => pickMetric(m)}>{name}</span>
+        ))}
         <span className="chip reset" onClick={reset}>reset</span>
         <span className="label">{rows.length} of {all.length} runs</span>
       </div>
@@ -153,20 +196,20 @@ export default function App() {
           <Widget span={6} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>
           <Widget span={6} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
           <Widget span={12} title="All runs" sub={`${rows.length} rows · ${FROZEN_QUERIES} frozen queries`}>
-            <Table rows={rows} cols={[...kept, MEAN, COST_PER_1K, S_PER_QUERY]} sort={sort} setSort={setSort} />
+            <Table rows={rows} cols={[...kept, MEAN, COST_PER_1K, S_PER_QUERY]} sort={sort} setSort={sortTable} />
           </Widget>
         </>}
         {tab === 'quality' && <>
           <Widget span={12} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(360)}</Widget>
-          <Widget span={12} title="Quality · all runs"><Table rows={forTable('quality')} cols={kept} sort={sort} setSort={setSort} /></Widget>
+          <Widget span={12} title="Quality · all runs"><Table rows={forTable('quality')} cols={kept} sort={sort} setSort={sortTable} /></Widget>
         </>}
         {tab === 'cost' && <>
           <Widget span={12} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>
-          <Widget span={12} title="Cost · all runs"><Table rows={forTable('cost')} cols={COST} sort={sort} setSort={setSort} /></Widget>
+          <Widget span={12} title="Cost · all runs"><Table rows={forTable('cost')} cols={COST} sort={sort} setSort={sortTable} /></Widget>
         </>}
         {tab === 'latency' && <>
           <Widget span={12} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
-          <Widget span={12} title="Latency · all runs"><Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={setSort} /></Widget>
+          <Widget span={12} title="Latency · all runs"><Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={sortTable} /></Widget>
         </>}
         {tab === 'suggestions' && <SuggestionsWidget />}
         {tab === 'evaluate' && <Widget span={12} title="Model evaluation sprint" sub={<QueueSub state={queue} />}><QueueBody state={queue} decide={decide} /></Widget>}
