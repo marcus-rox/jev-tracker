@@ -106,7 +106,7 @@
 
         <!-- column B -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="1 · Crawl (Python)"
-          data-a-detail="Runs the saved query list (43 queries) against seven discovery sources (six public plus Rox's Slack workspace), restricted to items newer than the last run. Deduplicates against the seen set; a Hugging Face model counts as new again when its weights change (identity is model id plus commit). Writes today's candidate list.">
+          data-a-detail="Runs the saved query list against six public discovery sources, restricted to items newer than the last run; the Rox Slack queries are run by Devin through its Slack search tool and the results handed to the script, so the crawler itself holds no Slack credentials. Deduplicates against the seen set; a Hugging Face model counts as new again when its weights change (identity is model id plus commit). Writes today's candidate list.">
           <rect x="310" y="80" width="270" height="56" /><text class="a-node__title" x="324" y="105">1 · Crawl</text><text class="a-node__sub" x="324" y="123">Python · 7 sources → candidate list</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="2 · Triage (Devin judgment)"

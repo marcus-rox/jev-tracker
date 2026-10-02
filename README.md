@@ -138,7 +138,7 @@ Legend: diamonds are decisions. The key is the URL, except Hugging Face models, 
 | Web | Tavily (keyless) | any page | whole days back |
 | X / Twitter | Tavily + `site:x.com` | posts on x.com / twitter.com | whole days back |
 | Hacker News | Algolia | stories and comments; quoted phrases only | server-side |
-| Slack | Rox workspace `search.messages` (needs `SLACK_USER_TOKEN`, else skipped) | messages in channels and DMs the token's user can see | server-side (`after:`) |
+| Slack | Rox workspace via the Slack MCP search the daily Devin session runs (results handed to the crawler) | messages in channels and DMs Marcus can see | server-side (`after:`) |
 | Submitted | the site's text box | whatever a person typed | none |
 
 Queries live in `crawler/queries.yaml`: the model names (`jev`, `kev`, `laya`, `systemone`,
@@ -207,9 +207,10 @@ candidate (`source, url, key, title, snippet, first_seen, query`) to
 where it is `hf:<id>@<sha>` so new weights under an existing model id surface once more. A failing
 (source, query) is printed and skipped; the exit code is 1 if any failed. `web` and `twitter` use
 Tavily's keyless mode (no API key; `twitter` appends `site:x.com`); when Tavily rate-limits with
-HTTP 429 the source logs and returns nothing. `slack` searches Rox's own workspace with Slack's
-`search.messages` and needs a user token with `search:read` in `SLACK_USER_TOKEN`; without it the
-source is skipped (printed, not a failure). Prior-work survey: `docs/PRIOR_WORK.md`.
+HTTP 429 the source logs and returns nothing. `slack` is Rox's own workspace: the crawler holds no
+Slack credentials, so the daily Devin session runs each Slack query through its Slack MCP search
+tool, saves the results as `<query slug>.md`, and passes the directory with `--slack-results`;
+without that flag the source is skipped (printed, not a failure). Prior-work survey: `docs/PRIOR_WORK.md`.
 
 ## Automation
 

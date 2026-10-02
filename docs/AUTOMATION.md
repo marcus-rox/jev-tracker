@@ -14,9 +14,14 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
 1. **Checkout**: clone `main` over HTTPS with the PAT (askpass helper; never print it), branch
    `automation/<date>`, `uv sync`, `export MODAL_TOKEN_ID=$MODAL_TOKEN_ID_ROX_RESEARCH
    MODAL_TOKEN_SECRET=$MODAL_TOKEN_SECRET_ROX_RESEARCH`.
-2. **Crawl**: `SLACK_USER_TOKEN=<token> uv run python -m crawler` → `crawler/candidates/<date>.jsonl`,
-   `crawler/seen.jsonl`. The Slack source (Rox workspace, `search.messages`) runs only when the
-   token is set; without it the crawler prints that it skipped `slack` and the other six run.
+2. **Crawl**: first the Slack queries (the `slack:` list in `crawler/queries.yaml`): for each, call
+   the Slack MCP tool `slack_search_public_and_private` with `keywords=[query]`,
+   `filters="after:<since YYYY-MM-DD>"`, `sort="timestamp"`, `include_context=false`, paging with
+   the cursor until exhausted, and save the `results` text to `/tmp/slack/<query slug>.md`
+   (`python -c 'from crawler.slack import slug; print(slug(q))'`). Then
+   `uv run python -m crawler --slack-results /tmp/slack` → `crawler/candidates/<date>.jsonl`,
+   `crawler/seen.jsonl`. Without the Slack MCP (or the flag) the crawler prints that it skipped
+   `slack` and the other six sources run.
    Text submitted from the site (`requests/<date>/*.json`) comes along as source `submitted`.
    Exit 1 means a (source, query) failed; keep going, list the failures in the PR.
 3. **Triage** (the decision): read today's candidates and write `crawler/triage/<date>.yaml`, one
