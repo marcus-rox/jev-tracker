@@ -410,6 +410,7 @@ gguf_image = _mount(
 )
 ollaya_image = _mount(
     modal.Image.from_registry(OLLAYA_IMAGE, add_python=PYTHON_VERSION)
+    .entrypoint([])  # the image's ENTRYPOINT is the ollaya binary; Modal must exec python
     .pip_install(*RUNTIME_DEPS)
     .env(
         {
