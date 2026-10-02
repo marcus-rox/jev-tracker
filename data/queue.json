@@ -53,9 +53,9 @@
    "label": "startlux_decision_9b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/startlux-models/StartLux-Decision-9B",
-   "status": "proposed",
+   "status": "queued",
    "note": "Jev-style decision model with its own architecture / serving (qwen3_5); no harness source for it",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T20:28:28Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
