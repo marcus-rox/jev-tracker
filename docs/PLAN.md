@@ -1,7 +1,8 @@
 # jev-tracker — a leaderboard of Jev alternatives on Rox's frozen 75-case benchmark
 
-**Status · 2026-10-01 · Phase 1 in progress.** Spec approved (`docs/SPEC.md`); porting the
-harness from `rox-research/projects/reranker_alts` (branch `devin/1790714158-laya-harness`).
+**Status · 2026-10-01 · Phase 1 done, awaiting PR review.** Harness ported from
+`rox-research/projects/reranker_alts` (branch `devin/1790714158-laya-harness`); Kev-4B, Laya and
+batched Kev-27B reran on Modal within 0.002 kept-mass of rox-research at every k.
 
 ## The objective
 

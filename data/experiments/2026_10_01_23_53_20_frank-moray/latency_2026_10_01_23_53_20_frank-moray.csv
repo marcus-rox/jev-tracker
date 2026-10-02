@@ -1,0 +1,3 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+laya_noul,75,6.85,4.28,17.76,1.54,34.51,419.6
+laya_score,75,7.50,4.75,19.77,1.72,39.01,419.6

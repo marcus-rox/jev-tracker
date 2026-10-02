@@ -1,6 +1,6 @@
 # jev-tracker — specification
 
-**Status · 2026-10-01 · 9 requirements, 9 unbound (nothing built yet).** Approved by Marcus on
+**Status · 2026-10-01 · 9 requirements, 4 bound (R-1..R-4, Phase 1), 5 unbound (site, crawler, automation).** Approved by Marcus on
 2026-10-01 with four decisions (raw answers in the repo under `data/`; automation opens a PR; one
 batched Kev-27B revalidation; no Slack report). Only Marcus edits this file after that.
 
@@ -105,10 +105,10 @@ None.
 
 | Requirement | Module | Test | Status |
 |---|---|---|---|
-| R-1 | `jev_tracker.experiment` | `tests/test_experiment.py::test_R1_*` | unbound |
-| R-2 | `jev_tracker.systemone` | `tests/test_contract.py::test_R2_*` | unbound |
-| R-3 | `jev_tracker.experiment` | `tests/test_experiment.py::test_R3_*` | unbound |
-| R-4 | `data/experiments` | `tests/test_validation.py::test_R4_*` | unbound |
+| R-1 | `jev_tracker.experiment` | `tests/test_artifacts.py::test_R1_*` + Modal reruns (R-4) | bound |
+| R-2 | `jev_tracker.systemone` | `tests/test_contract.py` | bound |
+| R-3 | `jev_tracker.experiment` | `tests/test_artifacts.py::test_R3_*` | bound |
+| R-4 | `data/experiments` | `tests/test_kept_mass.py::test_R4_*`, `tests/test_validation.py::test_R4_*` | bound |
 | R-5 | `site/` | manual (Marcus) + `tests/test_site_data.py` | unbound |
 | R-6 | `jev_tracker.site_data` | `tests/test_site_data.py::test_R6_*` | unbound |
 | R-7 | `site/` | `tests/test_site_data.py::test_R7_issue_url` | unbound |

@@ -1,3 +1,25 @@
 # jev-tracker
 
-Website that tracks Jev results. Its data is stored in this repository and updated automatically.
+Leaderboard of Jev alternatives on Rox's frozen 75-case reranking benchmark. The data lives in
+this repository; a daily automation reruns new models on Modal and opens a PR with the numbers.
+
+- `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
+- `docs/PLAN.md` — phases, decisions, next steps
+- `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
+  experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
+- `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
+- `data/benchmark/` — the 75 cases and labels (frozen)
+- `data/jev/` — Jev's committed answers
+- `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
+- `data/registry.yaml` — row labels (model family, serving, GPU) for every reranker shown
+
+## Run
+
+```bash
+uv sync
+export MODAL_TOKEN_ID=... MODAL_TOKEN_SECRET=...   # Modal workspace rox-research
+uv run python -m jev_tracker.experiment run configs/kev4b_smoke.yaml   # 2 cases, ~$0.05
+uv run python -m jev_tracker.experiment status <id>
+uv run python -m jev_tracker.experiment finish <id>                    # pull raws, score, cost, latency
+uv run pytest                                                          # offline tests
+```
