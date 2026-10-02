@@ -15,9 +15,16 @@ async function fetchQueue(): Promise<Queue> {
   return res.json()
 }
 
-/** Approve (proposed -> queued) or reject (drop) one proposed item; the server commits data/queue.json to main. */
-async function postDecision(config: string, decision: Decision): Promise<Queue> {
-  const res = await fetch(DECIDE_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, decision }) })
+/** What a Skip must carry: the phrase typed exactly, and the server's QUEUE_SKIP_PASSWORD. */
+export interface SkipConfirmation {
+  phrase: string
+  password: string
+}
+export const SKIP_PHRASE = 'Skip this Run'
+
+/** Approve (proposed -> queued) or reject (drop) one item; the server commits data/queue.json to main. */
+async function postDecision(config: string, decision: Decision, confirmation?: SkipConfirmation): Promise<Queue> {
+  const res = await fetch(DECIDE_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ config, decision, ...confirmation }) })
   if (!res.ok) {
     const body: { error?: string } = await res.json().catch(() => ({}))
     throw new Error(body.error ?? `${res.status} ${res.statusText}`)
@@ -25,7 +32,7 @@ async function postDecision(config: string, decision: Decision): Promise<Queue> 
   return res.json()
 }
 
-export type Decide = (config: string, decision: Decision) => Promise<void>
+export type Decide = (config: string, decision: Decision, confirmation?: SkipConfirmation) => Promise<void>
 
 export function useQueue(): [QueueState, Decide] {
   const [state, setState] = useState<QueueState>({ kind: 'loading' })
@@ -38,8 +45,8 @@ export function useQueue(): [QueueState, Decide] {
     const timer = setInterval(load, REFRESH_SECONDS * 1000)
     return () => clearInterval(timer)
   }, [])
-  const decide: Decide = useCallback(async (config, decision) => {
-    const queue = await postDecision(config, decision)
+  const decide: Decide = useCallback(async (config, decision, confirmation) => {
+    const queue = await postDecision(config, decision, confirmation)
     setState({ kind: 'ok', queue, at: new Date() })
   }, [])
   return [state, decide]

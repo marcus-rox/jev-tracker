@@ -183,9 +183,9 @@ uv run pytest                                                          # offline
 ```bash
 uv run python -m jev_tracker.site_data     # registry.yaml + data/experiments -> site/public/data/rows.json
 cd site && npm ci && npm run build          # -> site/dist (committed)
-GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.server   # http://localhost:8000, accepts form submissions
+GITHUB_TOKEN=<PAT> QUEUE_SKIP_PASSWORD=<pw> uv run python -m jev_tracker.server   # http://localhost:8000, accepts form submissions
 python3 -m http.server -d site/dist 8000                 # read-only alternative (no submissions)
-docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> jev-tracker  # what Render runs
+docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> -e QUEUE_SKIP_PASSWORD=<pw> jev-tracker  # what Render runs
 ```
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated

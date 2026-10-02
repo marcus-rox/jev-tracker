@@ -7,11 +7,13 @@ to `main` through the GitHub Contents API; the daily run reads that folder (craw
 GET /api/queue returns data/queue.json as it is on `main` right now (jev_tracker.evaluation_queue),
 so the site shows the evaluation queue without a redeploy; cached for QUEUE_CACHE_SECONDS.
 POST /api/queue/decide {"config": "configs/<name>.yaml", "decision": "approve" | "reject"} moves a
-proposed item to queued (or drops it) and commits the new data/queue.json to `main`.
+proposed item to queued (or drops it) and commits the new data/queue.json to `main`. A reject must
+also carry {"phrase": "Skip this Run", "password": <QUEUE_SKIP_PASSWORD>}, else 400 / 403.
 """
 
 import argparse
 import base64
+import hmac
 import json
 import os
 import re
@@ -35,6 +37,8 @@ CONTENTS_URL = "https://api.github.com/repos/marcus-rox/jev-tracker/contents"
 BRANCH = "main"
 REQUESTS_DIR = "requests"
 TOKEN_ENV = "GITHUB_TOKEN"
+SKIP_PASSWORD_ENV = "QUEUE_SKIP_PASSWORD"
+SKIP_PHRASE = "Skip this Run"
 API_PATH = "/api/requests"
 QUEUE_PATH = "/api/queue"
 DECIDE_PATH = "/api/queue/decide"
@@ -84,6 +88,18 @@ def parse_decision(body: bytes) -> tuple[Path, Decision]:
             f"expected {{'config': 'configs/<name>.yaml', 'decision': {'|'.join(DECISIONS)}}}, got {payload!r}"
         )
     return Path(config), decision
+
+
+def check_skip(body: bytes, password: str | None) -> None:
+    """ValueError unless the body types SKIP_PHRASE exactly; PermissionError unless its password matches."""
+    payload = json.loads(body)
+    if payload.get("phrase") != SKIP_PHRASE:
+        raise ValueError(f"type {SKIP_PHRASE!r} to skip")
+    if not password:
+        raise PermissionError(f"{SKIP_PASSWORD_ENV} is not set on the server; Skip is disabled")
+    typed = payload.get("password")
+    if not isinstance(typed, str) or not hmac.compare_digest(typed.encode(), password.encode()):
+        raise PermissionError("wrong password")
 
 
 def decided(queue: Queue, config: Path, decision: Decision, now: datetime) -> Queue:
@@ -188,11 +204,13 @@ class SiteHandler(SimpleHTTPRequestHandler):
         commit: Callable[[str, datetime], str],
         decide: Callable[[Path, Decision, datetime], Queue],
         queue: QueueCache,
+        skip_password: str | None,
         **kwargs,
     ) -> None:
         self.commit = commit
         self.decide = decide
         self.queue = queue
+        self.skip_password = skip_password
         super().__init__(*args, **kwargs)
 
     def do_GET(self) -> None:  # noqa: N802  (http.server's name)
@@ -228,11 +246,15 @@ class SiteHandler(SimpleHTTPRequestHandler):
                 self._json(HTTPStatus.CREATED, {"text": text, "html_url": html_url})
             else:
                 config, decision = parse_decision(body)
+                if decision == "reject":
+                    check_skip(body, self.skip_password)
                 queue = self.decide(config, decision, now)
                 self.queue.replace(queue.model_dump_json(indent=1).encode() + b"\n")
                 self._json(HTTPStatus.OK, queue.model_dump(mode="json"))
         except ValueError as e:
             self._json(HTTPStatus.BAD_REQUEST, {"error": str(e)})
+        except PermissionError as e:
+            self._json(HTTPStatus.FORBIDDEN, {"error": str(e)})
         except httpx.HTTPError as e:  # boundary: report the GitHub failure to the browser
             self._json(HTTPStatus.BAD_GATEWAY, {"error": f"GitHub write failed: {e}"})
 
@@ -261,8 +283,16 @@ def main(argv: list[str] | None = None) -> int:
     commit = partial(commit_request, token=token, client=client)
     decide = partial(commit_decision, token=token, client=client)
     queue = QueueCache(partial(fetch_queue, token=token, client=client))
+    skip_password = os.environ.get(SKIP_PASSWORD_ENV)
+    if not skip_password:
+        print(f"{SKIP_PASSWORD_ENV} is not set; Skip on the site will be refused")
     handler = partial(
-        SiteHandler, directory=str(args.dist), commit=commit, decide=decide, queue=queue
+        SiteHandler,
+        directory=str(args.dist),
+        commit=commit,
+        decide=decide,
+        queue=queue,
+        skip_password=skip_password,
     )
     print(
         f"serving {args.dist} on http://localhost:{args.port}  "

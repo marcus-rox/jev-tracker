@@ -11,7 +11,7 @@ import yaml
 
 from jev_tracker.evaluation_queue import Queue, QueueItem
 from jev_tracker.experiment import EXPERIMENTS_DIR
-from jev_tracker.server import decided, parse_decision, parse_request, request_path
+from jev_tracker.server import check_skip, decided, parse_decision, parse_request, request_path
 from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, TLDR, build, read_api_timing, updated
 
 DATA = build(
@@ -143,6 +143,21 @@ def test_R7_parse_decision() -> None:
     ):
         with pytest.raises(ValueError):
             parse_decision(body)
+
+
+def test_R7_skip_needs_the_phrase_and_the_password() -> None:
+    ok = b'{"config": "configs/a.yaml", "decision": "reject", "phrase": "Skip this Run", "password": "pw"}'
+    check_skip(ok, "pw")
+    with pytest.raises(ValueError, match="type 'Skip this Run'"):
+        check_skip(ok.replace(b"Skip this Run", b"skip this run"), "pw")
+    with pytest.raises(ValueError):
+        check_skip(b'{"config": "configs/a.yaml", "decision": "reject"}', "pw")
+    with pytest.raises(PermissionError, match="wrong password"):
+        check_skip(ok.replace(b'"pw"', b'"PW"'), "pw")
+    with pytest.raises(PermissionError, match="wrong password"):
+        check_skip(ok.replace(b', "password": "pw"', b""), "pw")
+    with pytest.raises(PermissionError, match="QUEUE_SKIP_PASSWORD is not set"):
+        check_skip(ok, None)
 
 
 def test_R7_decided_moves_only_proposed_items() -> None:
