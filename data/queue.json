@@ -128,6 +128,54 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/lev_4b_vs_jev.yaml",
+   "label": "lev_4b_vs_jev",
+   "source": "github",
+   "url": "https://github.com/Abhinavexists/lev",
+   "status": "proposed",
+   "note": "lev: open System One model, LoRA on Qwen3.5-4B (weights interfaze-ai/lev); needs a lev source adapter using its own runtime",
+   "queued_at": "2026-10-02T22:26:19Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/jevstyle_2b_vs_jev.yaml",
+   "label": "jevstyle_2b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/chaoliangUNSW/Jev-Style-2B-Decision-v3",
+   "status": "proposed",
+   "note": "Qwen3.5-2B finetune that answers System One requests; harness has no Qwen3.5 text-gen readout adapter",
+   "queued_at": "2026-10-02T22:26:19Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/jevstyle_0p8b_vs_jev.yaml",
+   "label": "jevstyle_0p8b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/chaoliangUNSW/Jev-Style-0.8B-Decision-v3",
+   "status": "proposed",
+   "note": "Qwen3.5-0.8B finetune that answers System One requests; same missing adapter as the 2B",
+   "queued_at": "2026-10-02T22:26:19Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/raz_systemone_nli_xs_vs_jev.yaml",
+   "label": "raz_systemone_nli_xs_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/RazvanManolache/raz-systemone-nli-xsmall-openjev",
+   "status": "proposed",
+   "note": "open System One NLI cross-encoder (deberta-v2-xsmall); needs a cross-encoder adapter",
+   "queued_at": "2026-10-02T22:26:19Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }

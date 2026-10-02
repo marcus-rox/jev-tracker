@@ -11552,3 +11552,362 @@
   verdict: not_jev
   reason: Cloudflare Clef is already benchmarked in this repository; no new checkpoint.
   config: null
+- key: https://github.com/VectifyAI/jev-doc-search
+  url: https://github.com/VectifyAI/jev-doc-search
+  verdict: not_jev
+  reason: uses Jev for doc search, not an alternative
+  config: null
+- key: https://github.com/Kandarp-Joshi-007/firstlight
+  url: https://github.com/Kandarp-Joshi-007/firstlight
+  verdict: not_jev
+  reason: brand-impersonation detection, unrelated
+  config: null
+- key: https://github.com/aryasaatvik/pagegraph
+  url: https://github.com/aryasaatvik/pagegraph
+  verdict: not_jev
+  reason: SEO toolkit using Jev, not an alternative
+  config: null
+- key: https://github.com/masanori-takada/jev-ultrafast-demo
+  url: https://github.com/masanori-takada/jev-ultrafast-demo
+  verdict: not_jev
+  reason: demo of Jev, not an alternative
+  config: null
+- key: https://github.com/G0-0000/pi-subagent-jev
+  url: https://github.com/G0-0000/pi-subagent-jev
+  verdict: not_jev
+  reason: gates subagents through Jev, not an alternative
+  config: null
+- key: https://github.com/Bitcoindefi/Open-Stellar
+  url: https://github.com/Bitcoindefi/Open-Stellar
+  verdict: not_jev
+  reason: agentic payments repo, unrelated
+  config: null
+- key: https://github.com/MiaoWuNYA/rikkahub-sillytavern-android
+  url: https://github.com/MiaoWuNYA/rikkahub-sillytavern-android
+  verdict: not_jev
+  reason: chat app using Jev, not an alternative
+  config: null
+- key: https://github.com/yanng981/awesome-system-one
+  url: https://github.com/yanng981/awesome-system-one
+  verdict: not_jev
+  reason: curated list of System One models, not a model
+  config: null
+- key: https://github.com/huyremy/xau-jev
+  url: https://github.com/huyremy/xau-jev
+  verdict: not_jev
+  reason: unrelated repo with jev in the name
+  config: null
+- key: https://github.com/ZeroX-01/jev-atlas
+  url: https://github.com/ZeroX-01/jev-atlas
+  verdict: not_jev
+  reason: index of Jev projects, not a model
+  config: null
+- key: https://github.com/im-mahdi-74/jev-frontend-ui
+  url: https://github.com/im-mahdi-74/jev-frontend-ui
+  verdict: not_jev
+  reason: frontend for Jev, not an alternative
+  config: null
+- key: https://github.com/im-mahdi-74/jev-backend-api
+  url: https://github.com/im-mahdi-74/jev-backend-api
+  verdict: not_jev
+  reason: backend for Jev, not an alternative
+  config: null
+- key: https://github.com/kserrec/call-by-jev-demo
+  url: https://github.com/kserrec/call-by-jev-demo
+  verdict: not_jev
+  reason: static demo, no model
+  config: null
+- key: https://github.com/func-it/delorean
+  url: https://github.com/func-it/delorean
+  verdict: not_jev
+  reason: app built on Jev, not an alternative
+  config: null
+- key: https://github.com/dumpydon/jevon
+  url: https://github.com/dumpydon/jevon
+  verdict: not_jev
+  reason: student project on Jev, not an alternative
+  config: null
+- key: https://github.com/parall-hq/jevable
+  url: https://github.com/parall-hq/jevable
+  verdict: not_jev
+  reason: log monitor using Jev, not an alternative
+  config: null
+- key: https://github.com/Alberto-Codes/judgevet
+  url: https://github.com/Alberto-Codes/judgevet
+  verdict: not_jev
+  reason: client library for Jev, not an alternative
+  config: null
+- key: https://github.com/SuperInstance/dungeon-jev
+  url: https://github.com/SuperInstance/dungeon-jev
+  verdict: not_jev
+  reason: game using Jev, not an alternative
+  config: null
+- key: https://github.com/lawrence3699/Jev-Style-2B-Decision-v3
+  url: https://github.com/lawrence3699/Jev-Style-2B-Decision-v3
+  verdict: needs_adapter
+  reason: GitHub mirror of chaoliangUNSW/Jev-Style-2B-Decision-v3, proposed from the
+    HF entry
+  config: null
+- key: https://github.com/lawrence3699/Jev-Style-0.8B-Decision-v3
+  url: https://github.com/lawrence3699/Jev-Style-0.8B-Decision-v3
+  verdict: needs_adapter
+  reason: GitHub mirror of chaoliangUNSW/Jev-Style-0.8B-Decision-v3, proposed from
+    the HF entry
+  config: null
+- key: https://github.com/eullm/eullm
+  url: https://github.com/eullm/eullm
+  verdict: not_jev
+  reason: EU LLM platform, unrelated
+  config: null
+- key: https://github.com/odience-network/paperclip-plugin-jev-enhanced
+  url: https://github.com/odience-network/paperclip-plugin-jev-enhanced
+  verdict: not_jev
+  reason: plugin using Jev, not an alternative
+  config: null
+- key: https://github.com/KevinMB0220/KevinMB0220
+  url: https://github.com/KevinMB0220/KevinMB0220
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinT31/KevinT31
+  url: https://github.com/KevinT31/KevinT31
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/kevee/kevee.github.com
+  url: https://github.com/kevee/kevee.github.com
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/hrbrmstr/cisa-known-exploited-vulns
+  url: https://github.com/hrbrmstr/cisa-known-exploited-vulns
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/kevin1121-bit/kevdevs-porfolio
+  url: https://github.com/kevin1121-bit/kevdevs-porfolio
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinMatta/KevinMatta
+  url: https://github.com/KevinMatta/KevinMatta
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinUNI2010/calendario-catering-kevin
+  url: https://github.com/KevinUNI2010/calendario-catering-kevin
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/zeroroot-ai/cve-triage
+  url: https://github.com/zeroroot-ai/cve-triage
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/reprodev/cvedeck
+  url: https://github.com/reprodev/cvedeck
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/kev1n01/kev1n01
+  url: https://github.com/kev1n01/kev1n01
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/kevincao91/kevincao91
+  url: https://github.com/kevincao91/kevincao91
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/realme72/sentinel-ai
+  url: https://github.com/realme72/sentinel-ai
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/FranciscoKevin/FranciscoKevin
+  url: https://github.com/FranciscoKevin/FranciscoKevin
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/jhonjason4005-netizen/subli-kevin
+  url: https://github.com/jhonjason4005-netizen/subli-kevin
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/aaliyahmjh/data698-capstone
+  url: https://github.com/aaliyahmjh/data698-capstone
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/kevinismiddleton/kevinismiddleton
+  url: https://github.com/kevinismiddleton/kevinismiddleton
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinJGV/KevinJGV
+  url: https://github.com/KevinJGV/KevinJGV
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinDang505/KevinDang505
+  url: https://github.com/KevinDang505/KevinDang505
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/Eben-Builds/wifi-guardian-threat-intel
+  url: https://github.com/Eben-Builds/wifi-guardian-threat-intel
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/kevlog/kevlog
+  url: https://github.com/kevlog/kevlog
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinKattakayam/KevinKattakayam
+  url: https://github.com/KevinKattakayam/KevinKattakayam
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/KevinGimbel/kevingimbel
+  url: https://github.com/KevinGimbel/kevingimbel
+  verdict: not_jev
+  reason: unrelated repo (person named Kevin / CISA KEV tooling / Jev demo)
+  config: null
+- key: https://github.com/zamax14/Laya-Finetune
+  url: https://github.com/zamax14/Laya-Finetune
+  verdict: not_jev
+  reason: Laya fine-tuning toolkit, not a checkpoint
+  config: null
+- key: https://github.com/kimjooyoon/gooo-ir-composition-tdd-experiments
+  url: https://github.com/kimjooyoon/gooo-ir-composition-tdd-experiments
+  verdict: not_jev
+  reason: IR experiments using Laya, not a model
+  config: null
+- key: https://github.com/Radithiyansusil/Laya-is-Good
+  url: https://github.com/Radithiyansusil/Laya-is-Good
+  verdict: not_jev
+  reason: fan/test repo, not a model
+  config: null
+- key: https://github.com/nsh1999/AgentSmith
+  url: https://github.com/nsh1999/AgentSmith
+  verdict: not_jev
+  reason: agent experiments using Laya, not a model
+  config: null
+- key: https://github.com/solvi-ai/solvi
+  url: https://github.com/solvi-ai/solvi
+  verdict: not_jev
+  reason: serving runtime for System One models, not a model
+  config: null
+- key: https://github.com/Abhinavexists/lev
+  url: https://github.com/Abhinavexists/lev
+  verdict: needs_adapter
+  reason: 'lev: open System One model, LoRA on Qwen3.5-4B (weights interfaze-ai/lev);
+    needs a lev source adapter using its own runtime'
+  config: configs/lev_4b_vs_jev.yaml
+- key: https://github.com/geospatialorg/geospatialorg.github.io
+  url: https://github.com/geospatialorg/geospatialorg.github.io
+  verdict: not_jev
+  reason: unrelated website ('noul' = 'new' in Romanian)
+  config: null
+- key: hf:chaoliangUNSW/Jev-Style-2B-Decision-v3@5bad2d53ae04e832e2b30aa2a89bec76ec03deec
+  url: https://huggingface.co/chaoliangUNSW/Jev-Style-2B-Decision-v3
+  verdict: needs_adapter
+  reason: Qwen3.5-2B finetune that answers System One requests; harness has no Qwen3.5
+    text-gen readout adapter
+  config: configs/jevstyle_2b_vs_jev.yaml
+- key: hf:chaoliangUNSW/Jev-Style-0.8B-Decision-v3@b023d1f9c7858fbf01504577a3bfc349ea5c7385
+  url: https://huggingface.co/chaoliangUNSW/Jev-Style-0.8B-Decision-v3
+  verdict: needs_adapter
+  reason: Qwen3.5-0.8B finetune that answers System One requests; same missing adapter
+    as the 2B
+  config: configs/jevstyle_0p8b_vs_jev.yaml
+- key: hf:harshnandwana/visual-jev-120k-qwen35-0.8b-lora@56b91dd8e4e6cd8b3318ca52b345ff962f18d3cb
+  url: https://huggingface.co/harshnandwana/visual-jev-120k-qwen35-0.8b-lora
+  verdict: needs_adapter
+  reason: visual-grounding LoRA on Qwen3.5-0.8B-Base; needs adapter-merge and an image
+    path; marginal for this benchmark
+  config: null
+- key: hf:mmahdi-sz/Laya-fa-universal-support@ec31f11383e66a0494b3e2dc47282194d97b3202
+  url: https://huggingface.co/mmahdi-sz/Laya-fa-universal-support
+  verdict: needs_adapter
+  reason: Laya fine-tune narrowed to Persian e-commerce intents; unlikely to still
+    speak System One IO
+  config: null
+- key: hf:sjoerdbodbijl/laya-mlx@a3da39702854641289479310798b0d4f0fef09a4
+  url: https://huggingface.co/sjoerdbodbijl/laya-mlx
+  verdict: needs_adapter
+  reason: MLX repack of convaiinnovations/laya already benchmarked; PyTorch harness
+    cannot load MLX
+  config: null
+- key: hf:Primeomicx/laya-nextflow-nfcore@cb624e0da50cb0522fb94b169500fb844306912f
+  url: https://huggingface.co/Primeomicx/laya-nextflow-nfcore
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: hf:RazvanManolache/raz-systemone-nli-xsmall-openjev@c9029dcb7bd6e0e9795a4474793b1e8ff54a9b09
+  url: https://huggingface.co/RazvanManolache/raz-systemone-nli-xsmall-openjev
+  verdict: needs_adapter
+  reason: open System One NLI cross-encoder (deberta-v2-xsmall); needs a cross-encoder
+    adapter
+  config: configs/raz_systemone_nli_xs_vs_jev.yaml
+- key: https://kevin.gtfkd.com
+  url: https://kevin.gtfkd.com
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtube/answer/2802168?hl=en
+  url: https://support.google.com/youtube/answer/2802168?hl=en
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtube/answer/6159254?hl=en
+  url: https://support.google.com/youtube/answer/6159254?hl=en
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://obsproject.com
+  url: https://obsproject.com
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtube/answer/174084?hl=en&co=genie.platform%3Ddesktop
+  url: https://support.google.com/youtube/answer/174084?hl=en&co=genie.platform%3Ddesktop
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtubetv/answer/7129768?hl=en&co=GENIE.Platform%3DDesktop
+  url: https://support.google.com/youtubetv/answer/7129768?hl=en&co=GENIE.Platform%3DDesktop
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://obsproject.com/download
+  url: https://obsproject.com/download
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtube/answer/1646861?hl=en
+  url: https://support.google.com/youtube/answer/1646861?hl=en
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtube/answer/15968883?hl=en
+  url: https://support.google.com/youtube/answer/15968883?hl=en
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtube?hl=en
+  url: https://support.google.com/youtube?hl=en
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://support.google.com/youtubetv?hl=en
+  url: https://support.google.com/youtubetv?hl=en
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
+- key: https://x.com/i/article/2105736661921656997
+  url: https://x.com/i/article/2105736661921656997
+  verdict: not_jev
+  reason: unrelated hit (KEV vuln data / YouTube help / article about Jev)
+  config: null
