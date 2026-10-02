@@ -1,0 +1,31 @@
+# Laya (421M English) on all 75 cases, 4 L4s per method, next to Jev's committed answers.
+# Laya reads 512 tokens per question, state included, so every request is one child; 64
+# requests share one GPU forward pass. rox-research reference: 2026_09_29_21_58_31_top-ram
+# (laya421m_noul / laya421m_score there).
+#   uv run python -m jev_tracker.experiment run configs/laya_vs_jev.yaml --wait
+name: laya_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  laya_noul:
+    source: laya
+    model: convaiinnovations/laya
+    method: noul_query_in_state
+    shards: 4
+    forward_batch: 64
+  laya_score:
+    source: laya
+    model: convaiinnovations/laya
+    method: score_query_in_question
+    shards: 4
+    forward_batch: 64

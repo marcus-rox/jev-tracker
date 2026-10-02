@@ -1,0 +1,24 @@
+# H-1 through the harness: Liquid AI's d1 on the first 2 cases, one request at a time, as many
+# children per request as d1 takes (LiquidSource: 128 questions, 110,000 characters).
+name: liquid_d1_smoke
+cases: 2
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: projects/reranker_alts/data/jev/noul_query_in_state.json
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: projects/reranker_alts/data/jev/score_query_in_question.json
+  d1_noul:
+    source: liquid
+    method: noul_query_in_state
+    concurrency: 1
+  d1_score:
+    source: liquid
+    method: score_query_in_question
+    concurrency: 1

@@ -1,0 +1,68 @@
+# Spend FP8's freed VRAM on bigger batches. On H100 bf16 batched serving peaks near 71 GB at 16 in
+# flight; w8a8 holds 41 GB resident, so the same card has ~30 GB for more concurrent requests.
+# Rows: bf16 at 32 (expected to OOM or nearly), w8a8 at 32 and 64 (64 = kev.serve's max batch).
+# Compare with kev27b_fp8_h100.yaml (busy-sawfly) at concurrency 16.
+#   uv run python -m projects.reranker_alts.experiment run projects/reranker_alts/configs/kev27b_fp8_bigbatch_h100.yaml --wait
+name: kev27b_fp8_bigbatch_h100
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: projects/reranker_alts/data/jev/noul_query_in_state.json
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: projects/reranker_alts/data/jev/score_query_in_question.json
+  kev27b_batched_c32_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 32
+    gpu: H100
+  kev27b_FP8_w8a8_c32_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 32
+    gpu: H100
+    fp8: w8a8
+  kev27b_FP8_w8a8_c64_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 64
+    gpu: H100
+    fp8: w8a8
+  kev27b_FP8_w8a8_c32_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 32
+    gpu: H100
+    fp8: w8a8
+  kev27b_FP8_w8a8_c64_score:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 64
+    gpu: H100
+    fp8: w8a8

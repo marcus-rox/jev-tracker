@@ -1,0 +1,32 @@
+# Kev-27B pinned to the 2026-09-24 weights (Hub revision 01b8199) that the rox-research reference
+# runs used; the Hub's main moved to "Kev-27B v2" on 2026-09-30. Same serving as kev27b_batched.yaml.
+name: kev27b_batched_v1
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+  kev27b_score:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16

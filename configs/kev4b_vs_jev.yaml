@@ -1,0 +1,31 @@
+# Kev-4B (open source, in-process on Modal) vs Jev (committed answers) vs production, on the
+# frozen 75 cases, kept-mass@k for k = 50..200 step 10.
+#   uv run python -m jev_tracker.experiment run configs/kev4b_vs_jev.yaml --wait
+name: kev4b_vs_jev
+cases: null            # all 75; an int = first N cases (smoke)
+k: {start: 50, stop: 200, step: 10}
+rerankers:             # table rows, in order; "prod" is what win-rates are measured against
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev4b_noul:
+    source: kev
+    model: jaredpalmer/kev-4b
+    method: noul_query_in_state
+    max_items: 25      # children per request; Kev's state limit is 8,192 tokens
+    max_chars: 24000
+    shards: 10         # L40S GPUs; ~2.5 min model load + ~2 min scoring
+  kev4b_score:
+    source: kev
+    model: jaredpalmer/kev-4b
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10

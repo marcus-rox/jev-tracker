@@ -1,0 +1,22 @@
+{
+  "verdict": "refuted",
+  "reason": "0.13x Kev's warm tokens/s; parity p99 0.0219 max 0.0738 vs re-run p99 0.0009 max 0.0051 (outside re-run noise); no-readout floor 0.54x",
+  "option_isolation": false,
+  "noise": {
+    "requests": 251,
+    "answers": 2980,
+    "missing": 0,
+    "p99_abs_dp": 0.0009000000000000119,
+    "max_abs_dp": 0.005099999999999993
+  },
+  "parity": {
+    "requests": 251,
+    "answers": 2980,
+    "missing": 0,
+    "p99_abs_dp": 0.021899999999999975,
+    "max_abs_dp": 0.0738
+  },
+  "same": false,
+  "speedup": 0.12512537305577237,
+  "floor_speedup": 0.5422527363861895
+}

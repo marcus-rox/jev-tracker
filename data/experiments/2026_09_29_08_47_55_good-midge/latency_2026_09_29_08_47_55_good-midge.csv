@@ -1,0 +1,3 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+kev27b_noul,75,17.34,12.56,41.66,4.58,64.61,37.2
+kev27b_score,75,22.32,17.33,48.91,7.10,92.91,37.2

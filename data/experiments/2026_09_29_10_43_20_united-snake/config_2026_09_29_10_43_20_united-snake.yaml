@@ -1,0 +1,41 @@
+# H-3 (sglang): Kev-27B's backbone on sglang with Kev's tokenizer and head, against Kev's own server
+# run twice (its re-run gap is the parity bar). Same 6 cases, Noul, 12 children per request,
+# 16 requests per pass, one H100 80GB each. The _floor arm runs the same passes with no
+# hidden-state readout (no answers): how much of the engine's time the readout costs.
+name: kev27b_sglang
+cases: 6
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 24000
+    concurrency: 16
+    gpu: H100!
+  kev27b_rerun_noul:
+    source: kev
+    model: jaredpalmer/kev-27b
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 24000
+    concurrency: 16
+    gpu: H100!
+  kev27b_sglang_noul:
+    source: sglang
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 24000
+    concurrency: 16
+    gpu: H100!
+  kev27b_sglang_floor_noul:
+    source: sglang
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 24000
+    concurrency: 16
+    gpu: H100!
+    floor: true

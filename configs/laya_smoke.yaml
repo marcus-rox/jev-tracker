@@ -1,0 +1,20 @@
+# Smoke test of the Laya producer: first 2 cases, 1 L4, noul only. ~$0.05.
+name: laya_smoke
+cases: 2
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  laya_noul:
+    source: laya
+    model: convaiinnovations/laya
+    method: noul_query_in_state
+    forward_batch: 64
