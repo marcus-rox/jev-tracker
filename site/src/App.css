@@ -1,0 +1,32 @@
+.app { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+.side { border-right: 1px solid #e3e3e3; padding: 16px; background: #fafafa; overflow-y: auto; height: 100vh; position: sticky; top: 0; box-sizing: border-box; }
+.side h1 { font-size: 18px; margin: 0 0 4px; }
+.side .sub { color: #666; margin: 0 0 16px; }
+.side h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: #555; margin: 16px 0 6px; }
+.side label { display: block; line-height: 1.6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.side label input { margin-right: 6px; }
+.side .exp { font-family: ui-monospace, monospace; font-size: 12px; }
+.side button { font-size: 12px; margin-right: 6px; }
+.main { padding: 16px 24px; min-width: 0; }
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid #ddd; }
+.tabs button { border: 1px solid transparent; border-bottom: none; background: none; padding: 8px 14px; cursor: pointer; font-size: 14px; border-radius: 6px 6px 0 0; }
+.tabs button.on { border-color: #ddd; background: #fff; font-weight: 600; margin-bottom: -1px; }
+.note { color: #666; margin: 0 0 10px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: 4px 8px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+th { background: #f3f3f3; position: sticky; top: 0; cursor: pointer; user-select: none; white-space: nowrap; }
+th.n, td.n { text-align: right; font-variant-numeric: tabular-nums; }
+th .dir { color: #999; margin-left: 4px; }
+tr.hl td { background: #fff8e1; }
+tr.sep td { border-top: 2px solid #999; }
+td.n a { color: inherit; border-bottom: 1px dotted #aaa; }
+td.n a:hover { color: #0a58ca; text-decoration: none; }
+td.dim { color: #999; }
+.cmp th.exp { font-size: 12px; font-family: ui-monospace, monospace; }
+form.eval { max-width: 640px; }
+form.eval label { display: block; margin: 10px 0 4px; font-weight: 600; }
+form.eval input[type=text], form.eval select { width: 100%; padding: 6px; box-sizing: border-box; font-size: 14px; }
+form.eval .inline label { display: inline; font-weight: normal; margin-right: 16px; }
+pre.yaml { background: #f6f8fa; padding: 12px; border-radius: 6px; overflow-x: auto; }
+.btn { display: inline-block; background: #1f883d; color: #fff; padding: 8px 14px; border-radius: 6px; font-weight: 600; }
+.btn:hover { text-decoration: none; background: #197a33; }

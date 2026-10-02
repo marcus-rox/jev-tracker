@@ -6,7 +6,7 @@ import json
 import pytest
 import yaml
 
-from jev_tracker.experiment import EXPERIMENTS_DIR
+from jev_tracker.experiment import EXPERIMENTS_DIR, REPO_DIR, load_config
 from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, build, read_api_timing
 
 DATA = build(yaml.safe_load(REGISTRY.read_text()), EXPERIMENTS_DIR, read_api_timing(API_TIMING))
@@ -70,3 +70,53 @@ def test_R6_every_shown_number_names_its_source() -> None:
             assert r["sources"]["kept_mass"], r["reranker"]
         if r["cost"] is not None:
             assert r["sources"]["cost"] and r["sources"]["latency"], r["reranker"]
+
+
+# R-7 lives in the browser (site/src/evaluate_config.ts); this pins the two things Python can check.
+EVALUATE_TS = REPO_DIR / "site" / "src" / "evaluate_config.ts"
+
+# What the form emits for source=kev, name=newkev, both methods: keep in step with evaluate_config.ts.
+FORM_YAML = """name: newkev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  newkev_noul:
+    source: kev
+    model: org/new-kev
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+    method: noul_query_in_state
+  newkev_score:
+    source: kev
+    model: org/new-kev
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+    method: score_query_in_question
+"""
+
+
+def test_R7_issue_url(tmp_path) -> None:
+    src = EVALUATE_TS.read_text()
+    assert "/issues/new?labels=evaluate" in src
+    assert "token" not in src.lower()
+    for line in FORM_YAML.splitlines():
+        if line.startswith("    ") and "org/new-kev" not in line and "method:" not in line:
+            assert line in src, line
+    path = tmp_path / "newkev.yaml"
+    path.write_text(FORM_YAML)
+    exp = load_config(path)
+    assert set(exp.rerankers) == {"prod", "jev_noul", "jev_score", "newkev_noul", "newkev_score"}
