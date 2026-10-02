@@ -1,7 +1,7 @@
 # jev-tracker — a leaderboard of Jev alternatives on Rox's frozen 75-case benchmark
 
-**Status · 2026-10-02 · Phase 1 merged (PR #1); Phase 2 site built, in PR; Phase 3 (crawler) in
-progress in two parallel sessions (prior-work survey, `crawler/`).** Harness ported from
+**Status · 2026-10-02 · Phases 1–2 merged (PR #1, #2); Phase 3 crawler merged (PR #3, #4); Phase 3b
+(new sources, automation glue, daily automation) in progress in two parallel sessions + this one.** Harness ported from
 `rox-research/projects/reranker_alts`; Kev-4B, Laya and batched Kev-27B (pinned to the 2026-09-24
 weights) reran on Modal within 0.002 kept-mass of rox-research at every k.
 
@@ -34,9 +34,10 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
 
 ## Next steps
 
-1. **Crawler + automation (Phase 3)**: ✅ prior-work survey (`docs/PRIOR_WORK.md`), ✅ `crawler/` (PR #4,
-   `tests/test_crawler.py`); next the daily Devin automation that opens a PR. Falsifier: the first
-   automation PR has no new candidate or fails to regenerate the site.
+1. **Daily automation (Phase 3b)**: R-8 edits (twitter, hackernews, Tavily web, `hf:<id>@<sha>`
+   key), `jev_tracker.evaluate_issues`, `crawler/triage.py`, `docs/AUTOMATION.md`, then the Devin
+   automation that runs the runbook daily and opens a PR. Falsifier: the first automation PR has no
+   new candidate or fails to regenerate the site.
 
 ## Decided
 
@@ -75,5 +76,5 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
 
 - ~~Whether Kev-4B's and Laya's own rerun spread is within 0.002~~ — yes: both reran within 0.002
   at every k (`tests/test_validation.py`).
-- Devin automation configuration (schedule, which playbook): resolved when Phase 3 starts, via the
-  automation-management skill.
+- ~~Devin automation configuration~~ — a Devin Automation with a daily schedule trigger, running as
+  Marcus (his PAT and Modal tokens), following `docs/AUTOMATION.md`; no Slack.
