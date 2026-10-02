@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
 import type { K, Row } from './types'
 
 const TOP_N = 10
@@ -55,15 +56,51 @@ const Swatch = ({ st }: { st: Style }) => (
   </svg>
 )
 
+interface Tip { text: string; x: number; y: number }
+
+/** Tooltip positioned relative to the wrapping `.chartwrap`; set from pointer events, cleared on leave. */
+function useTip() {
+  const [tip, setTip] = useState<Tip | null>(null)
+  const show = (text: string) => (e: PointerEvent<Element>) => {
+    const box = e.currentTarget.closest('.chartwrap')?.getBoundingClientRect()
+    if (box) setTip({ text, x: e.clientX - box.left, y: e.clientY - box.top })
+  }
+  const clear = () => setTip(null)
+  const node = tip && <TipBox tip={tip} />
+  return { tip, show, clear, node }
+}
+
+/** Sits just above-right of the pointer, shifted left when it would overflow the chart's right edge. */
+function TipBox({ tip }: { tip: Tip }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el?.parentElement) return
+    const room = el.parentElement.clientWidth - el.offsetWidth
+    el.style.left = `${Math.max(0, Math.min(tip.x + 12, room))}px`
+  }, [tip])
+  return <div ref={ref} className="tip" style={{ top: tip.y - 32 }}>{tip.text}</div>
+}
+
+const who = (r: Row) => `${r.label} · ${r.serving}${r.gpu !== '-' ? ` · ${r.gpu}` : ''}`
+
 interface LineProps { rows: Row[]; ks: K[]; height: number; hidden: Set<string>; onToggle: (family: string) => void }
 
 export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
+  const { tip, show, clear, node } = useTip()
   const S = series(rows)
   if (S.length === 0) return <p className="hint">No rows match the filters.</p>
   const styles = chartStyles(S)
   const styleOf = (family: string) => REF_STYLE[family] ?? styles.get(family)!
   const W = 900, H = height, L = 48, R = 36, T = 12, B = 30
   const kept = (r: Row, k: K) => r.kept_mass?.[k] ?? 0
+  const hot = tip?.text.split(' @')[0]
+  const nearestK = (e: PointerEvent<Element>) => {
+    const box = e.currentTarget.closest('svg')!.getBoundingClientRect()
+    const i = Math.round(((e.clientX - box.left) / box.width) * W - L) / ((W - L - R) / (ks.length - 1))
+    return ks[Math.min(ks.length - 1, Math.max(0, Math.round(i)))]
+  }
+  const onLine = (r: Row) => (e: PointerEvent<Element>) => { const k = nearestK(e); show(`${who(r)} @${k}: ${kept(r, k).toFixed(3)}`)(e) }
   const ys = S.flatMap((r) => ks.map((k) => kept(r, k)))
   const y0 = Math.max(0, Math.floor(Math.min(...ys) * 10) / 10 - 0.05), y1 = 1
   const x = (i: number) => L + (i * (W - L - R)) / (ks.length - 1)
@@ -71,7 +108,7 @@ export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
   const ticks: number[] = []
   for (let v = Math.ceil(y0 * 10) / 10; v <= y1 + 1e-9; v += 0.1) ticks.push(v)
   return (
-    <>
+    <div className="chartwrap" onPointerLeave={clear}>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" preserveAspectRatio="none" style={{ height: H }}>
         {ticks.map((v) => (
           <g key={v}>
@@ -82,14 +119,12 @@ export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
         {ks.map((k, i) => <text key={k} x={x(i)} y={H - 8} textAnchor="middle">k={k}</text>)}
         {S.filter((r) => !hidden.has(r.family)).map((r) => {
           const st = styleOf(r.family)
+          const points = ks.map((k, i) => `${x(i)},${y(kept(r, k))}`).join(' ')
           return (
-            <g key={r.family}>
-              <polyline fill="none" stroke={st.stroke} strokeWidth={st.width} strokeDasharray={st.dash || undefined} points={ks.map((k, i) => `${x(i)},${y(kept(r, k))}`).join(' ')}>
-                <title>{r.label} · {r.serving}</title>
-              </polyline>
-              {ks.map((k, i) => (
-                <g key={k}><Mark shape={st.marker} cx={x(i)} cy={y(kept(r, k))} fill={st.stroke} /><title>{r.label} @{k}: {kept(r, k).toFixed(3)}</title></g>
-              ))}
+            <g key={r.family} opacity={hot && hot !== who(r) ? 0.2 : 1}>
+              <polyline fill="none" stroke={st.stroke} strokeWidth={st.width} strokeDasharray={st.dash || undefined} points={points} />
+              {ks.map((k, i) => <Mark key={k} shape={st.marker} cx={x(i)} cy={y(kept(r, k))} fill={st.stroke} />)}
+              <polyline fill="none" stroke="transparent" strokeWidth={14} points={points} onPointerMove={onLine(r)} style={{ cursor: 'crosshair' }} />
             </g>
           )
         })}
@@ -103,7 +138,8 @@ export function LineChart({ rows, ks, height, hidden, onToggle }: LineProps) {
           </span>
         ))}
       </div>
-    </>
+      {node}
+    </div>
   )
 }
 
@@ -111,6 +147,7 @@ interface BarProps { rows: Row[]; value: (r: Row) => number | null | undefined; 
 
 /** Lowest value per family, as horizontal bars; Jev's bar is the reference. */
 export function HBars({ rows, value, digits }: BarProps) {
+  const { tip, show, clear, node } = useTip()
   const best = new Map<string, { v: number; r: Row }>()
   for (const r of rows) {
     const v = value(r)
@@ -123,14 +160,21 @@ export function HBars({ rows, value, digits }: BarProps) {
   const max = Math.max(...arr.map((a) => a.v))
   const jev = arr.find((a) => a.r.family === 'jev')
   return (
-    <div className="hbar">
-      {arr.map((a) => (
-        <div key={a.r.family} className={a === jev ? 'jev' : ''} style={{ display: 'contents' }}>
-          <span className="lbl" title={`${a.r.label} · ${a.r.serving} · ${a.r.gpu}`}>{a.r.family} <span className="muted">{a.r.gpu}</span></span>
-          <span className="t"><i style={{ width: `${(100 * a.v) / max}%` }} /></span>
-          <span className={`n ${jev && a !== jev && a.v < jev.v ? 'good' : ''}`}>{a.v.toFixed(digits)}</span>
-        </div>
-      ))}
+    <div className="chartwrap" onPointerLeave={clear}>
+      <div className="hbar">
+        {arr.map((a) => {
+          const text = `${who(a.r)}: ${a.v.toFixed(digits)}`
+          const cls = `${a === jev ? 'jev' : ''} ${tip?.text === text ? 'hot' : ''}`
+          return (
+            <div key={a.r.family} className={cls} style={{ display: 'contents' }} onPointerMove={show(text)}>
+              <span className="lbl">{a.r.family} <span className="muted">{a.r.gpu}</span></span>
+              <span className="t"><i style={{ width: `${(100 * a.v) / max}%` }} /></span>
+              <span className={`n ${jev && a !== jev && a.v < jev.v ? 'good' : ''}`}>{a.v.toFixed(digits)}</span>
+            </div>
+          )
+        })}
+      </div>
+      {node}
     </div>
   )
 }
