@@ -9,7 +9,7 @@ weights) reran on Modal within 0.002 kept-mass of rox-research at every k.
 ## The objective
 
 Marcus can open one local page, see the quality / cost / latency tables of every model run on the
-75 cases, filter and compare runs, and submit a new URL or Hugging Face model; a daily automation
+75 cases, filter runs, and submit a new URL or Hugging Face model; a daily automation
 finds new Jev alternatives, runs them, and opens a PR with the numbers. Success for Phase 1: the
 three validation reruns (R-4) match rox-research within 0.002 kept-mass at every k.
 
