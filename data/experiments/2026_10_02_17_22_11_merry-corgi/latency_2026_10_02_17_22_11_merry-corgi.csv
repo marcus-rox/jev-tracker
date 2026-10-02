@@ -1,0 +1,3 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+minicpm5_jev_noul,75,65.68,44.64,151.25,15.53,455.19,57.1
+minicpm5_jev_score,75,66.19,44.92,180.20,12.31,348.08,57.1

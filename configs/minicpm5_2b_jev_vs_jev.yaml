@@ -1,0 +1,28 @@
+# MiniCPM5-2B-Jev (ytbai/MiniCPM5-2B-Jev @27afc6f): LoRA + letter readout on MiniCPM5-2B vs Jev (committed answers) vs production, on the frozen 75 cases, kept-mass@k for
+# k = 50..200 step 10. In-process through the release's MiniCPMSystemOne (minicpm_jev source), 8 children / 8,000 characters per request (its 2,560-token state limit), 3 L4 shards (within the budget line of configs/kev27b_batched.yaml).
+# Approved on the site; added by the daily automation.
+#   uv run python -m jev_tracker.experiment run configs/minicpm5_2b_jev_vs_jev.yaml --wait
+name: minicpm5_2b_jev_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  minicpm5_jev_noul:
+    source: minicpm_jev
+    model: ytbai/MiniCPM5-2B-Jev
+    method: noul_query_in_state
+    shards: 3
+  minicpm5_jev_score:
+    source: minicpm_jev
+    model: ytbai/MiniCPM5-2B-Jev
+    method: score_query_in_question
+    shards: 3

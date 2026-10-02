@@ -1,0 +1,34 @@
+# Kev-0.8B BA-LoRA (Glax147/kev-0.8b-ba-lora: bias-aware post-train of Kev-0.8B, LoRA + head.pt) vs Jev (committed answers) vs production, on the frozen 75 cases, kept-mass@k for
+# k = 50..200 step 10. Serving as configs/kev27b_batched.yaml (the budget line): 3 shards,
+# 12 children per request, 16 requests in flight per container. Added by the daily automation.
+#   uv run python -m jev_tracker.experiment run configs/kev08b_ba_lora_vs_jev.yaml --wait
+name: kev08b_ba_lora_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev08b_ba_lora_noul:
+    source: kev
+    model: Glax147/kev-0.8b-ba-lora@6f3864febcef263cd5d520d5520c0c5aa92472f0
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+  kev08b_ba_lora_score:
+    source: kev
+    model: Glax147/kev-0.8b-ba-lora@6f3864febcef263cd5d520d5520c0c5aa92472f0
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16

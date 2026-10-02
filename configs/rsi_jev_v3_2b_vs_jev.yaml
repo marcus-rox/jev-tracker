@@ -1,0 +1,28 @@
+# RSI-Jev v3.0 (shgao/rsi-jev-v3.0-qwen3.5-2b @c778b68): fine-tuned Qwen3.5-2B tower + option scorer vs Jev (committed answers) vs production, on the frozen 75 cases, kept-mass@k for
+# k = 50..200 step 10. In-process through the release's load_release + rsijev.evaluate.predict (rsi_jev source), 12 children / 12,000 characters per request, 3 L40S shards (within the budget line of configs/kev27b_batched.yaml).
+# Approved on the site; added by the daily automation.
+#   uv run python -m jev_tracker.experiment run configs/rsi_jev_v3_2b_vs_jev.yaml --wait
+name: rsi_jev_v3_2b_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  rsi_jev_noul:
+    source: rsi_jev
+    model: shgao/rsi-jev-v3.0-qwen3.5-2b
+    method: noul_query_in_state
+    shards: 3
+  rsi_jev_score:
+    source: rsi_jev
+    model: shgao/rsi-jev-v3.0-qwen3.5-2b
+    method: score_query_in_question
+    shards: 3
