@@ -1,7 +1,7 @@
 """python -m crawler [--since YYYY-MM-DD] [--out crawler/candidates/] [--queries crawler/queries.yaml]
 
 Runs every (source x query) from queries.yaml with tqdm, dedupes against crawler/seen.jsonl,
-appends the new urls to it and writes crawler/candidates/<YYYY-MM-DD>.jsonl. A failing
+appends the new keys to it and writes crawler/candidates/<YYYY-MM-DD>.jsonl. A failing
 (source, query) is printed and skipped; the exit code is 1 at the end if any failed.
 """
 
@@ -14,7 +14,7 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from crawler import arxiv, github, huggingface, web
+from crawler import arxiv, github, hackernews, huggingface, twitter, web
 from crawler.contract import (
     SOURCES,
     Candidate,
@@ -32,6 +32,8 @@ SEARCHERS = {
     "huggingface": huggingface.search,
     "arxiv": arxiv.search,
     "web": web.search,
+    "twitter": twitter.search,
+    "hackernews": hackernews.search,
 }
 
 
@@ -77,7 +79,7 @@ def main(argv: list[str] | None = None) -> int:
     seen = read_seen(args.seen)
     since = args.since.replace(tzinfo=UTC) if args.since else default_since(seen, now)
     jobs = load_queries(args.queries)
-    print(f"since {since.isoformat()}  {len(jobs)} (source, query) jobs  {len(seen)} seen urls")
+    print(f"since {since.isoformat()}  {len(jobs)} (source, query) jobs  {len(seen)} seen keys")
 
     found, failed = crawl(jobs, since)
     fresh = new_candidates(found, seen)

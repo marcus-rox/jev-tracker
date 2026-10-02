@@ -1,7 +1,7 @@
 # R-8: what each source is asked. Source of truth; crawler/__main__.py reads one list per source.
 # GitHub repository search (pushed since the window start), arXiv (all fields, terms ANDed) and
-# DuckDuckGo take free text with quoted phrases. Hugging Face matches model ids by substring, so
-# phrases are useless there and `decision-model` is the Hub tag Kev-style models carry.
+# Tavily web search take free text with quoted phrases. Hugging Face matches model ids by
+# substring, so phrases are useless there and `decision-model` is the Hub tag Kev-style models carry.
 github:
   - jev
   - kev
@@ -35,3 +35,21 @@ web:
   - noul
   - '"decision model" reranker'
   - jaredpalmer/kev
+# twitter: the web list again, sent to Tavily with ` site:x.com` appended (x.com/twitter.com hosts only).
+twitter:
+  - jev
+  - kev
+  - laya
+  - systemone
+  - '"system one"'
+  - noul
+  - '"decision model" reranker'
+  - jaredpalmer/kev
+# hackernews: Algolia fuzzy-matches bare words (`jev` -> 613k hits), so only quoted exact phrases.
+hackernews:
+  - '"jaredpalmer"'
+  - '"kev-4b"'
+  - '"kev-27b"'
+  - '"liquid d1"'
+  - '"system one"'
+  - '"decision model"'
