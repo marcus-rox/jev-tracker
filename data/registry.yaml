@@ -1480,6 +1480,7 @@ rows:
   label: kev4b_ba_lora_noul
   family: kev4b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1493,6 +1494,7 @@ rows:
   label: kev4b_ba_lora_score
   family: kev4b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75

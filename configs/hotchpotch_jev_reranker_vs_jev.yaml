@@ -1,0 +1,43 @@
+# Bekko System One v0 (hotchpotch's Ettin-based shared-prefix decision encoders, 17M / 68M /
+# 400M) on all 75 cases, 1 L4 per model+method, next to Jev's committed answers. Approved site
+# proposal hotchpotch_jev_reranker_vs_jev; each request is one `predict` input object through
+# the release's inference_v0.BekkoSentenceTransformer (jev_tracker.bekko maps the body).
+#   uv run python -m jev_tracker.experiment run configs/hotchpotch_jev_reranker_vs_jev.yaml --wait
+name: hotchpotch_jev_reranker_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  bekko17m_noul:
+    source: bekko
+    model: hotchpotch/bekko-system-one-v0-17m
+    method: noul_query_in_state
+  bekko17m_score:
+    source: bekko
+    model: hotchpotch/bekko-system-one-v0-17m
+    method: score_query_in_question
+  bekko68m_noul:
+    source: bekko
+    model: hotchpotch/bekko-system-one-v0-68m
+    method: noul_query_in_state
+  bekko68m_score:
+    source: bekko
+    model: hotchpotch/bekko-system-one-v0-68m
+    method: score_query_in_question
+  bekko400m_noul:
+    source: bekko
+    model: hotchpotch/bekko-system-one-v0-400m
+    method: noul_query_in_state
+  bekko400m_score:
+    source: bekko
+    model: hotchpotch/bekko-system-one-v0-400m
+    method: score_query_in_question

@@ -1,0 +1,26 @@
+# Von 1.3 (wfzyx/von: 395M encoder + option-marker head) on all 75 cases, 1 L4 per method, next
+# to Jev's committed answers. Approved site proposal von_395m_vs_jev; scored in-process through
+# von-sdk's VonEngine, which answers the raw question dicts as its /v1/systemone server does.
+#   uv run python -m jev_tracker.experiment run configs/von_395m_vs_jev.yaml --wait
+name: von_395m_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  von_noul:
+    source: von
+    model: wfzyx/von
+    method: noul_query_in_state
+  von_score:
+    source: von
+    model: wfzyx/von
+    method: score_query_in_question
