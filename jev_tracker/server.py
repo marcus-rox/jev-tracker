@@ -4,6 +4,8 @@
 
 POST /api/requests {"text": "<whatever was typed>"} commits requests/<YYYY-MM-DD>/<HHMMSS>_<slug>.json
 to `main` through the GitHub Contents API; the daily run reads that folder (crawler/submitted.py).
+GET /api/queue returns data/queue.json as it is on `main` right now (jev_tracker.evaluation_queue),
+so the site shows the evaluation queue without a redeploy; cached for QUEUE_CACHE_SECONDS.
 """
 
 import argparse
@@ -12,6 +14,7 @@ import json
 import os
 import re
 import sys
+import time
 from collections.abc import Callable
 from datetime import UTC, datetime
 from functools import partial
@@ -29,6 +32,10 @@ BRANCH = "main"
 REQUESTS_DIR = "requests"
 TOKEN_ENV = "GITHUB_TOKEN"
 API_PATH = "/api/requests"
+QUEUE_PATH = "/api/queue"
+QUEUE_FILE = "data/queue.json"
+QUEUE_CACHE_SECONDS = 30.0
+EMPTY_QUEUE = b'{"items": []}\n'
 DEFAULT_PORT = 8000
 DEFAULT_DIST = REPO_DIR / "site" / "dist"
 HTTP_TIMEOUT_SECONDS = 30.0
@@ -79,10 +86,58 @@ def commit_request(text: str, now: datetime, token: str, client: httpx.Client) -
     return response.json()["content"]["html_url"]
 
 
+def fetch_queue(token: str, client: httpx.Client) -> bytes:
+    """data/queue.json as committed on `main`; an empty queue when the file does not exist yet."""
+    response = client.get(
+        f"{CONTENTS_URL}/{QUEUE_FILE}",
+        params={"ref": BRANCH},
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github.raw+json"},
+    )
+    if response.status_code == HTTPStatus.NOT_FOUND:
+        return EMPTY_QUEUE
+    response.raise_for_status()
+    return response.content
+
+
+class QueueCache:
+    """Serves one fetch per QUEUE_CACHE_SECONDS so page loads do not each hit GitHub."""
+
+    def __init__(self, fetch: Callable[[], bytes], ttl: float = QUEUE_CACHE_SECONDS) -> None:
+        self.fetch = fetch
+        self.ttl = ttl
+        self.body: bytes | None = None
+        self.fetched_at = 0.0
+
+    def get(self) -> bytes:
+        if self.body is None or time.monotonic() - self.fetched_at > self.ttl:
+            self.body = self.fetch()
+            self.fetched_at = time.monotonic()
+        return self.body
+
+
 class SiteHandler(SimpleHTTPRequestHandler):
-    def __init__(self, *args, commit: Callable[[str, datetime], str], **kwargs) -> None:
+    def __init__(
+        self, *args, commit: Callable[[str, datetime], str], queue: QueueCache, **kwargs
+    ) -> None:
         self.commit = commit
+        self.queue = queue
         super().__init__(*args, **kwargs)
+
+    def do_GET(self) -> None:  # noqa: N802  (http.server's name)
+        if self.path != QUEUE_PATH:
+            super().do_GET()
+            return
+        try:
+            body = self.queue.get()
+        except httpx.HTTPError as e:  # boundary: report the GitHub failure to the browser
+            self._json(HTTPStatus.BAD_GATEWAY, {"error": f"GitHub read failed: {e}"})
+            return
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", f"max-age={int(QUEUE_CACHE_SECONDS)}")
+        self.end_headers()
+        self.wfile.write(body)
 
     def do_POST(self) -> None:  # noqa: N802  (http.server's name)
         if self.path != API_PATH:
@@ -127,8 +182,11 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     client = httpx.Client(timeout=HTTP_TIMEOUT_SECONDS)
     commit = partial(commit_request, token=token, client=client)
-    handler = partial(SiteHandler, directory=str(args.dist), commit=commit)
-    print(f"serving {args.dist} on http://localhost:{args.port}  (POST {API_PATH})")
+    queue = QueueCache(partial(fetch_queue, token=token, client=client))
+    handler = partial(SiteHandler, directory=str(args.dist), commit=commit, queue=queue)
+    print(
+        f"serving {args.dist} on http://localhost:{args.port}  (POST {API_PATH}, GET {QUEUE_PATH})"
+    )
     ThreadingHTTPServer(("", args.port), handler).serve_forever()
     return 0
 

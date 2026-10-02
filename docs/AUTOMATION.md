@@ -32,20 +32,33 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    verdicts like any other candidate.
    Then `uv run python -m crawler.triage check crawler/triage/<date>.yaml
    crawler/candidates/<date>.jsonl` must exit 0.
+3b. **Queue** (what the site shows while runs are going): `uv run python -m
+   jev_tracker.evaluation_queue add crawler/triage/<date>.yaml` puts every runnable config in
+   `data/queue.json` as `queued`; then `… start configs/<a>.yaml configs/<b>.yaml` (the ≤3 that
+   step 5 will run) marks them `running`. Commit `data/queue.json` alone as the branch's first
+   commit and push that one commit to `main` too (`git push origin HEAD:main`; the branch is
+   `main` + this commit, so it is a fast-forward). This is the one write to `main` the run makes.
 4. **Issues**: `GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.evaluate_issues` turns open
    `evaluate` issues into `configs/issue_<n>_<slug>.yaml` (unauthenticated api.github.com is
    rate-limited from Devin VMs; the issue stays open until a human closes it, so the file-exists
    skip is what stops a rerun). Add registry rows for their rerankers as in step 3.
 5. **Run**: for each config written in steps 3–4 (max 3):
    `uv run python -m jev_tracker.experiment run configs/<name>.yaml --wait`. A failed run is
-   reported in the PR, not retried.
-6. **TLDR** (the second decision): rewrite `data/tldr.md`, 3–5 plain sentences for someone who
-   opens the site cold: who leads the benchmark and by how much, what today's runs added, what
-   changed since yesterday. Numbers come from `data/experiments`; no markdown headings.
+   reported in the PR, not retried. Afterwards `uv run python -m jev_tracker.evaluation_queue
+   done configs/<name>.yaml …` for every config that ran (failed ones too; the PR says why): a
+   finished model leaves the queue and exists only as its rows in the site data. Configs that were
+   queued but not run today stay `queued` for tomorrow.
+6. **TLDR** (the second decision): rewrite `data/tldr.md`, 3–5 sentences for someone who opens
+   the site cold: who leads the benchmark and by how much, what today's runs added, what changed
+   since yesterday. Numbers come from `data/experiments`; no markdown headings. Write it in
+   ASD-STE100 (Simplified Technical English) at about 80% compliance: one idea per sentence, at
+   most 20 words, active voice, present tense, approved general words (`use` not `utilize`, `show`
+   not `demonstrate`), no idioms; model names and numbers stay exactly as in the data.
 7. **Regenerate**: `uv run python -m jev_tracker.site_data` (reads `data/tldr.md`), then
    `cd site && npm ci && npm run build && cd ..`.
 8. **Check**: `uv run ruff check . && uv run ruff format --check . && uv run pytest -q`.
-9. **PR**: commit `crawler/`, `configs/`, `data/`, `site/public/data`, `site/dist` (explicit
+9. **PR**: commit `crawler/`, `configs/`, `data/` (including `data/queue.json` with the finished
+   items removed), `site/public/data`, `site/dist` (explicit
    paths, no `git add .`); push; open a PR titled `Daily <date>: <n> candidates, <m> runs` whose body
    has the triage counts per verdict, one line per run with kept-mass@50/200 and $/run, the crawler
    failures if any, and `Closes #<n>` for each `evaluate` issue run. No Slack (Marcus: skip for now).
@@ -54,6 +67,7 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
 
 ## What the automation never does
 
-- Push to `main`, force-push, amend, or edit `docs/SPEC.md`.
+- Push to `main` (except the single `data/queue.json` fast-forward in step 3b), force-push, amend,
+  or edit `docs/SPEC.md`.
 - Run more than 3 experiments or a config over the Kev-27B budget line.
 - Print or commit a token.
