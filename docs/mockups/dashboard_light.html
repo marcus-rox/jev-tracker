@@ -85,16 +85,16 @@ const sk = r => r.serving.split(':')[0];
 const FAMS = [...new Set(ROWS.map(fam))];
 const GPUS = [...new Set(ROWS.map(r => r.gpu))];
 const color = Object.fromEntries(FAMS.map((f, i) => [f, PALETTE[i % PALETTE.length]]));
-const state = { tab: 'summary', fams: new Set(), gpus: new Set(), sort: null, hidden: new Set() };
+const state = { tab: 'summary', fams: new Set(FAMS), gpus: new Set(GPUS), sort: null, hidden: new Set() };
 const fmt = (v, d) => v == null ? '–' : v.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const pass = r => (state.fams.size === 0 || state.fams.has(fam(r))) && (state.gpus.size === 0 || state.gpus.has(r.gpu));
+const pass = r => state.fams.has(fam(r)) && state.gpus.has(r.gpu);
 const visible = () => ROWS.filter(pass);
 
 function dropdown(el, name, opts, set) {
   const open = el.classList.contains('open');
-  el.innerHTML = `<button type="button">${name}${set.size ? ` <span class="cnt">${set.size} of ${opts.length}</span>` : ` <span style="color:var(--muted)">all</span>`}<span>▾</span></button><div class="menu"><div class="all"><a data-a="all">select all</a><a data-a="none">clear</a></div>${opts.map(o => `<label><input type="checkbox" ${set.has(o) ? 'checked' : ''} data-v="${esc(o)}">${esc(o)}</label>`).join('')}</div>`;
+  el.innerHTML = `<button type="button">${name}${set.size === opts.length ? ` <span style="color:var(--muted)">all ${opts.length}</span>` : ` <span class="cnt">${set.size} of ${opts.length}</span>`}<span>▾</span></button><div class="menu"><div class="all"><a data-a="all">select all</a><a data-a="none">clear</a></div>${opts.map(o => `<label><input type="checkbox" ${set.has(o) ? 'checked' : ''} data-v="${esc(o)}">${esc(o)}</label>`).join('')}</div>`;
   el.classList.toggle('open', open);
   el.querySelector('button').onclick = e => { e.stopPropagation(); document.querySelectorAll('.dd').forEach(d => d !== el && d.classList.remove('open')); el.classList.toggle('open'); };
   el.querySelector('.menu').onclick = e => e.stopPropagation();
@@ -201,7 +201,7 @@ function render() {
   document.querySelectorAll('th[data-k]').forEach(h => h.onclick = () => { const k = h.dataset.k; state.sort = state.sort?.key === k ? (state.sort.dir === 1 ? {key: k, dir: -1} : null) : {key: k, dir: 1}; render(); });
 }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { state.tab = b.dataset.t; state.sort = null; render(); });
-$('#reset').onclick = () => { state.fams.clear(); state.gpus.clear(); state.hidden.clear(); state.sort = null; render(); };
+$('#reset').onclick = () => { state.fams = new Set(FAMS); state.gpus = new Set(GPUS); state.hidden.clear(); state.sort = null; render(); };
 render();
 </script>
 </body></html>
