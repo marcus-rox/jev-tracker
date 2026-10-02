@@ -16,7 +16,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
 - `data/registry.yaml` — row labels (model family, serving, GPU) for every reranker shown
 - `site/` — Vite + React static site: summary / quality / cost / latency tables, filters,
-  "Evaluate a new model" form; `site/public/data/rows.json` is generated, `site/dist/` is the build
+  "Suggest a model to scrape" form in the left panel; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
   arXiv, web, X/Twitter, Hacker News, Rox's Slack); `crawler/queries.yaml`, `crawler/seen.jsonl`,
   `crawler/candidates/<date>.jsonl`
@@ -188,7 +188,7 @@ docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> j
 ```
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
-time, headline cards and a TLDR the daily run writes to `data/tldr.md`. "Evaluate a new model" takes
+time, headline cards and a TLDR the daily run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
 free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next daily run triages it.
 
 ## Crawler
