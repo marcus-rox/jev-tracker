@@ -18,7 +18,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `site/` — Vite + React static site: summary / quality / cost / latency tables, filters,
   "Evaluate a new model" form; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
-  arXiv, web, X/Twitter, Hacker News); `crawler/queries.yaml`, `crawler/seen.jsonl`,
+  arXiv, web, X/Twitter, Hacker News, Rox's Slack); `crawler/queries.yaml`, `crawler/seen.jsonl`,
   `crawler/candidates/<date>.jsonl`
 
 ## How it works
@@ -30,7 +30,7 @@ the **daily run** finds and benchmarks new models, and the **site** shows the re
 
 ```mermaid
 flowchart TB
-  SRC["6 public sources<br/>GitHub · Hugging Face · arXiv · Web · X · Hacker News"]
+  SRC["7 sources<br/>GitHub · Hugging Face · arXiv · Web · X · Hacker News · Slack"]
   USER([Marcus / a visitor])
   subgraph Find["1. Find"]
     CRAWL[Crawler]
@@ -56,7 +56,9 @@ flowchart TB
   REQ --> CRAWL
   CRAWL --> CAND --> DEVIN
   DEVIN --> TRI
-  DEVIN -->|runnable, max 3/day| CFG --> RUN
+  DEVIN -->|runnable, max 10/day| CFG --> RUN
+  DEVIN -->|needs_adapter, worth it| PROP[(Proposed: awaiting approval)]
+  USER -->|Approve on the site| PROP -->|queued| CFG
   BENCH --> RUN
   RUN <-->|shards| MODAL
   RUN --> RES --> GEN --> SITE
@@ -66,7 +68,9 @@ flowchart TB
 Legend: rectangles are processes, cylinders are data committed to the repo (or Modal storage),
 the hexagon is the one step where an LLM (Devin) makes a judgment call, the rounded box is a person.
 Everything Devin changes reaches `main` only through a PR Marcus merges (one exception: the
-evaluation-queue file, so the site can show what is running).
+evaluation-queue file, so the site can show what is running and so Marcus's Approve / Skip clicks
+on the site land immediately). Models the harness cannot call yet are *proposed*, not run: the
+site lists them under "Awaiting your approval" and only an approved one is built and benchmarked.
 
 **Figure 2. One day's run, as a sequence diagram.**
 
@@ -75,7 +79,7 @@ sequenceDiagram
   autonumber
   participant A as Devin Automation (daily 06:17 PT)
   participant C as Crawler
-  participant S as 6 public sources
+  participant S as 7 sources (6 public + Rox Slack)
   participant R as Repository
   participant M as Modal GPUs
   participant P as Pull request
@@ -90,14 +94,15 @@ sequenceDiagram
   C-->>A: today's candidates
   A->>A: triage every candidate (runnable / needs_adapter / not_jev)
   A->>R: write verdicts + a config per new runnable model
-  A->>R: push queue (runnable models) to main
-  loop each new runnable config (max 3)
+  A->>R: push queue (runnable → queued, worth-an-adapter → proposed) to main
+  loop each new runnable or approved config (max 10)
     A->>M: run all 75 cases (batched, sharded)
     M-->>A: raw answers + timers
     A->>R: score kept-mass, cost, latency
   end
   A->>R: rewrite TLDR, regenerate site data + build
   A->>P: open PR "Daily DATE: n candidates, m runs"
+  A->>A: Slack DM to Marcus: today's runs + models awaiting approval
   Note over P: Marcus reviews and merges, then Render redeploys the site
 ```
 
@@ -115,7 +120,8 @@ flowchart LR
   K -- no --> NEW[New candidate<br/>+ key remembered]
   NEW --> V{Devin triage}
   V -- not_jev --> X1[Recorded with a one-line reason]
-  V -- needs_adapter --> X2[Recorded with what is missing<br/>backlog for harness work]
+  V -- needs_adapter --> X2[Recorded with what is missing]
+  X2 -- worth an adapter --> X4[Proposed on the site<br/>runs once Marcus approves]
   V -- runnable --> X3[Config written<br/>benchmarked if not run before]
 ```
 
@@ -132,6 +138,7 @@ Legend: diamonds are decisions. The key is the URL, except Hugging Face models, 
 | Web | Tavily (keyless) | any page | whole days back |
 | X / Twitter | Tavily + `site:x.com` | posts on x.com / twitter.com | whole days back |
 | Hacker News | Algolia | stories and comments; quoted phrases only | server-side |
+| Slack | Rox workspace via the Slack MCP search the daily Devin session runs (results handed to the crawler) | messages in channels and DMs Marcus can see | server-side (`after:`) |
 | Submitted | the site's text box | whatever a person typed | none |
 
 Queries live in `crawler/queries.yaml`: the model names (`jev`, `kev`, `laya`, `systemone`,
@@ -192,15 +199,18 @@ uv run python -m crawler --since 2026-09-01 --out crawler/candidates/
 GITHUB_TOKEN=... uv run python -m crawler                  # 30 instead of 10 GitHub searches/min
 ```
 
-Sources: `github`, `huggingface`, `arxiv`, `web`, `twitter`, `hackernews` (one module each in
-`crawler/`). Queries are in `crawler/queries.yaml` (one list per source). Each run dedupes on
+Sources: `github`, `huggingface`, `arxiv`, `web`, `twitter`, `hackernews`, `slack` (one module each
+in `crawler/`). Queries are in `crawler/queries.yaml` (one list per source). Each run dedupes on
 `key` against `crawler/seen.jsonl`, appends the new keys there and writes one JSON object per
 candidate (`source, url, key, title, snippet, first_seen, query`) to
 `crawler/candidates/<YYYY-MM-DD>.jsonl`. `key` is the url for every source except Hugging Face,
 where it is `hf:<id>@<sha>` so new weights under an existing model id surface once more. A failing
 (source, query) is printed and skipped; the exit code is 1 if any failed. `web` and `twitter` use
 Tavily's keyless mode (no API key; `twitter` appends `site:x.com`); when Tavily rate-limits with
-HTTP 429 the source logs and returns nothing. Prior-work survey: `docs/PRIOR_WORK.md`.
+HTTP 429 the source logs and returns nothing. `slack` is Rox's own workspace: the crawler holds no
+Slack credentials, so the daily Devin session runs each Slack query through its Slack MCP search
+tool, saves the results as `<query slug>.md`, and passes the directory with `--slack-results`;
+without that flag the source is skipped (printed, not a failure). Prior-work survey: `docs/PRIOR_WORK.md`.
 
 ## Automation
 

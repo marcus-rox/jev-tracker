@@ -81,7 +81,7 @@ export default function App() {
   const [gpus, setGpus] = useState<Set<string> | null>(null)
   const [hidden, setHidden] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
-  const queue = useQueue()
+  const [queue, decide] = useQueue()
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/rows.json`).then((r) => r.json()).then(setData)
@@ -125,7 +125,7 @@ export default function App() {
       </nav>
       <main className="grid">
         {tab === 'summary' && <>
-          <Widget span={12} title="Model evaluation queue" sub={<QueueSub state={queue} />}><QueueBody state={queue} /></Widget>
+          <Widget span={12} title="Model evaluation queue" sub={<QueueSub state={queue} />}><QueueBody state={queue} decide={decide} /></Widget>
           {data.cards.map((c, i) => <NumWidget key={c.label} card={c} higherIsBetter={i === 0} />)}
           <Widget span={8} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(300)}</Widget>
           <Widget span={4} title="TLDR" sub={<>written by the daily run · <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></>}>

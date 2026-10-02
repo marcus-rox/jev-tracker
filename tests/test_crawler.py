@@ -12,7 +12,8 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from crawler import arxiv, github, hackernews, huggingface, submitted, twitter, web
+from crawler import arxiv, github, hackernews, huggingface, slack, submitted, twitter, web
+from crawler.__main__ import load_queries
 from crawler.contract import (
     DEFAULT_WINDOW,
     Candidate,
@@ -201,3 +202,29 @@ def test_R8_submitted_requests_become_candidates(tmp_path: Path):
     assert (c.source, c.key, c.url) == ("submitted", "https://huggingface.co/org/model", c.url)
     assert c.first_seen == datetime(2026, 10, 2, 7, 5, 9, tzinfo=UTC)
     assert submitted.load(tmp_path / "nowhere") == []
+
+
+def test_R8_slack_parse():
+    text = (FIXTURES / "slack.md").read_text()
+    got = slack.parse(text, "jev alternative", SINCE, NOW)
+    assert len(got) == 2  # the 2026-09-20 message is before SINCE
+    assert got[0] == Candidate(
+        source="slack",
+        url="https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1790895340178579",
+        key="https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1790895340178579",
+        title="#rox-research-working-group · Marcus Dominguez-Kuhne",
+        snippet="honestly a webpage with the three tables I sent earlier would be much easier to digest with a few filters this is pretty easy with a SQL database, web frontend with Devin",
+        first_seen=NOW,
+        query="jev alternative",
+    )
+    assert got[1].title == "#dm · Marcus Dominguez-Kuhne"
+    assert got[1].snippet.startswith("Hey guys, did an investigation")
+    assert len(slack.parse(text, "jev alternative", SINCE - timedelta(days=7), NOW)) == 3
+
+
+def test_R8_slack_load_by_query_slug(tmp_path: Path):
+    assert slack.slug('"system one"') == "system-one"
+    (tmp_path / "system-one.md").write_text((FIXTURES / "slack.md").read_text())
+    got = slack.load(tmp_path, ['"system one"', "laya"], SINCE, NOW)  # laya.md is missing: skipped
+    assert len(got) == 2 and all(c.query == '"system one"' for c in got)
+    assert all(source != "slack" for source, _ in load_queries(Path("crawler/queries.yaml")))

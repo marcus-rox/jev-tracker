@@ -53,3 +53,12 @@ hackernews:
   - '"liquid d1"'
   - '"system one"'
   - '"decision model"'
+# slack: Rox's own workspace. Not searched by this process: the daily session runs each query through
+# the Slack MCP search and hands the saved results over with --slack-results (see crawler/slack.py).
+slack:
+  - jev alternative
+  - kev
+  - laya
+  - '"system one"'
+  - '"decision model"'
+  - reranker

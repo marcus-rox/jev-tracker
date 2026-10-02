@@ -1,14 +1,18 @@
 """The model evaluation queue: data/queue.json on `main`, shown live by the site.
 
-    uv run python -m jev_tracker.evaluation_queue add crawler/triage/<date>.yaml   runnable decisions -> queued
+    uv run python -m jev_tracker.evaluation_queue add crawler/triage/<date>.yaml   runnable -> queued, needs_adapter with a config -> proposed
+    uv run python -m jev_tracker.evaluation_queue approve configs/<name>.yaml ...   proposed -> queued (the site's Approve button does the same)
+    uv run python -m jev_tracker.evaluation_queue reject configs/<name>.yaml ...    drop proposed items (the site's Skip button)
     uv run python -m jev_tracker.evaluation_queue start configs/<name>.yaml ...     queued -> running
     uv run python -m jev_tracker.evaluation_queue done configs/<name>.yaml ...      drop finished items
     uv run python -m jev_tracker.evaluation_queue show
 
-One item per config. Several items may be running at once; a finished one leaves the queue and
-exists only as its rows in the site data. `data/queue.json` is the single source of truth: the
-daily run commits the `start` state straight to `main` so the site shows it while runs are going,
-and the run's PR carries the `done` removal.
+One item per config. `proposed` is a model Devin wants Marcus's approval to run (usually one that
+needs adapter work first; `note` says what); `queued` runs in the next daily run's budget; several
+items may be running at once; a finished one leaves the queue and exists only as its rows in the
+site data. `data/queue.json` is the single source of truth: the daily run commits the `start`
+state straight to `main` so the site shows it while runs are going, the site's server commits
+approvals to `main` (jev_tracker.server), and the run's PR carries the `done` removal.
 """
 
 import argparse
@@ -24,7 +28,8 @@ from crawler.triage import TriageDecision, read_triage
 from jev_tracker.experiment import REPO_DIR
 
 QUEUE_PATH = REPO_DIR / "data" / "queue.json"
-Status = Literal["queued", "running"]
+Status = Literal["proposed", "queued", "running"]
+PROPOSED_BY: dict[str, Status] = {"runnable": "queued", "needs_adapter": "proposed"}
 
 
 class QueueItem(BaseModel):
@@ -35,6 +40,7 @@ class QueueItem(BaseModel):
     source: str
     url: str
     status: Status = "queued"
+    note: str = ""
     queued_at: datetime
     started_at: datetime | None = None
 
@@ -52,20 +58,48 @@ def write_queue(path: Path, queue: Queue) -> None:
 
 
 def enqueued(queue: Queue, decisions: list[TriageDecision], now: datetime) -> Queue:
-    """`queue` plus one queued item per runnable decision whose config is not already in it."""
+    """`queue` plus one item per decision with a config not already in it: runnable -> queued,
+    needs_adapter -> proposed (the config is the one Devin would write once approved)."""
     present = {item.config for item in queue.items}
-    added = [
-        QueueItem(
-            config=d.config,
-            label=d.config.stem,
-            source=d.key.split(":")[0] if ":" in d.key else "submitted",
-            url=d.url,
-            queued_at=now,
+    added: list[QueueItem] = []
+    for d in decisions:
+        if d.verdict not in PROPOSED_BY or d.config is None or d.config in present:
+            continue
+        present.add(d.config)
+        added.append(
+            QueueItem(
+                config=d.config,
+                label=d.config.stem,
+                source=d.key.split(":")[0] if ":" in d.key else "submitted",
+                url=d.url,
+                status=PROPOSED_BY[d.verdict],
+                note=d.reason if d.verdict == "needs_adapter" else "",
+                queued_at=now,
+            )
         )
-        for d in decisions
-        if d.verdict == "runnable" and d.config is not None and d.config not in present
-    ]
     return Queue(items=[*queue.items, *added])
+
+
+def approved(queue: Queue, configs: list[Path], now: datetime) -> Queue:
+    """`queue` with the given proposed items queued (approval time replaces the proposal time)."""
+    return Queue(
+        items=[
+            item.model_copy(update={"status": "queued", "queued_at": now})
+            if item.config in configs and item.status == "proposed"
+            else item
+            for item in queue.items
+        ]
+    )
+
+
+def rejected(queue: Queue, configs: list[Path]) -> Queue:
+    return Queue(
+        items=[
+            item
+            for item in queue.items
+            if not (item.config in configs and item.status == "proposed")
+        ]
+    )
 
 
 def started(queue: Queue, configs: list[Path], now: datetime) -> Queue:
@@ -104,6 +138,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--queue", type=Path, default=QUEUE_PATH)
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("add").add_argument("triage", type=Path)
+    sub.add_parser("approve").add_argument("configs", type=Path, nargs="+")
+    sub.add_parser("reject").add_argument("configs", type=Path, nargs="+")
     sub.add_parser("start").add_argument("configs", type=Path, nargs="+")
     sub.add_parser("done").add_argument("configs", type=Path, nargs="+")
     sub.add_parser("show")
@@ -113,6 +149,10 @@ def main(argv: list[str] | None = None) -> int:
     now = utcnow()
     if args.command == "add":
         queue = enqueued(queue, read_triage(args.triage), now)
+    elif args.command == "approve":
+        queue = approved(queue, args.configs, now)
+    elif args.command == "reject":
+        queue = rejected(queue, args.configs)
     elif args.command == "start":
         queue = started(queue, args.configs, now)
     elif args.command == "done":
@@ -122,10 +162,10 @@ def main(argv: list[str] | None = None) -> int:
     for item in queue.items:
         print(
             f"{item.status:8} {item.label:40} {item.source:12} since {item.started_at or item.queued_at:%Y-%m-%d %H:%M}Z"
+            + (f"  {item.note}" if item.note else "")
         )
-    print(
-        f"{len(queue.items)} in queue ({sum(i.status == 'running' for i in queue.items)} running)"
-    )
+    counts = ", ".join(f"{sum(i.status == s for i in queue.items)} {s}" for s in Status.__args__)
+    print(f"{len(queue.items)} in queue ({counts})")
     return 0
 
 

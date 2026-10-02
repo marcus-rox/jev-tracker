@@ -1,6 +1,7 @@
 """python -m crawler [--since YYYY-MM-DD] [--out crawler/candidates/] [--queries crawler/queries.yaml]
 
-Runs every (source x query) from queries.yaml with tqdm, adds the site's submissions from
+Runs every (source x query) from queries.yaml with tqdm, adds the Slack MCP search results saved by
+the daily session (--slack-results <dir>, see crawler/slack.py), adds the site's submissions from
 requests/ (source `submitted`), dedupes against crawler/seen.jsonl,
 appends the new keys to it and writes crawler/candidates/<YYYY-MM-DD>.jsonl. A failing
 (source, query) is printed and skipped; the exit code is 1 at the end if any failed.
@@ -15,7 +16,7 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from crawler import arxiv, github, hackernews, huggingface, submitted, twitter, web
+from crawler import arxiv, github, hackernews, huggingface, slack, submitted, twitter, web
 from crawler.contract import (
     SOURCES,
     Candidate,
@@ -38,12 +39,18 @@ SEARCHERS = {
 }
 
 
-def load_queries(path: Path) -> list[tuple[Source, str]]:
+def read_queries(path: Path) -> dict[str, list[str]]:
     per_source: dict[str, list[str]] = yaml.safe_load(path.read_text())
     unknown = set(per_source) - set(SOURCES)
     if unknown:
         raise ValueError(f"{path}: unknown sources {sorted(unknown)}; expected {SOURCES}")
-    return [(source, q) for source in SOURCES for q in per_source.get(source, [])]
+    return per_source
+
+
+def load_queries(path: Path) -> list[tuple[Source, str]]:
+    """(source, query) jobs for the sources this process searches itself (not `slack`, not `submitted`)."""
+    per_source = read_queries(path)
+    return [(source, q) for source in SEARCHERS for q in per_source.get(source, [])]
 
 
 def crawl(jobs: list[tuple[Source, str]], since: datetime) -> tuple[list[Candidate], list[str]]:
@@ -74,6 +81,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--queries", type=Path, default=HERE / "queries.yaml")
     parser.add_argument("--seen", type=Path, default=HERE / "seen.jsonl")
     parser.add_argument("--requests", type=Path, default=HERE.parent / "requests")
+    parser.add_argument(
+        "--slack-results",
+        type=Path,
+        help="directory of <query slug>.md files saved from the Slack MCP search (see crawler/slack.py)",
+    )
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -84,6 +96,12 @@ def main(argv: list[str] | None = None) -> int:
     print(f"since {since.isoformat()}  {len(jobs)} (source, query) jobs  {len(seen)} seen keys")
 
     found, failed = crawl(jobs, since)
+    if args.slack_results is None:
+        print("no --slack-results; skipping source slack")
+    else:
+        found.extend(
+            slack.load(args.slack_results, read_queries(args.queries).get("slack", []), since, now)
+        )
     if args.requests.exists():
         found.extend(submitted.load(args.requests))
     fresh = new_candidates(found, seen)

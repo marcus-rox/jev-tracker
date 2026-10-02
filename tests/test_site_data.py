@@ -4,12 +4,14 @@ attached kev_cost_report's numbers unchanged."""
 import json
 import re
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 import yaml
 
+from jev_tracker.evaluation_queue import Queue, QueueItem
 from jev_tracker.experiment import EXPERIMENTS_DIR
-from jev_tracker.server import parse_request, request_path
+from jev_tracker.server import decided, parse_decision, parse_request, request_path
 from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, TLDR, build, read_api_timing, updated
 
 DATA = build(
@@ -127,3 +129,47 @@ def test_R6_updated_and_cards() -> None:
     ]
     assert all("Jev" in c["detail"] for c in data["cards"])
     assert data["updated"] == updated(list(data["experiments"]))
+
+
+def test_R7_parse_decision() -> None:
+    assert parse_decision(b'{"config": "configs/clef9b.yaml", "decision": "approve"}') == (
+        Path("configs/clef9b.yaml"),
+        "approve",
+    )
+    for body in (
+        b"nope",
+        b'{"config": "", "decision": "approve"}',
+        b'{"config": "x", "decision": "maybe"}',
+    ):
+        with pytest.raises(ValueError):
+            parse_decision(body)
+
+
+def test_R7_decided_moves_only_proposed_items() -> None:
+    now = datetime(2026, 10, 2, 13, 0, tzinfo=UTC)
+    queue = Queue(
+        items=[
+            QueueItem(
+                config=Path("configs/a.yaml"),
+                label="a",
+                source="hf",
+                url="",
+                status="proposed",
+                queued_at=now,
+            ),
+            QueueItem(
+                config=Path("configs/b.yaml"),
+                label="b",
+                source="hf",
+                url="",
+                status="running",
+                queued_at=now,
+            ),
+        ]
+    )
+    assert [i.status for i in decided(queue, Path("configs/a.yaml"), "approve", now).items] == [
+        "queued",
+        "running",
+    ]
+    assert [i.label for i in decided(queue, Path("configs/a.yaml"), "reject", now).items] == ["b"]
+    assert decided(queue, Path("configs/b.yaml"), "reject", now) == queue

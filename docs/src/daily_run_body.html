@@ -17,8 +17,8 @@
   <p class="a-prose">
     Once a day a scheduler starts a fresh Devin session. The session is a fixed nine-step script:
     eight steps are plain Python commands checked into the repository, one step (triage) is a
-    judgment Devin makes and writes down as data. The script searches six places for new Jev-like
-    models, decides which of the new hits can be run as-is, runs at most three of them on Modal
+    judgment Devin makes and writes down as data. The script searches seven places (six public sources and Rox's Slack) for new Jev-like
+    models, decides which of the new hits can be run as-is, runs at most ten of them on Modal
     against the frozen 75-case benchmark, regenerates the leaderboard data and static site, runs
     the test suite, and opens one pull request into <code>main</code>. Nothing reaches
     <code>main</code> until you merge that PR.
@@ -41,7 +41,7 @@
     </div>
 
     <svg class="a-diagram__canvas" data-a-diagram-canvas viewBox="0 0 1000 620" role="img"
-      aria-label="Diagram: a scheduler starts a daily Devin session; the session crawls six discovery sources, triages the hits, reads evaluate issues and site submissions from GitHub, runs up to three configs on Modal (which pulls weights from Hugging Face), regenerates the static site and opens a pull request on GitHub, which Marcus reviews and merges.">
+      aria-label="Diagram: a scheduler starts a daily Devin session; the session crawls seven discovery sources, triages the hits, reads evaluate issues, site submissions and approved proposals from GitHub, runs up to ten configs on Modal (which pulls weights from Hugging Face), regenerates the static site and opens a pull request on GitHub, which Marcus reviews and merges.">
       <defs>
         <marker id="a-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
@@ -106,8 +106,8 @@
 
         <!-- column B -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="1 · Crawl (Python)"
-          data-a-detail="Runs the saved query list (43 queries) against six discovery sources, restricted to items newer than the last run. Deduplicates against the seen set; a Hugging Face model counts as new again when its weights change (identity is model id plus commit). Writes today's candidate list.">
-          <rect x="310" y="80" width="270" height="56" /><text class="a-node__title" x="324" y="105">1 · Crawl</text><text class="a-node__sub" x="324" y="123">Python · 6 sources → candidate list</text>
+          data-a-detail="Runs the saved query list against six public discovery sources, restricted to items newer than the last run; the Rox Slack queries are run by Devin through its Slack search tool and the results handed to the script, so the crawler itself holds no Slack credentials. Deduplicates against the seen set; a Hugging Face model counts as new again when its weights change (identity is model id plus commit). Writes today's candidate list.">
+          <rect x="310" y="80" width="270" height="56" /><text class="a-node__title" x="324" y="105">1 · Crawl</text><text class="a-node__sub" x="324" y="123">Python · 7 sources → candidate list</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="2 · Triage (Devin judgment)"
           data-a-detail="The only step that is not a fixed command. Devin reads each new candidate and records one verdict: runnable (a model the harness can already call), needs adapter (a real alternative we cannot call yet, with the reason), or not Jev. For runnable ones it writes a run config. A checker then refuses to continue if any candidate lacks a verdict or any runnable verdict lacks a config.">
@@ -118,8 +118,8 @@
           <rect x="310" y="240" width="270" height="56" /><text class="a-node__title" x="324" y="265">3 · Issue intake</text><text class="a-node__sub" x="324" y="283">Python · evaluate issues → run configs</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="4 · Run experiments (Python)"
-          data-a-detail="For each new config, at most three per day: scores the new model, production, and Jev's committed answers on all 75 benchmark cases on Modal GPUs, then computes kept-mass@k, cost per run, and latency. Raw answers and metrics are written under the data folder so every number in the PR is reproducible. A failed run is reported, not retried.">
-          <rect x="310" y="320" width="270" height="56" /><text class="a-node__title" x="324" y="345">4 · Run experiments</text><text class="a-node__sub" x="324" y="363">Python · ≤3 runs · 75 cases each</text>
+          data-a-detail="For each new or approved config, at most ten per day: scores the new model, production, and Jev's committed answers on all 75 benchmark cases on Modal GPUs, then computes kept-mass@k, cost per run, and latency. Raw answers and metrics are written under the data folder so every number in the PR is reproducible. A failed run is reported, not retried.">
+          <rect x="310" y="320" width="270" height="56" /><text class="a-node__title" x="324" y="345">4 · Run experiments</text><text class="a-node__sub" x="324" y="363">Python · ≤10 runs · 75 cases each</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="5 · Regenerate &amp; check (Python)"
           data-a-detail="Rebuilds the site's data files and static assets from the registry plus every experiment folder, then runs lint, formatting, and the full test suite (which re-scores every committed experiment from its raw answers).">
@@ -133,7 +133,7 @@
         <!-- column C -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Discovery sources"
           data-a-detail="GitHub, Hugging Face Hub, arXiv, general web search, X (via web search), Hacker News. All keyless; each is asked the same queries and returns title, link, snippet, and date.">
-          <rect x="680" y="80" width="280" height="56" /><text class="a-node__title" x="694" y="105">Discovery sources</text><text class="a-node__sub" x="694" y="123">GitHub · HF Hub · arXiv · web · X · HN</text>
+          <rect x="680" y="80" width="280" height="56" /><text class="a-node__title" x="694" y="105">Discovery sources</text><text class="a-node__sub" x="694" y="123">GitHub · HF · arXiv · web · X · HN · Slack</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Hugging Face Hub"
           data-a-detail="Where open-weight candidates live. Runs pin the exact commit so a silent weight update (as happened to Kev-27B) shows up as a new candidate instead of changing an old row.">
@@ -171,11 +171,11 @@
   <p class="a-section__note">
     Figure 2. Time runs downward. Each column is a participant; the thin bar on the session's
     lifeline is the time it is active. Solid arrows are calls, dashed arrows are replies, the
-    framed region repeats once per new config (at most three).
+    framed region repeats once per new or approved config (at most ten).
   </p>
   <figure class="a-panel" style="padding: 8px 0 0">
     <svg viewBox="0 0 1040 790" role="img" style="width: 100%; height: auto; display: block"
-      aria-label="Sequence: scheduler starts session; session clones repository, queries discovery sources, dedupes and triages, reads evaluate issues, loops up to three times running a config on Modal and receiving scores, regenerates the site and runs checks, pushes a branch and opens a PR; Marcus reviews and merges.">
+      aria-label="Sequence: scheduler starts session; session clones repository, queries discovery sources, dedupes and triages, reads evaluate issues, loops up to ten times running a config on Modal and receiving scores, regenerates the site and runs checks, pushes a branch and opens a PR; Marcus reviews and merges.">
       <defs>
         <marker id="seq-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
@@ -240,7 +240,7 @@
         <tr><th scope="row">2 Crawl</th><td>Python</td><td>Query list, seen set, last-run date</td><td>Today's candidate list; seen set extended</td><td>Per (source, query); the rest continue, failures listed in the PR</td></tr>
         <tr><th scope="row">3 Triage</th><td><strong>Devin judgment</strong></td><td>Today's candidates</td><td>One verdict per candidate; a run config per runnable one; registry rows</td><td>Checker exits non-zero until every candidate has a verdict and every runnable one a config</td></tr>
         <tr><th scope="row">4 Issue intake</th><td>Python</td><td>Open issues labelled <code>evaluate</code></td><td>One run config per issue (skipped if it already exists)</td><td>Reported in PR; crawler candidates still run</td></tr>
-        <tr><th scope="row">5 Run</th><td>Python on Modal</td><td>New configs (max 3)</td><td>Per experiment: raw answers, kept-mass@50/100/150/200, cost, latency</td><td>Reported in PR, not retried</td></tr>
+        <tr><th scope="row">5 Run</th><td>Python on Modal</td><td>New and approved configs (max 10)</td><td>Per experiment: raw answers, kept-mass@50/100/150/200, cost, latency</td><td>Reported in PR, not retried</td></tr>
         <tr><th scope="row">6 Regenerate</th><td>Python + site build</td><td>Registry + all experiment folders</td><td>Site data files and static assets</td><td>Reported in PR</td></tr>
         <tr><th scope="row">7 Check</th><td>Python</td><td>Whole repository</td><td>Lint, formatting, full test suite green</td><td>Reported in PR; CI will show red</td></tr>
         <tr><th scope="row">8 PR</th><td>Python + GitHub API</td><td>Everything above</td><td>One PR into <code>main</code></td><td>Final session message carries the report instead</td></tr>
@@ -258,7 +258,7 @@
       <caption class="a-visually-hidden">Triage verdicts</caption>
       <thead><tr><th scope="col">Verdict</th><th scope="col">Means</th><th scope="col">Consequence</th><th scope="col">Typical example</th></tr></thead>
       <tbody>
-        <tr><th scope="row">runnable</th><td>The harness can already call it: a Kev-family or Laya checkpoint on the Hub, or a hosted endpoint whose key is already a Modal secret</td><td>A run config is written (production + Jev answers + the model, all 75 cases) and it is run today if within the budget of three</td><td>A new Kev checkpoint under a different account</td></tr>
+        <tr><th scope="row">runnable</th><td>The harness can already call it: a Kev-family or Laya checkpoint on the Hub, or a hosted endpoint whose key is already a Modal secret</td><td>A run config is written (production + Jev answers + the model, all 75 cases) and it is run today if within the budget of ten</td><td>A new Kev checkpoint under a different account</td></tr>
         <tr><th scope="row">needs_adapter</th><td>A real Jev alternative the harness cannot call yet: new serving stack, new request format, key not provisioned, or over the Kev-27B cost line</td><td>Recorded with the missing piece named; nothing runs; shows up in the PR for a human to decide</td><td>A model that needs a serving framework the harness does not ship</td></tr>
         <tr><th scope="row">not_jev</th><td>Unrelated hit</td><td>Recorded with a one-line reason so it is never re-reviewed</td><td>A person named Kev; a Laya who is a voice actor</td></tr>
       </tbody>
@@ -303,7 +303,7 @@
         <tr><th scope="row">Compute per session</th><td>40 ACU cap</td><td>Automation settings</td></tr>
         <tr><th scope="row">Network</th><td>Allow-list: GitHub, Hugging Face, arXiv, web search, Hacker News, Modal, package registries</td><td>Automation network policy</td></tr>
         <tr><th scope="row">Secrets</th><td>Your GitHub token and the Modal tokens, never printed or committed</td><td>Prompt; askpass helper; repository has no token in code</td></tr>
-        <tr><th scope="row">Out of scope</th><td>No Slack posts; no edits to the spec; no force-push or amend</td><td>Prompt + runbook</td></tr>
+        <tr><th scope="row">Out of scope</th><td>No Slack channel posts (one DM to Marcus per run); no edits to the spec; no force-push or amend</td><td>Prompt + runbook</td></tr>
       </tbody>
     </table>
   </div>
@@ -314,7 +314,7 @@
   <div class="a-callout">
     <p class="a-prose" style="margin: 0">
       Fired by hand right after the Phase 3b merge (session started 03:20 UTC, 2 Oct). So far: crawl
-      done across all six sources; zero open evaluate issues; Hugging Face hits triaged; three
+      done across all six public sources; zero open evaluate issues; Hugging Face hits triaged; three
       runs launched on Modal, all pinned to a commit: Kev-0.8B, Kev-9B (v2 weights), and a
       community Kev-2B. It is still running; the PR it opens is the first real test of the whole loop.
     </p>

@@ -15,7 +15,9 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-Source = Literal["github", "huggingface", "arxiv", "web", "twitter", "hackernews", "submitted"]
+Source = Literal[
+    "github", "huggingface", "arxiv", "web", "twitter", "hackernews", "slack", "submitted"
+]
 SOURCES: tuple[Source, ...] = (
     "github",
     "huggingface",
@@ -23,6 +25,7 @@ SOURCES: tuple[Source, ...] = (
     "web",
     "twitter",
     "hackernews",
+    "slack",
     "submitted",
 )
 DEFAULT_WINDOW = timedelta(days=7)
