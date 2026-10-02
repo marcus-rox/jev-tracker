@@ -98,12 +98,39 @@
    "label": "hotchpotch_jev_reranker_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/blog/hotchpotch/introducing-jev-reranker",
-   "status": "running",
-   "note": "jev-reranker (hotchpotch) small decision models; own architecture",
+   "status": "failed",
+   "note": "modal call fc-01M3ZEBJYV19JYHWDVB14J9A4J: FAILED: RemoteError: Function call was cancelled by user or a failure.; modal call fc-01M3ZEBK5AR5XTSGPQEWG1MFSN: FAILED: RemoteError: Function call was cancelled by user or a failure.; modal call fc-01M3ZEBKD7HDJJAVYK2J1830A2: FAILED: RemoteError: Function call was cancelled by user or a failure.; modal call fc-01M3ZEBKKVHXBDP6HN0XTZPJCE: FAILED: RemoteError: Function call was cancelled by user or a failure.; jev_noul: no raw answers; jev_score: no raw answers; bekko17m_noul: no raw answers; bekko17m_score: no raw answers; bekko68m_noul: no raw answers; bekko68m_score: no raw answers; bekko400m_noul: no raw answers; bekko400m_score: no raw answers; no kept_mass_2026_10_02_23_14_22_hot-cub.json",
    "queued_at": "2026-10-02T20:34:48Z",
    "started_at": "2026-10-02T23:13:00Z",
-   "finished_at": null,
-   "evidence": null
+   "finished_at": "2026-10-02T23:34:10Z",
+   "evidence": {
+    "experiment": "2026_10_02_23_14_22_hot-cub",
+    "calls": {
+     "fc-01M3ZEBJG24GW4898D2SY5X7QZ": "finished",
+     "fc-01M3ZEBJQ139ANYT2870DDZ2GT": "finished",
+     "fc-01M3ZEBJYV19JYHWDVB14J9A4J": "FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "fc-01M3ZEBK5AR5XTSGPQEWG1MFSN": "FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "fc-01M3ZEBKD7HDJJAVYK2J1830A2": "FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "fc-01M3ZEBKKVHXBDP6HN0XTZPJCE": "FAILED: RemoteError: Function call was cancelled by user or a failure."
+    },
+    "rerankers": [],
+    "kept_mass": false,
+    "problems": [
+     "modal call fc-01M3ZEBJYV19JYHWDVB14J9A4J: FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "modal call fc-01M3ZEBK5AR5XTSGPQEWG1MFSN: FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "modal call fc-01M3ZEBKD7HDJJAVYK2J1830A2: FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "modal call fc-01M3ZEBKKVHXBDP6HN0XTZPJCE: FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "jev_noul: no raw answers",
+     "jev_score: no raw answers",
+     "bekko17m_noul: no raw answers",
+     "bekko17m_score: no raw answers",
+     "bekko68m_noul: no raw answers",
+     "bekko68m_score: no raw answers",
+     "bekko400m_noul: no raw answers",
+     "bekko400m_score: no raw answers",
+     "no kept_mass_2026_10_02_23_14_22_hot-cub.json"
+    ]
+   }
   },
   {
    "config": "configs/api_openrouter_kev4b_vs_jev.yaml",
@@ -122,12 +149,29 @@
    "label": "von_395m_vs_jev",
    "source": "github",
    "url": "https://github.com/wfzyx/von",
-   "status": "running",
-   "note": "Von: open-source 395M System One model; own architecture / serving",
+   "status": "failed",
+   "note": "modal call fc-01M3ZEBCKK4297914A9MY162FE: FAILED: RemoteError: Function call was cancelled by user or a failure.; modal call fc-01M3ZEBCTATM26RHVDJ1W7WQ8R: FAILED: RemoteError: Function call was cancelled by user or a failure.; jev_noul: no raw answers; jev_score: no raw answers; von_noul: no raw answers; von_score: no raw answers; no kept_mass_2026_10_02_23_14_16_keen-gannet.json",
    "queued_at": "2026-10-02T21:45:40Z",
    "started_at": "2026-10-02T23:13:00Z",
-   "finished_at": null,
-   "evidence": null
+   "finished_at": "2026-10-02T23:34:12Z",
+   "evidence": {
+    "experiment": "2026_10_02_23_14_16_keen-gannet",
+    "calls": {
+     "fc-01M3ZEBCKK4297914A9MY162FE": "FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "fc-01M3ZEBCTATM26RHVDJ1W7WQ8R": "FAILED: RemoteError: Function call was cancelled by user or a failure."
+    },
+    "rerankers": [],
+    "kept_mass": false,
+    "problems": [
+     "modal call fc-01M3ZEBCKK4297914A9MY162FE: FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "modal call fc-01M3ZEBCTATM26RHVDJ1W7WQ8R: FAILED: RemoteError: Function call was cancelled by user or a failure.",
+     "jev_noul: no raw answers",
+     "jev_score: no raw answers",
+     "von_noul: no raw answers",
+     "von_score: no raw answers",
+     "no kept_mass_2026_10_02_23_14_16_keen-gannet.json"
+    ]
+   }
   },
   {
    "config": "configs/lev_4b_vs_jev.yaml",
