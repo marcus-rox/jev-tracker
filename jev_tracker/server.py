@@ -3,7 +3,7 @@
     GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.server [--port 8000] [--dist site/dist]
 
 POST /api/requests {"text": "<whatever was typed>"} commits requests/<YYYY-MM-DD>/<HHMMSS>_<slug>.json
-to `main` through the GitHub Contents API; the daily run reads that folder (crawler/submitted.py).
+to `main` through the GitHub Contents API; the next automation run reads that folder (crawler/submitted.py).
 GET /api/requests returns every submission on `main` newest first (one GraphQL call), cached for
 QUEUE_CACHE_SECONDS and cleared by each new submission.
 GET /api/queue returns data/queue.json as it is on `main` right now (jev_tracker.evaluation_queue),

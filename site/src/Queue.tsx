@@ -28,7 +28,7 @@ function since(item: QueueItem, now: Date): string {
   return `${item.status === 'proposed' ? 'proposed' : 'queued'} ${age(item.queued_at, now)} ago`
 }
 
-/** Approve queues the model for the next daily run (which builds whatever the note says is missing); Skip drops it. */
+/** Approve queues the model for the next hourly run (which builds whatever the note says is missing); Skip drops it. */
 /** Skip is guarded: the phrase typed exactly plus the server's password, then one Skip click. */
 function SkipConfirm({ item, decide, onCancel }: { item: QueueItem; decide: Decide; onCancel: () => void }) {
   const [phrase, setPhrase] = useState('')
@@ -149,12 +149,12 @@ function Card({ item, now, decide, progress }: { item: QueueItem; now: Date; dec
   )
 }
 
-/** Queued models run in the next daily automation; it fires once a day, so this is when the lane drains. */
+/** Queued models run in the next automation run; it fires every hour, so this is when the lane drains. */
 function NextRun({ now }: { now: Date }) {
   const at = nextRun(now)
   return (
     <div className="next" title={at.toISOString()}>
-      <span className="clock" />next run in <b>{untilText(now, at)}</b><span className="when">{whenText(at)} · daily</span>
+      <span className="clock" />next run in <b>{untilText(now, at)}</b><span className="when">{whenText(at)} · hourly</span>
     </div>
   )
 }
