@@ -65,9 +65,9 @@
    "label": "hotchpotch_jev_reranker_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/blog/hotchpotch/introducing-jev-reranker",
-   "status": "proposed",
+   "status": "queued",
    "note": "jev-reranker (hotchpotch) small decision models; own architecture",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T20:34:48Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
