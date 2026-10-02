@@ -53,3 +53,11 @@ hackernews:
   - '"liquid d1"'
   - '"system one"'
   - '"decision model"'
+# slack: Rox's own workspace (search.messages); needs SLACK_USER_TOKEN, skipped without it.
+slack:
+  - jev alternative
+  - kev
+  - laya
+  - '"system one"'
+  - '"decision model"'
+  - reranker

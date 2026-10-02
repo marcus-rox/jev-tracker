@@ -1,0 +1,33 @@
+{
+ "ok": true,
+ "query": "jev alternative after:2026-09-25",
+ "messages": {
+  "matches": [
+   {
+    "iid": "0b6e0e2a-3a7b-4d68-9b0a-5a0f2e7f0c11",
+    "team": "T0BQQC3ZZZZ",
+    "channel": {"id": "C06BBH67BV3", "is_private": false, "name": "book-club"},
+    "type": "message",
+    "user": "U0BQQC4046P",
+    "username": "marcus",
+    "ts": "1790239531.565669",
+    "text": "I found this new Jev alternative CLM (Contrastive Learning Model) interesting:\n<https://x.com/jackyk02/status/2102905335925424285|x.com/jackyk02/status/2102905335925424285>",
+    "permalink": "https://rox-myy1001.slack.com/archives/C06BBH67BV3/p1790239531565669"
+   },
+   {
+    "iid": "7f1c2d3e-4b5a-4c6d-8e9f-0a1b2c3d4e5f",
+    "team": "T0BQQC3ZZZZ",
+    "channel": {"id": "C0BER5TPUF6", "is_private": false, "name": "rox-research-working-group"},
+    "type": "message",
+    "user": "U0BQQC4046P",
+    "username": "marcus",
+    "ts": "1790573440.270079",
+    "text": "Some preliminary results: I used <https://github.com/jaredpalmer/kev|Kev> as an open-source Jev alternative.",
+    "permalink": "https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1790573440270079"
+   }
+  ],
+  "pagination": {"first": 1, "last": 2, "page": 1, "page_count": 1, "per_page": 100, "total_count": 2},
+  "paging": {"count": 100, "page": 1, "pages": 1, "total": 2},
+  "total": 2
+ }
+}

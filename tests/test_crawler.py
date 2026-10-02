@@ -12,7 +12,8 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
-from crawler import arxiv, github, hackernews, huggingface, submitted, twitter, web
+from crawler import arxiv, github, hackernews, huggingface, slack, submitted, twitter, web
+from crawler.__main__ import load_queries
 from crawler.contract import (
     DEFAULT_WINDOW,
     Candidate,
@@ -201,3 +202,27 @@ def test_R8_submitted_requests_become_candidates(tmp_path: Path):
     assert (c.source, c.key, c.url) == ("submitted", "https://huggingface.co/org/model", c.url)
     assert c.first_seen == datetime(2026, 10, 2, 7, 5, 9, tzinfo=UTC)
     assert submitted.load(tmp_path / "nowhere") == []
+
+
+def test_R8_slack_parse():
+    payload = json.loads((FIXTURES / "slack.json").read_text())
+    got = slack.parse(payload, "jev alternative", SINCE, NOW)
+    assert len(got) == 1  # the 2026-09-24 message is before SINCE
+    assert got[0] == Candidate(
+        source="slack",
+        url="https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1790573440270079",
+        key="https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1790573440270079",
+        title="#rox-research-working-group · marcus",
+        snippet="Some preliminary results: I used <https://github.com/jaredpalmer/kev|Kev> as an open-source Jev alternative.",
+        first_seen=NOW,
+        query="jev alternative",
+    )
+    assert len(slack.parse(payload, "jev alternative", SINCE - timedelta(days=7), NOW)) == 2
+
+
+def test_R8_slack_skipped_without_token(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.delenv(slack.TOKEN_ENV, raising=False)
+    assert not slack.configured()
+    jobs = load_queries(Path("crawler/queries.yaml"), frozenset({"slack"}))
+    assert jobs and all(source != "slack" for source, _ in jobs)
+    assert any(source == "slack" for source, _ in load_queries(Path("crawler/queries.yaml")))

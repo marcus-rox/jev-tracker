@@ -1,6 +1,6 @@
 """python -m crawler [--since YYYY-MM-DD] [--out crawler/candidates/] [--queries crawler/queries.yaml]
 
-Runs every (source x query) from queries.yaml with tqdm, adds the site's submissions from
+Runs every (source x query) from queries.yaml with tqdm (Slack only when SLACK_USER_TOKEN is set), adds the site's submissions from
 requests/ (source `submitted`), dedupes against crawler/seen.jsonl,
 appends the new keys to it and writes crawler/candidates/<YYYY-MM-DD>.jsonl. A failing
 (source, query) is printed and skipped; the exit code is 1 at the end if any failed.
@@ -15,7 +15,7 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from crawler import arxiv, github, hackernews, huggingface, submitted, twitter, web
+from crawler import arxiv, github, hackernews, huggingface, slack, submitted, twitter, web
 from crawler.contract import (
     SOURCES,
     Candidate,
@@ -35,15 +35,18 @@ SEARCHERS = {
     "web": web.search,
     "twitter": twitter.search,
     "hackernews": hackernews.search,
+    "slack": slack.search,
 }
 
 
-def load_queries(path: Path) -> list[tuple[Source, str]]:
+def load_queries(path: Path, skip: frozenset[Source] = frozenset()) -> list[tuple[Source, str]]:
     per_source: dict[str, list[str]] = yaml.safe_load(path.read_text())
     unknown = set(per_source) - set(SOURCES)
     if unknown:
         raise ValueError(f"{path}: unknown sources {sorted(unknown)}; expected {SOURCES}")
-    return [(source, q) for source in SOURCES for q in per_source.get(source, [])]
+    return [
+        (source, q) for source in SOURCES if source not in skip for q in per_source.get(source, [])
+    ]
 
 
 def crawl(jobs: list[tuple[Source, str]], since: datetime) -> tuple[list[Candidate], list[str]]:
@@ -80,7 +83,10 @@ def main(argv: list[str] | None = None) -> int:
     now = utcnow()
     seen = read_seen(args.seen)
     since = args.since.replace(tzinfo=UTC) if args.since else default_since(seen, now)
-    jobs = load_queries(args.queries)
+    skip: frozenset[Source] = frozenset() if slack.configured() else frozenset({"slack"})
+    if skip:
+        print(f"{slack.TOKEN_ENV} is not set; skipping sources {sorted(skip)}")
+    jobs = load_queries(args.queries, skip)
     print(f"since {since.isoformat()}  {len(jobs)} (source, query) jobs  {len(seen)} seen keys")
 
     found, failed = crawl(jobs, since)
