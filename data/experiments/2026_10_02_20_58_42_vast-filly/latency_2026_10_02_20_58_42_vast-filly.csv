@@ -1,0 +1,3 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+kev4b_ba_lora_noul,75,9.36,6.76,23.15,2.67,36.03,37.2
+kev4b_ba_lora_score,75,11.80,9.08,28.71,3.75,49.37,37.2
