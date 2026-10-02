@@ -1,6 +1,6 @@
 """Site submissions as candidates: requests/<date>/<id>.json (written by jev_tracker.server).
 
-    load(requests_dir) -> list[Candidate]      source="submitted", key=url
+    load(requests_dir) -> list[Candidate]      source="submitted", key=the submitted text
 
 Every file is returned every run; the seen set is what stops a link being triaged twice.
 """
@@ -19,7 +19,7 @@ SNIPPET = "submitted from the site's Evaluate page"
 class Submission(BaseModel):
     model_config = {"frozen": True}
 
-    url: str
+    text: str
     submitted_at: datetime
 
 
@@ -30,9 +30,9 @@ def load(requests_dir: Path) -> list[Candidate]:
         candidates.append(
             Candidate(
                 source="submitted",
-                url=s.url,
-                key=s.url,
-                title=s.url,
+                url=s.text,
+                key=s.text,
+                title=s.text,
                 snippet=SNIPPET,
                 first_seen=s.submitted_at,
                 query=QUERY,

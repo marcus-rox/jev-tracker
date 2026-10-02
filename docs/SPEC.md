@@ -68,14 +68,16 @@ with the new data and the regenerated site.
   - The 0.002 band is Kev-27B's measured run-to-run spread (rox-research H-1 reruns); if a model's
     own rerun spread is larger, the comparison reports it and Marcus decides.
 - **R-5 Site.** `site/dist/` SHALL be a static build served by `python3 -m http.server` showing a
-  summary table (each model's best ranker), the quality table (kept-mass@50/100/150/200), the cost
-  table ($/run, $/query, $/1k) and the latency table (s/query, h/1k), with filters on model
-  family, serving, GPU, experiment, queries=75, and k columns; column sort; and side-by-side
-  comparison of 2+ selected experiments. Every number links to its source JSON.
+  summary table (every 75-query run: kept-mass@k, mean, $/1k, s/query), the quality table
+  (kept-mass@50/100/150/200), the cost table ($/run, $/query, $/1k) and the latency table
+  (s/query, h/1k), with filters on model · serving and GPU; column sort; and side-by-side
+  comparison of 2+ selected experiments. Every number links to its source JSON. The summary
+  opens with the last-updated time, three cards (best alternative by quality, cost, latency,
+  each beside Jev's number) and the daily run's TLDR.
 - **R-6 Site data.** `python -m jev_tracker.site_data` SHALL regenerate `site/public/data/*.json`
   from `data/experiments/` and `data/registry.yaml` with no hand edits; the attached report's
   numbers SHALL appear unchanged on day one.
-- **R-7 Submit.** The site SHALL have an "Evaluate a new model" box taking exactly one web link.
+- **R-7 Submit.** The site SHALL have an "Evaluate a new model" text box (free text; the hint asks for one web link).
   Submitting POSTs it to the site's server (`python -m jev_tracker.server`, which also serves
   `site/dist`), which files it as `requests/<date>/<time>_<slug>.json` on `main` through the GitHub
   API; the daily automation reads that folder and Devin decides how to evaluate the link. No token

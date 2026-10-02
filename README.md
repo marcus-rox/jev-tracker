@@ -43,7 +43,7 @@ python3 -m http.server -d site/dist 8000                 # read-only alternative
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
 time, headline cards and a TLDR the daily run writes to `data/tldr.md`. "Evaluate a new model" takes
-one web link; the server files it under `requests/<date>/` on `main` and the next daily run triages it.
+free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next daily run triages it.
 
 ## Crawler
 

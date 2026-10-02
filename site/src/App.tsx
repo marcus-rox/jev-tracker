@@ -150,8 +150,6 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('summary')
   const [models, setModels] = useState(new Set<string>())
   const [gpus, setGpus] = useState(new Set<string>())
-  const [only75, setOnly75] = useState(true)
-  const [ks, setKs] = useState(new Set<string>(['50', '100', '150', '200']))
   const [compare, setCompare] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
 
@@ -164,13 +162,13 @@ export default function App() {
   const pass = (r: Row) =>
     (models.size === 0 || models.has(modelKey(r))) &&
     (gpus.size === 0 || gpus.has(r.gpu)) &&
-    (!only75 || r.queries === 75)
+    r.queries === 75
   const rows = all.filter(pass)
-  const shownKs = data.ks.filter((k) => ks.has(k))
+  const shownKs = data.ks
   const kept = shownKs.map(keptCol)
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
   const experiments = Object.keys(data.experiments).sort()
-  const reset = () => { setModels(new Set()); setGpus(new Set()); setOnly75(true); setSort(null) }
+  const reset = () => { setModels(new Set()); setGpus(new Set()); setSort(null) }
 
   return (
     <div className="app">
@@ -178,10 +176,6 @@ export default function App() {
         <h1>jev-tracker</h1>
         <p className="sub">{all.length} rows · {experiments.length} experiments · 75 frozen queries</p>
         <button onClick={reset}>reset filters</button>
-        <h3>k columns</h3>
-        {data.ks.map((k) => <label key={k}><input type="checkbox" checked={ks.has(k)} onChange={() => setKs(toggled(ks, k))} />@{k}</label>)}
-        <h3>queries</h3>
-        <label><input type="checkbox" checked={only75} onChange={() => setOnly75(!only75)} />75-query runs only</label>
         <Checks title="model · serving" options={uniq(all.map(modelKey))} on={models} toggle={(v) => setModels(toggled(models, v))} />
         <Checks title="GPU" options={uniq(all.map((r) => r.gpu))} on={gpus} toggle={(v) => setGpus(toggled(gpus, v))} />
         <Checks title="compare (2+)" options={experiments} on={compare} toggle={(v) => setCompare(toggled(compare, v))} mono />

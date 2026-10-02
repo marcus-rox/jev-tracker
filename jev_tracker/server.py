@@ -2,7 +2,7 @@
 
     GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.server [--port 8000] [--dist site/dist]
 
-POST /api/requests {"url": "<one web link>"} commits requests/<YYYY-MM-DD>/<HHMMSS>_<slug>.json
+POST /api/requests {"text": "<whatever was typed>"} commits requests/<YYYY-MM-DD>/<HHMMSS>_<slug>.json
 to `main` through the GitHub Contents API; the daily run reads that folder (crawler/submitted.py).
 """
 
@@ -18,7 +18,6 @@ from functools import partial
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
 
 import httpx
 from pydantic import BaseModel
@@ -36,48 +35,42 @@ HTTP_TIMEOUT_SECONDS = 30.0
 MAX_BODY_BYTES = 4096
 MAX_SLUG_CHARS = 60
 NOT_SLUG = re.compile(r"[^a-z0-9]+")
+NOT_SCHEME = re.compile(r"^https?://")
 
 
 class Submission(BaseModel):
     model_config = {"frozen": True}
 
-    url: str
+    text: str
     submitted_at: datetime
 
 
 def parse_request(body: bytes) -> str:
-    """The one web link in a POST body, or ValueError naming what was wrong with it."""
+    """The submitted text in a POST body, or ValueError naming what was wrong with it."""
     try:
         payload = json.loads(body)
     except ValueError as e:
         raise ValueError(f"body is not JSON: {e}") from e
-    url = payload.get("url") if isinstance(payload, dict) else None
-    if not isinstance(url, str) or not url.strip():
-        raise ValueError(f"expected {{'url': '<one web link>'}}, got {payload!r}")
-    url = url.strip()
-    if len(url.split()) != 1:
-        raise ValueError(f"expected exactly one web link, got {url!r}")
-    parts = urlsplit(url)
-    if parts.scheme not in ("http", "https") or not parts.netloc:
-        raise ValueError(f"expected an http(s) link, got {url!r}")
-    return url
+    text = payload.get("text") if isinstance(payload, dict) else None
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError(f"expected {{'text': '<non-empty text>'}}, got {payload!r}")
+    return text.strip()
 
 
-def request_path(url: str, now: datetime) -> str:
-    parts = urlsplit(url)
-    slug = NOT_SLUG.sub("_", (parts.netloc + parts.path).lower()).strip("_")[:MAX_SLUG_CHARS]
+def request_path(text: str, now: datetime) -> str:
+    slug = NOT_SLUG.sub("_", NOT_SCHEME.sub("", text.lower())).strip("_")[:MAX_SLUG_CHARS]
     return f"{REQUESTS_DIR}/{now:%Y-%m-%d}/{now:%H%M%S}_{slug}.json"
 
 
-def commit_request(url: str, now: datetime, token: str, client: httpx.Client) -> str:
+def commit_request(text: str, now: datetime, token: str, client: httpx.Client) -> str:
     """Writes the submission file to `main`; returns its GitHub URL."""
-    path = request_path(url, now)
-    record = Submission(url=url, submitted_at=now).model_dump_json(indent=1) + "\n"
+    path = request_path(text, now)
+    record = Submission(text=text, submitted_at=now).model_dump_json(indent=1) + "\n"
     response = client.put(
         f"{CONTENTS_URL}/{path}",
         headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},
         json={
-            "message": f"request: evaluate {url}",
+            "message": f"request: evaluate {text}",
             "content": base64.b64encode(record.encode()).decode(),
             "branch": BRANCH,
         },
@@ -100,16 +93,16 @@ class SiteHandler(SimpleHTTPRequestHandler):
             self.send_error(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, f"body is {length} bytes")
             return
         try:
-            url = parse_request(self.rfile.read(length))
+            text = parse_request(self.rfile.read(length))
         except ValueError as e:
             self._json(HTTPStatus.BAD_REQUEST, {"error": str(e)})
             return
         try:
-            html_url = self.commit(url, datetime.now(UTC).replace(microsecond=0))
+            html_url = self.commit(text, datetime.now(UTC).replace(microsecond=0))
         except httpx.HTTPError as e:  # boundary: report the GitHub failure to the browser
             self._json(HTTPStatus.BAD_GATEWAY, {"error": f"GitHub write failed: {e}"})
             return
-        self._json(HTTPStatus.CREATED, {"url": url, "html_url": html_url})
+        self._json(HTTPStatus.CREATED, {"text": text, "html_url": html_url})
 
     def _json(self, status: HTTPStatus, payload: dict) -> None:
         body = json.dumps(payload).encode()

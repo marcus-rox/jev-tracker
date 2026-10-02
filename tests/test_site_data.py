@@ -80,21 +80,21 @@ def test_R6_every_shown_number_names_its_source() -> None:
             assert r["sources"]["cost"] and r["sources"]["latency"], r["reranker"]
 
 
-# R-7: the server takes one web link and files it under requests/ (the GitHub write is not tested).
-def test_R7_parse_request_accepts_one_link() -> None:
+# R-7: the server takes the box's text and files it under requests/ (the GitHub write is not tested).
+def test_R7_parse_request_accepts_any_text() -> None:
     assert (
-        parse_request(b'{"url": " https://huggingface.co/org/model "}')
+        parse_request(b'{"text": " https://huggingface.co/org/model "}')
         == "https://huggingface.co/org/model"
     )
+    assert parse_request(b'{"text": "try the new Kev 30B"}') == "try the new Kev 30B"
 
 
 @pytest.mark.parametrize(
     "body, message",
     [
         (b"not json", "body is not JSON"),
-        (b'{"link": "https://x.y"}', "expected {'url'"),
-        (b'{"url": "https://a.b https://c.d"}', "exactly one web link"),
-        (b'{"url": "huggingface.co/org/model"}', "expected an http(s) link"),
+        (b'{"url": "https://x.y"}', "expected {'text'"),
+        (b'{"text": "   "}', "expected {'text'"),
     ],
 )
 def test_R7_parse_request_rejects(body: bytes, message: str) -> None:
@@ -105,7 +105,11 @@ def test_R7_parse_request_rejects(body: bytes, message: str) -> None:
 def test_R7_request_path_is_dated_and_slugged() -> None:
     now = datetime(2026, 10, 2, 7, 5, 9, tzinfo=UTC)
     path = request_path("https://huggingface.co/Org/Model-Name?x=1", now)
-    assert path == "requests/2026-10-02/070509_huggingface_co_org_model_name.json"
+    assert path == "requests/2026-10-02/070509_huggingface_co_org_model_name_x_1.json"
+    assert (
+        request_path("try the new Kev 30B", now)
+        == "requests/2026-10-02/070509_try_the_new_kev_30b.json"
+    )
 
 
 def test_R6_updated_and_cards() -> None:
@@ -117,9 +121,9 @@ def test_R6_updated_and_cards() -> None:
         updated(["nostamp"])
     data = json.loads(OUT.read_text())
     assert [c["label"] for c in data["cards"]] == [
-        "models evaluated",
-        "best alternative (mean kept-mass)",
-        "experiments",
-        "GPU spend (warm)",
+        "best quality (mean kept-mass)",
+        "cheapest ($ / 1k queries)",
+        "fastest (s / query)",
     ]
+    assert all("Jev" in c["detail"] for c in data["cards"])
     assert data["updated"] == updated(list(data["experiments"]))

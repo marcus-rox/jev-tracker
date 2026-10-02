@@ -110,42 +110,62 @@ def updated(experiment_ids: list[str]) -> str:
     return f"{y}-{mo}-{d} {h}:{mi} UTC"
 
 
-def _best(rows: list[dict]) -> dict | None:
-    scored = [r for r in rows if r["mean_kept_mass"] is not None]
-    return max(scored, key=lambda r: r["mean_kept_mass"], default=None)
+def _pick(rows: list[dict], value, lowest: bool) -> dict | None:
+    scored = [(value(r), r) for r in rows if value(r) is not None]
+    if not scored:
+        return None
+    return (min if lowest else max)(scored, key=lambda t: t[0])[1]
 
 
-def cards(rows: list[dict], n_experiments: int) -> list[dict]:
-    """Pure: the summary tab's headline numbers, over the 75-query rows."""
+def _card(
+    label: str, rows: list[dict], jev: list[dict], value, fmt: str, lowest: bool, unit: str
+) -> dict:
+    best, ref = _pick(rows, value, lowest), _pick(jev, value, lowest)
+    return {
+        "label": label,
+        "value": format(value(best), fmt) + unit if best else "-",
+        "detail": (
+            f"{best['label']} · Jev {format(value(ref), fmt)}{unit}" if best and ref else "-"
+        ),
+    }
+
+
+def cards(rows: list[dict]) -> list[dict]:
+    """Pure: the best Jev alternative on each axis, over the 75-query rows, with Jev's own number.
+
+    A zero cost or latency means the run was never timed, not that it was free.
+    """
     full = [r for r in rows if r["queries"] == BENCHMARK_QUERIES]
     open_rows = [r for r in full if r["family"] not in BASELINE_FAMILIES]
-    best_open, best_jev = _best(open_rows), _best([r for r in full if r["family"] == "jev"])
-    gpu_usd = sum(r["cost"]["warm_usd"] for r in rows if r["cost"] and r["cost"]["warm_gpu_s"])
+    jev = [r for r in full if r["family"] == "jev"]
     return [
-        {
-            "label": "models evaluated",
-            "value": str(len({r["family"] for r in open_rows})),
-            "detail": "open or hosted alternatives, all 75 queries",
-        },
-        {
-            "label": "best alternative (mean kept-mass)",
-            "value": f"{best_open['mean_kept_mass']:.3f}" if best_open else "-",
-            "detail": (
-                f"{best_open['label']} · Jev {best_jev['mean_kept_mass']:.3f}"
-                if best_open and best_jev
-                else "-"
-            ),
-        },
-        {
-            "label": "experiments",
-            "value": str(n_experiments),
-            "detail": "committed under data/experiments",
-        },
-        {
-            "label": "GPU spend (warm)",
-            "value": f"${gpu_usd:,.2f}",
-            "detail": "sum of every GPU run's warm cost",
-        },
+        _card(
+            "best quality (mean kept-mass)",
+            open_rows,
+            jev,
+            lambda r: r["mean_kept_mass"],
+            ".3f",
+            False,
+            "",
+        ),
+        _card(
+            "cheapest ($ / 1k queries)",
+            open_rows,
+            jev,
+            lambda r: (r["cost"]["usd_per_1k"] or None) if r["cost"] else None,
+            ".2f",
+            True,
+            "",
+        ),
+        _card(
+            "fastest (s / query)",
+            open_rows,
+            jev,
+            lambda r: (r["latency"]["s_per_query"] or None) if r["latency"] else None,
+            ".2f",
+            True,
+            "",
+        ),
     ]
 
 
@@ -194,7 +214,7 @@ def build(
         "experiments": experiments,
         "rows": rows,
         "updated": updated(list(experiments)),
-        "cards": cards(rows, len(experiments)),
+        "cards": cards(rows),
         "tldr": tldr,
     }
 

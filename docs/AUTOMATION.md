@@ -15,7 +15,7 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    `automation/<date>`, `uv sync`, `export MODAL_TOKEN_ID=$MODAL_TOKEN_ID_ROX_RESEARCH
    MODAL_TOKEN_SECRET=$MODAL_TOKEN_SECRET_ROX_RESEARCH`.
 2. **Crawl**: `uv run python -m crawler` → `crawler/candidates/<date>.jsonl`, `crawler/seen.jsonl`.
-   Links submitted from the site (`requests/<date>/*.json`) come along as source `submitted`.
+   Text submitted from the site (`requests/<date>/*.json`) comes along as source `submitted`.
    Exit 1 means a (source, query) failed; keep going, list the failures in the PR.
 3. **Triage** (the decision): read today's candidates and write `crawler/triage/<date>.yaml`, one
    entry per `key`:
@@ -27,8 +27,9 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    - `needs_adapter`: a real Jev alternative the harness cannot call yet (new serving stack, new
      request format, key not provisioned, over budget). Say what is missing in `reason`.
    - `not_jev`: unrelated hit (a person named Kev, a repo about something else). One-line reason.
-   A `submitted` candidate is a human asking for exactly that link: open it, work out what it is
-   (model, repo, paper, endpoint) and give it one of the three verdicts like any other candidate.
+   A `submitted` candidate is whatever a human typed into the site (usually a link): open or
+   search for it, work out what it is (model, repo, paper, endpoint) and give it one of the three
+   verdicts like any other candidate.
    Then `uv run python -m crawler.triage check crawler/triage/<date>.yaml
    crawler/candidates/<date>.jsonl` must exit 0.
 4. **Issues**: `GITHUB_TOKEN=<PAT> uv run python -m jev_tracker.evaluate_issues` turns open

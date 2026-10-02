@@ -3620,24 +3620,19 @@
  "updated": "2026-10-02 03:29 UTC",
  "cards": [
   {
-   "label": "models evaluated",
-   "value": "12",
-   "detail": "open or hosted alternatives, all 75 queries"
-  },
-  {
-   "label": "best alternative (mean kept-mass)",
+   "label": "best quality (mean kept-mass)",
    "value": "0.917",
    "detail": "kev27b_score \u00b7 Jev 0.926"
   },
   {
-   "label": "experiments",
-   "value": "24",
-   "detail": "committed under data/experiments"
+   "label": "cheapest ($ / 1k queries)",
+   "value": "0.92",
+   "detail": "laya322m_multilingual_noul_reworded \u00b7 Jev 4.70"
   },
   {
-   "label": "GPU spend (warm)",
-   "value": "$95.01",
-   "detail": "sum of every GPU run's warm cost"
+   "label": "fastest (s / query)",
+   "value": "4.13",
+   "detail": "laya322m_multilingual_noul_reworded \u00b7 Jev 0.21"
   }
  ],
  "tldr": "Jev is still the best ranker on the frozen 75-query benchmark (kept-mass 0.893 at k=50, 0.961 at k=200). Nothing open has matched it yet.\nThe closest alternatives are the Kev checkpoints: the pinned Kev-27B (9/24 weights) reaches 0.887 / 0.954 at about $0.90 per run of 75 queries, while the Kev-27B v2 weights published on 9/30 are about 0.01 lower.\nToday's run (2026-10-02) added Kev-0.8B, Kev-9B v2 and an unofficial Kev-2B: all well behind (best 0.753 / 0.889 for Kev-9B v2 noul), each under $0.60 per run.\nLaya (322M\u2013421M encoders) is far cheaper but ranks much worse; production (gpt-5-mini, 3 passes) sits at 0.711 / 0.837.\n"

@@ -194,7 +194,7 @@ def test_R8_submitted_requests_become_candidates(tmp_path: Path):
     day = tmp_path / "requests" / "2026-10-02"
     day.mkdir(parents=True)
     (day / "070509_hf.json").write_text(
-        '{"url": "https://huggingface.co/org/model", "submitted_at": "2026-10-02T07:05:09Z"}\n'
+        '{"text": "https://huggingface.co/org/model", "submitted_at": "2026-10-02T07:05:09Z"}\n'
     )
     (tmp_path / "requests" / "README.md").write_text("ignored\n")
     [c] = submitted.load(tmp_path / "requests")
