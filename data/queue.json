@@ -122,9 +122,9 @@
    "label": "von_395m_vs_jev",
    "source": "github",
    "url": "https://github.com/wfzyx/von",
-   "status": "proposed",
+   "status": "queued",
    "note": "Von: open-source 395M System One model; own architecture / serving",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T21:45:40Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
