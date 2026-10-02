@@ -15,7 +15,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `data/jev/` — Jev's committed answers
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
 - `data/registry.yaml` — row labels (model family, serving, GPU) for every reranker shown
-- `site/` — Vite + React static site: summary / quality / cost / latency tables, filters, compare,
+- `site/` — Vite + React static site: summary / quality / cost / latency tables, filters,
   "Evaluate a new model" form; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
   arXiv, web, X/Twitter, Hacker News); `crawler/queries.yaml`, `crawler/seen.jsonl`,

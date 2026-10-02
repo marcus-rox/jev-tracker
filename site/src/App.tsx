@@ -3,13 +3,12 @@ import './App.css'
 import Evaluate from './Evaluate'
 import { blob, type K, type Row, type SiteData } from './types'
 
-type Tab = 'summary' | 'quality' | 'cost' | 'latency' | 'compare' | 'evaluate'
+type Tab = 'summary' | 'quality' | 'cost' | 'latency' | 'evaluate'
 const TABS: [Tab, string][] = [
   ['summary', 'Summary'],
   ['quality', 'Quality'],
   ['cost', 'Cost'],
   ['latency', 'Latency'],
-  ['compare', 'Compare runs'],
   ['evaluate', 'Evaluate a new model'],
 ]
 
@@ -100,38 +99,12 @@ function Table({ rows, cols, sort, setSort }: { rows: Row[]; cols: Col[]; sort: 
   )
 }
 
-function Compare({ rows, experiments, ks }: { rows: Row[]; experiments: string[]; ks: K[] }) {
-  if (experiments.length < 2) return <p className="note">Tick two or more experiments under "Compare" in the sidebar.</p>
-  const labels = uniq(rows.filter((r) => experiments.includes(r.experiment)).map((r) => r.label))
-  const cell = (label: string, exp: string) => rows.find((r) => r.label === label && r.experiment === exp)
-  const cols: [string, Col][] = [...ks.map((k) => [`@${k}`, keptCol(k)] as [string, Col]), ['$ / 1k', COST[5]], ['s / query', LATENCY[1]]]
-  return (
-    <table className="cmp">
-      <thead>
-        <tr><th rowSpan={2}>ranker</th>{experiments.map((e) => <th key={e} className="exp" colSpan={cols.length}>{e}</th>)}</tr>
-        <tr>{experiments.flatMap((e) => cols.map(([h]) => <th key={e + h} className="n">{h}</th>))}</tr>
-      </thead>
-      <tbody>
-        {labels.map((label) => (
-          <tr key={label}>
-            <td>{label}</td>
-            {experiments.flatMap((e) => {
-              const r = cell(label, e)
-              return cols.map(([h, c]) => r ? <Num key={e + h} row={r} col={c} /> : <td key={e + h} className="n dim">·</td>)
-            })}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
-
-function Checks({ title, options, on, toggle, mono }: { title: string; options: string[]; on: Set<string>; toggle: (v: string) => void; mono?: boolean }) {
+function Checks({ title, options, on, toggle }: { title: string; options: string[]; on: Set<string>; toggle: (v: string) => void }) {
   return (
     <>
       <h3>{title}</h3>
       {options.map((o) => (
-        <label key={o} className={mono ? 'exp' : ''} title={o}>
+        <label key={o} title={o}>
           <input type="checkbox" checked={on.has(o)} onChange={() => toggle(o)} />{o}
         </label>
       ))}
@@ -150,7 +123,6 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('summary')
   const [models, setModels] = useState(new Set<string>())
   const [gpus, setGpus] = useState(new Set<string>())
-  const [compare, setCompare] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
 
   useEffect(() => {
@@ -178,7 +150,6 @@ export default function App() {
         <button onClick={reset}>reset filters</button>
         <Checks title="model · serving" options={uniq(all.map(modelKey))} on={models} toggle={(v) => setModels(toggled(models, v))} />
         <Checks title="GPU" options={uniq(all.map((r) => r.gpu))} on={gpus} toggle={(v) => setGpus(toggled(gpus, v))} />
-        <Checks title="compare (2+)" options={experiments} on={compare} toggle={(v) => setCompare(toggled(compare, v))} mono />
       </aside>
       <main className="main">
         <nav className="tabs">
@@ -197,7 +168,6 @@ export default function App() {
         {tab === 'quality' && <Table rows={forTable('quality')} cols={kept} sort={sort} setSort={setSort} />}
         {tab === 'cost' && <Table rows={forTable('cost')} cols={COST} sort={sort} setSort={setSort} />}
         {tab === 'latency' && <Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={setSort} />}
-        {tab === 'compare' && <Compare rows={rows} experiments={experiments.filter((e) => compare.has(e))} ks={shownKs} />}
         {tab === 'evaluate' && <Evaluate />}
       </main>
     </div>

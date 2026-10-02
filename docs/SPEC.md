@@ -70,8 +70,8 @@ with the new data and the regenerated site.
 - **R-5 Site.** `site/dist/` SHALL be a static build served by `python3 -m http.server` showing a
   summary table (every 75-query run: kept-mass@k, mean, $/1k, s/query), the quality table
   (kept-mass@50/100/150/200), the cost table ($/run, $/query, $/1k) and the latency table
-  (s/query, h/1k), with filters on model · serving and GPU; column sort; and side-by-side
-  comparison of 2+ selected experiments. Every number links to its source JSON. The summary
+  (s/query, h/1k), with filters on model · serving and GPU and column sort. Every number links
+  to its source JSON. The summary
   opens with the last-updated time, three cards (best alternative by quality, cost, latency,
   each beside Jev's number) and the daily run's TLDR.
 - **R-6 Site data.** `python -m jev_tracker.site_data` SHALL regenerate `site/public/data/*.json`
