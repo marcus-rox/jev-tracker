@@ -41,9 +41,9 @@
    "label": "rsi_jev_v3_2b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/shgao/rsi-jev-v3.0-qwen3.5-2b",
-   "status": "proposed",
+   "status": "queued",
    "note": "Jev-style decision model with its own architecture / serving (rsi-jev); no harness source for it",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T17:12:55Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
