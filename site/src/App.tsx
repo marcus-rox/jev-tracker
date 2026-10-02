@@ -54,6 +54,7 @@ const LABELS: [string, (r: Row) => string][] = [
 ]
 
 const servingKind = (r: Row) => r.serving.split(':')[0]
+const modelKey = (r: Row) => `${r.family} · ${servingKind(r)}`
 const uniq = (xs: string[]) => [...new Set(xs)]
 
 function Num({ row, col }: { row: Row; col: Col }) {
@@ -97,17 +98,6 @@ function Table({ rows, cols, sort, setSort }: { rows: Row[]; cols: Col[]; sort: 
       </tbody>
     </table>
   )
-}
-
-/** Each family's 75-query row with the highest mean kept-mass (first wins a tie), as in the report. */
-function bestPerFamily(rows: Row[]): Row[] {
-  const best = new Map<string, Row>()
-  for (const r of rows) {
-    if (r.queries !== 75 || r.mean_kept_mass === null) continue
-    const b = best.get(r.family)
-    if (!b || r.mean_kept_mass > b.mean_kept_mass!) best.set(r.family, r)
-  }
-  return [...best.values()].sort((a, b) => b.mean_kept_mass! - a.mean_kept_mass!)
 }
 
 function Compare({ rows, experiments, ks }: { rows: Row[]; experiments: string[]; ks: K[] }) {
@@ -158,10 +148,8 @@ const toggled = (s: Set<string>, v: string) => {
 export default function App() {
   const [data, setData] = useState<SiteData | null>(null)
   const [tab, setTab] = useState<Tab>('summary')
-  const [families, setFamilies] = useState(new Set<string>())
-  const [servings, setServings] = useState(new Set<string>())
+  const [models, setModels] = useState(new Set<string>())
   const [gpus, setGpus] = useState(new Set<string>())
-  const [exps, setExps] = useState(new Set<string>())
   const [only75, setOnly75] = useState(true)
   const [ks, setKs] = useState(new Set<string>(['50', '100', '150', '200']))
   const [compare, setCompare] = useState(new Set<string>())
@@ -174,17 +162,15 @@ export default function App() {
 
   const all = data.rows
   const pass = (r: Row) =>
-    (families.size === 0 || families.has(r.family)) &&
-    (servings.size === 0 || servings.has(servingKind(r))) &&
+    (models.size === 0 || models.has(modelKey(r))) &&
     (gpus.size === 0 || gpus.has(r.gpu)) &&
-    (exps.size === 0 || exps.has(r.experiment)) &&
     (!only75 || r.queries === 75)
   const rows = all.filter(pass)
   const shownKs = data.ks.filter((k) => ks.has(k))
   const kept = shownKs.map(keptCol)
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
   const experiments = Object.keys(data.experiments).sort()
-  const reset = () => { setFamilies(new Set()); setServings(new Set()); setGpus(new Set()); setExps(new Set()); setOnly75(true); setSort(null) }
+  const reset = () => { setModels(new Set()); setGpus(new Set()); setOnly75(true); setSort(null) }
 
   return (
     <div className="app">
@@ -196,19 +182,18 @@ export default function App() {
         {data.ks.map((k) => <label key={k}><input type="checkbox" checked={ks.has(k)} onChange={() => setKs(toggled(ks, k))} />@{k}</label>)}
         <h3>queries</h3>
         <label><input type="checkbox" checked={only75} onChange={() => setOnly75(!only75)} />75-query runs only</label>
-        <Checks title="model family" options={uniq(all.map((r) => r.family))} on={families} toggle={(v) => setFamilies(toggled(families, v))} />
-        <Checks title="serving" options={uniq(all.map(servingKind))} on={servings} toggle={(v) => setServings(toggled(servings, v))} />
+        <Checks title="model · serving" options={uniq(all.map(modelKey))} on={models} toggle={(v) => setModels(toggled(models, v))} />
         <Checks title="GPU" options={uniq(all.map((r) => r.gpu))} on={gpus} toggle={(v) => setGpus(toggled(gpus, v))} />
-        <Checks title="experiment" options={experiments} on={exps} toggle={(v) => setExps(toggled(exps, v))} mono />
         <Checks title="compare (2+)" options={experiments} on={compare} toggle={(v) => setCompare(toggled(compare, v))} mono />
       </aside>
       <main className="main">
         <nav className="tabs">
           {TABS.map(([t, name]) => <button key={t} className={tab === t ? 'on' : ''} onClick={() => { setTab(t); setSort(null) }}>{name}</button>)}
         </nav>
+        <p className="note">Click any column header to sort; click again to reverse, a third time to clear.</p>
         {tab === 'summary' && <>
-          <p className="note">Each model family's 75-query ranker with the highest mean kept-mass over @50–200, with that run's cost and latency. Click a number for its source JSON.</p>
-          <Table rows={bestPerFamily(rows)} cols={[...kept, MEAN, COST[5], LATENCY[1]]} sort={sort} setSort={setSort} />
+          <p className="note">Every run: kept-mass at the chosen k, its mean, cost per 1k queries and seconds per query. Click a number for its source JSON.</p>
+          <Table rows={rows} cols={[...kept, MEAN, COST[5], LATENCY[1]]} sort={sort} setSort={setSort} />
         </>}
         {tab === 'quality' && <Table rows={forTable('quality')} cols={kept} sort={sort} setSort={setSort} />}
         {tab === 'cost' && <Table rows={forTable('cost')} cols={COST} sort={sort} setSort={setSort} />}
