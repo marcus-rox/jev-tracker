@@ -69,3 +69,8 @@ td.n a:hover { color: var(--accent); text-decoration: none; }
 .hbar .jev .t i { background:var(--text); }
 .hbar .lbl { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .foot { padding:0 20px 24px; color:var(--muted); font-size:12px; }
+.chartwrap { position:relative; }
+.tip { position:absolute; pointer-events:none; z-index:6; background:var(--text); color:var(--panel); padding:4px 8px; border-radius:4px; font-size:12px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+.hbar .hot .lbl, .hbar .hot .n { color:var(--text); font-weight:600; }
+.hbar .hot .t { outline:1px solid var(--accent); }
+.hbar .lbl, .hbar .t, .hbar .n { cursor:default; }
