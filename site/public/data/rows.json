@@ -38,7 +38,8 @@
   "2026_10_02_10_47_28_fine-buck": "jevany_qwen35_4b_vs_jev: JevAny Qwen3.5-4B LoRA @1c7aa9b, 3 x L40S (failed)",
   "2026_10_02_17_18_05_proven-shiner": "kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)",
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
-  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)"
+  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
+  "2026_10_02_20_58_42_vast-filly": "kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)"
  },
  "rows": [
   {
@@ -4406,9 +4407,97 @@
     "latency": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
     "config": "data/experiments/2026_10_02_18_00_38_large-corgi/config_2026_10_02_18_00_38_large-corgi.yaml"
    }
+  },
+  {
+   "experiment": "2026_10_02_20_58_42_vast-filly",
+   "reranker": "kev4b_ba_lora_noul",
+   "label": "kev4b_ba_lora_noul",
+   "family": "kev4b_ba_lora",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7437283586533333,
+    "100": 0.7906679674933333,
+    "150": 0.83604008904,
+    "200": 0.89143245104
+   },
+   "mean_kept_mass": 0.8154672165566667,
+   "cost": {
+    "warm_gpu_s": 521.0075976848602,
+    "load_s": 66.7207384109497,
+    "warm_usd": 0.2823861179451942,
+    "in_function_usd": 0.318686865881443,
+    "usd_per_query": 0.0037651482392692557,
+    "usd_per_1k": 3.765148239269256,
+    "peak_gb": 16.698039808
+   },
+   "latency": {
+    "run_s": 521.0075976848602,
+    "s_per_query": 6.94676796913147,
+    "h_per_1k": 1.929657769203186
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_20_58_42_vast-filly/kept_mass_2026_10_02_20_58_42_vast-filly.json",
+    "cost": "data/experiments/2026_10_02_20_58_42_vast-filly/costs_2026_10_02_20_58_42_vast-filly.json",
+    "latency": "data/experiments/2026_10_02_20_58_42_vast-filly/costs_2026_10_02_20_58_42_vast-filly.json",
+    "config": "data/experiments/2026_10_02_20_58_42_vast-filly/config_2026_10_02_20_58_42_vast-filly.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_20_58_42_vast-filly",
+   "reranker": "kev4b_ba_lora_score",
+   "label": "kev4b_ba_lora_score",
+   "family": "kev4b_ba_lora",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7483857564666667,
+    "100": 0.7934417620933334,
+    "150": 0.8374609409733333,
+    "200": 0.8901795821866667
+   },
+   "mean_kept_mass": 0.81736701043,
+   "cost": {
+    "warm_gpu_s": 648.9946110248566,
+    "load_s": 64.86429738998413,
+    "warm_usd": 0.3517550791754722,
+    "in_function_usd": 0.38708407035493847,
+    "usd_per_query": 0.00469006772233963,
+    "usd_per_1k": 4.69006772233963,
+    "peak_gb": 16.818999296
+   },
+   "latency": {
+    "run_s": 648.9946110248566,
+    "s_per_query": 8.653261480331421,
+    "h_per_1k": 2.403683744536506
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_20_58_42_vast-filly/kept_mass_2026_10_02_20_58_42_vast-filly.json",
+    "cost": "data/experiments/2026_10_02_20_58_42_vast-filly/costs_2026_10_02_20_58_42_vast-filly.json",
+    "latency": "data/experiments/2026_10_02_20_58_42_vast-filly/costs_2026_10_02_20_58_42_vast-filly.json",
+    "config": "data/experiments/2026_10_02_20_58_42_vast-filly/config_2026_10_02_20_58_42_vast-filly.yaml"
+   }
   }
  ],
- "updated": "2026-10-02 11:00 PDT",
+ "updated": "2026-10-02 13:58 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",
@@ -4426,5 +4515,5 @@
    "detail": "laya322m_multilingual_noul_reworded \u00b7 Jev 0.21"
   }
  ],
- "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Three models finish today.\n  - RSI-Jev: 0.739 / 0.899\n  - RSI-Jev costs $10.47.\n  - MiniCPM5-Jev: 0.731 / 0.892\n  - MiniCPM5-Jev costs $2.20.\n  - Kev-0.8B BA-LoRA: 0.648 / 0.851\n  - Kev-0.8B BA-LoRA costs $0.25.\n- The top three stay.\n  - Jev, Kev-27B, AutoTrust lead.\n  - New models trail Jev.\n  - BA-LoRA is below production.\n  - Production keeps 0.711 at k=50.\n"
+ "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- One model finishes today.\n  - Kev-4B BA-LoRA: 0.748 / 0.891\n  - Kev-4B BA-LoRA costs $0.63.\n  - StartLux-Decision-9B run fails.\n- The top three stay.\n  - Jev, Kev-27B, AutoTrust lead.\n  - Kev-4B BA-LoRA trails Jev.\n  - Production keeps 0.711 at k=50\n"
 }

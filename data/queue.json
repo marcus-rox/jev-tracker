@@ -37,28 +37,61 @@
    }
   },
   {
-   "config": "configs/kev4b_ba_lora_vs_jev.yaml",
-   "label": "kev4b_ba_lora_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/Glax147/kev-4b-ba-lora",
-   "status": "running",
-   "note": "over budget: general Kev-4B post-train (head.pt + LoRA on Qwen3.5-4B-Base) runs through the kev source, but today's 3-run cap is used; queue for a later day",
-   "queued_at": "2026-10-02T20:34:27Z",
-   "started_at": "2026-10-02T20:58:12Z",
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/startlux_decision_9b_vs_jev.yaml",
    "label": "startlux_decision_9b_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/startlux-models/StartLux-Decision-9B",
-   "status": "running",
-   "note": "Jev-style decision model with its own architecture / serving (qwen3_5); no harness source for it",
+   "status": "failed",
+   "note": "modal call fc-01M3Z6S9SGDM187CNQKPW70JFG: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6S9SGDM187CNQKPW70JFG not found; modal call fc-01M3Z6SA0MF3Q4WTQ61HYS8ZKT: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SA0MF3Q4WTQ61HYS8ZKT not found; modal call fc-01M3Z6SA92976R6NQ11PWYY14G: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SA92976R6NQ11PWYY14G not found; modal call fc-01M3Z6SAHNEGTXQNZZSTDQFJ70: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SAHNEGTXQNZZSTDQFJ70 not found; modal call fc-01M3Z6SAT0E8C0ESNXPGKQWNSV: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SAT0E8C0ESNXPGKQWNSV not found; modal call fc-01M3Z6SB0HD8PVHCY0PX0VFX85: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SB0HD8PVHCY0PX0VFX85 not found; modal call fc-01M3Z6Z9BMC7J1GAT7RS0NWXJQ: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9BMC7J1GAT7RS0NWXJQ not found; modal call fc-01M3Z6Z9JGXVT16WB66BGD3G38: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9JGXVT16WB66BGD3G38 not found; modal call fc-01M3Z6Z9SY387M2W8DVWNJ2WV3: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9SY387M2W8DVWNJ2WV3 not found; modal call fc-01M3Z6ZA08YMTAY8GB3HTT4ENS: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZA08YMTAY8GB3HTT4ENS not found; modal call fc-01M3Z6ZA7S4VB6B27SS1YE3WC3: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZA7S4VB6B27SS1YE3WC3 not found; modal call fc-01M3Z6ZAE8F3GMGCFGCJFV1DZG: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZAE8F3GMGCFGCJFV1DZG not found; startlux9b_noul: no raw answers; startlux9b_score: no raw answers",
    "queued_at": "2026-10-02T20:28:28Z",
    "started_at": "2026-10-02T20:58:12Z",
-   "finished_at": null,
-   "evidence": null
+   "finished_at": "2026-10-02T21:21:10Z",
+   "evidence": {
+    "experiment": "2026_10_02_21_02_04_clever-satyr",
+    "calls": {
+     "fc-01M3Z6S9SGDM187CNQKPW70JFG": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6S9SGDM187CNQKPW70JFG not found",
+     "fc-01M3Z6SA0MF3Q4WTQ61HYS8ZKT": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SA0MF3Q4WTQ61HYS8ZKT not found",
+     "fc-01M3Z6SA92976R6NQ11PWYY14G": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SA92976R6NQ11PWYY14G not found",
+     "fc-01M3Z6SAHNEGTXQNZZSTDQFJ70": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SAHNEGTXQNZZSTDQFJ70 not found",
+     "fc-01M3Z6SAT0E8C0ESNXPGKQWNSV": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SAT0E8C0ESNXPGKQWNSV not found",
+     "fc-01M3Z6SB0HD8PVHCY0PX0VFX85": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SB0HD8PVHCY0PX0VFX85 not found",
+     "fc-01M3Z6Z9BMC7J1GAT7RS0NWXJQ": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9BMC7J1GAT7RS0NWXJQ not found",
+     "fc-01M3Z6Z9JGXVT16WB66BGD3G38": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9JGXVT16WB66BGD3G38 not found",
+     "fc-01M3Z6Z9SY387M2W8DVWNJ2WV3": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9SY387M2W8DVWNJ2WV3 not found",
+     "fc-01M3Z6ZA08YMTAY8GB3HTT4ENS": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZA08YMTAY8GB3HTT4ENS not found",
+     "fc-01M3Z6ZA7S4VB6B27SS1YE3WC3": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZA7S4VB6B27SS1YE3WC3 not found",
+     "fc-01M3Z6ZAE8F3GMGCFGCJFV1DZG": "FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZAE8F3GMGCFGCJFV1DZG not found"
+    },
+    "rerankers": [
+     {
+      "name": "jev_noul",
+      "requests": 457,
+      "cases": 75
+     },
+     {
+      "name": "jev_score",
+      "requests": 457,
+      "cases": 75
+     }
+    ],
+    "kept_mass": true,
+    "problems": [
+     "modal call fc-01M3Z6S9SGDM187CNQKPW70JFG: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6S9SGDM187CNQKPW70JFG not found",
+     "modal call fc-01M3Z6SA0MF3Q4WTQ61HYS8ZKT: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SA0MF3Q4WTQ61HYS8ZKT not found",
+     "modal call fc-01M3Z6SA92976R6NQ11PWYY14G: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SA92976R6NQ11PWYY14G not found",
+     "modal call fc-01M3Z6SAHNEGTXQNZZSTDQFJ70: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SAHNEGTXQNZZSTDQFJ70 not found",
+     "modal call fc-01M3Z6SAT0E8C0ESNXPGKQWNSV: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SAT0E8C0ESNXPGKQWNSV not found",
+     "modal call fc-01M3Z6SB0HD8PVHCY0PX0VFX85: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6SB0HD8PVHCY0PX0VFX85 not found",
+     "modal call fc-01M3Z6Z9BMC7J1GAT7RS0NWXJQ: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9BMC7J1GAT7RS0NWXJQ not found",
+     "modal call fc-01M3Z6Z9JGXVT16WB66BGD3G38: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9JGXVT16WB66BGD3G38 not found",
+     "modal call fc-01M3Z6Z9SY387M2W8DVWNJ2WV3: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6Z9SY387M2W8DVWNJ2WV3 not found",
+     "modal call fc-01M3Z6ZA08YMTAY8GB3HTT4ENS: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZA08YMTAY8GB3HTT4ENS not found",
+     "modal call fc-01M3Z6ZA7S4VB6B27SS1YE3WC3: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZA7S4VB6B27SS1YE3WC3 not found",
+     "modal call fc-01M3Z6ZAE8F3GMGCFGCJFV1DZG: FAILED: NotFoundError: Function fu-n2tQNgP9B6TF7KEfR8LlEz associated with fc-01M3Z6ZAE8F3GMGCFGCJFV1DZG not found",
+     "startlux9b_noul: no raw answers",
+     "startlux9b_score: no raw answers"
+    ]
+   }
   },
   {
    "config": "configs/hotchpotch_jev_reranker_vs_jev.yaml",

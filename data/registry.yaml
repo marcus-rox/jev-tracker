@@ -37,6 +37,7 @@ experiments:
   2026_10_02_17_18_05_proven-shiner: 'kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)'
   2026_10_02_17_22_11_merry-corgi: 'minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)'
   2026_10_02_18_00_38_large-corgi: 'rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)'
+  2026_10_02_20_58_42_vast-filly: 'kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1365,6 +1366,32 @@ rows:
   serving: 'rsijev predict: 12 children, 1 in flight'
   gpu: L40S
   buffer: '-'
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_20_58_42_vast-filly
+  reranker: kev4b_ba_lora_noul
+  label: kev4b_ba_lora_noul
+  family: kev4b_ba_lora
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_02_20_58_42_vast-filly
+  reranker: kev4b_ba_lora_score
+  label: kev4b_ba_lora_score
+  family: kev4b_ba_lora
+  serving: 'batched: 12 children, 16 in flight'
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
   queries: 75
   tables:
   - quality

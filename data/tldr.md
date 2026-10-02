@@ -4,15 +4,11 @@
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-- Three models finish today.
-  - RSI-Jev: 0.739 / 0.899
-  - RSI-Jev costs $10.47.
-  - MiniCPM5-Jev: 0.731 / 0.892
-  - MiniCPM5-Jev costs $2.20.
-  - Kev-0.8B BA-LoRA: 0.648 / 0.851
-  - Kev-0.8B BA-LoRA costs $0.25.
+- One model finishes today.
+  - Kev-4B BA-LoRA: 0.748 / 0.891
+  - Kev-4B BA-LoRA costs $0.63.
+  - StartLux-Decision-9B run fails.
 - The top three stay.
   - Jev, Kev-27B, AutoTrust lead.
-  - New models trail Jev.
-  - BA-LoRA is below production.
-  - Production keeps 0.711 at k=50.
+  - Kev-4B BA-LoRA trails Jev.
+  - Production keeps 0.711 at k=50

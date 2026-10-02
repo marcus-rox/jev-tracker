@@ -23,6 +23,9 @@ validated into the same `SystemOneResponse`:
   maps the request body to its typed questions, as its server's wire.py does).
 * MiniCPM5-Jev (``score_cases_minicpm_jev``): a LoRA + letter readout on MiniCPM5-2B through the
   release's ``MiniCPMSystemOne``, which converts the request body itself (jev_tracker.minicpm_jev).
+* StartLux-Decision (``score_cases_startlux``): a Qwen3.5 decoder read out at the option letters,
+  through the release's own ``startlux_decision.StartLuxDecision.decide``, which answers the
+  request body in-process (eager padded passes; the server's CUDA graphs are off).
 * API (``score_cases_api``): any hosted model that answers the System One request at a URL; a CPU
   container posts the bodies unchanged with a bearer key from a Modal Secret. The only scorer
   that leaves the container.
@@ -171,6 +174,28 @@ MINICPM_JEV_PKGS = (
     "safetensors==0.8.0",
     "numpy==2.5.3",
 )
+# huggingface.co/startlux-models/StartLux-Decision-9B (2026-10-02): weights + decision_config.json +
+# startlux_decision/ (Apache-2.0 runtime). requirements.txt: "tested with torch 2.11, transformers
+# 5.8.1, flash-linear-attention 0.5.2, causal-conv1d 1.7.0"; causal-conv1d 1.7.0 ships wheels up to
+# torch 2.10 (cu12), so torch 2.10.0 cu128 + that wheel; transformers 5.8.1 still exports the
+# qwen3_5 `is_fast_path_available` its loader checks.
+STARTLUX_REVISION = {
+    "startlux-models/StartLux-Decision-9B": "2974b71c4bc6ba9766f3fbca804fd0ce54db223c",
+}
+STARTLUX_TORCH = ("torch==2.10.0",)
+STARTLUX_TORCH_INDEX = "https://download.pytorch.org/whl/cu128"
+CAUSAL_CONV1D_WHEEL = (
+    "https://github.com/Dao-AILab/causal-conv1d/releases/download/v1.7.0/"
+    "causal_conv1d-1.7.0%2Bcu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl"
+)
+STARTLUX_PKGS = (
+    "transformers==5.8.1",
+    "accelerate>=1.10",  # its loader passes device_map
+    "huggingface_hub>=0.34",
+    "safetensors>=0.4",
+    "flash-linear-attention==0.5.2",
+    CAUSAL_CONV1D_WHEEL,
+)
 JEVANY_REVISION = {
     "SimpleJev/JevAny-Qwen3.5-4B-LoRA": "1c7aa9bab14ac347aeb917c0bcd757838a8a78ce",
 }
@@ -188,6 +213,8 @@ GPU_FOR = {
     "SimpleJev/JevAny-Qwen3.5-4B-LoRA": "L40S",  # as Kev-4B
     **{m: "L40S" for m in RSI_JEV_REVISION},  # 2B, fp32 tower (the release's evaluation precision)
     **{m: "L4" for m in MINICPM_JEV_REVISION},  # 2B bf16, as Kev-0.8B
+    "Glax147/kev-4b-ba-lora": "L40S",  # a Kev-4B post-train: as Kev-4B
+    **{m: "H100" for m in STARTLUX_REVISION},  # 9B bf16, as Kev-9B
 }
 DEFAULT_KEV_GPU = "H100"  # a Kev checkpoint not in GPU_FOR
 # Kev-27B stages its bf16 weights through host memory while loading (upstream: --memory-mb 131072).
@@ -221,7 +248,16 @@ class ScoringRun(BaseModel):
     experiment: str  # experiment id; answers live under raw/<experiment>/<reranker>/ on the Volume
     reranker: str
     engine: Literal[
-        "kev", "laya", "clef", "matilda", "autotrust", "jevany", "rsi_jev", "minicpm_jev", "api"
+        "kev",
+        "laya",
+        "clef",
+        "matilda",
+        "autotrust",
+        "jevany",
+        "rsi_jev",
+        "minicpm_jev",
+        "startlux",
+        "api",
     ]
     model: str
     method: str
@@ -318,6 +354,9 @@ autotrust_image = _mount(_base().pip_install(*AUTOTRUST_PKGS))
 jevany_image = _mount(_base().pip_install(*JEVANY_PKGS))
 rsi_jev_image = _mount(_base().pip_install(*RSI_JEV_PKGS))
 minicpm_jev_image = _mount(_base().pip_install(*MINICPM_JEV_PKGS))
+startlux_image = _mount(
+    _base().pip_install(*STARTLUX_TORCH, index_url=STARTLUX_TORCH_INDEX).pip_install(*STARTLUX_PKGS)
+)
 api_image = _mount(_base())
 progress_image = _mount(_base().pip_install(FASTAPI_PKG))
 
@@ -1035,6 +1074,62 @@ def score_cases_minicpm_jev(job_json: str) -> str:
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 
+@app.function(
+    image=startlux_image,
+    gpu="H100",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_startlux(job_json: str) -> str:
+    """Answer every batch of this shard's cases with StartLux-Decision; resumable like score_cases.
+
+    The release's `StartLuxDecision` (bf16, fast kernels required) renders one prompt per question
+    and reads the option letters' logits, all questions of a request in one padded pass; its
+    `decide` answers the request body in the System One format, as its /v1/systemone server does.
+    CUDA graphs are off: the eager path is the one the server falls back to."""
+    import sys
+
+    import torch
+    from huggingface_hub import snapshot_download
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    revision = STARTLUX_REVISION[run.repo]
+    path = snapshot_download(run.repo, revision=revision)
+    sys.path.insert(0, path)
+    from startlux_decision import StartLuxDecision
+
+    model = StartLuxDecision(path, device="cuda", graphs=False)
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(
+        f"loaded {run.repo}@{revision[:12]} in {loaded - t0:.0f}s "
+        f"(fast kernels: {model.fast_kernels})",
+        flush=True,
+    )
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, run.model).body()
+        t = time.time()
+        answers, usage = model.decide(body["state"], body["questions"])
+        resp = SystemOneResponse.model_validate(
+            {"model": run.model, "answers": answers, "usage": usage}
+        )
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, usage["input_tokens"])
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    return _summary(job, t0, loaded, n, len(done), resident_gb)
+
+
 @app.function(image=api_image, timeout=4 * HOUR, single_use_containers=True, volumes=VOLUMES)
 def score_cases_api(job_json: str) -> str:
     """Post every batch of this shard's cases to a hosted System One endpoint; resumable.
@@ -1135,6 +1230,7 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
         "jevany": score_cases_jevany,
         "rsi_jev": score_cases_rsi_jev,
         "minicpm_jev": score_cases_minicpm_jev,
+        "startlux": score_cases_startlux,
         "api": score_cases_api,
     }
     run = job.run

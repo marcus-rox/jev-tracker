@@ -17,7 +17,7 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
 
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
 (raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust`, `jevany`,
-`rsi_jev` or `minicpm_jev`
+`rsi_jev`, `minicpm_jev` or `startlux`
 (scored now, in-process on Modal, sharded over GPUs) or `api` (any hosted model that answers the System One request at a URL, from
 a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
 modal_app.py; the metric is untouched.
@@ -229,6 +229,25 @@ class MiniCpmJevSource(BaseModel):
     gpu: str | None = None
 
 
+class StartLuxSource(BaseModel):
+    """StartLux-Decision: a Qwen3.5 decoder read out at the option letters, answered by the
+    release's own `startlux_decision.StartLuxDecision.decide` on the request body.
+
+    Each question is one prompt that repeats the state (65,536 tokens each); 12 children / 12,000
+    characters per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["startlux"]
+    method: str
+    model: Literal["startlux-models/StartLux-Decision-9B"]
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
 class ApiSource(BaseModel):
     """Any hosted model that answers the System One request body at `url` (Jev, Liquid d1, ...).
 
@@ -260,6 +279,7 @@ ModelSource = (
     | JevAnySource
     | RsiJevSource
     | MiniCpmJevSource
+    | StartLuxSource
     | ApiSource
 )
 Source = Annotated[ProductionSource | AnswersSource | ModelSource, Field(discriminator="source")]
