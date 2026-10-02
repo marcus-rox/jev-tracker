@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { blob, type Decision, type QueueItem, type QueueStatus } from './types'
+import { blob, type Decision, type Evidence, type QueueItem, type QueueStatus } from './types'
 import type { Decide, QueueState } from './queue'
 import { nextRun, untilText, whenText } from './schedule'
 
@@ -10,6 +10,7 @@ const STAGES: { status: QueueStatus; title: string; empty: string }[] = [
   { status: 'proposed', title: 'Awaiting your approval', empty: 'nothing to approve' },
   { status: 'queued', title: 'Queued', empty: 'nothing queued' },
   { status: 'running', title: 'Running', empty: 'nothing running' },
+  { status: 'failed', title: 'Failed', empty: 'nothing failed' },
 ]
 
 function age(fromIso: string, now: Date): string {
@@ -21,6 +22,7 @@ function age(fromIso: string, now: Date): string {
 
 function since(item: QueueItem, now: Date): string {
   if (item.status === 'running') return item.started_at ? `started ${age(item.started_at, now)} ago` : 'starting'
+  if (item.status === 'failed') return item.finished_at ? `failed ${age(item.finished_at, now)} ago` : 'failed'
   return `${item.status === 'proposed' ? 'proposed' : 'queued'} ${age(item.queued_at, now)} ago`
 }
 
@@ -47,6 +49,40 @@ function Actions({ item, decide }: { item: QueueItem; decide: Decide }) {
   )
 }
 
+/** The Modal-side proof a failed run leaves behind: which calls finished, how many cases each reranker answered. */
+function EvidenceList({ evidence }: { evidence: Evidence }) {
+  const calls = Object.values(evidence.calls)
+  const finished = calls.filter((s) => s === 'finished').length
+  return (
+    <ul className="evidence">
+      <li><b>Experiment</b><a href={blob(`data/experiments/${evidence.experiment}`)} target="_blank" rel="noreferrer">{evidence.experiment}</a></li>
+      <li><b>Modal calls</b>{calls.length ? `${finished} of ${calls.length} finished` : 'none recorded'}</li>
+      {evidence.rerankers.map((r) => <li key={r.name}><b>{r.name}</b>{r.cases} cases · {r.requests} requests</li>)}
+      <li><b>Kept-mass table</b>{evidence.kept_mass ? 'written' : 'missing'}</li>
+    </ul>
+  )
+}
+
+/** Skip drops a failed item once its evidence has been read. */
+function Dismiss({ item, decide }: { item: QueueItem; decide: Decide }) {
+  const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const act = () => {
+    setPending(true)
+    setError(null)
+    decide(item.config, 'reject').catch((err: unknown) => {
+      setError(err instanceof Error ? err.message : String(err))
+      setPending(false)
+    })
+  }
+  return (
+    <>
+      <div className="actions"><button type="button" className="reject" disabled={pending} onClick={act}>{pending ? 'Removing…' : 'Skip'}</button></div>
+      {error && <div className="meta bad">{error}</div>}
+    </>
+  )
+}
+
 const SOURCE_COLOR: Record<string, string> = {
   huggingface: '#f0a94a', github: '#9b6fd0', arxiv: '#c0d86a', web: '#6fcfe8', twitter: '#6fa8ea', hackernews: '#e8864a', slack: '#5ec9a6', submitted: '#b05fb8', manual: '#b05fb8',
 }
@@ -60,6 +96,8 @@ function Card({ item, now, decide }: { item: QueueItem; now: Date; decide: Decid
         {item.note && <div className="note" title={item.note}>{item.note}</div>}
         {item.status === 'running' && <div className="bar"><i /></div>}
         {item.status === 'proposed' && <Actions item={item} decide={decide} />}
+        {item.status === 'failed' && item.evidence && <EvidenceList evidence={item.evidence} />}
+        {item.status === 'failed' && <Dismiss item={item} decide={decide} />}
       </div>
       <div className="foot">
         <span><b>Source</b>{item.source}</span>
@@ -107,8 +145,8 @@ export function QueueSub({ state }: { state: QueueState }) {
   const count = (status: QueueStatus) => items.filter((i) => i.status === status).length
   return (
     <>
-      {state.kind === 'ok' && <span className="sub">{count('proposed')} awaiting approval · {count('queued')} queued · {count('running')} running</span>}
-      <span className="sub">{state.kind === 'ok' && '· '}source: <a href={blob('data/queue.json')} target="_blank" rel="noreferrer">data/queue.json</a> · Approve / Skip commit to it on main · a finished model leaves the queue and appears in the Model list below</span>
+      {state.kind === 'ok' && <span className="sub">{count('proposed')} awaiting approval · {count('queued')} queued · {count('running')} running · {count('failed')} failed</span>}
+      <span className="sub">{state.kind === 'ok' && '· '}source: <a href={blob('data/queue.json')} target="_blank" rel="noreferrer">data/queue.json</a> · Approve / Skip commit to it on main · a run leaves the queue only once Modal is verified (every call finished, every case answered) and then appears in the Model list below</span>
     </>
   )
 }

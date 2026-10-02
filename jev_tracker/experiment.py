@@ -13,6 +13,7 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
     uv run python -m jev_tracker.experiment status <id>
     uv run python -m jev_tracker.experiment finish <id>   # pull answers, write the report
     uv run python -m jev_tracker.experiment run configs/x.yaml --wait  # run + finish
+    uv run python -m jev_tracker.experiment verify <id>                # did Modal really do it?
 
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
 (raw answers already on disk, e.g. Jev's), `kev` or `laya` (scored now, in-process on Modal,
@@ -24,6 +25,7 @@ modal_app.py; the metric is untouched.
 import argparse
 import json
 import shutil
+import sys
 import time
 from pathlib import Path
 from typing import Annotated, Literal
@@ -419,6 +421,80 @@ def finish(id: str) -> None:
         print(Path(latency(id)).read_text())
 
 
+class RerankerEvidence(BaseModel):
+    model_config = {"frozen": True}
+
+    name: str
+    requests: int
+    cases: int
+
+
+class Evidence(BaseModel):
+    """What proves an experiment really ran: every Modal call finished, every scored reranker
+    answered every case, and the kept-mass table was written. `problems` is empty when it did."""
+
+    model_config = {"frozen": True}
+
+    experiment: str
+    calls: dict[str, str]  # Modal call id -> "finished" | "running" | "FAILED: ..."
+    rerankers: list[RerankerEvidence]
+    kept_mass: bool
+    problems: list[str]
+
+    @property
+    def ok(self) -> bool:
+        return not self.problems
+
+
+RUNNING = "running"
+FAILED = "FAILED"
+FINISHED = "finished"
+
+
+def call_states(calls: Path) -> dict[str, str]:
+    """Each spawned Modal call reduced to finished / running / FAILED: <why>."""
+    out: dict[str, str] = {}
+    for rec, state in modal_app.states(calls):
+        if state == RUNNING or state.startswith(FAILED):
+            out[rec.call_id] = state
+        else:
+            out[rec.call_id] = FINISHED
+    return out
+
+
+def evidence(id: str, calls: dict[str, str]) -> Evidence:
+    """Offline part of `verify`: judge the experiment directory given its Modal call states."""
+    p = Paths(id)
+    exp = load_config(p.config)
+    expected = exp.cases or len(load_cases())
+    problems = [
+        f"modal call {call_id}: {state}" for call_id, state in calls.items() if state != FINISHED
+    ]
+    rerankers: list[RerankerEvidence] = []
+    for name, src in exp.rerankers.items():
+        if isinstance(src, ProductionSource):
+            continue
+        if not p.raw(name).exists():
+            problems.append(f"{name}: no raw answers")
+            continue
+        records = read_raw(p.raw(name))
+        answered = len({r.case_id for r in records})
+        rerankers.append(RerankerEvidence(name=name, requests=len(records), cases=answered))
+        if answered != expected:
+            problems.append(f"{name}: {answered} of {expected} cases answered")
+    kept_mass = p.report_base.with_suffix(".json").exists()
+    if not kept_mass:
+        problems.append(f"no {p.report_base.with_suffix('.json').name}")
+    return Evidence(
+        experiment=id, calls=calls, rerankers=rerankers, kept_mass=kept_mass, problems=problems
+    )
+
+
+def verify(id: str) -> Evidence:
+    p = Paths(id)
+    return evidence(id, call_states(p.calls) if p.calls.exists() else {})
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -430,6 +506,9 @@ def main() -> None:
     sub.add_parser("resume").add_argument("id")
     sub.add_parser("costs").add_argument("id")
     sub.add_parser("latency").add_argument("id")
+    sub.add_parser(
+        "verify", help="exit 1 unless every call finished and every case is answered"
+    ).add_argument("id")
     sub.add_parser("logs")
     a = ap.parse_args()
     if a.cmd == "run":
@@ -444,6 +523,11 @@ def main() -> None:
         print(Path(costs(a.id)).read_text())
     elif a.cmd == "latency":
         print(Path(latency(a.id)).read_text())
+    elif a.cmd == "verify":
+        found = verify(a.id)
+        print(found.model_dump_json(indent=1))
+        if not found.ok:
+            sys.exit(1)
     else:
         modal_app.logs()
 

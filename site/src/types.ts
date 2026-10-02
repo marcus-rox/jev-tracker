@@ -53,7 +53,7 @@ export interface SiteData {
 export const REPO = 'https://github.com/marcus-rox/jev-tracker'
 export const blob = (path: string) => `${REPO}/blob/main/${path}`
 
-export type QueueStatus = 'proposed' | 'queued' | 'running'
+export type QueueStatus = 'proposed' | 'queued' | 'running' | 'failed'
 export type Decision = 'approve' | 'reject'
 
 export interface QueueItem {
@@ -65,6 +65,17 @@ export interface QueueItem {
   note: string
   queued_at: string
   started_at: string | null
+  finished_at: string | null
+  evidence: Evidence | null
+}
+
+/** What `experiment verify` found for a run: Modal call states, cases answered per reranker, kept-mass table present. */
+export interface Evidence {
+  experiment: string
+  calls: Record<string, string>
+  rerankers: { name: string; requests: number; cases: number }[]
+  kept_mass: boolean
+  problems: string[]
 }
 
 export interface Queue {
