@@ -130,18 +130,6 @@
    "evidence": null
   },
   {
-   "config": "configs/el_jevo_v17_vs_jev.yaml",
-   "label": "el_jevo_v17_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/DanielAlonsoC/el-jevo",
-   "status": "proposed",
-   "note": "V17 is a merged 0.8B checkpoint with a published wrapper for noul, choice and score; add the NLI-to-System-One wrapper and a pinned Modal loader. Earlier NLI-only triage does not cover this wrapper.",
-   "queued_at": "2026-10-02T13:27:10Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/canopy_jev_27b_vs_jev.yaml",
    "label": "canopy_jev_27b_vs_jev",
    "source": "huggingface",
