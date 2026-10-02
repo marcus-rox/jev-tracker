@@ -21,6 +21,144 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
   arXiv, web, X/Twitter, Hacker News); `crawler/queries.yaml`, `crawler/seen.jsonl`,
   `crawler/candidates/<date>.jsonl`
 
+## How it works
+
+Three parts share one repository: the **benchmark harness** scores a model on the 75 frozen cases,
+the **daily run** finds and benchmarks new models, and the **site** shows the results.
+
+**Figure 1. Block diagram of the system.**
+
+```mermaid
+flowchart TB
+  SRC["6 public sources<br/>GitHub · Hugging Face · arXiv · Web · X · Hacker News"]
+  USER([Marcus / a visitor])
+  subgraph Find["1. Find"]
+    CRAWL[Crawler]
+    SEEN[(Seen set)]
+    CAND[(Today's candidates)]
+  end
+  subgraph Decide["2. Decide and run"]
+    DEVIN{{Devin daily session: triage}}
+    TRI[(Triage verdicts)]
+    CFG[(Experiment configs)]
+    RUN[Runner]
+    MODAL[(Modal GPUs)]
+    BENCH[(Frozen benchmark:<br/>75 cases, labels, Jev answers)]
+    RES[(Results: kept-mass,<br/>cost, latency, raw answers)]
+  end
+  subgraph Show["3. Show"]
+    GEN[Site generator]
+    SITE[Leaderboard site on Render]
+    REQ[(Submitted requests)]
+  end
+  SRC -->|search APIs| CRAWL
+  SEEN <-->|dedupe| CRAWL
+  REQ --> CRAWL
+  CRAWL --> CAND --> DEVIN
+  DEVIN --> TRI
+  DEVIN -->|runnable, max 3/day| CFG --> RUN
+  BENCH --> RUN
+  RUN <-->|shards| MODAL
+  RUN --> RES --> GEN --> SITE
+  USER -->|types a link| SITE -->|files| REQ
+```
+
+Legend: rectangles are processes, cylinders are data committed to the repo (or Modal storage),
+the hexagon is the one step where an LLM (Devin) makes a judgment call, the rounded box is a person.
+Everything Devin changes reaches `main` only through a PR Marcus merges (one exception: the
+evaluation-queue file, so the site can show what is running).
+
+**Figure 2. One day's run, as a sequence diagram.**
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant A as Devin Automation (daily 06:17 PT)
+  participant C as Crawler
+  participant S as 6 public sources
+  participant R as Repository
+  participant M as Modal GPUs
+  participant P as Pull request
+  A->>R: clone main, branch automation/DATE
+  A->>C: crawl since last run
+  loop every (source, query) pair (~43)
+    C->>S: search(query, since)
+    S-->>C: hits (url, title, snippet)
+  end
+  C->>R: read submitted requests
+  C->>R: drop keys already seen, append new keys
+  C-->>A: today's candidates
+  A->>A: triage every candidate (runnable / needs_adapter / not_jev)
+  A->>R: write verdicts + a config per new runnable model
+  A->>R: push queue (runnable models) to main
+  loop each new runnable config (max 3)
+    A->>M: run all 75 cases (batched, sharded)
+    M-->>A: raw answers + timers
+    A->>R: score kept-mass, cost, latency
+  end
+  A->>R: rewrite TLDR, regenerate site data + build
+  A->>P: open PR "Daily DATE: n candidates, m runs"
+  Note over P: Marcus reviews and merges, then Render redeploys the site
+```
+
+Legend: solid arrows are calls, dashed arrows are replies, boxes marked `loop` repeat. Steps 3–7 are
+the crawl, step 8 is triage, steps 11–13 are one benchmark run.
+
+**Figure 3. What happens to one search hit.**
+
+```mermaid
+flowchart LR
+  Q["(source, query)<br/>e.g. huggingface 'kev'"] --> API[Source search API<br/>filtered to 'since']
+  API --> HIT[Hit: url, title, snippet]
+  HIT --> K{Key already<br/>in seen set?}
+  K -- yes --> DROP[Dropped]
+  K -- no --> NEW[New candidate<br/>+ key remembered]
+  NEW --> V{Devin triage}
+  V -- not_jev --> X1[Recorded with a one-line reason]
+  V -- needs_adapter --> X2[Recorded with what is missing<br/>backlog for harness work]
+  V -- runnable --> X3[Config written<br/>benchmarked if not run before]
+```
+
+Legend: diamonds are decisions. The key is the URL, except Hugging Face models, where it is
+`hf:<id>@<commit>`, so new weights under an old model id come back once more.
+
+**Table 1. What each source is asked.**
+
+| Source | API | What a query matches | Date filter |
+|---|---|---|---|
+| GitHub | repository search | name, description, readme; repo pushed since the window | server-side |
+| Hugging Face | model search, newest first | model id substring | client-side, last modified |
+| arXiv | Atom API, all fields | title / abstract / authors; terms ANDed | client-side, last updated |
+| Web | Tavily (keyless) | any page | whole days back |
+| X / Twitter | Tavily + `site:x.com` | posts on x.com / twitter.com | whole days back |
+| Hacker News | Algolia | stories and comments; quoted phrases only | server-side |
+| Submitted | the site's text box | whatever a person typed | none |
+
+Queries live in `crawler/queries.yaml`: the model names (`jev`, `kev`, `laya`, `systemone`,
+`"system one"`, `noul`, `"decision model" reranker`, `jaredpalmer/kev`) per source. The crawler
+only collects; it never decides relevance. Relevance is the triage step.
+
+**Table 2. Triage verdicts.**
+
+| Verdict | Meaning | What happens |
+|---|---|---|
+| `runnable` | a model the harness can already call (Kev-family or official Laya weights on Hugging Face, or a hosted API whose key is a Modal Secret); also used for posts about such a model | config in `configs/`; benchmarked if that exact model/revision has no results yet |
+| `needs_adapter` | a real Jev alternative the harness cannot call yet (GGUF/ONNX/MLX export, own architecture or serving stack, key not provisioned, over budget) | recorded with what is missing; nothing runs |
+| `not_jev` | unrelated hit (a person called Kev, CISA KEV, keV in physics, apps built on Jev) | recorded with a one-line reason |
+
+### Reading what the crawl found
+
+- `crawler/candidates/<date>.jsonl`: every new hit that day (source, url, title, snippet, query).
+- `crawler/triage/<date>.yaml`: Devin's verdict and reason for each of them, matched by `key`.
+- `data/experiments/<id>/`: results for the models that ran; `data/tldr.md` is the day's summary.
+
+```bash
+uv run python -m crawler.triage check crawler/triage/<date>.yaml crawler/candidates/<date>.jsonl  # counts per verdict
+python3 -c "import yaml,sys;[print(d['key'],'|',d['reason']) for d in yaml.safe_load(open(sys.argv[1])) if d['verdict']=='needs_adapter']" crawler/triage/<date>.yaml
+```
+
+The fuller explainer (same diagrams, step table, guardrails) is `docs/DAILY_RUN.html`.
+
 ## Run
 
 ```bash
