@@ -3,6 +3,7 @@
 Run from the repo root:  python3 docs/src/build_jev_alternatives.py
 Then compile the fragment into docs/JEV_ALTERNATIVES.html with the artifact kit.
 """
+
 from __future__ import annotations
 
 import collections
@@ -28,14 +29,42 @@ BENCHED = {
 }
 
 BUCKETS = [
-    ("runnable", "Runnable with today's harness", "Nothing: Kev / Laya family or a hosted API with a provisioned key."),
-    ("quant", "Quantised / exported weights (GGUF, MLX, ONNX)", "A llama.cpp / MLX / ONNX serving source, or find the bf16 original."),
-    ("arch", "Own architecture / serving", "A harness source that loads the model and reads P(true) or the ordinal readout."),
-    ("unofficial", "Unofficial checkpoint of a supported family", "Allow-list the repo in the kev / laya source (low effort, low expected value)."),
-    ("vision", "Vision / multimodal input", "A new request format carrying images; out of scope for the text benchmark."),
+    (
+        "runnable",
+        "Runnable with today's harness",
+        "Nothing: Kev / Laya family or a hosted API with a provisioned key.",
+    ),
+    (
+        "quant",
+        "Quantised / exported weights (GGUF, MLX, ONNX)",
+        "A llama.cpp / MLX / ONNX serving source, or find the bf16 original.",
+    ),
+    (
+        "arch",
+        "Own architecture / serving",
+        "A harness source that loads the model and reads P(true) or the ordinal readout.",
+    ),
+    (
+        "unofficial",
+        "Unofficial checkpoint of a supported family",
+        "Allow-list the repo in the kev / laya source (low effort, low expected value).",
+    ),
+    (
+        "vision",
+        "Vision / multimodal input",
+        "A new request format carrying images; out of scope for the text benchmark.",
+    ),
     ("noweights", "No weights / code released yet", "Blocked on the author."),
-    ("api", "Hosted API: key or URL not provisioned", "A Modal Secret with the key, or a hosted URL for the self-hosted server."),
-    ("kevbase", "Kev recipe on an unverified base model", "Verify the kev source on that base (Gemma-4, MiniCPM) then run."),
+    (
+        "api",
+        "Hosted API: key or URL not provisioned",
+        "A Modal Secret with the key, or a hosted URL for the self-hosted server.",
+    ),
+    (
+        "kevbase",
+        "Kev recipe on an unverified base model",
+        "Verify the kev source on that base (Gemma-4, MiniCPM) then run.",
+    ),
     ("budget", "Over GPU budget", "Approve the budget or a smaller GPU."),
     ("other", "Other", "See the triage reason."),
 ]
@@ -54,13 +83,19 @@ def bucket(verdict: str, reason: str) -> str:
         return "api"
     if "budget" in r:
         return "budget"
-    if re.search(r"no released|no weights|not released|weights.*not|without weights|code release|no checkpoint|no public", r):
+    if re.search(
+        r"no released|no weights|not released|weights.*not|without weights|code release|no checkpoint|no public",
+        r,
+    ):
         return "noweights"
     if re.search(r"unofficial|only admits|official repos", r):
         return "unofficial"
     if re.search(r"only verified on|recipe on", r):
         return "kevbase"
-    if re.search(r"own architecture|own serving|serving stack|request format|no harness source|own .*package|engine|wrapper|readout|server", r):
+    if re.search(
+        r"own architecture|own serving|serving stack|request format|no harness source|own .*package|engine|wrapper|readout|server",
+        r,
+    ):
         return "arch"
     return "other"
 
@@ -115,9 +150,17 @@ def main() -> None:
             status = "untouched"
         rows.append(
             dict(
-                key=key, url=c["url"], title=c["title"], snippet=c["snippet"], source=c["source"],
-                first_seen=c["first_seen"][:10], verdict=v["verdict"], reason=v["reason"],
-                bucket=bucket(v["verdict"], v["reason"]), status=status, config=v["config"] or "",
+                key=key,
+                url=c["url"],
+                title=c["title"],
+                snippet=c["snippet"],
+                source=c["source"],
+                first_seen=c["first_seen"][:10],
+                verdict=v["verdict"],
+                reason=v["reason"],
+                bucket=bucket(v["verdict"], v["reason"]),
+                status=status,
+                config=v["config"] or "",
                 model=model_of(key),
             )
         )
@@ -128,7 +171,11 @@ def main() -> None:
     n_hits = len(verdicts)
     n_alt = len(rows)
     n_models = sum(1 for g in groups if "/" in g and not g.startswith("http"))
-    n_untouched_models = sum(1 for g, rs in groups.items() if "/" in g and not g.startswith("http") and all(r["status"] == "untouched" for r in rs))
+    n_untouched_models = sum(
+        1
+        for g, rs in groups.items()
+        if "/" in g and not g.startswith("http") and all(r["status"] == "untouched" for r in rs)
+    )
     by_bucket = collections.Counter(r["bucket"] for r in rows)
     models_by_bucket = collections.Counter()
     for g, rs in groups.items():
@@ -157,30 +204,38 @@ def main() -> None:
         return (
             f'<tr data-bucket="{b}" data-status="{e(st)}" data-source="{e(src[0])}" data-text="{e((name + " " + reason + " " + " ".join(r["title"] for r in rs)).lower())}">'
             f'<th scope="row"><a href="{e(link)}">{e(name)}</a></th>'
-            f'<td data-numeric>{len(rs)}</td>'
-            f'<td>{e(BUCKET_TITLE[b])}</td>'
-            f'<td>{e(st)}</td>'
-            f'<td>{e(", ".join(src))}</td>'
-            f'<td>{e(reason)}</td>'
-            f'<td>{e(rs[0]["first_seen"])}</td>'
+            f"<td data-numeric>{len(rs)}</td>"
+            f"<td>{e(BUCKET_TITLE[b])}</td>"
+            f"<td>{e(st)}</td>"
+            f"<td>{e(', '.join(src))}</td>"
+            f"<td>{e(reason)}</td>"
+            f"<td>{e(rs[0]['first_seen'])}</td>"
             "</tr>"
         )
 
     order = {k: i for i, (k, _, _) in enumerate(BUCKETS)}
-    sorted_groups = sorted(groups.items(), key=lambda kv: (order[collections.Counter(r["bucket"] for r in kv[1]).most_common(1)[0][0]], -len(kv[1]), kv[0].lower()))
+    sorted_groups = sorted(
+        groups.items(),
+        key=lambda kv: (
+            order[collections.Counter(r["bucket"] for r in kv[1]).most_common(1)[0][0]],
+            -len(kv[1]),
+            kv[0].lower(),
+        ),
+    )
     model_rows = "\n".join(group_row(g, rs) for g, rs in sorted_groups)
 
     hit_rows = "\n".join(
         f'<tr data-bucket="{r["bucket"]}" data-status="{e(r["status"])}" data-source="{e(r["source"])}" data-text="{e((r["title"] + " " + r["reason"] + " " + r["snippet"]).lower())}">'
         f'<th scope="row"><a href="{e(r["url"])}">{e(r["title"])}</a></th>'
-        f'<td>{e(r["source"])}</td><td>{e(BUCKET_TITLE[r["bucket"]])}</td><td>{e(r["status"])}</td>'
-        f'<td>{e(r["reason"])}</td><td>{e(r["config"])}</td><td>{e(r["first_seen"])}</td></tr>'
+        f"<td>{e(r['source'])}</td><td>{e(BUCKET_TITLE[r['bucket']])}</td><td>{e(r['status'])}</td>"
+        f"<td>{e(r['reason'])}</td><td>{e(r['config'])}</td><td>{e(r['first_seen'])}</td></tr>"
         for r in sorted(rows, key=lambda r: (order[r["bucket"]], r["source"], r["title"].lower()))
     )
 
     bucket_table_rows = "\n".join(
         f'<tr><th scope="row">{e(t)}</th><td data-numeric>{by_bucket.get(k, 0)}</td><td data-numeric>{models_by_bucket.get(k, 0)}</td><td>{e(need)}</td></tr>'
-        for k, t, need in BUCKETS if by_bucket.get(k, 0)
+        for k, t, need in BUCKETS
+        if by_bucket.get(k, 0)
     )
     funnel_rows = "\n".join(
         f'<tr><th scope="row">{e(a)}</th><td data-numeric>{n}</td></tr>'
@@ -194,11 +249,19 @@ def main() -> None:
             ("In the approval queue (proposed)", queue_counts.get("proposed", 0)),
         ]
     )
-    not_jev_rows = "\n".join(f"<tr><th scope=\"row\">{e(k)}</th><td data-numeric>{n}</td></tr>" for k, n in not_jev.most_common(10))
-    source_rows = "\n".join(f"<tr><th scope=\"row\">{e(k)}</th><td data-numeric>{n}</td></tr>" for k, n in sources.most_common())
+    not_jev_rows = "\n".join(
+        f'<tr><th scope="row">{e(k)}</th><td data-numeric>{n}</td></tr>'
+        for k, n in not_jev.most_common(10)
+    )
+    source_rows = "\n".join(
+        f'<tr><th scope="row">{e(k)}</th><td data-numeric>{n}</td></tr>'
+        for k, n in sources.most_common()
+    )
 
     statuses = sorted(by_status, key=lambda s: ("untouched" in s, s))
-    filter_bar = lambda tid: f"""
+
+    def filter_bar(tid: str) -> str:
+        return f"""
 <div class="a-toolbar" data-jev-filters="#{tid}">
   <label class="a-label">What is missing <select class="a-select" data-key="bucket"><option value="all">all</option>{opt([k for k, _, _ in BUCKETS if by_bucket.get(k)], BUCKET_TITLE)}</select></label>
   <label class="a-label">Status <select class="a-select" data-key="status"><option value="all">all</option>{opt(statuses)}</select></label>
@@ -211,7 +274,7 @@ def main() -> None:
 <nav class="a-section" aria-labelledby="toc-heading">
   <h2 class="a-section__title" id="toc-heading">Contents</h2>
   <ul class="a-prose">
-    <li><a href="#answer-heading">1. Why only {queue_counts.get('proposed', 0)} await approval</a></li>
+    <li><a href="#answer-heading">1. Why only {queue_counts.get("proposed", 0)} await approval</a></li>
     <li><a href="#funnel-heading">2. Funnel from crawl to queue (Figure 1, Table 1)</a></li>
     <li><a href="#models-heading">3. Every Jev alternative, one row per model (Table 2)</a></li>
     <li><a href="#hits-heading">4. Every raw hit (Table 3)</a></li>
@@ -220,18 +283,18 @@ def main() -> None:
 </nav>
 
 <section class="a-section" aria-labelledby="answer-heading">
-  <h2 class="a-section__title" id="answer-heading">1. Why only {queue_counts.get('proposed', 0)} await approval</h2>
+  <h2 class="a-section__title" id="answer-heading">1. Why only {queue_counts.get("proposed", 0)} await approval</h2>
   <ul class="a-prose">
     <li>The crawler has seen <strong>{n_hits:,}</strong> hits. Triage marked <strong>{n_hits - n_alt:,}</strong> of them <code>not_jev</code> (people called Kev, CISA KEV, keV physics, apps built on Jev) — they are not alternatives and are not in this doc beyond Table 5.</li>
-    <li><strong>{n_alt}</strong> hits are real Jev alternatives. Only <strong>{by_bucket['runnable']}</strong> are <code>runnable</code> with today's harness, and those are almost all posts about Kev and Laya, which are already benchmarked.</li>
-    <li>The other <strong>{n_alt - by_bucket['runnable']}</strong> are <code>needs_adapter</code>: the harness cannot call them yet. The automation only promotes a <code>needs_adapter</code> hit to the approval queue when it judges the adapter "worth it" — that judgement is what left {queue_counts.get('proposed', 0)} in the queue, not the supply of models.</li>
+    <li><strong>{n_alt}</strong> hits are real Jev alternatives. Only <strong>{by_bucket["runnable"]}</strong> are <code>runnable</code> with today's harness, and those are almost all posts about Kev and Laya, which are already benchmarked.</li>
+    <li>The other <strong>{n_alt - by_bucket["runnable"]}</strong> are <code>needs_adapter</code>: the harness cannot call them yet. The automation only promotes a <code>needs_adapter</code> hit to the approval queue when it judges the adapter "worth it" — that judgement is what left {queue_counts.get("proposed", 0)} in the queue, not the supply of models.</li>
     <li>Collapsing quantised variants, the {n_alt} hits are <strong>{n_models} distinct Hugging Face models</strong> plus {len(groups) - n_models} repos/posts without a Hugging Face link; <strong>{n_untouched_models}</strong> of those models have never been run or queued. That is the list to prioritise (Table 2).</li>
   </ul>
   <div class="a-grid">
     <div class="a-metric"><div class="a-metric__label">Hits crawled</div><div class="a-metric__value">{n_hits:,}</div></div>
     <div class="a-metric"><div class="a-metric__label">Real Jev alternatives</div><div class="a-metric__value">{n_alt}</div></div>
     <div class="a-metric"><div class="a-metric__label">Distinct HF models</div><div class="a-metric__value">{n_models}</div><div class="a-metric__delta">{n_untouched_models} never run or queued</div></div>
-    <div class="a-metric"><div class="a-metric__label">Awaiting approval</div><div class="a-metric__value">{queue_counts.get('proposed', 0)}</div><div class="a-metric__delta">{queue_counts.get('queued', 0)} queued · {queue_counts.get('failed', 0)} failed</div></div>
+    <div class="a-metric"><div class="a-metric__label">Awaiting approval</div><div class="a-metric__value">{queue_counts.get("proposed", 0)}</div><div class="a-metric__delta">{queue_counts.get("queued", 0)} queued · {queue_counts.get("failed", 0)} failed</div></div>
   </div>
 </section>
 
@@ -255,7 +318,7 @@ def main() -> None:
 <section class="a-section" aria-labelledby="models-heading">
   <h2 class="a-section__title" id="models-heading">3. Every Jev alternative, one row per model</h2>
   <p class="a-section__note">Table 2. One row per distinct Hugging Face model (quantised / MLX / GGUF variants of the same weights collapsed into "variants") or per non-Hugging-Face repo/post. Sorted: runnable first, then by what is missing, then by number of variants. Status: benchmarked = results on the dashboard; ran today = the hourly run launched it; queue: proposed / queued / failed = in data/queue.json; untouched = nothing has happened yet. Filters combine; the search box matches name, reason and titles.</p>
-  {filter_bar('models-table')}
+  {filter_bar("models-table")}
   <div class="a-table-scroll">
     <table class="a-table" id="models-table" data-a-sticky-columns="1">
       <caption class="a-visually-hidden">Jev alternatives, one row per model</caption>
@@ -270,7 +333,7 @@ def main() -> None:
   <h2 class="a-section__title" id="hits-heading">4. Every raw hit</h2>
   <details class="a-disclosure">
     <summary>Table 3. All {n_alt} raw hits triaged runnable or needs_adapter (one row per crawler hit; the same model can appear several times — once per export, post or pinned revision). Same filters as Table 2.</summary>
-    {filter_bar('hits-table')}
+    {filter_bar("hits-table")}
     <div class="a-table-scroll">
       <table class="a-table" id="hits-table" data-a-sticky-columns="1">
         <caption class="a-visually-hidden">All raw hits</caption>
@@ -328,7 +391,9 @@ document.querySelectorAll('[data-jev-filters]').forEach(function (bar) {{
 </script>
 """
     OUT.write_text(body.strip() + "\n")
-    print(f"wrote {OUT} ({OUT.stat().st_size:,} bytes): {n_hits} hits, {n_alt} alternatives, {n_models} models, {n_untouched_models} untouched")
+    print(
+        f"wrote {OUT} ({OUT.stat().st_size:,} bytes): {n_hits} hits, {n_alt} alternatives, {n_models} models, {n_untouched_models} untouched"
+    )
 
 
 if __name__ == "__main__":
