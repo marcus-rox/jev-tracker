@@ -133,7 +133,7 @@ export default function App() {
   const gpuSet = gpus ?? new Set(GPUS)
   const prod = all.find((r) => r.family === PROD_FAMILY) ?? null
   const active = BOUNDS.filter(([m]) => bounds.has(m))
-  const inBounds = (r: Row) => prod === null || active.every(([, , col]) => beatsProd(r, prod, col))
+  const inBounds = (r: Row) => r.family === PROD_FAMILY || prod === null || active.every(([, , col]) => beatsProd(r, prod, col))
   const rows = ranked(all.filter((r) => fams.has(r.family) && gpuSet.has(r.gpu) && inBounds(r)), metric)
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
   const kept = data.ks.map(keptCol)
