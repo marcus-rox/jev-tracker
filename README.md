@@ -5,6 +5,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 
 - `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
 - `docs/PLAN.md` — phases, decisions, next steps
+- `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
   experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
 - `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
