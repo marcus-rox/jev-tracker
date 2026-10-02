@@ -13,6 +13,7 @@ CANDIDATES = [
     Candidate(
         source="github",
         url="https://github.com/a/kev-fork",
+        key="https://github.com/a/kev-fork",
         title="a/kev-fork",
         snippet="",
         first_seen=NOW,
@@ -21,6 +22,7 @@ CANDIDATES = [
     Candidate(
         source="web",
         url="https://example.com/jev-post",
+        key="https://example.com/jev-post",
         title="post",
         snippet="",
         first_seen=NOW,
