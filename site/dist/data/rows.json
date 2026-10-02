@@ -4159,5 +4159,5 @@
    "detail": "laya322m_multilingual_noul_reworded \u00b7 Jev 0.21"
   }
  ],
- "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- AutoTrust JEV-27B is third.\n  - 0.883 / 0.959 kept-mass\n  - 0.010 behind at k=50\n  - Costs $11.89 per run.\n- Today adds two models.\n  - AutoTrust: 0.883 / 0.959\n  - MATILDA: 0.876 / 0.952\n  - MATILDA costs $10.86.\n  - JevAny run failed.\n- AutoTrust passes Clef-27B.\n  - Clef-27B: 0.880 / 0.946\n  - MATILDA is below Clef-27B.\n- k=50 separates models.\n  - k=200 does not.\n  - Random keeps 0.749 at k=200.\n"
+ "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Two models finish today.\n  - AutoTrust: 0.883 / 0.959\n  - AutoTrust costs $11.89.\n  - MATILDA: 0.876 / 0.952\n  - MATILDA costs $10.86.\n  - JevAny run failed.\n- AutoTrust passes Clef-27B.\n  - AutoTrust takes third place.\n  - 0.010 behind at k=50\n  - Clef-27B: 0.880 / 0.946\n  - MATILDA is below Clef-27B.\n- k=50 separates models.\n  - k=200 does not.\n  - Random keeps 0.749 at k=200.\n"
 }

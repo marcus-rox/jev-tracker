@@ -6,10 +6,10 @@
    "source": "huggingface",
    "url": "https://huggingface.co/SimpleJev/JevAny-Qwen3.5-4B-LoRA",
    "status": "failed",
-   "note": "modal call fc-01M3Y3KXAH83SRFBRVHJZYQC63: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXGZKJKXYSFYCEJK8MX6: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXR17T11DF628CNCF2QW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXXWPJJ585JWXF2WY7J8: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KY4ZR6JEHWD2H2KHV25A: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; jevany_noul: no raw answers; jevany_score: no raw answers",
+   "note": "modal call fc-01M3Y3KXAH83SRFBRVHJZYQC63: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXGZKJKXYSFYCEJK8MX6: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXR17T11DF628CNCF2QW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KXXWPJJ585JWXF2WY7J8: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KY4ZR6JEHWD2H2KHV25A: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; modal call fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf; jev_noul: no raw answers; jev_score: no raw answers; jevany_noul: no raw answers; jevany_score: no raw answers",
    "queued_at": "2026-10-02T10:21:29Z",
    "started_at": "2026-10-02T10:35:51Z",
-   "finished_at": "2026-10-02T10:52:18Z",
+   "finished_at": "2026-10-02T13:28:10Z",
    "evidence": {
     "experiment": "2026_10_02_10_47_28_fine-buck",
     "calls": {
@@ -20,18 +20,7 @@
      "fc-01M3Y3KY4ZR6JEHWD2H2KHV25A": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
      "fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW": "FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf"
     },
-    "rerankers": [
-     {
-      "name": "jev_noul",
-      "requests": 457,
-      "cases": 75
-     },
-     {
-      "name": "jev_score",
-      "requests": 457,
-      "cases": 75
-     }
-    ],
+    "rerankers": [],
     "kept_mass": true,
     "problems": [
      "modal call fc-01M3Y3KXAH83SRFBRVHJZYQC63: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
@@ -40,6 +29,8 @@
      "modal call fc-01M3Y3KXXWPJJ585JWXF2WY7J8: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
      "modal call fc-01M3Y3KY4ZR6JEHWD2H2KHV25A: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
      "modal call fc-01M3Y3KYAXZMTMTA4FHDQ9NEKW: FAILED: ValueError: Could not load any image processor class for /__modal/volumes/vo-RpiSjPuZRF3V5SwM5JuvA5/hub/models--SimpleJev--JevAny-Qwen3.5-4B-LoRA/snapshots/1c7aa9bab14ac347aeb917c0bcd757838a8a78ce. The model conf",
+     "jev_noul: no raw answers",
+     "jev_score: no raw answers",
      "jevany_noul: no raw answers",
      "jevany_score: no raw answers"
     ]
@@ -173,6 +164,18 @@
    "status": "proposed",
    "note": "Inception Mercury Decide, hosted structured decision model on OpenRouter; api source needs an OpenRouter key as a Modal Secret",
    "queued_at": "2026-10-02T09:38:32Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/el_jevo_v17_vs_jev.yaml",
+   "label": "el_jevo_v17_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/DanielAlonsoC/el-jevo",
+   "status": "proposed",
+   "note": "V17 is a merged 0.8B checkpoint with a published wrapper for noul, choice and score; add the NLI-to-System-One wrapper and a pinned Modal loader. Earlier NLI-only triage does not cover this wrapper.",
+   "queued_at": "2026-10-02T13:27:10Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null

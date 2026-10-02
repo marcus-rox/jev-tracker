@@ -4,16 +4,15 @@
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-- AutoTrust JEV-27B is third.
-  - 0.883 / 0.959 kept-mass
-  - 0.010 behind at k=50
-  - Costs $11.89 per run.
-- Today adds two models.
+- Two models finish today.
   - AutoTrust: 0.883 / 0.959
+  - AutoTrust costs $11.89.
   - MATILDA: 0.876 / 0.952
   - MATILDA costs $10.86.
   - JevAny run failed.
 - AutoTrust passes Clef-27B.
+  - AutoTrust takes third place.
+  - 0.010 behind at k=50
   - Clef-27B: 0.880 / 0.946
   - MATILDA is below Clef-27B.
 - k=50 separates models.

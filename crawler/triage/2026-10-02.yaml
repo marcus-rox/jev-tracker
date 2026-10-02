@@ -8911,3 +8911,873 @@
   reason: Kev 1.0 announcement; Kev checkpoints already benchmarked (configs/kev_sizes.yaml),
     nothing new to run
   config: null
+- key: https://github.com/dagfinndybvig/miu-jev
+  url: https://github.com/dagfinndybvig/miu-jev
+  verdict: not_jev
+  reason: 'dagfinndybvig/miu-jev: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/philipbrembeck/pi-advisor
+  url: https://github.com/philipbrembeck/pi-advisor
+  verdict: not_jev
+  reason: 'philipbrembeck/pi-advisor: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/LukasPodhorny/trello-jev
+  url: https://github.com/LukasPodhorny/trello-jev
+  verdict: not_jev
+  reason: 'LukasPodhorny/trello-jev: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/Kevin-Zhouu/jevify
+  url: https://github.com/Kevin-Zhouu/jevify
+  verdict: not_jev
+  reason: 'Kevin-Zhouu/jevify: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/cequence-io/openai-scala-client
+  url: https://github.com/cequence-io/openai-scala-client
+  verdict: not_jev
+  reason: 'cequence-io/openai-scala-client: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/odyseja2011/jev-filemanager
+  url: https://github.com/odyseja2011/jev-filemanager
+  verdict: not_jev
+  reason: 'odyseja2011/jev-filemanager: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/yangisu/Automate_jev
+  url: https://github.com/yangisu/Automate_jev
+  verdict: not_jev
+  reason: 'yangisu/Automate_jev: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/PavDev3/PokeJev
+  url: https://github.com/PavDev3/PokeJev
+  verdict: not_jev
+  reason: 'PavDev3/PokeJev: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/fr0ziii/pi-jfiles
+  url: https://github.com/fr0ziii/pi-jfiles
+  verdict: not_jev
+  reason: 'fr0ziii/pi-jfiles: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/matt-riley/pi-browser
+  url: https://github.com/matt-riley/pi-browser
+  verdict: not_jev
+  reason: 'matt-riley/pi-browser: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/leviathan-devops/jev-fact-kernel
+  url: https://github.com/leviathan-devops/jev-fact-kernel
+  verdict: not_jev
+  reason: 'leviathan-devops/jev-fact-kernel: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/RadRebelSam/awesome-jev
+  url: https://github.com/RadRebelSam/awesome-jev
+  verdict: not_jev
+  reason: 'RadRebelSam/awesome-jev: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/aramalipoor/rust-jevtest
+  url: https://github.com/aramalipoor/rust-jevtest
+  verdict: not_jev
+  reason: 'aramalipoor/rust-jevtest: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/designfordrink/jev-benchmark
+  url: https://github.com/designfordrink/jev-benchmark
+  verdict: not_jev
+  reason: 'designfordrink/jev-benchmark: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/umatter/jevtools
+  url: https://github.com/umatter/jevtools
+  verdict: not_jev
+  reason: 'umatter/jevtools: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/bgrablin/hermes-switchyard
+  url: https://github.com/bgrablin/hermes-switchyard
+  verdict: not_jev
+  reason: 'bgrablin/hermes-switchyard: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/lokeshinumpudi/maple-line
+  url: https://github.com/lokeshinumpudi/maple-line
+  verdict: not_jev
+  reason: 'lokeshinumpudi/maple-line: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/GastonGelhorn/jevmate
+  url: https://github.com/GastonGelhorn/jevmate
+  verdict: not_jev
+  reason: 'GastonGelhorn/jevmate: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/mukiwu/jev-search-mcp
+  url: https://github.com/mukiwu/jev-search-mcp
+  verdict: not_jev
+  reason: 'mukiwu/jev-search-mcp: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/Sayansh2004/JevXMCP
+  url: https://github.com/Sayansh2004/JevXMCP
+  verdict: not_jev
+  reason: 'Sayansh2004/JevXMCP: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/AppitStudio/awesome-jev
+  url: https://github.com/AppitStudio/awesome-jev
+  verdict: not_jev
+  reason: 'AppitStudio/awesome-jev: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/AlienXc137/Support-Ticket-Ai-Agent-with-RAG-Guardrails-and-Jev
+  url: https://github.com/AlienXc137/Support-Ticket-Ai-Agent-with-RAG-Guardrails-and-Jev
+  verdict: not_jev
+  reason: 'AlienXc137/Support-Ticket-Ai-Agent-with-RAG-Guardrails-and-Jev: application,
+    SDK, catalog or benchmark around existing models; no distinct decision checkpoint
+    or hosted endpoint.'
+  config: null
+- key: https://github.com/Computational-social-science/JevRSI
+  url: https://github.com/Computational-social-science/JevRSI
+  verdict: needs_adapter
+  reason: RSI-style Qwen3-0.6B training loop uses a custom typed-decision head; needs
+    a published stable checkpoint and Modal inference adapter.
+  config: null
+- key: https://github.com/Yomiamy/jev-mobile-mcp
+  url: https://github.com/Yomiamy/jev-mobile-mcp
+  verdict: not_jev
+  reason: 'Yomiamy/jev-mobile-mcp: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/Hyper-AI-Lab/openclaw-jev
+  url: https://github.com/Hyper-AI-Lab/openclaw-jev
+  verdict: not_jev
+  reason: 'Hyper-AI-Lab/openclaw-jev: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/jstdlee/jev-photos
+  url: https://github.com/jstdlee/jev-photos
+  verdict: not_jev
+  reason: 'jstdlee/jev-photos: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/manojjahgirdar/agentic_harness_with_jev
+  url: https://github.com/manojjahgirdar/agentic_harness_with_jev
+  verdict: not_jev
+  reason: 'manojjahgirdar/agentic_harness_with_jev: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/jade-quark79/jevp
+  url: https://github.com/jade-quark79/jevp
+  verdict: not_jev
+  reason: 'jade-quark79/jevp: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/SleepinWei/Jev-LongSeq
+  url: https://github.com/SleepinWei/Jev-LongSeq
+  verdict: not_jev
+  reason: 'SleepinWei/Jev-LongSeq: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/notque/vexjoy-agent
+  url: https://github.com/notque/vexjoy-agent
+  verdict: not_jev
+  reason: 'notque/vexjoy-agent: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/BudEcosystem/Bud-Decision-Engine
+  url: https://github.com/BudEcosystem/Bud-Decision-Engine
+  verdict: not_jev
+  reason: Desktop serving studio for existing decision models; not a new checkpoint
+    or hosted model endpoint.
+  config: null
+- key: https://github.com/AkashPriyadarshii/jev-seo
+  url: https://github.com/AkashPriyadarshii/jev-seo
+  verdict: not_jev
+  reason: 'AkashPriyadarshii/jev-seo: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/Eliot5566/JEV-Paper-Radar
+  url: https://github.com/Eliot5566/JEV-Paper-Radar
+  verdict: not_jev
+  reason: 'Eliot5566/JEV-Paper-Radar: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/tinystruct/tinystruct-smart-dba
+  url: https://github.com/tinystruct/tinystruct-smart-dba
+  verdict: not_jev
+  reason: 'tinystruct/tinystruct-smart-dba: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/eitaar/jev-skill-router
+  url: https://github.com/eitaar/jev-skill-router
+  verdict: not_jev
+  reason: 'eitaar/jev-skill-router: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/kevernlt/kevernlt
+  url: https://github.com/kevernlt/kevernlt
+  verdict: not_jev
+  reason: 'kevernlt/kevernlt: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/jonpol01/d1a-playground
+  url: https://github.com/jonpol01/d1a-playground
+  verdict: not_jev
+  reason: 'jonpol01/d1a-playground: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/rakshit-737/linchpin
+  url: https://github.com/rakshit-737/linchpin
+  verdict: not_jev
+  reason: 'rakshit-737/linchpin: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/webhunter-navrhy/fr-reality-proprietes-privees-kevin-gasnier
+  url: https://github.com/webhunter-navrhy/fr-reality-proprietes-privees-kevin-gasnier
+  verdict: not_jev
+  reason: 'webhunter-navrhy/fr-reality-proprietes-privees-kevin-gasnier: person/profile,
+    unrelated app or CISA Known Exploited Vulnerabilities project; no typed-decision
+    model.'
+  config: null
+- key: https://github.com/KevinZonda/KevinZondaTerminal
+  url: https://github.com/KevinZonda/KevinZondaTerminal
+  verdict: not_jev
+  reason: 'KevinZonda/KevinZondaTerminal: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevminso14/APS-2-kevinsong
+  url: https://github.com/kevminso14/APS-2-kevinsong
+  verdict: not_jev
+  reason: 'kevminso14/APS-2-kevinsong: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/aetheria-research/kevlar
+  url: https://github.com/aetheria-research/kevlar
+  verdict: not_jev
+  reason: 'aetheria-research/kevlar: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/the-kevind/the.kevind.website
+  url: https://github.com/the-kevind/the.kevind.website
+  verdict: not_jev
+  reason: 'the-kevind/the.kevind.website: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/carlsullivan11/umbra-wiki
+  url: https://github.com/carlsullivan11/umbra-wiki
+  verdict: not_jev
+  reason: 'carlsullivan11/umbra-wiki: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/senzgrc/signal-atlas
+  url: https://github.com/senzgrc/signal-atlas
+  verdict: not_jev
+  reason: 'senzgrc/signal-atlas: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevindwi/kevindwi.github.io
+  url: https://github.com/kevindwi/kevindwi.github.io
+  verdict: not_jev
+  reason: 'kevindwi/kevindwi.github.io: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/keevinvieeira/curriculo-kevin
+  url: https://github.com/keevinvieeira/curriculo-kevin
+  verdict: not_jev
+  reason: 'keevinvieeira/curriculo-kevin: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevintsli/kevintsli
+  url: https://github.com/kevintsli/kevintsli
+  verdict: not_jev
+  reason: 'kevintsli/kevintsli: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/sarroyoclaudio/kev
+  url: https://github.com/sarroyoclaudio/kev
+  verdict: not_jev
+  reason: 'sarroyoclaudio/kev: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/NullSpace-BitCradle/Threat_Intelligence_Pipeline
+  url: https://github.com/NullSpace-BitCradle/Threat_Intelligence_Pipeline
+  verdict: not_jev
+  reason: 'NullSpace-BitCradle/Threat_Intelligence_Pipeline: person/profile, unrelated
+    app or CISA Known Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevinbayter/kevinbayter
+  url: https://github.com/kevinbayter/kevinbayter
+  verdict: not_jev
+  reason: 'kevinbayter/kevinbayter: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/skywise89-ops/kevin-wedding-english
+  url: https://github.com/skywise89-ops/kevin-wedding-english
+  verdict: not_jev
+  reason: 'skywise89-ops/kevin-wedding-english: person/profile, unrelated app or CISA
+    Known Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/KevalXD/KevalXD
+  url: https://github.com/KevalXD/KevalXD
+  verdict: not_jev
+  reason: 'KevalXD/KevalXD: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevintsli/kevintsli.github.io
+  url: https://github.com/kevintsli/kevintsli.github.io
+  verdict: not_jev
+  reason: 'kevintsli/kevintsli.github.io: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevinmuraguri4-hub/kevinmuraguri-repo
+  url: https://github.com/kevinmuraguri4-hub/kevinmuraguri-repo
+  verdict: not_jev
+  reason: 'kevinmuraguri4-hub/kevinmuraguri-repo: person/profile, unrelated app or
+    CISA Known Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/jmurray2011/rdy
+  url: https://github.com/jmurray2011/rdy
+  verdict: not_jev
+  reason: 'jmurray2011/rdy: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kazakov7/kevin7
+  url: https://github.com/kazakov7/kevin7
+  verdict: not_jev
+  reason: 'kazakov7/kevin7: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevinduong0101/kevinduong0101
+  url: https://github.com/kevinduong0101/kevinduong0101
+  verdict: not_jev
+  reason: 'kevinduong0101/kevinduong0101: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/KevinOceanLiu/kevinoceanliu.github.io
+  url: https://github.com/KevinOceanLiu/kevinoceanliu.github.io
+  verdict: not_jev
+  reason: 'KevinOceanLiu/kevinoceanliu.github.io: person/profile, unrelated app or
+    CISA Known Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/v3nomtech/V3nom-Intel
+  url: https://github.com/v3nomtech/V3nom-Intel
+  verdict: not_jev
+  reason: 'v3nomtech/V3nom-Intel: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevnnard/kevnnard
+  url: https://github.com/kevnnard/kevnnard
+  verdict: not_jev
+  reason: 'kevnnard/kevnnard: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevincarcache/kevincarcache
+  url: https://github.com/kevincarcache/kevincarcache
+  verdict: not_jev
+  reason: 'kevincarcache/kevincarcache: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevin-kraus/kevin-kraus
+  url: https://github.com/kevin-kraus/kevin-kraus
+  verdict: not_jev
+  reason: 'kevin-kraus/kevin-kraus: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/Carlos-OBMC/Carlos-OBMC-Angeles_ICT10_Q1Project_Aguas_Carlos_Kevin_Jo
+  url: https://github.com/Carlos-OBMC/Carlos-OBMC-Angeles_ICT10_Q1Project_Aguas_Carlos_Kevin_Jo
+  verdict: not_jev
+  reason: 'Carlos-OBMC/Carlos-OBMC-Angeles_ICT10_Q1Project_Aguas_Carlos_Kevin_Jo:
+    person/profile, unrelated app or CISA Known Exploited Vulnerabilities project;
+    no typed-decision model.'
+  config: null
+- key: https://github.com/Revi1337/vulnox
+  url: https://github.com/Revi1337/vulnox
+  verdict: not_jev
+  reason: 'Revi1337/vulnox: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/eter-dan/Kevin-s-saloon
+  url: https://github.com/eter-dan/Kevin-s-saloon
+  verdict: not_jev
+  reason: 'eter-dan/Kevin-s-saloon: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/DanielR91/CVE_Prioritiser
+  url: https://github.com/DanielR91/CVE_Prioritiser
+  verdict: not_jev
+  reason: 'DanielR91/CVE_Prioritiser: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/shivamsaraswat/VulnSort
+  url: https://github.com/shivamsaraswat/VulnSort
+  verdict: not_jev
+  reason: 'shivamsaraswat/VulnSort: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/kevin121233/kevin
+  url: https://github.com/kevin121233/kevin
+  verdict: not_jev
+  reason: 'kevin121233/kevin: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/KevinDeng-0411/KevinDeng-0411
+  url: https://github.com/KevinDeng-0411/KevinDeng-0411
+  verdict: not_jev
+  reason: 'KevinDeng-0411/KevinDeng-0411: person/profile, unrelated app or CISA Known
+    Exploited Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/yash2121ja/vuln-intel-db
+  url: https://github.com/yash2121ja/vuln-intel-db
+  verdict: not_jev
+  reason: 'yash2121ja/vuln-intel-db: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/florianppn/CVEille
+  url: https://github.com/florianppn/CVEille
+  verdict: not_jev
+  reason: 'florianppn/CVEille: person/profile, unrelated app or CISA Known Exploited
+    Vulnerabilities project; no typed-decision model.'
+  config: null
+- key: https://github.com/urben88/ai-frontend-guide-kit
+  url: https://github.com/urben88/ai-frontend-guide-kit
+  verdict: not_jev
+  reason: 'urben88/ai-frontend-guide-kit: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/tc3oliver/laya-apple
+  url: https://github.com/tc3oliver/laya-apple
+  verdict: needs_adapter
+  reason: Apple ANE/CoreML port needs a compatible inference adapter; current harness
+    runs upstream Laya on CUDA.
+  config: null
+- key: https://github.com/HectorLayak/HectorLayak
+  url: https://github.com/HectorLayak/HectorLayak
+  verdict: not_jev
+  reason: 'HectorLayak/HectorLayak: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/eugeneproai/laya-jev-benchmark
+  url: https://github.com/eugeneproai/laya-jev-benchmark
+  verdict: not_jev
+  reason: 'eugeneproai/laya-jev-benchmark: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/derrickqin/litellm-gemini-laya-router
+  url: https://github.com/derrickqin/litellm-gemini-laya-router
+  verdict: not_jev
+  reason: 'derrickqin/litellm-gemini-laya-router: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/derrickqin/google-adk-laya-router
+  url: https://github.com/derrickqin/google-adk-laya-router
+  verdict: not_jev
+  reason: 'derrickqin/google-adk-laya-router: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/butabuyan-ux/layananbantuanspinjam
+  url: https://github.com/butabuyan-ux/layananbantuanspinjam
+  verdict: not_jev
+  reason: 'butabuyan-ux/layananbantuanspinjam: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/m7madi8/layaly-pos
+  url: https://github.com/m7madi8/layaly-pos
+  verdict: not_jev
+  reason: 'm7madi8/layaly-pos: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/poad/laya-ts-example
+  url: https://github.com/poad/laya-ts-example
+  verdict: not_jev
+  reason: 'poad/laya-ts-example: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/butabuyan-ux/Layanan-bantuan-spinjam
+  url: https://github.com/butabuyan-ux/Layanan-bantuan-spinjam
+  verdict: not_jev
+  reason: 'butabuyan-ux/Layanan-bantuan-spinjam: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/move38studios/decision-map-bench
+  url: https://github.com/move38studios/decision-map-bench
+  verdict: not_jev
+  reason: 'move38studios/decision-map-bench: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/git-Ktu/laya_playground
+  url: https://github.com/git-Ktu/laya_playground
+  verdict: not_jev
+  reason: 'git-Ktu/laya_playground: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/TerrKot/vacancy-skill-classification
+  url: https://github.com/TerrKot/vacancy-skill-classification
+  verdict: not_jev
+  reason: Fixed 43-anchor vacancy skill classifier; corpus and weights remain private,
+    not a runnable general decision alternative.
+  config: null
+- key: https://github.com/tiw/jeff-laya-routing-study
+  url: https://github.com/tiw/jeff-laya-routing-study
+  verdict: not_jev
+  reason: 'tiw/jeff-laya-routing-study: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/weeklyvillain/gatekeeper
+  url: https://github.com/weeklyvillain/gatekeeper
+  verdict: not_jev
+  reason: 'weeklyvillain/gatekeeper: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/CYMCharming/system1bench
+  url: https://github.com/CYMCharming/system1bench
+  verdict: not_jev
+  reason: 'CYMCharming/system1bench: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/keeltrace/hermes-nerve
+  url: https://github.com/keeltrace/hermes-nerve
+  verdict: not_jev
+  reason: 'keeltrace/hermes-nerve: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/anderson188/layaaimodel.com
+  url: https://github.com/anderson188/layaaimodel.com
+  verdict: not_jev
+  reason: 'anderson188/layaaimodel.com: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/asynq-io/system-one
+  url: https://github.com/asynq-io/system-one
+  verdict: not_jev
+  reason: 'asynq-io/system-one: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/pyardley/laya-ollama-demo
+  url: https://github.com/pyardley/laya-ollama-demo
+  verdict: not_jev
+  reason: 'pyardley/laya-ollama-demo: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/trifleen/laya-pipeline
+  url: https://github.com/trifleen/laya-pipeline
+  verdict: not_jev
+  reason: 'trifleen/laya-pipeline: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/alexdoandev/jev-laya-dsh
+  url: https://github.com/alexdoandev/jev-laya-dsh
+  verdict: not_jev
+  reason: 'alexdoandev/jev-laya-dsh: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/leloush-x/zenflash-llm
+  url: https://github.com/leloush-x/zenflash-llm
+  verdict: not_jev
+  reason: 'leloush-x/zenflash-llm: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/oozsen/systemone-tr
+  url: https://github.com/oozsen/systemone-tr
+  verdict: not_jev
+  reason: 'oozsen/systemone-tr: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/AyushGupta235/cvlm
+  url: https://github.com/AyushGupta235/cvlm
+  verdict: needs_adapter
+  reason: CLM-8B vision extension needs projection-head scoring and multimodal inputs;
+    no matching harness source.
+  config: null
+- key: https://github.com/THEROCKSSS/awesome-jev
+  url: https://github.com/THEROCKSSS/awesome-jev
+  verdict: not_jev
+  reason: 'THEROCKSSS/awesome-jev: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/mokk43/gev-wrapper
+  url: https://github.com/mokk43/gev-wrapper
+  verdict: not_jev
+  reason: 'mokk43/gev-wrapper: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/lucast4049/openjev
+  url: https://github.com/lucast4049/openjev
+  verdict: needs_adapter
+  reason: Project claims a Jev-compatible diffusion-model API but supplies no hosted
+    URL/model pair or verified checkpoint/loader in the card; adapter cannot be configured
+    yet.
+  config: null
+- key: https://github.com/Liuziyu77/Valen
+  url: https://github.com/Liuziyu77/Valen
+  verdict: needs_adapter
+  reason: Qwen3.5-2B vision decision model requires the separate Valen checkpoint,
+    custom inference code and image inputs; no text-only benchmark adapter.
+  config: null
+- key: https://github.com/Shivam-Jha96/gsp
+  url: https://github.com/Shivam-Jha96/gsp
+  verdict: not_jev
+  reason: 'Shivam-Jha96/gsp: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/surafel-kindu/system-one-models-game-test
+  url: https://github.com/surafel-kindu/system-one-models-game-test
+  verdict: not_jev
+  reason: 'surafel-kindu/system-one-models-game-test: application, SDK, catalog or
+    benchmark around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/rhc98/awesome-jev
+  url: https://github.com/rhc98/awesome-jev
+  verdict: not_jev
+  reason: 'rhc98/awesome-jev: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/sorgina13/Fast-lookups-for-LLMs
+  url: https://github.com/sorgina13/Fast-lookups-for-LLMs
+  verdict: not_jev
+  reason: Architecture comparison uses embedding similarity and ordinary generated
+    LLM answers; not a newly released typed-decision model.
+  config: null
+- key: https://github.com/LempereurBenjamin/pi-system-one-gate
+  url: https://github.com/LempereurBenjamin/pi-system-one-gate
+  verdict: not_jev
+  reason: 'LempereurBenjamin/pi-system-one-gate: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/valentynkit/awesome-jev-typesafe
+  url: https://github.com/valentynkit/awesome-jev-typesafe
+  verdict: not_jev
+  reason: 'valentynkit/awesome-jev-typesafe: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/SoundBlaster/SwiftJev
+  url: https://github.com/SoundBlaster/SwiftJev
+  verdict: not_jev
+  reason: 'SoundBlaster/SwiftJev: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/SoundBlaster/SwiftDecision
+  url: https://github.com/SoundBlaster/SwiftDecision
+  verdict: not_jev
+  reason: 'SoundBlaster/SwiftDecision: application, SDK, catalog or benchmark around
+    existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/Wayn-Git/Amethyst
+  url: https://github.com/Wayn-Git/Amethyst
+  verdict: not_jev
+  reason: 'Wayn-Git/Amethyst: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/withabdul/gemini-jev
+  url: https://github.com/withabdul/gemini-jev
+  verdict: needs_adapter
+  reason: Gemini Structured Output wrapper needs its probability-output protocol translated
+    and a provisioned key/hosted endpoint; neither is a callable Modal source now.
+  config: null
+- key: https://github.com/cipherTing/sael
+  url: https://github.com/cipherTing/sael
+  verdict: not_jev
+  reason: 'cipherTing/sael: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/ozers/jevsome-projects
+  url: https://github.com/ozers/jevsome-projects
+  verdict: not_jev
+  reason: 'ozers/jevsome-projects: application, SDK, catalog or benchmark around existing
+    models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: https://github.com/anujgupta9860/intent-router-hybrid
+  url: https://github.com/anujgupta9860/intent-router-hybrid
+  verdict: not_jev
+  reason: 'anujgupta9860/intent-router-hybrid: application, SDK, catalog or benchmark
+    around existing models; no distinct decision checkpoint or hosted endpoint.'
+  config: null
+- key: hf:Mikemugen/ochevid-jev-vl-2b@3db4b34fd7a39086b34c0801fd26e1fce6cb5a06
+  url: https://huggingface.co/Mikemugen/ochevid-jev-vl-2b
+  verdict: needs_adapter
+  reason: Qwen3-VL-2B shared-image-prefix execution needs its custom OchevidBranches
+    loader and image requests; the frozen benchmark is text-only.
+  config: null
+- key: hf:autotrust/JEV-27B-VL@d835ee0b42460bd74890c7eab63ba0dcb4dd808a
+  url: https://huggingface.co/autotrust/JEV-27B-VL
+  verdict: needs_adapter
+  reason: Vision extension uses an additional image processor and request format;
+    no multimodal harness source for this revision.
+  config: null
+- key: hf:autotrust/JEV-27B@51740a8891c2a8baefd969237fd44187b3e3a115
+  url: https://huggingface.co/autotrust/JEV-27B
+  verdict: runnable
+  reason: Supported AutoTrust source already scored pinned revision 962701f3e5437ef5d7cceedae98741477007d367
+    today; subsequent commits only update serve_decide.py, so reuse verified results
+    without another experiment.
+  config: configs/autotrust_jev27b_vs_jev.yaml
+- key: hf:DanielAlonsoC/el-jevo@e755463141ee4524360cb4e8b71710ff6923a9e9
+  url: https://huggingface.co/DanielAlonsoC/el-jevo
+  verdict: needs_adapter
+  reason: V17 is a merged 0.8B checkpoint with a published wrapper for noul, choice
+    and score; add the NLI-to-System-One wrapper and a pinned Modal loader. Earlier
+    NLI-only triage does not cover this wrapper.
+  config: configs/el_jevo_v17_vs_jev.yaml
+- key: hf:DreamBlooms/NeoHorse-Jev-4B-GGUF@ebe1785df7a68d476b71e625c994b2928c3e3397
+  url: https://huggingface.co/DreamBlooms/NeoHorse-Jev-4B-GGUF
+  verdict: needs_adapter
+  reason: GGUF export needs llama.cpp plus NeoHorse decision-head readout; the current
+    Kev source cannot load GGUF.
+  config: null
+- key: hf:groxaxo/NeoHorse-Jev-4B-TmuxPocket-Choice-Head@583175cf94552fed66322242eec350605eac95b1
+  url: https://huggingface.co/groxaxo/NeoHorse-Jev-4B-TmuxPocket-Choice-Head
+  verdict: needs_adapter
+  reason: Standalone NeoHorse choice head needs its matching base weights, loader
+    and System One output mapping.
+  config: null
+- key: hf:groxaxo/NeoHorse-Jev-4B-TmuxPocket-MLX5@b4aab5e25eb18ecc17a5858030c273e457e136b9
+  url: https://huggingface.co/groxaxo/NeoHorse-Jev-4B-TmuxPocket-MLX5
+  verdict: needs_adapter
+  reason: MLX5 serving and custom decision head are not available in the CUDA Modal
+    harness; requires a port.
+  config: null
+- key: hf:ggml-org/Kev-9B-GGUF@ec2bbfe6620218aee2e01cc93bb78dee2a96ed58
+  url: https://huggingface.co/ggml-org/Kev-9B-GGUF
+  verdict: needs_adapter
+  reason: GGUF Kev export needs a llama.cpp decision-head adapter; existing Kev source
+    loads native checkpoints only.
+  config: null
+- key: hf:ggml-org/Kev-0.8B-GGUF@e551e319d483ff57e1ff208924b349d397cffc1c
+  url: https://huggingface.co/ggml-org/Kev-0.8B-GGUF
+  verdict: needs_adapter
+  reason: GGUF Kev export needs a llama.cpp decision-head adapter; existing Kev source
+    loads native checkpoints only.
+  config: null
+- key: hf:kallebysantos/laya-onnx@b45b71af9fc04eb18d72caa10371454798eb2d59
+  url: https://huggingface.co/kallebysantos/laya-onnx
+  verdict: needs_adapter
+  reason: ONNX export needs an ONNX runtime and Laya head decoder; current source
+    only loads the pinned upstream Laya checkpoint.
+  config: null
+- key: hf:mmahdi-sz/Laya-fa-universal-support@b1e9437eee750c992a4568e9a77dd67bd07e16b4
+  url: https://huggingface.co/mmahdi-sz/Laya-fa-universal-support
+  verdict: not_jev
+  reason: Persian e-commerce intent classifier with a fixed domain taxonomy, not a
+    general typed-decision checkpoint for this benchmark.
+  config: null
+- key: hf:Prasanna85/laya-issue-triage@bbfde5c48f340c2331dc81ae43f9e4554cc2da39
+  url: https://huggingface.co/Prasanna85/laya-issue-triage
+  verdict: not_jev
+  reason: Fine-tuned GitHub issue classifier has a frozen bug/feature/question contract;
+    it cannot answer arbitrary reranking decisions.
+  config: null
+- key: hf:billyd10/laya-homelab-router@1d899bc79ecb1eefd998e8e35d67645db5c48321
+  url: https://huggingface.co/billyd10/laya-homelab-router
+  verdict: not_jev
+  reason: Domain-specific homelab routing adaptation is held from serving and does
+    not improve its house evaluation; no distinct general decision model.
+  config: null
+- key: hf:mmahdi-sz/Laya-fa@4f8a1b4fc6ee887a12dddd6be0fe77395d90b682
+  url: https://huggingface.co/mmahdi-sz/Laya-fa
+  verdict: needs_adapter
+  reason: Unofficial Persian Laya checkpoint lacks a readable model card; inspect
+    checkpoint/head compatibility before loading it through a new source.
+  config: null
+- key: https://www.truefoundry.com/blog/typesafe-ai-jev
+  url: https://www.truefoundry.com/blog/typesafe-ai-jev
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://www.indeed.com/cmp/System-One/about
+  url: https://www.indeed.com/cmp/System-One/about
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://cohere.com/blog/rerank-4
+  url: https://cohere.com/blog/rerank-4
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://www.reddit.com/r/Rag/comments/1j7fwuc/can_someone_explain_in_detail_how_a_reranker_works
+  url: https://www.reddit.com/r/Rag/comments/1j7fwuc/can_someone_explain_in_detail_how_a_reranker_works
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://www.facebook.com/ScharssAzael/posts/-jaredpalmerkev-by-jared-palmer-is-an-open-source-project-providing-a-family-of-/1719350715815974
+  url: https://www.facebook.com/ScharssAzael/posts/-jaredpalmerkev-by-jared-palmer-is-an-open-source-project-providing-a-family-of-/1719350715815974
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://x.com/i/article/2101342142425866525
+  url: https://x.com/i/article/2101342142425866525
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://x.com/itslayaland
+  url: https://x.com/itslayaland
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://x.com/SystemOneCo
+  url: https://x.com/SystemOneCo
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://x.com/ekzhang1/status/2100651678110515383
+  url: https://x.com/ekzhang1/status/2100651678110515383
+  verdict: needs_adapter
+  reason: 'over budget: 35B model exceeds the 27B model line; social post also lacks
+    a callable URL/model/Modal Secret.'
+  config: null
+- key: https://x.com/jnmet/status/2081000507611476267
+  url: https://x.com/jnmet/status/2081000507611476267
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://x.com/MYCGHKSAR/status/2081052369224335373
+  url: https://x.com/MYCGHKSAR/status/2081052369224335373
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://x.com/jasonzhou1993/status/2105736661921656997
+  url: https://x.com/jasonzhou1993/status/2105736661921656997
+  verdict: not_jev
+  reason: Article, social post, support question or unrelated namesake; no new typed-decision
+    checkpoint or callable endpoint.
+  config: null
+- key: https://news.ycombinator.com/item?id=49932279
+  url: https://news.ycombinator.com/item?id=49932279
+  verdict: not_jev
+  reason: Discussion/demo of existing Clef or Jev models already tracked; no new checkpoint
+    or endpoint.
+  config: null
+- key: https://news.ycombinator.com/item?id=49932121
+  url: https://news.ycombinator.com/item?id=49932121
+  verdict: not_jev
+  reason: Discussion/demo of existing Clef or Jev models already tracked; no new checkpoint
+    or endpoint.
+  config: null
+- key: https://news.ycombinator.com/item?id=49932234
+  url: https://news.ycombinator.com/item?id=49932234
+  verdict: not_jev
+  reason: Discussion/demo of existing Clef or Jev models already tracked; no new checkpoint
+    or endpoint.
+  config: null
+- key: https://news.ycombinator.com/item?id=49932219
+  url: https://news.ycombinator.com/item?id=49932219
+  verdict: not_jev
+  reason: Discussion/demo of existing Clef or Jev models already tracked; no new checkpoint
+    or endpoint.
+  config: null
