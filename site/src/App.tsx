@@ -6,6 +6,7 @@ import Evaluate from './Evaluate'
 import { QueueBody, QueueSub } from './Queue'
 import { REFRESH_SECONDS, useQueue } from './queue'
 import Table, { type Col, type Sort } from './Table'
+import Tldr from './Tldr'
 import ThemeSelect from './Theme'
 import { REPO, blob, type Card, type K, type SiteData } from './types'
 
@@ -131,10 +132,10 @@ export default function App() {
       <main className="grid">
         {tab === 'summary' && <>
           {data.cards.map((c, i) => <NumWidget key={c.label} card={c} higherIsBetter={i === 0} />)}
-          <Widget span={8} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(300)}</Widget>
-          <Widget span={4} title="TLDR" sub={<>written by the daily run · <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></>}>
-            <div className="tldr">{data.tldr.split('\n').filter((line) => line.trim() !== '').map((line, i) => <p key={i}>{line}</p>)}</div>
+          <Widget span={12} title="TLDR" sub={<>recap written by the daily run · <a href={blob('data/tldr.md')} target="_blank" rel="noreferrer">data/tldr.md</a></>}>
+            <Tldr text={data.tldr} />
           </Widget>
+          <Widget span={12} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(300)}</Widget>
           <Widget span={6} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>
           <Widget span={6} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
           <Widget span={12} title="All runs" sub={`${rows.length} rows · ${FROZEN_QUERIES} frozen queries`}>

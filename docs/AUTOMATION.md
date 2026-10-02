@@ -64,12 +64,20 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    done configs/<name>.yaml …` for every config that ran (failed ones too; the PR says why): a
    finished model leaves the queue and exists only as its rows in the site data. Configs that were
    queued but not run today stay `queued` for tomorrow.
-6. **TLDR** (the second decision): rewrite `data/tldr.md`, 3–5 sentences for someone who opens
-   the site cold: who leads the benchmark and by how much, what today's runs added, what changed
-   since yesterday. Numbers come from `data/experiments`; no markdown headings. Write it in
-   ASD-STE100 (Simplified Technical English) at about 80% compliance: one idea per sentence, at
-   most 20 words, active voice, present tense, approved general words (`use` not `utilize`, `show`
-   not `demonstrate`), no idioms; model names and numbers stay exactly as in the data.
+6. **TLDR** (the second decision): rewrite `data/tldr.md` in the `recap` format (the
+   `/a:recap` skill in DoKu67/claude-code-skils) for someone who opens the site cold. Four
+   headings, always, in this order, each on its own line ending in a colon, with no markdown `#`:
+   - `Summary:` — 1–2 sentences first (who leads the benchmark and by how much), then bullets for
+     what to watch and why.
+   - `Key Points:` — what today's runs added and what changed since yesterday, one claim per bullet.
+   - `Table:` — a markdown table of the best run per model family, columns
+     `Model | kept-mass@50 | kept-mass@200 | $ / run | GPU`, sorted by kept-mass@50, Jev first.
+   - `Interesting Notes:` — caveats, surprises, failed runs; `None` if there are none.
+   At most 5 one-line bullets per section; `None` (never an empty section) when Key Points or
+   Interesting Notes has nothing. Numbers come from `data/experiments` exactly as in the data.
+   Sentences are ASD-STE100 (Simplified Technical English) at about 80% compliance: one idea per
+   sentence, at most 20 words, active voice, present tense, approved general words (`use` not
+   `utilize`, `show` not `demonstrate`), no idioms.
 7. **Regenerate**: `uv run python -m jev_tracker.site_data` (reads `data/tldr.md`), then
    `cd site && npm ci && npm run build && cd ..`.
 8. **Check**: `uv run ruff check . && uv run ruff format --check . && uv run pytest -q`.

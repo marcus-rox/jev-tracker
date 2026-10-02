@@ -73,7 +73,11 @@ svg .axis { stroke: var(--border); } svg .gridline { stroke: var(--grid); }
 .legend { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12px; margin-top:6px; }
 .legend span { cursor:pointer; } .legend span.off { opacity:.35; }
 .legend svg { vertical-align:middle; margin-right:5px; }
-.tldr p { margin:0 0 8px; } .tldr { font-size:13px; }
+.tldr { font-size:13px; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); grid-template-rows:auto auto; grid-auto-flow:column; gap:4px 28px; }
+.tldr h3 { margin:6px 0 4px; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+.tldr p { margin:0 0 6px; } .tldr ul { margin:0 0 6px; padding-left:18px; } .tldr li { margin:0 0 3px; }
+.tldr table { margin:2px 0 6px; } .tldr th { cursor:default; position:static; } .tldr td { white-space:normal; }
+@media (max-width: 1000px) { .tldr { grid-template-columns:1fr; grid-auto-flow:row; } }
 table { border-collapse:collapse; width:100%; font-size:13px; }
 th, td { padding:5px 8px; border-bottom:1px solid var(--grid); text-align:left; white-space:nowrap; }
 th { color:var(--muted); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--panel); }
