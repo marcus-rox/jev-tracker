@@ -1,9 +1,9 @@
 # jev-tracker — a leaderboard of Jev alternatives on Rox's frozen 75-case benchmark
 
-**Status · 2026-10-01 · Phase 1 done, awaiting PR review.** Harness ported from
-`rox-research/projects/reranker_alts` (branch `devin/1790714158-laya-harness`); Kev-4B, Laya and
-batched Kev-27B (pinned to the 2026-09-24 weights) reran on Modal within 0.002 kept-mass of
-rox-research at every k.
+**Status · 2026-10-02 · Phase 1 merged (PR #1); Phase 2 site built, in PR; Phase 3 (crawler) in
+progress in two parallel sessions (prior-work survey, `crawler/`).** Harness ported from
+`rox-research/projects/reranker_alts`; Kev-4B, Laya and batched Kev-27B (pinned to the 2026-09-24
+weights) reran on Modal within 0.002 kept-mass of rox-research at every k.
 
 ## The objective
 
@@ -29,17 +29,12 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
 |---|---|---|
 | Access check with the PAT | ✅ | Push, workflows, actions, PRs work; Pages has no site yet |
 | Context: Slack threads, Jev sessions, report, source branch | ✅ | The seam to port is producers → `RawRecord` → evaluator |
+| Port + validate (Phase 1, PR #1) | ✅ | Kev-4B, Laya, Kev-27B@2026-09-24 within 0.002 at every k; Kev-27B v2 weights differ by ~0.01 |
+| Site (Phase 2) | ✅ | One `rows.json` from `registry.yaml` + experiments reproduces the report's cells; static Vite build |
 
 ## Next steps
 
-1. **Port the harness** (`jev_tracker/`, `data/`, `configs/`, 18 report experiments gzipped,
-   `data/registry.yaml`) and run the offline tests. Falsifier: prod + Jev do not reproduce
-   0.711/0.837 and 0.893/0.961. Cost: one session.
-2. **Validate on Modal**: `kev4b_vs_jev` (10 × L40S, ~$1), `laya_vs_jev` (L4, ~$1),
-   `kev27b_batched` (3 × H200, ~$30). Falsifier: |Δ kept-mass| > 0.002 at any k. Cost: ~$32.
-3. **Site (Phase 2)**: Vite + React static build reading `site/public/data/*.json`; falsifier:
-   a number on the page differs from the attached report.
-4. **Crawler + automation (Phase 3)**: prior-work survey (`docs/PRIOR_WORK.md`, done), then `crawler/`; then the daily Devin
+1. **Crawler + automation (Phase 3)**: prior-work survey (`docs/PRIOR_WORK.md`, done), then `crawler/`; then the daily Devin
    automation that opens a PR. Falsifier: the first automation PR has no new candidate or fails
    to regenerate the site.
 
