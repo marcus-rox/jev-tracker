@@ -97,18 +97,6 @@
    "evidence": null
   },
   {
-   "config": "configs/api_openrouter_mercury_decide_vs_jev.yaml",
-   "label": "api_openrouter_mercury_decide_vs_jev",
-   "source": "hackernews",
-   "url": "https://news.ycombinator.com/item?id=49931514",
-   "status": "proposed",
-   "note": "Inception Mercury Decide, hosted structured decision model on OpenRouter; api source needs an OpenRouter key as a Modal Secret",
-   "queued_at": "2026-10-02T09:38:32Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/el_jevo_v17_vs_jev.yaml",
    "label": "el_jevo_v17_vs_jev",
    "source": "huggingface",
