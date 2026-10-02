@@ -55,7 +55,9 @@ from jev_tracker.metrics import ShardSummary
 from jev_tracker.rerankers import append_jsonl_gz, read_jsonl_gz
 from jev_tracker.systemone import RawRecord, SystemOneResponse
 
-APP_NAME = "jev-tracker"
+# JEV_TRACKER_APP names a separate deployment: two working trees deploying the same app replace
+# each other's functions and kill each other's running shards.
+APP_NAME = os.environ.get("JEV_TRACKER_APP", "jev-tracker")
 RUNS_VOLUME_NAME = "jev-tracker-runs"
 HF_CACHE_VOLUME_NAME = "rox-research--hf-cache"  # Kev / Laya weights already cached there
 REPO_DIR = Path(__file__).resolve().parents[1]
@@ -67,7 +69,7 @@ PYTHON_VERSION = "3.12"
 HOUR = 60 * 60
 COMMIT_EVERY_S = 60
 PROGRESS_DICT_NAME = "jev-tracker-progress"
-PROGRESS_LABEL = "jev-tracker-progress"  # web endpoint: https://<workspace>--<label>.modal.run
+PROGRESS_LABEL = f"{APP_NAME}-progress"  # web endpoint: https://<workspace>--<label>.modal.run
 PROGRESS_EVERY_S = 5  # the bars' tqdm mininterval, so the site sees what the terminal sees
 PROGRESS_STALE_S = 24 * HOUR  # a bar not touched for this long is no longer served
 FASTAPI_PKG = "fastapi[standard]>=0.115"  # Modal's web endpoints are FastAPI handlers
