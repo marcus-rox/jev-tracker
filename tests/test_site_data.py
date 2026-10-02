@@ -11,7 +11,14 @@ import yaml
 
 from jev_tracker.evaluation_queue import Queue, QueueItem
 from jev_tracker.experiment import EXPERIMENTS_DIR
-from jev_tracker.server import check_skip, decided, parse_decision, parse_request, request_path
+from jev_tracker.server import (
+    check_skip,
+    decided,
+    parse_decision,
+    parse_request,
+    request_path,
+    suggestions,
+)
 from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, TLDR, build, read_api_timing, updated
 
 DATA = build(
@@ -188,3 +195,47 @@ def test_R7_decided_moves_only_proposed_items() -> None:
     ]
     assert [i.label for i in decided(queue, Path("configs/a.yaml"), "reject", now).items] == ["b"]
     assert decided(queue, Path("configs/b.yaml"), "reject", now) == queue
+
+
+def _file(name: str, text: str, submitted_at: str) -> dict:
+    return {
+        "name": name,
+        "object": {"text": json.dumps({"text": text, "submitted_at": submitted_at})},
+    }
+
+
+def test_R7_suggestions_lists_every_submission_newest_first() -> None:
+    payload = {
+        "data": {
+            "repository": {
+                "object": {
+                    "entries": [
+                        {
+                            "name": "2026-10-01",
+                            "object": {
+                                "entries": [_file("090000_a.json", "a", "2026-10-01T09:00:00Z")]
+                            },
+                        },
+                        {
+                            "name": "2026-10-02",
+                            "object": {
+                                "entries": [
+                                    _file("010000_b.json", "b", "2026-10-02T01:00:00Z"),
+                                    _file(
+                                        "120000_c.json",
+                                        "try the new Kev 30B",
+                                        "2026-10-02T12:00:00Z",
+                                    ),
+                                ]
+                            },
+                        },
+                        {"name": "README.md", "object": {}},
+                    ]
+                }
+            }
+        }
+    }
+    got = suggestions(payload)
+    assert [s.text for s in got] == ["try the new Kev 30B", "b", "a"]
+    assert got[0].path == "requests/2026-10-02/120000_c.json"
+    assert suggestions({"data": {"repository": {"object": None}}}) == []

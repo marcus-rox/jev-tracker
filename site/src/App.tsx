@@ -5,18 +5,21 @@ import Dropdown from './Dropdown'
 import Evaluate from './Evaluate'
 import { QueueBody, QueueSub } from './Queue'
 import { REFRESH_SECONDS, useQueue } from './queue'
+import { SuggestionsBody, SuggestionsSub } from './Suggestions'
+import { useSuggestions } from './suggestions'
 import Table, { type Col, type Sort } from './Table'
 import Tldr from './Tldr'
 import ThemeSelect from './Theme'
 import { REPO, blob, type Card, type K, type SiteData } from './types'
 
-type Tab = 'summary' | 'quality' | 'cost' | 'latency' | 'evaluate'
+type Tab = 'summary' | 'quality' | 'cost' | 'latency' | 'evaluate' | 'suggestions'
 const TABS: [Tab, string][] = [
   ['summary', 'Summary'],
   ['quality', 'Quality'],
   ['cost', 'Cost'],
   ['latency', 'Latency'],
   ['evaluate', 'Jevs to Process'],
+  ['suggestions', 'Suggestions'],
 ]
 const FROZEN_QUERIES = 75
 const CHART_SUB = 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table · click a legend entry to hide it'
@@ -73,6 +76,12 @@ function NumWidget({ card, higherIsBetter }: { card: Card; higherIsBetter: boole
       </div>
     </Widget>
   )
+}
+
+/** Mounted only while its tab is open, so each visit re-reads requests/ from the server. */
+function SuggestionsWidget() {
+  const state = useSuggestions()
+  return <Widget span={12} title="Suggestions" sub={<SuggestionsSub state={state} />}><SuggestionsBody state={state} /></Widget>
 }
 
 export default function App() {
@@ -159,6 +168,7 @@ export default function App() {
           <Widget span={12} title="Latency · seconds per query" sub="fastest run per family">{latencyBars}</Widget>
           <Widget span={12} title="Latency · all runs"><Table rows={forTable('latency')} cols={LATENCY} sort={sort} setSort={setSort} /></Widget>
         </>}
+        {tab === 'suggestions' && <SuggestionsWidget />}
         {tab === 'evaluate' && <Widget span={12} title="Model evaluation sprint" sub={<QueueSub state={queue} />}><QueueBody state={queue} decide={decide} /></Widget>}
       </main>
       </div>

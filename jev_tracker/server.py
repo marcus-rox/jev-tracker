@@ -4,6 +4,8 @@
 
 POST /api/requests {"text": "<whatever was typed>"} commits requests/<YYYY-MM-DD>/<HHMMSS>_<slug>.json
 to `main` through the GitHub Contents API; the daily run reads that folder (crawler/submitted.py).
+GET /api/requests returns every submission on `main` newest first (one GraphQL call), cached for
+QUEUE_CACHE_SECONDS and cleared by each new submission.
 GET /api/queue returns data/queue.json as it is on `main` right now (jev_tracker.evaluation_queue),
 so the site shows the evaluation queue without a redeploy; cached for QUEUE_CACHE_SECONDS.
 POST /api/queue/decide {"config": "configs/<name>.yaml", "decision": "approve" | "reject"} moves a
@@ -33,9 +35,12 @@ from pydantic import BaseModel
 from jev_tracker.evaluation_queue import Queue, approved, rejected
 from jev_tracker.experiment import REPO_DIR
 
-CONTENTS_URL = "https://api.github.com/repos/marcus-rox/jev-tracker/contents"
+OWNER, REPO = "marcus-rox", "jev-tracker"
+CONTENTS_URL = f"https://api.github.com/repos/{OWNER}/{REPO}/contents"
+GRAPHQL_URL = "https://api.github.com/graphql"
 BRANCH = "main"
 REQUESTS_DIR = "requests"
+REQUEST_SUFFIX = ".json"
 TOKEN_ENV = "GITHUB_TOKEN"
 SKIP_PASSWORD_ENV = "QUEUE_SKIP_PASSWORD"
 SKIP_PHRASE = "Skip this Run"
@@ -61,6 +66,28 @@ class Submission(BaseModel):
 
     text: str
     submitted_at: datetime
+
+
+class Suggestion(BaseModel):
+    """One submission as the site's Suggestions tab lists it; `path` is its file on `main`."""
+
+    model_config = {"frozen": True}
+
+    path: str
+    text: str
+    submitted_at: datetime
+
+
+# requests/<date>/<file>.json is two levels deep, so the query nests Tree entries twice.
+REQUESTS_QUERY = """
+query($owner: String!, $name: String!, $expression: String!) {
+  repository(owner: $owner, name: $name) {
+    object(expression: $expression) {
+      ... on Tree { entries { name object { ... on Tree { entries { name object { ... on Blob { text } } } } } } }
+    }
+  }
+}
+"""
 
 
 def parse_request(body: bytes) -> str:
@@ -128,6 +155,37 @@ def commit_request(text: str, now: datetime, token: str, client: httpx.Client) -
     return response.json()["content"]["html_url"]
 
 
+def suggestions(payload: dict) -> list[Suggestion]:
+    """Every submission in a REQUESTS_QUERY response, newest first; [] when requests/ is absent."""
+    tree = payload["data"]["repository"]["object"] or {"entries": []}
+    found = []
+    for day in tree["entries"]:
+        for file in (day["object"] or {}).get("entries", []):
+            if file["name"].endswith(REQUEST_SUFFIX):
+                record = Submission.model_validate_json(file["object"]["text"])
+                path = f"{REQUESTS_DIR}/{day['name']}/{file['name']}"
+                found.append(Suggestion(path=path, **record.model_dump()))
+    return sorted(found, key=lambda s: (s.submitted_at, s.path), reverse=True)
+
+
+def fetch_suggestions(token: str, client: httpx.Client) -> bytes:
+    """GET /api/requests's body: {"items": [Suggestion, ...]} read from `main` in one GraphQL call."""
+    response = client.post(
+        GRAPHQL_URL,
+        headers={"Authorization": f"Bearer {token}"},
+        json={
+            "query": REQUESTS_QUERY,
+            "variables": {"owner": OWNER, "name": REPO, "expression": f"{BRANCH}:{REQUESTS_DIR}"},
+        },
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if payload.get("errors"):
+        raise httpx.HTTPError(f"GraphQL errors: {payload['errors']}")
+    items = [s.model_dump(mode="json") for s in suggestions(payload)]
+    return json.dumps({"items": items}).encode()
+
+
 def fetch_queue(token: str, client: httpx.Client) -> bytes:
     """data/queue.json as committed on `main`; an empty queue when the file does not exist yet."""
     response = client.get(
@@ -177,7 +235,7 @@ def commit_decision(
     return new_queue
 
 
-class QueueCache:
+class GitHubCache:
     """Serves one fetch per QUEUE_CACHE_SECONDS so page loads do not each hit GitHub."""
 
     def __init__(self, fetch: Callable[[], bytes], ttl: float = QUEUE_CACHE_SECONDS) -> None:
@@ -196,6 +254,9 @@ class QueueCache:
         self.body = body
         self.fetched_at = time.monotonic()
 
+    def clear(self) -> None:
+        self.body = None
+
 
 class SiteHandler(SimpleHTTPRequestHandler):
     def __init__(
@@ -203,22 +264,25 @@ class SiteHandler(SimpleHTTPRequestHandler):
         *args,
         commit: Callable[[str, datetime], str],
         decide: Callable[[Path, Decision, datetime], Queue],
-        queue: QueueCache,
+        queue: GitHubCache,
+        suggestions: GitHubCache,
         skip_password: str | None,
         **kwargs,
     ) -> None:
         self.commit = commit
         self.decide = decide
         self.queue = queue
+        self.suggestions = suggestions
         self.skip_password = skip_password
         super().__init__(*args, **kwargs)
 
     def do_GET(self) -> None:  # noqa: N802  (http.server's name)
-        if self.path != QUEUE_PATH:
+        cache = {QUEUE_PATH: self.queue, API_PATH: self.suggestions}.get(self.path)
+        if cache is None:
             super().do_GET()
             return
         try:
-            body = self.queue.get()
+            body = cache.get()
         except httpx.HTTPError as e:  # boundary: report the GitHub failure to the browser
             self._json(HTTPStatus.BAD_GATEWAY, {"error": f"GitHub read failed: {e}"})
             return
@@ -243,6 +307,7 @@ class SiteHandler(SimpleHTTPRequestHandler):
             if self.path == API_PATH:
                 text = parse_request(body)
                 html_url = self.commit(text, now)
+                self.suggestions.clear()
                 self._json(HTTPStatus.CREATED, {"text": text, "html_url": html_url})
             else:
                 config, decision = parse_decision(body)
@@ -282,7 +347,8 @@ def main(argv: list[str] | None = None) -> int:
     client = httpx.Client(timeout=HTTP_TIMEOUT_SECONDS)
     commit = partial(commit_request, token=token, client=client)
     decide = partial(commit_decision, token=token, client=client)
-    queue = QueueCache(partial(fetch_queue, token=token, client=client))
+    queue = GitHubCache(partial(fetch_queue, token=token, client=client))
+    suggestions = GitHubCache(partial(fetch_suggestions, token=token, client=client))
     skip_password = os.environ.get(SKIP_PASSWORD_ENV)
     if not skip_password:
         print(f"{SKIP_PASSWORD_ENV} is not set; Skip on the site will be refused")
@@ -292,11 +358,12 @@ def main(argv: list[str] | None = None) -> int:
         commit=commit,
         decide=decide,
         queue=queue,
+        suggestions=suggestions,
         skip_password=skip_password,
     )
     print(
         f"serving {args.dist} on http://localhost:{args.port}  "
-        f"(POST {API_PATH}, GET {QUEUE_PATH}, POST {DECIDE_PATH})"
+        f"(GET+POST {API_PATH}, GET {QUEUE_PATH}, POST {DECIDE_PATH})"
     )
     ThreadingHTTPServer(("", args.port), handler).serve_forever()
     return 0

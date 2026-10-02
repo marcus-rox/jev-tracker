@@ -1,4 +1,4 @@
-# Serves the committed site build (site/dist) plus POST /api/requests; see jev_tracker/server.py.
+# Serves the committed site build (site/dist) plus the /api routes; see jev_tracker/server.py.
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 WORKDIR /app
