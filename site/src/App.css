@@ -144,3 +144,5 @@ table.sugg tbody tr:hover td { background:var(--bg); }
 table.sugg tr.open td { background:var(--hl); }
 .more { margin-left:8px; padding:0 6px; border:1px solid var(--border); border-radius:10px; background:var(--panel); color:var(--accent); font-size:11px; line-height:18px; cursor:pointer; }
 .more:hover { border-color:var(--accent); }
+.card .note.open { display:block; -webkit-line-clamp:unset; overflow:visible; white-space:pre-wrap; overflow-wrap:anywhere; }
+.more.note-toggle { margin:4px 0 0; }
