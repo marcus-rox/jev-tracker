@@ -1,0 +1,28 @@
+# JevAny pointer LoRA on Qwen3.5-4B (SimpleJev/JevAny-Qwen3.5-4B-LoRA @1c7aa9b) vs Jev (committed answers) vs production, on the frozen 75 cases, kept-mass@k for
+# k = 50..200 step 10. In-process through the JevAny release's JevModel (jevany source, code @f8701e7), 12 children / 12,000 characters per request, 3 L40S shards (within the budget line of configs/kev27b_batched.yaml).
+# Approved on the site; added by the daily automation.
+#   uv run python -m jev_tracker.experiment run configs/jevany_qwen35_4b_vs_jev.yaml --wait
+name: jevany_qwen35_4b_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  jevany_noul:
+    source: jevany
+    model: SimpleJev/JevAny-Qwen3.5-4B-LoRA
+    method: noul_query_in_state
+    shards: 3
+  jevany_score:
+    source: jevany
+    model: SimpleJev/JevAny-Qwen3.5-4B-LoRA
+    method: score_query_in_question
+    shards: 3

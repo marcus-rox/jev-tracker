@@ -1,0 +1,3 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+autotrust_noul,75,51.61,34.23,121.75,10.35,370.76,419.6
+autotrust_score,75,50.88,32.59,123.04,9.68,336.97,419.6

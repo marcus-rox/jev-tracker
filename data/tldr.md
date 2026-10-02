@@ -4,18 +4,17 @@
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-- Clef-27B is third.
-  - 0.880 / 0.946 kept-mass
-  - 0.013 behind at k=50
-  - Costs $9.05 per run.
-- Today adds three models.
-  - Clef-Flash: 0.782 / 0.918
-  - Kev-0.5B: 0.547 / 0.793
-  - Clef-Flash costs $3.26.
-  - Kev-0.5B costs $0.17.
-- Clef is new today.
-  - Clef uses a new adapter.
-  - Clef-27B passes Kev-9B v2.
+- Two models finish today.
+  - AutoTrust: 0.883 / 0.959
+  - AutoTrust costs $11.89.
+  - MATILDA: 0.876 / 0.952
+  - MATILDA costs $10.86.
+  - JevAny run failed.
+- AutoTrust passes Clef-27B.
+  - AutoTrust takes third place.
+  - 0.010 behind at k=50
+  - Clef-27B: 0.880 / 0.946
+  - MATILDA is below Clef-27B.
 - k=50 separates models.
   - k=200 does not.
   - Random keeps 0.749 at k=200.

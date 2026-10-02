@@ -12,6 +12,12 @@ validated into the same `SystemOneResponse`:
   forward pass (laya_batch).
 * Clef (``score_cases_clef``): Cloudflare's Qwen3.5 backbone + joint schema head, asked through
   the release's own ``joint_schema_model.systemone`` (one request per forward pass).
+* MATILDA (``score_cases_matilda``): Maincode's Qwen3.5 backbone + decision readout, asked through
+  the release's own runtime (``maincode_jev_serve.decide``), one child per request.
+* AutoTrust (``score_cases_autotrust``): Qwen3.8-27B + LoRA + 24-slot decision head, the release's
+  bare prompt per question (jev_tracker.autotrust), one child per request.
+* JevAny (``score_cases_jevany``): a pointer LoRA on a Qwen3.5 base through the JevAny release's
+  ``JevModel``, which answers the request body in-process.
 * API (``score_cases_api``): any hosted model that answers the System One request at a URL; a CPU
   container posts the bodies unchanged with a bearer key from a Modal Secret. The only scorer
   that leaves the container.
@@ -92,6 +98,49 @@ CLEF_REVISION = {
     "Cloudflare/clef": "2f3de3dd85f379784083b0814d997ab627200f0c",  # 27.4B, 55 GB bf16
     "Cloudflare/clef-flash": "17f0b0ad64efb65d273590632833508766b2aae6",  # 9.4B, 19 GB bf16
 }
+# huggingface.co/Maincode/matilda-jev-v1 (2026-10-02): USAGE.txt "tested ... Transformers 5.17.0,
+# PyTorch 2.14.0" plus its requirements-runtime.txt; runtime/ holds maincode_jev_serve.
+MATILDA_MODEL = "Maincode/matilda-jev-v1"
+MATILDA_REVISION = "c87f57504300588ff4270ff5ac17c38d1c7996b9"  # 26.1B, 49 GiB bf16
+MATILDA_PKGS = (
+    "torch==2.14.0",
+    "torchvision==0.29.0",
+    "transformers==5.17.0",
+    "flash-linear-attention==0.5.2",
+    "safetensors==0.8.0",
+    "pillow==12.3.0",
+    "numpy==2.5.3",
+)
+MATILDA_BATCH = 64  # rows per forward pass, the runtime's default (MJ_BATCH_SIZE)
+# huggingface.co/autotrust/JEV-27B (2026-10-01): README "torch 2.13 + cu130, transformers 5.16,
+# peft 0.21, flash-linear-attention 0.5.2"; transformers 5.17.0 as MATILDA (config says 5.16.1).
+AUTOTRUST_MODEL = "autotrust/JEV-27B"
+AUTOTRUST_REVISION = "962701f3e5437ef5d7cceedae98741477007d367"  # 27B, 54 GB bf16
+AUTOTRUST_PKGS = (
+    "torch==2.14.0",
+    "transformers==5.17.0",
+    "peft==0.21.0",
+    "accelerate>=1.10",
+    "safetensors>=0.6",
+    "flash-linear-attention==0.5.2",
+)
+# Weights, tokenizer, adapter/ (the HF LoRA), head.safetensors, judge_config.json, calibration.json.
+AUTOTRUST_FILES = [
+    "*.json",
+    "model-*.safetensors",
+    "head.safetensors",
+    "adapter/*",
+    "tokenizer*",
+    "chat_template.jinja",
+]
+# github.com/SimpleJev/JevAny, main on 2026-10-02 (0.3.0): the code release the model cards require.
+JEVANY_REF = "f8701e76bb61f7cc60e5a40125ed6a8361c9ab87"
+JEVANY_PKG = f"jevany[local,fast] @ git+https://github.com/SimpleJev/JevAny.git@{JEVANY_REF}"
+# The base's Qwen3.5 processor config makes transformers load an image processor (torchvision, Pillow).
+JEVANY_PKGS = (JEVANY_PKG, "torch==2.14.0", "torchvision==0.29.0", "pillow==12.3.0")
+JEVANY_REVISION = {
+    "SimpleJev/JevAny-Qwen3.5-4B-LoRA": "1c7aa9bab14ac347aeb917c0bcd757838a8a78ce",
+}
 GPU_FOR = {
     "jaredpalmer/kev-0.8b": "L4",
     "jaredpalmer/kev-4b": "L40S",
@@ -100,10 +149,18 @@ GPU_FOR = {
     **{m: "L4" for m in LAYA_SUBFOLDER},
     "Cloudflare/clef": "H200",  # as Kev-27B: the budget line
     "Cloudflare/clef-flash": "H100",
+    MATILDA_MODEL: "H200",  # 26.1B, as Kev-27B: the budget line
+    AUTOTRUST_MODEL: "H200",  # 27B, as Kev-27B: the budget line
+    "SimpleJev/JevAny-Qwen3.5-4B-LoRA": "L40S",  # as Kev-4B
 }
 DEFAULT_KEV_GPU = "H100"  # a Kev checkpoint not in GPU_FOR
 # Kev-27B stages its bf16 weights through host memory while loading (upstream: --memory-mb 131072).
-MEMORY_MB_FOR = {"jaredpalmer/kev-27b": 131_072, "Cloudflare/clef": 131_072}
+MEMORY_MB_FOR = {
+    "jaredpalmer/kev-27b": 131_072,
+    "Cloudflare/clef": 131_072,
+    MATILDA_MODEL: 131_072,
+    AUTOTRUST_MODEL: 131_072,
+}
 API = "API"  # gpu of a hosted-API scorer: no GPU is attached or billed
 API_TRANSIENT = {429, 500, 502, 503, 504}
 API_RETRIES = 16  # waits 2, 4, ... 60 s, about 12 min in all
@@ -127,7 +184,7 @@ class ScoringRun(BaseModel):
 
     experiment: str  # experiment id; answers live under raw/<experiment>/<reranker>/ on the Volume
     reranker: str
-    engine: Literal["kev", "laya", "clef", "api"]
+    engine: Literal["kev", "laya", "clef", "matilda", "autotrust", "jevany", "api"]
     model: str
     method: str
     max_items: int | None  # children per System One request; None = the whole case
@@ -218,6 +275,9 @@ kev_image = _mount(
 )
 laya_image = _mount(_base().pip_install(LAYA_PKG))  # brings torch + transformers
 clef_image = _mount(_base().pip_install(*CLEF_PKGS))
+matilda_image = _mount(_base().pip_install(*MATILDA_PKGS))
+autotrust_image = _mount(_base().pip_install(*AUTOTRUST_PKGS))
+jevany_image = _mount(_base().pip_install(*JEVANY_PKGS))
 api_image = _mount(_base())
 progress_image = _mount(_base().pip_install(FASTAPI_PKG))
 
@@ -565,6 +625,214 @@ def score_cases_clef(job_json: str) -> str:
     ).model_dump_json()
 
 
+def _summary(
+    job: ShardJob, t0: float, loaded: float, n: int, resumed: int, resident_gb: float
+) -> str:
+    """ShardSummary of a one-request-per-forward-pass GPU scorer (timers since container start)."""
+    import torch
+
+    run = job.run
+    return ShardSummary(
+        reranker=run.reranker,
+        shard=job.shard,
+        gpu=run.gpu_type.rstrip("!"),
+        load_s=loaded - t0,
+        warm_s=time.time() - loaded,
+        total_s=time.time() - t0,
+        requests=n,
+        resumed=resumed,
+        device=torch.cuda.get_device_name(),
+        resident_gb=resident_gb,
+        peak_gb=torch.cuda.max_memory_allocated() / 1e9,
+        forward_passes=n,
+    ).model_dump_json()
+
+
+@app.function(
+    image=matilda_image,
+    gpu="H200",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_matilda(job_json: str) -> str:
+    """Answer every batch of this shard's cases with MATILDA in-process; resumable like score_cases.
+
+    The release's runtime/ (`maincode_jev_serve`) loads the checkpoint and scores the request's
+    state + questions (`decide`, then `answer`), exactly as its /v1/systemone server does."""
+    import sys
+
+    import torch
+    from huggingface_hub import snapshot_download
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    path = snapshot_download(run.repo, revision=MATILDA_REVISION)
+    sys.path.insert(0, f"{path}/runtime")
+    from maincode_jev_serve.config import gpu_limits
+    from maincode_jev_serve.decide import decide
+    from maincode_jev_serve.model import DecisionModel
+    from maincode_jev_serve.model import answer as decision_answer
+
+    model = DecisionModel(checkpoint=path, device="cuda")
+    model.eval()
+    max_tokens, token_budget = gpu_limits()
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(f"loaded {run.repo}@{MATILDA_REVISION[:12]} in {loaded - t0:.0f}s", flush=True)
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, run.model).body()
+        t = time.time()
+        distributions, input_tokens = decide(
+            model,
+            body["state"],
+            body["questions"],
+            temperature=model.temperature,
+            max_tokens=max_tokens,
+            token_budget=token_budget,
+            batch_size=MATILDA_BATCH,
+        )
+        resp = SystemOneResponse.model_validate(
+            {
+                "model": run.model,
+                "answers": {
+                    key: decision_answer(body["questions"][key], values)
+                    for key, values in distributions.items()
+                },
+                "usage": {"input_tokens": input_tokens, "output_tokens": 0},
+            }
+        )
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, input_tokens)
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    return _summary(job, t0, loaded, n, len(done), resident_gb)
+
+
+@app.function(
+    image=autotrust_image,
+    gpu="H200",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_autotrust(job_json: str) -> str:
+    """Answer every batch of this shard's cases with AutoTrust JEV-27B; resumable like score_cases.
+
+    The README's transformers path: LoRA merged into the backbone, the last token's hidden state
+    through the 24-slot head, one forward pass per question (jev_tracker.autotrust)."""
+    import torch
+    from huggingface_hub import snapshot_download
+    from peft import PeftModel
+    from safetensors.torch import load_file
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    from jev_tracker import autotrust
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    path = Path(
+        snapshot_download(run.repo, revision=AUTOTRUST_REVISION, allow_patterns=AUTOTRUST_FILES)
+    )
+    tokenizer = AutoTokenizer.from_pretrained(path)
+    base = AutoModelForCausalLM.from_pretrained(path, dtype=torch.bfloat16, device_map="cuda")
+    model = PeftModel.from_pretrained(base, str(path), subfolder="adapter").merge_and_unload()
+    model.eval()
+    weights = load_file(str(path / "head.safetensors"))
+    head_weight = weights["proj.weight"].cuda().float()
+    head_bias = weights["proj.bias"].cuda().float()
+    head = autotrust.Head.load(path)
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(f"loaded {run.repo}@{AUTOTRUST_REVISION[:12]} in {loaded - t0:.0f}s", flush=True)
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, run.model).body()
+        asked = autotrust.prompts(body)
+        t = time.time()
+        logits: dict[str, list[float]] = {}
+        tokens = 0
+        for prompt in asked:
+            ids = tokenizer(prompt.text, return_tensors="pt", add_special_tokens=False).to("cuda")
+            with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16):
+                hidden = model.model(**ids).last_hidden_state[0, -1].float()
+            logits[prompt.key] = (head_weight @ hidden + head_bias).tolist()
+            tokens += ids["input_ids"].shape[1]
+        resp = SystemOneResponse.model_validate(
+            autotrust.response(run.model, asked, logits, head, tokens)
+        )
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, tokens)
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    return _summary(job, t0, loaded, n, len(done), resident_gb)
+
+
+@app.function(
+    image=jevany_image,
+    gpu="L40S",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_jevany(job_json: str) -> str:
+    """Answer every batch of this shard's cases with a JevAny checkpoint; resumable like score_cases.
+
+    `jevany.JevModel` takes the /v1/systemone request body unchanged; a request over its packed
+    token limit (ValueError "exceeds") is split in two, as score_cases does on Kev's 422."""
+    import torch
+    from jevany import JevModel
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    revision = JEVANY_REVISION[run.repo]
+    jev = JevModel.from_pretrained(f"{run.repo}@{revision}", device="cuda", dtype="bf16")
+    served = jev.runtime.model_id
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(f"loaded {run.repo}@{revision[:12]} as {served} in {loaded - t0:.0f}s", flush=True)
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, served).body()
+        t = time.time()
+        try:
+            resp = SystemOneResponse.model_validate(jev(body))
+        except ValueError as e:
+            if "exceeds" not in str(e) or len(batch) == 1:
+                raise
+            half = len(batch) // 2
+            answer(case, bi, batch[:half])
+            answer(case, bi, batch[half:])
+            return
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, resp.usage.input_tokens)
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    return _summary(job, t0, loaded, n, len(done), resident_gb)
+
+
 @app.function(image=api_image, timeout=4 * HOUR, single_use_containers=True, volumes=VOLUMES)
 def score_cases_api(job_json: str) -> str:
     """Post every batch of this shard's cases to a hosted System One endpoint; resumable.
@@ -660,6 +928,9 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
         "kev": score_cases,
         "laya": score_cases_laya,
         "clef": score_cases_clef,
+        "matilda": score_cases_matilda,
+        "autotrust": score_cases_autotrust,
+        "jevany": score_cases_jevany,
         "api": score_cases_api,
     }
     run = job.run
