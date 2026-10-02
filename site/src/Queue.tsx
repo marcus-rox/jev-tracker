@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { blob, type Decision, type Evidence, type QueueItem, type QueueStatus } from './types'
-import type { Decide, QueueState } from './queue'
+import { blob, type Evidence, type QueueItem, type QueueStatus } from './types'
+import { SKIP_PHRASE, type Decide, type QueueState } from './queue'
 import { nextRun, untilText, whenText } from './schedule'
 import { useProgress, type ProgressState } from './progress'
 import { RunProgress } from './Progress'
@@ -29,22 +29,52 @@ function since(item: QueueItem, now: Date): string {
 }
 
 /** Approve queues the model for the next daily run (which builds whatever the note says is missing); Skip drops it. */
-function Actions({ item, decide }: { item: QueueItem; decide: Decide }) {
-  const [pending, setPending] = useState<Decision | null>(null)
+/** Skip is guarded: the phrase typed exactly plus the server's password, then one Skip click. */
+function SkipConfirm({ item, decide, onCancel }: { item: QueueItem; decide: Decide; onCancel: () => void }) {
+  const [phrase, setPhrase] = useState('')
+  const [password, setPassword] = useState('')
+  const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const act = (decision: Decision) => {
-    setPending(decision)
+  const ready = phrase === SKIP_PHRASE && password.length > 0 && !pending
+  const act = () => {
+    setPending(true)
     setError(null)
-    decide(item.config, decision).catch((err: unknown) => {
+    decide(item.config, 'reject', { phrase, password }).catch((err: unknown) => {
       setError(err instanceof Error ? err.message : String(err))
-      setPending(null)
+      setPending(false)
     })
   }
   return (
+    <form className="confirm" onSubmit={(e) => { e.preventDefault(); if (ready) act() }}>
+      <label>Type <code>{SKIP_PHRASE}</code><input value={phrase} onChange={(e) => setPhrase(e.target.value)} placeholder={SKIP_PHRASE} autoFocus autoComplete="off" spellCheck={false} /></label>
+      <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" /></label>
+      <div className="actions">
+        <button type="submit" className="reject" disabled={!ready}>{pending ? 'Removing…' : 'Skip'}</button>
+        <button type="button" disabled={pending} onClick={onCancel}>Cancel</button>
+      </div>
+      {error && <div className="meta bad">{error}</div>}
+    </form>
+  )
+}
+
+function Actions({ item, decide }: { item: QueueItem; decide: Decide }) {
+  const [pending, setPending] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const approve = () => {
+    setPending(true)
+    setError(null)
+    decide(item.config, 'approve').catch((err: unknown) => {
+      setError(err instanceof Error ? err.message : String(err))
+      setPending(false)
+    })
+  }
+  if (confirming) return <SkipConfirm item={item} decide={decide} onCancel={() => setConfirming(false)} />
+  return (
     <>
       <div className="actions">
-        <button type="button" className="approve" disabled={pending !== null} onClick={() => act('approve')}>{pending === 'approve' ? 'Queueing…' : 'Approve'}</button>
-        <button type="button" className="reject" disabled={pending !== null} onClick={() => act('reject')}>{pending === 'reject' ? 'Removing…' : 'Skip'}</button>
+        <button type="button" className="approve" disabled={pending} onClick={approve}>{pending ? 'Queueing…' : 'Approve'}</button>
+        <button type="button" className="reject" disabled={pending} onClick={() => setConfirming(true)}>Skip</button>
       </div>
       {error && <div className="meta bad">{error}</div>}
     </>
@@ -65,24 +95,11 @@ function EvidenceList({ evidence }: { evidence: Evidence }) {
   )
 }
 
-/** Skip drops a failed item once its evidence has been read. */
+/** Skip drops a failed item once its evidence has been read; same guard as above. */
 function Dismiss({ item, decide }: { item: QueueItem; decide: Decide }) {
-  const [pending, setPending] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const act = () => {
-    setPending(true)
-    setError(null)
-    decide(item.config, 'reject').catch((err: unknown) => {
-      setError(err instanceof Error ? err.message : String(err))
-      setPending(false)
-    })
-  }
-  return (
-    <>
-      <div className="actions"><button type="button" className="reject" disabled={pending} onClick={act}>{pending ? 'Removing…' : 'Skip'}</button></div>
-      {error && <div className="meta bad">{error}</div>}
-    </>
-  )
+  const [confirming, setConfirming] = useState(false)
+  if (confirming) return <SkipConfirm item={item} decide={decide} onCancel={() => setConfirming(false)} />
+  return <div className="actions"><button type="button" className="reject" onClick={() => setConfirming(true)}>Skip</button></div>
 }
 
 const SOURCE_COLOR: Record<string, string> = {

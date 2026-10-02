@@ -93,6 +93,11 @@ select.theme option { color: #16191f; }
 .actions button { border:1px solid var(--border); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; cursor:pointer; background:var(--panel); color:var(--text); }
 .actions .approve { background:var(--accent); border-color:var(--accent); color:#fff; }
 .actions button:disabled { opacity:.5; cursor:default; }
+.confirm { display:flex; flex-direction:column; gap:6px; margin-top:8px; padding:8px; border:1px solid var(--border); border-radius:8px; background:var(--grid); }
+.confirm label { display:flex; flex-direction:column; gap:3px; font-size:11px; color:var(--muted); }
+.confirm code { font-size:11px; color:var(--text); }
+.confirm input { font:inherit; font-size:12px; padding:4px 6px; border:1px solid var(--border); border-radius:6px; background:var(--panel); color:var(--text); }
+.confirm .actions { margin-top:2px; }
 svg text { fill: var(--muted); font-size:11px; }
 svg .axis { stroke: var(--border); } svg .gridline { stroke: var(--grid); }
 .legend { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12px; margin-top:6px; }
