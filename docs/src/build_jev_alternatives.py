@@ -177,10 +177,17 @@ def main() -> None:
         if "/" in g and not g.startswith("http") and all(r["status"] == "untouched" for r in rs)
     )
     by_bucket = collections.Counter(r["bucket"] for r in rows)
+
+    def group_bucket(rs) -> str:
+        """A group's blocker is its bf16 original's, not its exports'."""
+        counts = collections.Counter(r["bucket"] for r in rs)
+        real = [b for b in counts if b != "quant"]
+        return max(real, key=counts.__getitem__) if real else "quant"
+
     models_by_bucket = collections.Counter()
     for g, rs in groups.items():
         if "/" in g and not g.startswith("http"):
-            models_by_bucket[collections.Counter(r["bucket"] for r in rs).most_common(1)[0][0]] += 1
+            models_by_bucket[group_bucket(rs)] += 1
     by_status = collections.Counter(r["status"] for r in rows)
     sources = collections.Counter(r["source"] for r in rows)
     queue_counts = collections.Counter(it["status"] for it in queue.values())
@@ -193,11 +200,11 @@ def main() -> None:
 
     # ---- model roll-up (one row per Hugging Face model stem, or per non-HF hit)
     def group_row(g, rs):
-        rs = sorted(rs, key=lambda r: r["first_seen"])
+        rs = sorted(rs, key=lambda r: (r["bucket"] == "quant", r["first_seen"]))
         is_model = "/" in g and not g.startswith("http")
         name = g if is_model else rs[0]["title"]
         link = f"https://huggingface.co/{g}" if is_model else rs[0]["url"]
-        b = collections.Counter(r["bucket"] for r in rs).most_common(1)[0][0]
+        b = group_bucket(rs)
         st = sorted({r["status"] for r in rs}, key=lambda s: ("untouched" in s, s))[0]
         src = sorted({r["source"] for r in rs})
         reason = rs[0]["reason"]
@@ -217,7 +224,7 @@ def main() -> None:
     sorted_groups = sorted(
         groups.items(),
         key=lambda kv: (
-            order[collections.Counter(r["bucket"] for r in kv[1]).most_common(1)[0][0]],
+            order[group_bucket(kv[1])],
             -len(kv[1]),
             kv[0].lower(),
         ),
@@ -308,7 +315,7 @@ def main() -> None:
   </figure>
   <div class="a-table-scroll">
     <table class="a-table">
-      <caption class="a-panel__title">Table 1. Why the alternatives are not runnable, and what each group needs. Columns: hits = raw crawler hits in the group; models = distinct Hugging Face models whose dominant verdict is this group.</caption>
+      <caption class="a-panel__title">Table 1. Why the alternatives are not runnable, and what each group needs. Columns: hits = raw crawler hits in the group; models = distinct Hugging Face models whose original (non-export) weights fall in this group.</caption>
       <thead><tr><th scope="col">What is missing</th><th scope="col" data-numeric>Hits</th><th scope="col" data-numeric>Models</th><th scope="col">What an adapter needs</th></tr></thead>
       <tbody>{bucket_table_rows}</tbody>
     </table>
