@@ -16,7 +16,7 @@ const TABS: [Tab, string][] = [
   ['quality', 'Quality'],
   ['cost', 'Cost'],
   ['latency', 'Latency'],
-  ['evaluate', 'Sprint board'],
+  ['evaluate', 'Jevs to Process'],
 ]
 const FROZEN_QUERIES = 75
 const CHART_SUB = 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table · click a legend entry to hide it'

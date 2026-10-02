@@ -1,20 +1,22 @@
 - Jev leads the benchmark.
-  - kept-mass 0.893 at k=50
-  - kept-mass 0.961 at k=200
-  - No open model matches it.
-- Kev-27B is the closest alternative.
-  - 0.887 / 0.953, 0.006 behind at k=50
-  - About 8x Jev's cost per run.
-  - v2 weights (9/30) score 0.013 lower.
-- Today's run added three models.
+  - 0.893 kept-mass at k=50
+  - 0.961 kept-mass at k=200
+  - No open model matches.
+- Kev-27B is closest.
+  - 0.887 / 0.953 kept-mass
+  - 0.006 behind at k=50
+  - About 8x Jev's cost.
+  - v2 weights: 0.013 lower.
+- Today's run: three models.
   - Kev-9B v2: 0.753 / 0.889
   - Kev-2B per2021: 0.684 / 0.868
   - Kev-0.8B: 0.642 / 0.846
-  - All cost under $0.60 per run.
-- Laya encoders are cheap but weak.
+  - All under $0.60 per run.
+- Laya encoders: cheap, weak.
   - Under $0.13 per run.
   - Best 0.644 at k=50.
-- Production sits at 0.711 / 0.837.
-  - Most expensive run on the board.
-- k=50 separates models; k=200 does not.
-  - Random order keeps 0.749 at k=200.
+- Production: 0.711 / 0.837.
+  - Most expensive run.
+- k=50 separates models.
+  - k=200 does not.
+  - Random keeps 0.749 at k=200.

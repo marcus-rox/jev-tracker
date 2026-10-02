@@ -66,7 +66,7 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    queued but not run today stay `queued` for tomorrow.
 6. **TLDR** (the second decision): rewrite `data/tldr.md` as nested markdown bullets for someone
    who opens the site cold. Two levels only: a top-level bullet is one claim, its children are the
-   numbers that support it. At most 7 words per bullet, aim for 5. No headings, no tables, no
+   numbers that support it. At most 5 words per bullet. No headings, no tables, no
    prose paragraphs. Order: who leads the benchmark, the closest alternative, what today's runs
    added, what changed since yesterday. Numbers come from `data/experiments` exactly as in the
    data. Write it in ASD-STE100 (Simplified Technical English) at about 90% compliance: one idea
