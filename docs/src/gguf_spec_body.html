@@ -1,0 +1,211 @@
+<section class="a-section" aria-labelledby="toc-heading">
+  <h2 class="a-section__title" id="toc-heading">Contents</h2>
+  <ul class="a-prose">
+    <li><a href="#status">1. Status</a></li>
+    <li><a href="#levels">2. Requirement levels (Figure 1, Table 1)</a></li>
+    <li><a href="#purpose">3. Purpose and goals</a></li>
+    <li><a href="#requirements">4. Requirements R-1, R-2, R-3</a></li>
+    <li><a href="#not-required">5. Not required</a></li>
+    <li><a href="#clarifications">6. Clarifications</a></li>
+    <li><a href="#conformance">7. Conformance (Table 2)</a></li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="status">
+  <h2 class="a-section__title" id="status">1. Status</h2>
+  <p class="a-prose">
+    <strong>Status · 2026-10-02 · 3 requirements, 3 unbound.</strong> This is the specification of
+    one task, "run GGUF files on our Modal tests", with its own numbering; it does not extend the
+    repository-wide <code>docs/SPEC.md</code>. The three requirements are the minimal set Devin
+    proposed and Marcus approved in chat on 2026-10-02 ("Approve as-is, start building"), rendered
+    here word for word as obligations. Only Marcus edits them after that.
+  </p>
+</section>
+
+<section class="a-section" aria-labelledby="levels">
+  <h2 class="a-section__title" id="levels">2. Requirement levels</h2>
+  <p class="a-section__note">
+    Figure 1. The three requirements as a tree. Indentation is "serves": R-1 feeds R-2 its input,
+    R-3 proves both without a GPU. A level says what rests on a requirement, not how strongly it
+    binds; every requirement is an obligation. The right column is the goal each one covers.
+  </p>
+  <figure class="a-panel" style="padding: 12px 16px">
+<pre class="a-prose" style="margin: 0; font-family: var(--font-mono); font-size: 13px; line-height: 1.5">R-2   One Modal GGUF scorer writes the same shard files as every local scorer     G-1, G-2
+├── R-1    source: gguf in the experiment YAML selects repo@revision + file        G-1
+└── R-3    A 2-case smoke config and GPU-free unit tests exercise R-1 and R-2      G-3</pre>
+  </figure>
+  <p class="a-section__note">
+    Legend. The pair that matters for review: <strong>R-2 green with R-1 red</strong> means the
+    model works but is hard-coded, so Q8_0 or 4B cannot be tried without a code edit; <strong>R-2
+    green with R-3 red</strong> means the first run is the full 75 cases, slower and dearer to debug.
+  </p>
+
+  <p class="a-section__note">Table 1. Module map: which part of the harness each requirement binds, at which level.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Modules and the level at which each requirement binds them</caption>
+      <thead><tr><th scope="col">Module</th><th scope="col">Level 1</th><th scope="col">Level 2</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Modal app (new GGUF image and scorer function)</th><td>R-2</td><td></td></tr>
+        <tr><th scope="row">Experiment configuration (new source type)</th><td></td><td>R-1</td></tr>
+        <tr><th scope="row">Smoke config + tests (new config file, new test file)</th><td></td><td>R-3</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="purpose">
+  <h2 class="a-section__title" id="purpose">3. Purpose and goals</h2>
+  <p class="a-prose">
+    The harness scores every decision model through one contract (System One: one child per
+    question, <code>noul</code> = probability of "yes" or <code>score</code> = expected ordinal
+    level) and derives quality, cost and latency from the saved answers. Every local model so far
+    was loaded as bf16 safetensors through its own Python package; no image can open a GGUF file.
+    A GGUF file is the same model with quantized weights (for example 4-bit): less GPU memory, so a
+    cheaper GPU and possibly lower latency. Marcus's words: "running these using GGUF could help us
+    reduce cost + improve latency". The goals the requirements cover:
+  </p>
+  <ul class="a-prose">
+    <li><strong>G-1</strong> Run a quantized GGUF decision model through the 75-case benchmark on Modal, same contract and metrics.</li>
+    <li><strong>G-2</strong> Compare its cost ($/1k) and latency against the bf16 run of the same weights already on the dashboard.</li>
+    <li><strong>G-3</strong> Smallest change; first reviewable number within one session.</li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="requirements">
+  <h2 class="a-section__title" id="requirements">4. Requirements</h2>
+
+  <article class="a-phase">
+    <div class="a-phase__index">R-1</div>
+    <div>
+      <div class="a-phase__head">
+        <h3 class="a-phase__title">R-1 — <code>source: gguf</code> in the experiment YAML</h3>
+        <span class="a-status" data-state="planned">unbound</span>
+      </div>
+      <p class="a-section__note"><em>Level 2 · experiment configuration · serves R-2 · covers G-1.</em></p>
+      <p class="a-prose">
+        An experiment configuration SHALL accept a reranker with <code>source: gguf</code>,
+        <code>model: &lt;repo&gt;@&lt;sha&gt;</code> (for example <code>ggml-org/Kev-9B-GGUF@&lt;sha&gt;</code>)
+        and <code>file: &lt;name&gt;.gguf</code> (for example <code>Kev-9B-Q4_K_M.gguf</code>), plus the
+        existing <code>method</code>, <code>gpu</code>, <code>shards</code>, <code>concurrency</code>,
+        <code>max_items</code> and <code>max_chars</code> fields, and turn it into a scoring run for
+        the GGUF scorer.
+      </p>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: switch quantization</h4>
+      <ul class="a-prose">
+        <li>GIVEN the smoke configuration for Kev-9B Q4_K_M</li>
+        <li>WHEN only <code>file</code> is changed to <code>Kev-9B-Q8_0.gguf</code></li>
+        <li>THEN the loaded run carries the Q8_0 file, its name shows it, and nothing else changes</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: a missing field is a configuration error</h4>
+      <ul class="a-prose">
+        <li>GIVEN a <code>gguf</code> source with no <code>file</code></li>
+        <li>WHEN the configuration is loaded</li>
+        <li>THEN loading fails with a message naming <code>file</code></li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: dispatch</h4>
+      <ul class="a-prose">
+        <li>GIVEN a scoring run whose engine is <code>gguf</code></li>
+        <li>WHEN a shard is spawned</li>
+        <li>THEN the GGUF scorer function is the one called, with the configured GPU</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="a-phase">
+    <div class="a-phase__index">R-2</div>
+    <div>
+      <div class="a-phase__head">
+        <h3 class="a-phase__title">R-2 — One Modal function <code>score_cases_gguf</code></h3>
+        <span class="a-status" data-state="planned">unbound</span>
+      </div>
+      <p class="a-section__note"><em>Level 1 · Modal app · root · covers G-1, G-2.</em></p>
+      <p class="a-prose">
+        The Modal app SHALL have one GGUF scorer function whose image is a CUDA runtime plus the
+        llama.cpp <code>llama-server</code> built from a pinned upstream commit; it SHALL download the named <code>.gguf</code> into the shared HF-cache
+        volume (tqdm), start <code>llama-server --parallel &lt;concurrency&gt;</code>, reuse the
+        <code>score_cases_api</code> posting loop against localhost, and write the same shard files
+        every local scorer writes, so that kept-mass, warm GPU-seconds, $/1k and latency come from
+        existing code.
+      </p>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: one request answered</h4>
+      <ul class="a-prose">
+        <li>GIVEN Kev-9B Q4_K_M at its pinned revision on an L40S</li>
+        <li>WHEN one System One request with one state and several children is posted</li>
+        <li>THEN the response validates as a System One response with one probability per child</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: the same shard files</h4>
+      <ul class="a-prose">
+        <li>GIVEN a 2-case run</li>
+        <li>WHEN the function finishes</li>
+        <li>THEN the runs volume holds a gzipped shard file with a raw record per batch and a shard summary (GPU, load s, warm s, batches) with the same meanings as every local scorer, so the existing evaluator prices and times it with no new code</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: a wrong file name</h4>
+      <ul class="a-prose">
+        <li>GIVEN a configuration whose file does not exist in the pinned revision</li>
+        <li>WHEN the function starts</li>
+        <li>THEN it fails naming repository and file, before the server is started</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="a-phase">
+    <div class="a-phase__index">R-3</div>
+    <div>
+      <div class="a-phase__head">
+        <h3 class="a-phase__title">R-3 — A 2-case smoke config and GPU-free unit tests</h3>
+        <span class="a-status" data-state="planned">unbound</span>
+      </div>
+      <p class="a-section__note"><em>Level 2 · configs, tests · serves R-2 · covers G-3.</em></p>
+      <p class="a-prose">
+        The repository SHALL contain a 2-case smoke configuration for Kev-9B Q4_K_M on an L40S, and
+        unit tests for GGUF configuration parsing and scorer dispatch that run in the normal suite
+        with no GPU and no network.
+      </p>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: the suite stays green</h4>
+      <ul class="a-prose">
+        <li>GIVEN the repository</li>
+        <li>WHEN the test suite runs on a CPU-only machine</li>
+        <li>THEN the GGUF tests pass and nothing downloads a model</li>
+      </ul>
+      <h4 class="a-prose" style="margin-bottom: 4px">Scenario: the smoke config is runnable</h4>
+      <ul class="a-prose">
+        <li>GIVEN the smoke configuration</li>
+        <li>WHEN it is loaded</li>
+        <li>THEN its GGUF run has 2 cases, the Q4_K_M file and GPU L40S, beside production and Jev</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<section class="a-section" aria-labelledby="not-required">
+  <h2 class="a-section__title" id="not-required">5. Not required</h2>
+  <p class="a-section__note">Deleted from the proposal by minimal-cover, with the reason, and approved as deletions.</p>
+  <ul class="a-prose">
+    <li><strong>A generic llama-cpp-python adapter with per-model prompt and readout.</strong> llama-server already does it for five decision-model families (Kev, Laya, Lev, OpenJev, Julia-1).</li>
+    <li><strong>StartLux GGUF.</strong> Its GGUF is a bare decoder; the readout lives in their torch <code>gguf_server.py</code>. Separate follow-up if wanted.</li>
+    <li><strong>ONNX, crawler/triage rule changes, dashboard changes.</strong> Not needed for G-1..G-3.</li>
+    <li><strong>A quality bar for the GGUF row.</strong> Whether quantization costs kept-mass is what the run measures; it is a hypothesis, not a gate (noise about ±0.02 at 75 cases).</li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="clarifications">
+  <h2 class="a-section__title" id="clarifications">6. Clarifications</h2>
+  <p class="a-prose">None. The four flags raised with the proposal (smoke size 2, pin the runtime build, Kev-9B Q4_K_M on L40S first, GGUF-may-still-lose-on-latency hypothesis) were approved as-is and are recorded as decisions in <code>docs/GGUF_PLAN.html</code>. The pin moved from release b11351 to a master commit when step 1 showed no release contains the System One endpoint yet (Plan → Decided).</p>
+</section>
+
+<section class="a-section" aria-labelledby="conformance">
+  <h2 class="a-section__title" id="conformance">7. Conformance</h2>
+  <p class="a-section__note">Table 2. One scenario is one test; a row is <code>unbound</code> until a module and a test have taken it on. ✅ and ❌ differ in shape, not only colour.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Requirement, module, test and status</caption>
+      <thead><tr><th scope="col">Req</th><th scope="col">Module</th><th scope="col">Test</th><th scope="col">Status</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">R-1</th><td>—</td><td>planned: <code>tests/test_gguf.py::test_R1_*</code> (switch quantization, missing file, dispatch)</td><td>unbound</td></tr>
+        <tr><th scope="row">R-2</th><td>—</td><td>planned: the 2-case Modal smoke run (shard file + summary on the volume; cost table prices it) and <code>test_R2_response_validates</code> on a recorded server response</td><td>unbound</td></tr>
+        <tr><th scope="row">R-3</th><td>—</td><td>planned: <code>tests/test_gguf.py::test_R3_smoke_config_loads</code>; the suite itself on CI</td><td>unbound</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>

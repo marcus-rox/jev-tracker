@@ -1,0 +1,267 @@
+<section class="a-section" aria-labelledby="toc-heading">
+  <h2 class="a-section__title" id="toc-heading">Contents</h2>
+  <ul class="a-prose">
+    <li><a href="#status">1. Status</a></li>
+    <li><a href="#objective">2. The objective</a></li>
+    <li><a href="#block">3. Figure 1: where the GGUF scorer sits</a></li>
+    <li><a href="#sequence">4. Figure 2: one GGUF shard as a sequence diagram</a></li>
+    <li><a href="#constraints">5. Constraints</a></li>
+    <li><a href="#previous">6. Table 1: previous steps</a></li>
+    <li><a href="#next">7. Table 2: next steps</a></li>
+    <li><a href="#decided">8. Decided</a></li>
+    <li><a href="#out">9. Out of scope</a></li>
+    <li><a href="#open">10. Open</a></li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="status">
+  <h2 class="a-section__title" id="status">1. Status</h2>
+  <p class="a-prose">
+    <strong>Status · 2026-10-02 · requirements approved, build starting.</strong> Marcus approved
+    the minimal set (R-1..R-3 in <code>docs/GGUF_SPEC.html</code>) in chat; no code exists
+    yet. First checkpoint is step 1 below: a GGUF decision model loaded on a Modal GPU and answering
+    one System One request. This is a standalone task with its own spec and plan (it does not extend the repository-wide
+    <code>docs/PLAN.md</code>); its steps are numbered <em>GGUF step 1..4</em>.
+  </p>
+</section>
+
+<section class="a-section" aria-labelledby="objective">
+  <h2 class="a-section__title" id="objective">2. The objective</h2>
+  <p class="a-prose">
+    A quantized GGUF export of a decision model already on the dashboard in bf16 can be named in a
+    configuration and scored on Modal on all 75 cases, and its row shows cost and latency measured
+    the same way as the bf16 row. <strong>The bar it must beat</strong> is the bf16 run of the same
+    weights: Kev-9B bf16 on an H100 (80 GB), the cheapest committed run that beats production,
+    at $5.6 per 1k queries and 5.1 GPU-seconds per query (kept-mass@50 0.753).
+    Success, falsifiably: the Kev-9B Q4_K_M row is cheaper per 1k queries <em>or</em> faster per
+    query than that bf16 row while its kept-mass stays within the benchmark noise (about ±0.02 at
+    75 cases). If it is neither, the hypothesis "GGUF reduces cost or latency" is refuted for this
+    model, which is a valid outcome and is recorded as such.
+  </p>
+</section>
+
+<section class="a-section" aria-labelledby="block">
+  <h2 class="a-section__title" id="block">3. Figure 1: where the GGUF scorer sits</h2>
+  <p class="a-section__note">
+    Figure 1. Components and what flows between them during one GGUF scoring run. Boxes are
+    components; dashed frames are ownership boundaries; arrows carry what crosses them. The only
+    new component is the GGUF GPU container (bold frame); everything left and right of it already
+    exists. Select a box for its responsibility; drag to pan; <kbd>+</kbd>/<kbd>−</kbd>/<kbd>0</kbd> zoom.
+  </p>
+  <div class="a-diagram" data-a-diagram tabindex="0">
+    <div class="a-toolbar a-no-print" style="margin: 8px 8px 0; justify-content: flex-end">
+      <button type="button" class="a-btn a-btn--outline" data-a-zoom="out">Zoom out</button>
+      <button type="button" class="a-btn a-btn--outline" data-a-zoom="in">Zoom in</button>
+      <button type="button" class="a-btn a-btn--outline" data-a-zoom="reset">Reset view</button>
+    </div>
+    <svg class="a-diagram__canvas" data-a-diagram-canvas viewBox="0 0 1000 520" role="img"
+      aria-label="Diagram: the experiment command on the laptop reads a configuration and spawns one GGUF GPU container per shard on Modal; the container downloads the pinned GGUF file from Hugging Face into the shared weights volume, starts a local model server, and a client loop posts System One requests to it and writes raw answers and timings to the runs volume; the laptop pulls those files and the evaluator derives kept-mass, cost and latency into the experiment folder.">
+      <defs>
+        <marker id="a-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
+        </marker>
+      </defs>
+      <g data-a-diagram-viewport class="a-diagram__viewport">
+        <g class="a-group"><rect x="20" y="40" width="250" height="450" /><text x="34" y="62">laptop · experiment command</text></g>
+        <g class="a-group"><rect x="300" y="40" width="400" height="450" /><text x="314" y="62">Modal · one GPU container per shard (new)</text></g>
+        <g class="a-group"><rect x="730" y="40" width="250" height="450" /><text x="744" y="62">external · storage</text></g>
+
+        <!-- laptop -->
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Configuration"
+          data-a-detail="One YAML file per experiment. A gguf source names the Hub repository pinned to a revision, the file inside it (for example the Q4_K_M file), the question method, GPU, shards, concurrency and request limits. Changing model, size or quantization is a configuration edit only (R-1).">
+          <rect x="40" y="90" width="210" height="56" /><text class="a-node__title" x="54" y="114">Configuration</text><text class="a-node__sub" x="54" y="132">source: gguf · repo@rev · file</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Spawn shards"
+          data-a-detail="Deals the cases over the configured number of shards and spawns one GPU container per shard, recording each call so a failed shard can be respawned. Unchanged: the gguf engine is one more entry in the dispatch table.">
+          <rect x="40" y="190" width="210" height="56" /><text class="a-node__title" x="54" y="214">Spawn shards</text><text class="a-node__sub" x="54" y="232">cases dealt over N GPUs</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Pull and evaluate"
+          data-a-detail="Waits for the shards (tqdm), pulls the raw answers and the per-shard timers (load, warm, in-function seconds) from the runs volume, then derives kept-mass@k, $/1k from warm GPU-seconds times the GPU price, and s/query. Unchanged; this is what makes the GGUF row comparable to the bf16 row (R-2).">
+          <rect x="40" y="330" width="210" height="56" /><text class="a-node__title" x="54" y="354">Pull and evaluate</text><text class="a-node__sub" x="54" y="372">kept-mass · $/1k · s/query</text></g>
+
+        <!-- container -->
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Fetch GGUF file"
+          data-a-detail="Downloads the one named file from the pinned Hub revision into the shared weights volume (tqdm), or reuses it when it is already there. Measured as load time, not warm time. Fails early, naming repository and file, when the file does not exist (R-2).">
+          <rect x="330" y="90" width="340" height="56" /><text class="a-node__title" x="344" y="114">1 · Fetch the GGUF file</text><text class="a-node__sub" x="344" y="132">one file · pinned revision · cached in the weights volume</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Local model server"
+          data-a-detail="The GGUF runtime's own server, started inside the container with the file, all layers on the GPU and as many parallel slots as the configured concurrency. It implements the System One endpoint for the official decision-model families itself (prompt format, yes/no or level readout), so the harness writes no per-model adapter. Ready when its health check answers.">
+          <rect x="330" y="190" width="340" height="56" style="stroke-width: 2.5" /><text class="a-node__title" x="344" y="214">2 · Local model server (GGUF runtime)</text><text class="a-node__sub" x="344" y="232">System One endpoint on localhost · GPU</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Client loop"
+          data-a-detail="The existing posting loop used for hosted APIs, pointed at localhost: builds each System One request from the case and method, keeps `concurrency` requests in flight, validates each response, records answers with timings, and commits the shard file to the runs volume every minute (resumable). Warm time starts at the first request.">
+          <rect x="330" y="290" width="340" height="56" /><text class="a-node__title" x="344" y="314">3 · Client loop (existing API loop)</text><text class="a-node__sub" x="344" y="332">System One requests → answers · tqdm per batch</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Shard summary"
+          data-a-detail="The same summary every local scorer writes: GPU type, load seconds, warm seconds, in-function seconds, answered batches. The evaluator reads it to price the run.">
+          <rect x="330" y="390" width="340" height="56" /><text class="a-node__title" x="344" y="414">4 · Shard summary</text><text class="a-node__sub" x="344" y="432">gpu · load s · warm s · batches</text></g>
+
+        <!-- external -->
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Hugging Face Hub"
+          data-a-detail="Where the official GGUF exports live (for Kev: BF16, Q8_0 and Q4_K_M files per size, converted from the same revisions the bf16 rows were run on). The run pins the revision so a silent re-export shows up as a new candidate.">
+          <rect x="750" y="90" width="210" height="56" /><text class="a-node__title" x="764" y="114">Hugging Face Hub</text><text class="a-node__sub" x="764" y="132">official GGUF exports</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Weights volume"
+          data-a-detail="Shared Modal volume that already caches Kev and Laya weights. GGUF files land next to them, so a second shard or a second run does not download again.">
+          <rect x="750" y="190" width="210" height="56" /><text class="a-node__title" x="764" y="214">Weights volume</text><text class="a-node__sub" x="764" y="232">shared cache</text></g>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Runs volume"
+          data-a-detail="Modal volume holding each shard's gzipped raw answers and its summary until the laptop pulls them into the experiment folder in the repository.">
+          <rect x="750" y="330" width="210" height="56" /><text class="a-node__title" x="764" y="354">Runs volume</text><text class="a-node__sub" x="764" y="372">raw answers · summaries</text></g>
+
+        <!-- edges -->
+        <path class="a-edge" d="M145,146 V190" marker-end="url(#a-arrow)" />
+        <path class="a-edge" d="M250,218 H330" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="256" y="210">run config · shard i</text>
+        <path class="a-edge" d="M500,146 V190" marker-end="url(#a-arrow)" />
+        <path class="a-edge" d="M500,246 V290" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="508" y="272">ready</text>
+        <path class="a-edge" d="M500,346 V390" marker-end="url(#a-arrow)" />
+        <path class="a-edge" d="M670,118 H750" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="676" y="110">get file</text>
+        <path class="a-edge a-edge--dim" d="M750,132 H670" marker-end="url(#a-arrow)" />
+        <path class="a-edge" d="M670,210 H750" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="676" y="202">read / write file</text>
+        <path class="a-edge" d="M670,318 H710 V358 H750" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="676" y="310">answers</text>
+        <path class="a-edge" d="M670,418 H720 V372 H750" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="676" y="440">summary</text>
+        <path class="a-edge a-edge--dim" d="M750,372 H740 V470 H145 V386" marker-end="url(#a-arrow)" /><text class="a-edge__label" x="300" y="486">pull answers + summaries</text>
+      </g>
+    </svg>
+    <div class="a-inspector" data-a-inspector aria-live="polite">
+      <p class="a-inspector__title" data-a-inspector-title>Select a box</p>
+      <p style="margin: 0; color: rgb(var(--text-secondary))" data-a-inspector-body>Each box's responsibility appears here.</p>
+    </div>
+  </div>
+  <p class="a-section__note">
+    Legend. Numbers 1–4 are the order inside the container. The bold box is the only new runtime
+    piece; the client loop, summary, volumes and evaluator are reused unchanged, which is what
+    makes R-2's cost and latency comparable to bf16 by construction.
+  </p>
+</section>
+
+<section class="a-section" aria-labelledby="sequence">
+  <h2 class="a-section__title" id="sequence">4. Figure 2: one GGUF shard as a sequence diagram</h2>
+  <p class="a-section__note">
+    Figure 2. Time runs downward; each column is a participant. Solid arrows are calls, dashed
+    arrows are replies; the framed region repeats once per batch of children, with
+    <code>concurrency</code> batches in flight at once.
+  </p>
+  <figure class="a-panel" style="padding: 8px 0 0">
+    <svg viewBox="0 0 1040 640" role="img" style="width: 100%; height: auto; display: block"
+      aria-label="Sequence: the laptop spawns a shard; the container fetches the GGUF file from the Hub into the weights volume, starts the local model server and waits for health; then for each batch the client loop posts a System One request and receives answers, appending them to the runs volume; at the end it writes the shard summary and the laptop pulls and evaluates.">
+      <defs>
+        <marker id="seq-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
+        </marker>
+      </defs>
+      <g class="a-node"><rect x="20" y="20" width="150" height="40" /><text class="a-node__title" x="95" y="45" text-anchor="middle">Laptop</text></g>
+      <g class="a-node"><rect x="220" y="20" width="170" height="40" /><text class="a-node__title" x="305" y="45" text-anchor="middle">GGUF container</text></g>
+      <g class="a-node"><rect x="440" y="20" width="170" height="40" /><text class="a-node__title" x="525" y="45" text-anchor="middle">Local model server</text></g>
+      <g class="a-node"><rect x="660" y="20" width="160" height="40" /><text class="a-node__title" x="740" y="45" text-anchor="middle">Hugging Face Hub</text></g>
+      <g class="a-node"><rect x="870" y="20" width="150" height="40" /><text class="a-node__title" x="945" y="45" text-anchor="middle">Volumes</text></g>
+      <path class="a-edge a-edge--dim" d="M95,60 V620" style="stroke-dasharray: 4 6" />
+      <path class="a-edge a-edge--dim" d="M305,60 V620" style="stroke-dasharray: 4 6" />
+      <path class="a-edge a-edge--dim" d="M525,60 V620" style="stroke-dasharray: 4 6" />
+      <path class="a-edge a-edge--dim" d="M740,60 V620" style="stroke-dasharray: 4 6" />
+      <path class="a-edge a-edge--dim" d="M945,60 V620" style="stroke-dasharray: 4 6" />
+      <g class="a-node"><rect x="299" y="100" width="12" height="470" /></g>
+      <g class="a-node"><rect x="519" y="220" width="12" height="300" /></g>
+      <g class="a-group"><rect x="210" y="330" width="820" height="150" /><text x="224" y="352">loop · per batch of children · `concurrency` in flight</text></g>
+
+      <path class="a-edge" d="M95,100 H297" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="105" y="94">1 spawn shard (run config, shard i)</text>
+      <path class="a-edge" d="M311,140 H738" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="322" y="134">2 fetch the one GGUF file at the pinned revision (tqdm) — skipped if cached</text>
+      <path class="a-edge a-edge--dim" d="M738,165 H311" marker-end="url(#seq-arrow)" style="stroke-dasharray: 6 4" /><text class="a-edge__label" x="322" y="182">file → weights volume</text>
+      <path class="a-edge" d="M311,220 H517" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="322" y="214">3 start server: file, all layers on GPU, slots = concurrency</text>
+      <path class="a-edge a-edge--dim" d="M517,255 H311" marker-end="url(#seq-arrow)" style="stroke-dasharray: 6 4" /><text class="a-edge__label" x="322" y="272">healthy (load time ends, warm time starts)</text>
+
+      <path class="a-edge" d="M311,380 H517" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="322" y="374">4 System One request: state + children as questions (noul or score)</text>
+      <path class="a-edge a-edge--dim" d="M517,415 H311" marker-end="url(#seq-arrow)" style="stroke-dasharray: 6 4" /><text class="a-edge__label" x="322" y="432">answers: P(yes) per child, or expected level</text>
+      <path class="a-edge" d="M311,455 H943" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="322" y="449">5 append raw record (answers + timing) to the shard file; commit every minute</text>
+
+      <path class="a-edge" d="M311,520 H943" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="322" y="514">6 write shard summary: gpu · load s · warm s · batches</text>
+      <path class="a-edge" d="M95,565 H943" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="105" y="559">7 pull answers + summaries → evaluate: kept-mass · $/1k · s/query</text>
+    </svg>
+  </figure>
+  <p class="a-section__note">
+    Legend. Steps 2–3 are load time; 4–5 are warm time and the only part that enters $/1k (R-2).
+    Step 4's request body is the same one the hosted-API scorer sends today; the server, not the
+    harness, turns it into a prompt and reads the answer tokens.
+  </p>
+</section>
+
+<section class="a-section" aria-labelledby="constraints">
+  <h2 class="a-section__title" id="constraints">5. Constraints</h2>
+  <ul class="a-prose">
+    <li><strong>Same contract, same artifacts, same cost formula as every local scorer.</strong>
+      Prevents an incomparable row: a GGUF number computed differently from the bf16 number would
+      answer nothing (the reason the project exists).</li>
+    <li><strong>Pin the Hub revision of the GGUF repository.</strong> Kev-27B's weights moved under
+      an unpinned run on 2026-09-30 and shifted kept-mass by about 0.01; the GGUF exports are
+      re-converted when their source moves.</li>
+    <li><strong>Pin the runtime build.</strong> The System One endpoint in the GGUF runtime is one
+      day old; an unpinned "latest" would make reruns irreproducible.</li>
+    <li><strong>tqdm for the file download and the batch loop</strong> (Marcus, standing): a silent
+      6 GB download looks like a hang.</li>
+    <li><strong>Smoke first (2 cases), then all 75 only on Marcus's go.</strong> Prevents a $3 run
+      that fails on request shape; the smoke run costs under $1.</li>
+    <li><strong>No per-model readout code in the harness.</strong> The rox-research llama.cpp fork
+      (2026-09-29) cost a session of adapter work and was 10× slower than Kev's server; if the
+      runtime's own endpoint does not serve a model, that model is out of scope here.</li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="previous">
+  <h2 class="a-section__title" id="previous">6. Table 1: previous steps</h2>
+  <p class="a-section__note">Table 1. Closed steps, one row each. ✅ = ran and the falsifier did not fire; ❌ = the falsifier fired or the step was dropped unrun, with the reason.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Previous steps with outcome and what each established</caption>
+      <thead><tr><th scope="col">Step</th><th scope="col">Outcome</th><th scope="col">What it established</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Kev-27B through a llama.cpp fork (rox-research, 2026-09-29)</th><td>❌</td><td>Fork about 10× slower than Kev's own server; quantization gained nothing within noise · rox-research serving hypotheses, carried as data in <code>docs/SPEC.md</code> "Not required"</td></tr>
+        <tr><th scope="row">Why GGUF/ONNX hits are <code>needs_adapter</code></th><td>✅</td><td>No GGUF/ONNX runtime in any Modal image; readout lives in each model's serving code; almost all export hits are repackagings of bf16 models already benchmarked · this session, 2026-10-02</td></tr>
+        <tr><th scope="row">Is there a runtime that already speaks System One for GGUF?</th><td>✅</td><td>Yes: upstream llama.cpp merged a System One endpoint (Kev, Laya, Lev, OpenJev, Julia-1) on 2026-10-02, and official Kev GGUFs exist at the benchmarked revisions · this session</td></tr>
+        <tr><th scope="row">Minimal requirement set</th><td>✅</td><td>Three requirements cover G-1..G-3; generic adapter, StartLux, ONNX deleted · approved by Marcus in chat, 2026-10-02</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="next">
+  <h2 class="a-section__title" id="next">7. Table 2: next steps</h2>
+  <p class="a-section__note">Table 2. At most four steps; each with the requirement it serves, what would falsify it, and its cost. Cheapest disconfirming step first.</p>
+  <div class="a-table-scroll">
+    <table class="a-table">
+      <caption class="a-visually-hidden">Next steps with requirement, falsifier and cost</caption>
+      <thead><tr><th scope="col">Step</th><th scope="col">Serves</th><th scope="col">Falsifier</th><th scope="col">Cost</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">GGUF step 1 · a Modal GPU container loads Kev-9B Q4_K_M with the pinned runtime build and answers one System One request</th><td>R-2</td><td>The runtime cannot load the file, or rejects our request body, or returns answers that do not validate as a System One response</td><td>under $0.50 of L40S time; one session hour</td></tr>
+        <tr><th scope="row">GGUF step 2 · <code>gguf</code> source in configuration, dispatch to the new scorer, 2-case smoke config, unit tests without a GPU</th><td>R-1, R-3</td><td>Config parsing or dispatch tests fail; a quantization switch needs a code edit</td><td>no GPU; one session hour</td></tr>
+        <tr><th scope="row">GGUF step 3 · run the 2-case smoke on Modal; report load s, warm GPU-s per query and $/1k beside bf16 Kev-9B</th><td>R-2, R-3</td><td>The GGUF row is neither cheaper per 1k nor faster per query than bf16 Kev-9B (hypothesis refuted, recorded as such), or its cost cannot be computed by the shared formula</td><td>under $1</td></tr>
+        <tr><th scope="row">GGUF step 4 · all 75 cases, only on Marcus's go; then Q8_0 or 4B/0.8B by config edit if the result warrants</th><td>R-1, R-2</td><td>Kept-mass outside ±0.02 of the bf16 row, or the per-query numbers do not hold at 75 cases</td><td>about $3 per model</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="a-section" aria-labelledby="decided">
+  <h2 class="a-section__title" id="decided">8. Decided</h2>
+  <ul class="a-prose">
+    <li><strong>Serve GGUF through the runtime's own System One endpoint, not a per-model adapter.</strong> Upstream llama.cpp implements the prompt and readout for the official decision families; writing our own would repeat the rox-research fork and lock us to one model.</li>
+    <li><strong>Runtime built from a pinned upstream commit (master of 2026-10-02 18:26 UTC) inside the Modal image, not the Python binding.</strong> Superseded decision: the pre-built release binary (b11351). Falsified by step 1: the System One endpoint was merged upstream at 09:56 UTC but the newest release was cut from an 08:08 commit, so no pre-built binary can load the official decision-model GGUFs yet ("wrong number of tensors; expected 429, got 427", the two being the decision head). The source build is a one-time image cost; switch back to a release binary once one ships. The binding would add a second readout path.</li>
+    <li><strong>Reuse the hosted-API posting loop against localhost.</strong> It already validates responses, retries, splits oversized batches and writes the shard file; the GGUF scorer only starts the server first.</li>
+    <li><strong>First target Kev-9B Q4_K_M on an L40S (48 GB).</strong> The bf16 run needed an H100 and is the cheapest committed row that beats production; a 4-bit file fits a GPU at half the price.</li>
+    <li><strong>Configuration shape: <code>model: &lt;repo&gt;@&lt;revision&gt;</code> plus <code>file: &lt;name&gt;.gguf</code></strong>, mirroring how bf16 sources pin a revision; the run name carries the file so Q4 and Q8 rows are distinguishable.</li>
+    <li><strong>Load time excluded from $/1k, as for every local scorer.</strong> Download and server start-up are reported as load seconds; warm seconds start at the first request.</li>
+    <li><strong>Smoke size 2 cases</strong>, the existing smoke size, not a new number.</li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="out">
+  <h2 class="a-section__title" id="out">9. Out of scope</h2>
+  <ul class="a-prose">
+    <li>StartLux GGUF: bare decoder, readout in the publisher's torch server; separate task.</li>
+    <li>ONNX and MLX exports: other runtimes; nearly all are repackagings of benchmarked bf16 models.</li>
+    <li>A generic per-model prompt/readout adapter.</li>
+    <li>Crawler and triage rule changes (re-triaging the 181 export hits), queue, dashboard, <code>data/</code>, <code>site/dist</code>.</li>
+    <li>Kev-27B GGUF: the 27B serving question was closed in rox-research; revisit only if 9B shows a clear win.</li>
+  </ul>
+</section>
+
+<section class="a-section" aria-labelledby="open">
+  <h2 class="a-section__title" id="open">10. Open</h2>
+  <ul class="a-prose">
+    <li><strong>Does the runtime's System One endpoint batch many children of one state into one prefill?</strong> Resolved by GGUF step 3's warm GPU-s per query: if a 25-child request costs about 25 single-child requests, latency will not beat Kev's server.</li>
+    <li><strong>Does 4-bit quantization move Kev-9B's kept-mass outside the ±0.02 noise?</strong> Resolved by GGUF step 4 (all 75 cases). Not a gate; a result either way.</li>
+    <li><strong>Which GPU is the right cost line for GGUF rows</strong> (cheapest that fits, or the bf16 row's GPU)? Decided for now as "cheapest that fits" (L40S); Marcus to confirm when the first number lands.</li>
+  </ul>
+</section>

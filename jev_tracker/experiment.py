@@ -18,8 +18,10 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
 (raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust`, `jevany`,
 `rsi_jev`, `minicpm_jev` or `startlux`
-(scored now, in-process on Modal, sharded over GPUs) or `api` (any hosted model that answers the System One request at a URL, from
-a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
+(scored now, in-process on Modal, sharded over GPUs), `gguf` (one quantized .gguf file served by
+llama.cpp on a Modal GPU), `ollaya` (an ONNX decision model served by the Ollaya daemon on a Modal
+GPU) or `api` (any hosted model that answers the System One request at a URL,
+from a Modal CPU container). Adding a model = a new source here + a producer of RawRecords in
 modal_app.py; the metric is untouched.
 """
 
@@ -317,6 +319,41 @@ class ApiSource(BaseModel):
     concurrency: int = 8  # requests in flight per container
 
 
+class GgufSource(BaseModel):
+    """A quantized decision model: one `.gguf` file of a Hub repo, served by llama.cpp's
+    /v1/systemone on a Modal GPU. `model` is `repo@revision` (e.g. ggml-org/Kev-9B-GGUF@<sha>),
+    `file` the file inside it (Kev-9B-Q4_K_M.gguf, Kev-9B-Q8_0.gguf, ...)."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["gguf"]
+    method: str
+    model: str
+    file: str
+    max_items: int | None = 25
+    max_chars: int | None = 24_000
+    shards: int = 1
+    concurrency: int = 8  # llama-server slots = requests in flight per container
+    gpu: str | None = None  # None = modal_app.DEFAULT_GGUF_GPU
+
+
+class OllayaSource(BaseModel):
+    """An ONNX decision model served by the Ollaya daemon (ONNX Runtime CUDA) on a Modal GPU.
+    `model` is an Ollaya registry name (kev:9b, kev:4b, laya:en, ...); the registry manifest pins
+    the graph and the upstream weight files, the Modal image pins the daemon."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["ollaya"]
+    method: str
+    model: str
+    max_items: int | None = 25
+    max_chars: int | None = 24_000
+    shards: int = 1
+    concurrency: int = 8  # requests in flight per container; the daemon queues them
+    gpu: str | None = None  # None = modal_app.DEFAULT_OLLAYA_GPU
+
+
 ModelSource = (
     KevSource
     | LayaSource
@@ -330,6 +367,8 @@ ModelSource = (
     | VonSource
     | BekkoSource
     | ApiSource
+    | GgufSource
+    | OllayaSource
 )
 Source = Annotated[ProductionSource | AnswersSource | ModelSource, Field(discriminator="source")]
 
@@ -363,6 +402,7 @@ class Experiment(BaseModel):
             reranker=name,
             engine=src.source,
             model=src.model,
+            file=src.file if isinstance(src, GgufSource) else None,
             method=src.method,
             max_items=src.max_items,
             max_chars=src.max_chars,

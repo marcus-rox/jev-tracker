@@ -42,15 +42,18 @@ Modal credentials come from MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the environme
 import functools
 import gzip
 import io
+import json
 import os
+import shutil
 import subprocess
 import threading
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Literal
 
+import httpx
 import modal
 from pydantic import BaseModel
 from tqdm import tqdm
@@ -61,7 +64,9 @@ from jev_tracker.metrics import ShardSummary
 from jev_tracker.rerankers import append_jsonl_gz, read_jsonl_gz
 from jev_tracker.systemone import RawRecord, SystemOneResponse
 
-APP_NAME = "jev-tracker"
+# JEV_TRACKER_APP names a separate deployment: two working trees deploying the same app replace
+# each other's functions and kill each other's running shards.
+APP_NAME = os.environ.get("JEV_TRACKER_APP", "jev-tracker")
 RUNS_VOLUME_NAME = "jev-tracker-runs"
 HF_CACHE_VOLUME_NAME = "rox-research--hf-cache"  # Kev / Laya weights already cached there
 REPO_DIR = Path(__file__).resolve().parents[1]
@@ -73,7 +78,7 @@ PYTHON_VERSION = "3.12"
 HOUR = 60 * 60
 COMMIT_EVERY_S = 60
 PROGRESS_DICT_NAME = "jev-tracker-progress"
-PROGRESS_LABEL = "jev-tracker-progress"  # web endpoint: https://<workspace>--<label>.modal.run
+PROGRESS_LABEL = f"{APP_NAME}-progress"  # web endpoint: https://<workspace>--<label>.modal.run
 PROGRESS_EVERY_S = 5  # the bars' tqdm mininterval, so the site sees what the terminal sees
 PROGRESS_STALE_S = 24 * HOUR  # a bar not touched for this long is no longer served
 FASTAPI_PKG = "fastapi[standard]>=0.115"  # Modal's web endpoints are FastAPI handlers
@@ -255,6 +260,37 @@ API = "API"  # gpu of a hosted-API scorer: no GPU is attached or billed
 API_TRANSIENT = {429, 500, 502, 503, 504}
 API_RETRIES = 16  # waits 2, 4, ... 60 s, about 12 min in all
 API_BACKOFF_S, API_MAX_WAIT_S = 2.0, 60.0
+API_TIMEOUT = httpx.Timeout(600.0, connect=10.0)
+# github.com/ggml-org/llama.cpp master of 2026-10-02 18:26 UTC. /v1/systemone (#29818, merged 09:56)
+# is in no release yet (b11351 = the 08:08 commit, its qwen35 loader has no decision head), so
+# llama-server is built from source, statically, for the GPUs GPU_USD_PER_S prices (L40S, H100).
+LLAMA_CPP_COMMIT = "bed0a856606ee4a24a164066f73d2379447033f5"
+LLAMA_CPP_SRC = "/opt/llama.cpp-src"
+LLAMA_CPP_DIR = "/opt/llama.cpp"
+LLAMA_CPP_CUDA_ARCHS = "89;90"  # sm_89 = L4 / L40S, sm_90 = H100
+LLAMA_CPP_BUILD_CPUS = 32  # the CUDA kernels are ~150 nvcc jobs; the default builder takes >1 h
+CUDA_IMAGE = "nvidia/cuda:12.8.1-devel-ubuntu24.04"  # nvcc to build, libcudart / libcublas to run
+LLAMA_CPP_APT = ("git", "cmake", "build-essential", "ca-certificates")
+HF_HUB_PKG = "huggingface_hub>=0.30"
+LLAMA_URL = "http://127.0.0.1:8080"
+LLAMA_LOG = Path("/tmp/llama-server.log")
+LLAMA_START_TIMEOUT_S = 10 * 60  # includes reading a 5 GB file from the Volume
+LLAMA_POLL_S = 2.0
+LLAMA_CTX_PER_SLOT = (
+    8192  # tokens per in-flight request; --ctx-size is shared over --parallel slots
+)
+DEFAULT_GGUF_GPU = "L40S"
+# ghcr.io/ollaya-dev/ollaya:cuda12 of 2026-10-02 (Ollaya 0.9.0: /usr/bin/ollaya + ONNX Runtime CUDA 12
+# libraries), pinned by digest. cuda12 rather than cuda: the CUDA 13 pack needs an R580+ driver.
+OLLAYA_IMAGE = "ghcr.io/ollaya-dev/ollaya@sha256:e613df044a10c4deb2b29a6996c96d83ef2bc897670369234f321eec99a04c47"
+OLLAYA_BIN = "/usr/bin/ollaya"
+OLLAYA_URL = "http://127.0.0.1:11435"
+OLLAYA_MODELS_DIR = f"{HF_CACHE_DIR}/ollaya/models"  # the model store, on the HF-cache Volume
+OLLAYA_LOG = Path("/tmp/ollaya.log")
+OLLAYA_START_TIMEOUT_S = 60
+OLLAYA_LOAD_TIMEOUT = "30m"  # bf16 Kev-9B is ~20 GB read from the Volume into ORT; default 5m
+OLLAYA_PULL_TIMEOUT = httpx.Timeout(HOUR, connect=10.0)
+DEFAULT_OLLAYA_GPU = "H100"
 
 
 class ApiEndpoint(BaseModel):
@@ -287,8 +323,11 @@ class ScoringRun(BaseModel):
         "von",
         "bekko",
         "api",
+        "gguf",
+        "ollaya",
     ]
     model: str
+    file: str | None = None  # gguf only: the .gguf file inside the `model` repo (Q4_K_M, Q8_0, ...)
     method: str
     max_items: int | None  # children per System One request; None = the whole case
     max_chars: int | None  # characters of child text per request; None = no limit
@@ -311,11 +350,17 @@ class ScoringRun(BaseModel):
     def gpu_type(self) -> str:
         if self.engine == "api":
             return API
+        if self.engine == "gguf":
+            return self.gpu or DEFAULT_GGUF_GPU
+        if self.engine == "ollaya":
+            return self.gpu or DEFAULT_OLLAYA_GPU
         return self.gpu or GPU_FOR.get(self.repo, DEFAULT_KEV_GPU)
 
     @property
     def name(self) -> str:
         short = self.model.split("/")[-1]
+        if self.file is not None:
+            short = Path(self.file).stem
         i = "all" if self.max_items is None else self.max_items
         c = "all" if self.max_chars is None else self.max_chars
         return f"{short}_{self.method}_i{i}_c{c}"
@@ -389,6 +434,59 @@ startlux_image = _mount(
 von_image = _mount(_base().pip_install(VON_PKG))  # brings torch + transformers
 bekko_image = _mount(_base().pip_install(*BEKKO_PKGS))
 api_image = _mount(_base())
+
+
+def _build_llama_server() -> None:
+    """Image build step: a static CUDA llama-server at LLAMA_CPP_COMMIT, on a many-core builder."""
+    src, build = LLAMA_CPP_SRC, f"{LLAMA_CPP_SRC}/build"
+    for cmd in (
+        ["git", "clone", "https://github.com/ggml-org/llama.cpp", src],
+        ["git", "-C", src, "checkout", LLAMA_CPP_COMMIT],
+        [
+            "cmake",
+            "-S",
+            src,
+            "-B",
+            build,
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DGGML_CUDA=ON",
+            f"-DCMAKE_CUDA_ARCHITECTURES={LLAMA_CPP_CUDA_ARCHS}",
+            "-DBUILD_SHARED_LIBS=OFF",
+            "-DLLAMA_CURL=OFF",
+            "-DLLAMA_BUILD_TESTS=OFF",
+            "-DLLAMA_BUILD_EXAMPLES=OFF",
+        ],
+        ["cmake", "--build", build, "--target", "llama-server", "-j", str(LLAMA_CPP_BUILD_CPUS)],
+    ):
+        subprocess.run(cmd, check=True)
+    Path(LLAMA_CPP_DIR).mkdir(parents=True, exist_ok=True)
+    shutil.copy(f"{build}/bin/llama-server", f"{LLAMA_CPP_DIR}/llama-server")
+    shutil.rmtree(src)
+
+
+gguf_image = _mount(
+    modal.Image.from_registry(CUDA_IMAGE, add_python=PYTHON_VERSION)
+    .apt_install(*LLAMA_CPP_APT)
+    .pip_install(*RUNTIME_DEPS, HF_HUB_PKG)
+    .run_function(_build_llama_server, cpu=LLAMA_CPP_BUILD_CPUS, memory=64 * 1024, timeout=HOUR)
+    .env({"HF_HOME": HF_CACHE_DIR})
+    .workdir(REMOTE_DIR)
+)
+ollaya_image = _mount(
+    modal.Image.from_registry(OLLAYA_IMAGE, add_python=PYTHON_VERSION)
+    .entrypoint([])  # the image's ENTRYPOINT is the ollaya binary; Modal must exec python
+    .pip_install(*RUNTIME_DEPS)
+    .env(
+        {
+            "OLLAYA_HOST": OLLAYA_URL.split("//")[1],
+            "OLLAYA_MODELS": OLLAYA_MODELS_DIR,
+            "OLLAYA_DEVICE": "cuda",  # fail loudly rather than fall back to the CPU
+            "OLLAYA_KEEP_ALIVE": "-1",
+            "OLLAYA_LOAD_TIMEOUT": OLLAYA_LOAD_TIMEOUT,
+        }
+    )
+    .workdir(REMOTE_DIR)
+)
 progress_image = _mount(_base().pip_install(FASTAPI_PKG))
 
 runs_volume = modal.Volume.from_name(RUNS_VOLUME_NAME, create_if_missing=True)
@@ -1168,6 +1266,44 @@ def score_cases_minicpm_jev(job_json: str) -> str:
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 
+def _post_answer(
+    client: httpx.Client,
+    url: str,
+    out: Path,
+    method: Method,
+    model: str,
+    write: threading.Lock,
+    case: DataPoint,
+    bi: int,
+    batch: list[Item],
+) -> None:
+    """Post one batch's System One request to `url` and append the record to the shard file.
+
+    A batch the endpoint rejects as over its input limit (400/422) is split in two, as
+    score_cases does on Kev's 422. A transient error is retried with exponential backoff; a
+    record's latency is its successful attempt."""
+    body = request(method, case.input.query, batch, model).body()
+    for attempt in range(API_RETRIES + 1):
+        t = time.time()
+        r = client.post(url, json=body)
+        if r.status_code not in API_TRANSIENT or attempt == API_RETRIES:
+            break
+        print(f"{case.id} batch {bi}: HTTP {r.status_code}, retry {attempt + 1}", flush=True)
+        time.sleep(min(API_BACKOFF_S * 2**attempt, API_MAX_WAIT_S))
+    if r.status_code in (400, 422) and len(batch) > 1:
+        half = len(batch) // 2
+        _post_answer(client, url, out, method, model, write, case, bi, batch[:half])
+        _post_answer(client, url, out, method, model, write, case, bi, batch[half:])
+        return
+    if r.status_code != 200:
+        raise RuntimeError(f"{case.id} batch {bi}: HTTP {r.status_code}: {r.text[:300]}")
+    rec = record(
+        method, case.id, bi, batch, SystemOneResponse.model_validate(r.json()), time.time() - t, t
+    )
+    with write:
+        append_jsonl_gz(out, rec)
+
+
 @app.function(
     image=startlux_image,
     gpu="H100",
@@ -1331,11 +1467,7 @@ def score_cases_bekko(job_json: str) -> str:
 def score_cases_api(job_json: str) -> str:
     """Post every batch of this shard's cases to a hosted System One endpoint; resumable.
 
-    `run.concurrency` requests in flight. A batch the endpoint rejects as over its input limit
-    (400/422) is split in two, as score_cases does on Kev's 422. A transient error is retried
-    with exponential backoff; a record's latency is its successful attempt."""
-    import httpx
-
+    `run.concurrency` requests in flight (see _post_answer for splitting and retries)."""
     job = ShardJob.model_validate_json(job_json)
     run = job.run
     if run.api is None:
@@ -1347,37 +1479,10 @@ def score_cases_api(job_json: str) -> str:
     headers = {}
     if run.api.secret is not None:
         headers["Authorization"] = f"Bearer {os.environ[run.api.key_env]}"
-    client = httpx.Client(headers=headers, timeout=httpx.Timeout(600.0, connect=10.0))
-    write = threading.Lock()
-
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
-        body = request(method, case.input.query, batch, run.model).body()
-        for attempt in range(API_RETRIES + 1):
-            t = time.time()
-            r = client.post(run.api.url, json=body)
-            if r.status_code not in API_TRANSIENT or attempt == API_RETRIES:
-                break
-            print(f"{case.id} batch {bi}: HTTP {r.status_code}, retry {attempt + 1}", flush=True)
-            time.sleep(min(API_BACKOFF_S * 2**attempt, API_MAX_WAIT_S))
-        if r.status_code in (400, 422) and len(batch) > 1:
-            half = len(batch) // 2
-            answer(case, bi, batch[:half])
-            answer(case, bi, batch[half:])
-            return
-        if r.status_code != 200:
-            raise RuntimeError(f"{case.id} batch {bi}: HTTP {r.status_code}: {r.text[:300]}")
-        rec = record(
-            method,
-            case.id,
-            bi,
-            batch,
-            SystemOneResponse.model_validate(r.json()),
-            time.time() - t,
-            t,
-        )
-        with write:
-            append_jsonl_gz(out, rec)
-
+    client = httpx.Client(headers=headers, timeout=API_TIMEOUT)
+    answer = functools.partial(
+        _post_answer, client, run.api.url, out, method, run.model, threading.Lock()
+    )
     loaded = time.time()
     n = _answer_shard(job, done, answer)
     scored = time.time()
@@ -1392,6 +1497,232 @@ def score_cases_api(job_json: str) -> str:
         requests=n,
         resumed=len(done),
     ).model_dump_json()
+
+
+def _start_llama_server(model_path: str, parallel: int) -> subprocess.Popen:
+    """llama-server at LLAMA_URL with every layer on the GPU; returns once /health answers 200."""
+    cmd = [
+        f"{LLAMA_CPP_DIR}/llama-server",
+        *("--model", model_path),
+        *("--host", LLAMA_URL.split("//")[1].split(":")[0]),
+        *("--port", LLAMA_URL.rsplit(":", 1)[1]),
+        *("--n-gpu-layers", "999"),
+        *("--parallel", str(parallel)),
+        *("--ctx-size", str(LLAMA_CTX_PER_SLOT * parallel)),
+        "--no-webui",
+    ]
+    print(" ".join(cmd), flush=True)
+    proc = subprocess.Popen(cmd, stdout=LLAMA_LOG.open("w"), stderr=subprocess.STDOUT)
+    started = time.time()
+    while time.time() - started < LLAMA_START_TIMEOUT_S and proc.poll() is None:
+        try:
+            if httpx.get(f"{LLAMA_URL}/health", timeout=LLAMA_POLL_S).status_code == 200:
+                return proc
+        except httpx.HTTPError:
+            pass
+        time.sleep(LLAMA_POLL_S)
+    proc.kill()
+    raise RuntimeError(
+        f"llama-server not healthy after {time.time() - started:.0f}s (exit {proc.poll()}):\n"
+        + LLAMA_LOG.read_text()[-3000:]
+    )
+
+
+@app.function(
+    image=gguf_image,
+    gpu=DEFAULT_GGUF_GPU,
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_gguf(job_json: str) -> str:
+    """Answer every batch with a GGUF decision model behind llama.cpp's /v1/systemone; resumable.
+
+    `run.file` of the Hub repo `run.model` (repo@revision) is downloaded into the HF-cache Volume
+    (tqdm; reused next time), llama-server serves it on localhost with `run.concurrency` slots,
+    and the API posting loop is pointed at it, so the shard files are those of every scorer and
+    kept-mass, warm GPU-seconds, $/1k and latency need no new code. Load time = download + server
+    start + one warm-up request (the mmap'd weights are paged in by the first forward pass, not
+    by /health); warm time = the posting loop."""
+    from huggingface_hub import hf_hub_download
+    from huggingface_hub.errors import EntryNotFoundError
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    if run.file is None:
+        raise ValueError(f"{job.desc}: gguf source without a file")
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+    t0 = time.time()
+    repo, _, revision = run.model.partition("@")
+    try:
+        path = hf_hub_download(repo, run.file, revision=revision or None)
+    except EntryNotFoundError as e:
+        raise FileNotFoundError(f"{job.desc}: no file {run.file} in {run.model}") from e
+    hf_cache.commit()
+    server = _start_llama_server(path, run.concurrency)
+    client = httpx.Client(timeout=API_TIMEOUT)
+    url = f"{LLAMA_URL}/v1/systemone"
+    answer = functools.partial(_post_answer, client, url, out, method, run.model, threading.Lock())
+    try:
+        cases = run.shard_cases(job.shard)
+        if cases:
+            first = batches(cases[0].input, run.max_items, run.max_chars)[0]
+            body = request(method, cases[0].input.query, first, run.model).body()
+            client.post(url, json=body).raise_for_status()
+        loaded = time.time()
+        n = _answer_shard(job, done, answer)
+    finally:
+        client.close()
+        server.terminate()
+        print(LLAMA_LOG.read_text()[-2500:], flush=True)
+    scored = time.time()
+    return ShardSummary(
+        reranker=run.reranker,
+        shard=job.shard,
+        gpu=run.gpu_type,
+        load_s=loaded - t0,
+        warm_s=scored - loaded,
+        total_s=time.time() - t0,
+        requests=n,
+        resumed=len(done),
+    ).model_dump_json()
+
+
+def _start_ollaya() -> subprocess.Popen:
+    """The Ollaya daemon at OLLAYA_URL (env from ollaya_image); returns once GET / answers 200."""
+    Path(OLLAYA_MODELS_DIR).mkdir(parents=True, exist_ok=True)
+    proc = subprocess.Popen(
+        [OLLAYA_BIN, "serve"], stdout=OLLAYA_LOG.open("w"), stderr=subprocess.STDOUT
+    )
+    started = time.time()
+    while time.time() - started < OLLAYA_START_TIMEOUT_S and proc.poll() is None:
+        try:
+            if httpx.get(OLLAYA_URL, timeout=LLAMA_POLL_S).status_code == 200:
+                return proc
+        except httpx.HTTPError:
+            pass
+        time.sleep(LLAMA_POLL_S)
+    proc.kill()
+    raise RuntimeError(
+        f"ollaya serve not up after {time.time() - started:.0f}s (exit {proc.poll()}):\n"
+        + OLLAYA_LOG.read_text()[-3000:]
+    )
+
+
+def pull_progress(lines: Iterable[str], bars: dict[str, tqdm]) -> None:
+    """Drive one tqdm bar per blob from /api/pull's NDJSON stream (`pulling <digest>` lines carry
+    total and completed bytes); the stream must end in {"status": "success"}, else it was cut."""
+    last: dict | None = None
+    for line in lines:
+        if not line:
+            continue
+        last = json.loads(line)
+        if "error" in last:
+            raise RuntimeError(f"ollaya pull: {last['error']}")
+        digest = last.get("digest")
+        if digest is None:
+            continue
+        if digest not in bars:
+            bars[digest] = tqdm(
+                total=last["total"],
+                desc=f"pull {digest[7:19]}",
+                unit="B",
+                unit_scale=True,
+                mininterval=PROGRESS_EVERY_S,
+            )
+        bars[digest].update(last["completed"] - bars[digest].n)
+    if last is None or last.get("status") != "success":
+        raise RuntimeError(f"ollaya pull: stream ended without success (last line {last})")
+
+
+def _pull_ollaya_model(client: httpx.Client, model: str) -> None:
+    """`ollaya pull`: the ONNX graph and the upstream weight files it points at, into the store."""
+    bars: dict[str, tqdm] = {}
+    with client.stream(
+        "POST", f"{OLLAYA_URL}/api/pull", json={"model": model}, timeout=OLLAYA_PULL_TIMEOUT
+    ) as r:
+        if r.status_code != 200:
+            r.read()
+            raise RuntimeError(f"ollaya pull {model}: HTTP {r.status_code}: {r.text[:300]}")
+        try:
+            pull_progress(r.iter_lines(), bars)
+        finally:
+            for bar in bars.values():
+                bar.close()
+
+
+@app.function(
+    image=ollaya_image,
+    gpu=DEFAULT_OLLAYA_GPU,
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_ollaya(job_json: str) -> str:
+    """Answer every batch with an ONNX decision model behind Ollaya's /v1/systemone; resumable.
+
+    `run.model` is an Ollaya name (kev:9b, laya:en, ...): the daemon pulls its ONNX graph and the
+    upstream weight files into the store on the HF-cache Volume (tqdm; reused next time) and runs
+    it with ONNX Runtime CUDA. Load time = pull + daemon start + one warm-up request (which loads
+    the model onto the GPU); warm time = the posting loop, as for every API-shaped scorer."""
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+    t0 = time.time()
+    server = _start_ollaya()
+    client = httpx.Client(timeout=API_TIMEOUT)
+    url = f"{OLLAYA_URL}/v1/systemone"
+    answer = functools.partial(_post_answer, client, url, out, method, run.model, threading.Lock())
+    try:
+        _pull_ollaya_model(client, run.model)
+        hf_cache.commit()
+        cases = run.shard_cases(job.shard)
+        if cases:
+            first = batches(cases[0].input, run.max_items, run.max_chars)[0]
+            body = request(method, cases[0].input.query, first, run.model).body()
+            r = client.post(url, json=body, timeout=OLLAYA_PULL_TIMEOUT)
+            if r.status_code != 200:
+                raise RuntimeError(f"{job.desc}: warm-up HTTP {r.status_code}: {r.text[:300]}")
+        loaded = time.time()
+        print(f"loaded {run.model} in {loaded - t0:.0f}s", flush=True)
+        n = _answer_shard(job, done, answer)
+    finally:
+        client.close()
+        server.terminate()
+        print(OLLAYA_LOG.read_text()[-2500:], flush=True)
+    scored = time.time()
+    return ShardSummary(
+        reranker=run.reranker,
+        shard=job.shard,
+        gpu=run.gpu_type,
+        load_s=loaded - t0,
+        warm_s=scored - loaded,
+        total_s=time.time() - t0,
+        requests=n,
+        resumed=len(done),
+    ).model_dump_json()
+
+
+SCORERS = {
+    "kev": score_cases,
+    "laya": score_cases_laya,
+    "clef": score_cases_clef,
+    "matilda": score_cases_matilda,
+    "autotrust": score_cases_autotrust,
+    "jevany": score_cases_jevany,
+    "rsi_jev": score_cases_rsi_jev,
+    "minicpm_jev": score_cases_minicpm_jev,
+    "startlux": score_cases_startlux,
+    "von": score_cases_von,
+    "bekko": score_cases_bekko,
+    "api": score_cases_api,
+    "gguf": score_cases_gguf,
+    "ollaya": score_cases_ollaya,
+}
 
 
 @app.function(image=progress_image)
@@ -1418,20 +1749,6 @@ def spawn(run: ScoringRun, calls_file: Path) -> None:
 
 def spawn_shard(job: ShardJob, calls_file: Path) -> None:
     """Spawn (or re-spawn: done batches on the Volume are skipped) one shard and record its call."""
-    score = {
-        "kev": score_cases,
-        "laya": score_cases_laya,
-        "clef": score_cases_clef,
-        "matilda": score_cases_matilda,
-        "autotrust": score_cases_autotrust,
-        "jevany": score_cases_jevany,
-        "rsi_jev": score_cases_rsi_jev,
-        "minicpm_jev": score_cases_minicpm_jev,
-        "startlux": score_cases_startlux,
-        "von": score_cases_von,
-        "bekko": score_cases_bekko,
-        "api": score_cases_api,
-    }
     run = job.run
     options: dict = {"memory": MEMORY_MB_FOR.get(run.repo)}
     if run.engine == "api":
@@ -1439,7 +1756,7 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
             options["secrets"] = [modal.Secret.from_name(run.api.secret)]
     else:
         options["gpu"] = run.gpu_type
-    fn = score[run.engine].with_options(**options)
+    fn = SCORERS[run.engine].with_options(**options)
     call = fn.spawn(job.model_dump_json())
     rec = CallRecord(
         job=job,
