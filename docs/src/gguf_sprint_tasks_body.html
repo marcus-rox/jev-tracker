@@ -106,7 +106,7 @@
   <h3 class="a-prose">Scope</h3>
   <p class="a-prose">In scope:</p>
   <ul class="a-prose">
-    <li>One Modal image: CUDA runtime plus the pinned pre-built runtime binary (b11351), plus the harness's runtime dependencies.</li>
+    <li>One Modal image: CUDA toolkit, <code>llama-server</code> built from the pinned upstream commit (no release binary has the System One endpoint yet), plus the harness's runtime dependencies.</li>
     <li>One Modal function for the <code>gguf</code> engine: download the one named file at the pinned revision into the shared weights volume (tqdm, skipped if cached), start the server with all layers on the GPU and slots equal to the configured concurrency, wait for health, then run the existing API posting loop against localhost and write the usual shard file and shard summary.</li>
     <li>Load time (download + server start) measured separately from warm time.</li>
   </ul>
@@ -148,7 +148,7 @@
   <h3 class="a-prose">Dependencies and constraints</h3>
   <ul class="a-prose">
     <li>Plan constraints: same contract and cost formula (R-2); pinned revision and pinned runtime build; tqdm; no per-model readout code.</li>
-    <li>Assumes the pre-built CUDA binary runs on Modal's L40S driver (unverified until step 1 runs; the fallback is the runtime's own CUDA container image).</li>
+    <li>Verified by step 1: the pre-built release binary (b11351) does not load the official GGUFs (no release yet contains the System One endpoint merged 2026-10-02 09:56 UTC); the server is built from source for the L40S and H100 architectures instead.</li>
     <li>Plan Open item 1 (does the endpoint batch children into one prefill) is <em>not</em> blocking this task; it is answered by Task 4.</li>
   </ul>
 
@@ -162,7 +162,7 @@
       <li>A 2-case run leaves a shard file and a summary with warm seconds excluding load — source: this task's Acceptance criteria.</li>
       <li>The request body posted is the one the hosted-API scorer sends today — source: Plan → Decided (reuse the posting loop).</li>
       <li>The runtime's endpoint implements System One for Kev — source: Plan → Previous steps row 3 (upstream merge, 2026-10-02).</li>
-      <li>The pre-built binary runs on the chosen GPU — source: Assumption (unverified).</li>
+      <li>The source-built server runs on the chosen GPU — source: step 1 smoke run (Task 4 result).</li>
     </ol>
     <p class="a-prose"><strong>Argument:</strong></p>
     <ol class="a-prose">

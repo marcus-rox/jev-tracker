@@ -1353,7 +1353,7 @@ details.a-disclosure[open] > summary::before {
       <p class="a-section__note"><em>Level 1 · Modal app · root · covers G-1, G-2.</em></p>
       <p class="a-prose">
         The Modal app SHALL have one GGUF scorer function whose image is a CUDA runtime plus the
-        llama.cpp b11351 binary; it SHALL download the named <code>.gguf</code> into the shared HF-cache
+        llama.cpp <code>llama-server</code> built from a pinned upstream commit; it SHALL download the named <code>.gguf</code> into the shared HF-cache
         volume (tqdm), start <code>llama-server --parallel &lt;concurrency&gt;</code>, reuse the
         <code>score_cases_api</code> posting loop against localhost, and write the same shard files
         every local scorer writes, so that kept-mass, warm GPU-seconds, $/1k and latency come from
@@ -1422,7 +1422,7 @@ details.a-disclosure[open] > summary::before {
 
 <section class="a-section" aria-labelledby="clarifications">
   <h2 class="a-section__title" id="clarifications">6. Clarifications</h2>
-  <p class="a-prose">None. The four flags raised with the proposal (smoke size 2, pin b11351, Kev-9B Q4_K_M on L40S first, GGUF-may-still-lose-on-latency hypothesis) were approved as-is and are recorded as decisions in <code>docs/GGUF_PLAN.html</code>.</p>
+  <p class="a-prose">None. The four flags raised with the proposal (smoke size 2, pin the runtime build, Kev-9B Q4_K_M on L40S first, GGUF-may-still-lose-on-latency hypothesis) were approved as-is and are recorded as decisions in <code>docs/GGUF_PLAN.html</code>. The pin moved from release b11351 to a master commit when step 1 showed no release contains the System One endpoint yet (Plan → Decided).</p>
 </section>
 
 <section class="a-section" aria-labelledby="conformance">

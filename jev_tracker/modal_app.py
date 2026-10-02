@@ -34,6 +34,7 @@ import functools
 import gzip
 import io
 import os
+import shutil
 import subprocess
 import threading
 import time
@@ -203,16 +204,16 @@ API_TRANSIENT = {429, 500, 502, 503, 504}
 API_RETRIES = 16  # waits 2, 4, ... 60 s, about 12 min in all
 API_BACKOFF_S, API_MAX_WAIT_S = 2.0, 60.0
 API_TIMEOUT = httpx.Timeout(600.0, connect=10.0)
-# github.com/ggml-org/llama.cpp release b11351 (2026-10-02): first build with /v1/systemone (#29818),
-# prebuilt against CUDA 12.8; a flat dir of llama-server + its .so files (rpath $ORIGIN).
-LLAMA_CPP_BUILD = "b11351"
-LLAMA_CPP_TGZ = (
-    "https://github.com/ggml-org/llama.cpp/releases/download/"
-    f"{LLAMA_CPP_BUILD}/llama-{LLAMA_CPP_BUILD}-bin-ubuntu-cuda-12.8-x64.tar.gz"
-)
+# github.com/ggml-org/llama.cpp master of 2026-10-02 18:26 UTC. /v1/systemone (#29818, merged 09:56)
+# is in no release yet (b11351 = the 08:08 commit, its qwen35 loader has no decision head), so
+# llama-server is built from source, statically, for the GPUs GPU_USD_PER_S prices (L40S, H100).
+LLAMA_CPP_COMMIT = "bed0a856606ee4a24a164066f73d2379447033f5"
+LLAMA_CPP_SRC = "/opt/llama.cpp-src"
 LLAMA_CPP_DIR = "/opt/llama.cpp"
-CUDA_IMAGE = "nvidia/cuda:12.8.1-runtime-ubuntu24.04"  # the libcudart / libcublas 12 it links
-LLAMA_CPP_APT = ("curl", "ca-certificates", "libgomp1", "libssl3")  # tar fetch; OpenMP + TLS libs
+LLAMA_CPP_CUDA_ARCHS = "89;90"  # sm_89 = L4 / L40S, sm_90 = H100
+LLAMA_CPP_BUILD_CPUS = 32  # the CUDA kernels are ~150 nvcc jobs; the default builder takes >1 h
+CUDA_IMAGE = "nvidia/cuda:12.8.1-devel-ubuntu24.04"  # nvcc to build, libcudart / libcublas to run
+LLAMA_CPP_APT = ("git", "cmake", "build-essential", "ca-certificates")
 HF_HUB_PKG = "huggingface_hub>=0.30"
 LLAMA_URL = "http://127.0.0.1:8080"
 LLAMA_LOG = Path("/tmp/llama-server.log")
@@ -354,14 +355,41 @@ jevany_image = _mount(_base().pip_install(*JEVANY_PKGS))
 rsi_jev_image = _mount(_base().pip_install(*RSI_JEV_PKGS))
 minicpm_jev_image = _mount(_base().pip_install(*MINICPM_JEV_PKGS))
 api_image = _mount(_base())
+
+
+def _build_llama_server() -> None:
+    """Image build step: a static CUDA llama-server at LLAMA_CPP_COMMIT, on a many-core builder."""
+    src, build = LLAMA_CPP_SRC, f"{LLAMA_CPP_SRC}/build"
+    for cmd in (
+        ["git", "clone", "https://github.com/ggml-org/llama.cpp", src],
+        ["git", "-C", src, "checkout", LLAMA_CPP_COMMIT],
+        [
+            "cmake",
+            "-S",
+            src,
+            "-B",
+            build,
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DGGML_CUDA=ON",
+            f"-DCMAKE_CUDA_ARCHITECTURES={LLAMA_CPP_CUDA_ARCHS}",
+            "-DBUILD_SHARED_LIBS=OFF",
+            "-DLLAMA_CURL=OFF",
+            "-DLLAMA_BUILD_TESTS=OFF",
+            "-DLLAMA_BUILD_EXAMPLES=OFF",
+        ],
+        ["cmake", "--build", build, "--target", "llama-server", "-j", str(LLAMA_CPP_BUILD_CPUS)],
+    ):
+        subprocess.run(cmd, check=True)
+    Path(LLAMA_CPP_DIR).mkdir(parents=True, exist_ok=True)
+    shutil.copy(f"{build}/bin/llama-server", f"{LLAMA_CPP_DIR}/llama-server")
+    shutil.rmtree(src)
+
+
 gguf_image = _mount(
     modal.Image.from_registry(CUDA_IMAGE, add_python=PYTHON_VERSION)
     .apt_install(*LLAMA_CPP_APT)
-    .run_commands(
-        f"mkdir -p {LLAMA_CPP_DIR}",
-        f"curl -fsSL {LLAMA_CPP_TGZ} | tar xz --strip-components=1 -C {LLAMA_CPP_DIR}",
-    )
     .pip_install(*RUNTIME_DEPS, HF_HUB_PKG)
+    .run_function(_build_llama_server, cpu=LLAMA_CPP_BUILD_CPUS, memory=64 * 1024, timeout=HOUR)
     .env({"HF_HOME": HF_CACHE_DIR})
     .workdir(REMOTE_DIR)
 )
@@ -1169,8 +1197,8 @@ def _start_llama_server(model_path: str, parallel: int) -> subprocess.Popen:
     ]
     print(" ".join(cmd), flush=True)
     proc = subprocess.Popen(cmd, stdout=LLAMA_LOG.open("w"), stderr=subprocess.STDOUT)
-    deadline = time.time() + LLAMA_START_TIMEOUT_S
-    while time.time() < deadline and proc.poll() is None:
+    started = time.time()
+    while time.time() - started < LLAMA_START_TIMEOUT_S and proc.poll() is None:
         try:
             if httpx.get(f"{LLAMA_URL}/health", timeout=LLAMA_POLL_S).status_code == 200:
                 return proc
@@ -1179,7 +1207,7 @@ def _start_llama_server(model_path: str, parallel: int) -> subprocess.Popen:
         time.sleep(LLAMA_POLL_S)
     proc.kill()
     raise RuntimeError(
-        f"llama-server not healthy after {LLAMA_START_TIMEOUT_S}s (exit {proc.poll()}):\n"
+        f"llama-server not healthy after {time.time() - started:.0f}s (exit {proc.poll()}):\n"
         + LLAMA_LOG.read_text()[-3000:]
     )
 
