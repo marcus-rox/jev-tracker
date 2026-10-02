@@ -60,10 +60,16 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    the session stays `queued` with its note and the PR says what is left.
 5. **Run**: for each config written in steps 3–4b, approved ones first (max 10):
    `uv run python -m jev_tracker.experiment run configs/<name>.yaml --wait`. A failed run is
-   reported in the PR, not retried. Afterwards `uv run python -m jev_tracker.evaluation_queue
-   done configs/<name>.yaml …` for every config that ran (failed ones too; the PR says why): a
-   finished model leaves the queue and exists only as its rows in the site data. Configs that were
-   queued but not run today stay `queued` for tomorrow.
+   reported in the PR, not retried.
+5b. **Verify and close** every config that ran: `uv run python -m jev_tracker.evaluation_queue
+   done configs/<name>.yaml --experiment <id>` (the id `run` printed). This runs
+   `jev_tracker.experiment verify <id>`, which checks the Modal side — every spawned call
+   finished, every scored reranker answered every case, the kept-mass table exists — and removes
+   the item only when all of that holds; otherwise the item becomes `failed` on the board with the
+   evidence (call states, cases answered per reranker) and stays until Marcus skips it. A run that
+   never produced an experiment directory: `done configs/<name>.yaml --failed "<why>"`. Never
+   remove a queue item any other way. Configs that were queued but not run today stay `queued`
+   for tomorrow.
 6. **TLDR** (the second decision): rewrite `data/tldr.md` as nested markdown bullets for someone
    who opens the site cold. Two levels only: a top-level bullet is one claim, its children are the
    numbers that support it. At most 5 words per bullet. No headings, no tables, no
@@ -78,11 +84,13 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
 9. **PR**: commit `crawler/`, `configs/`, `data/` (including `data/queue.json` with the finished
    items removed), `site/public/data`, `site/dist` (explicit
    paths, no `git add .`); push; open a PR titled `Daily <date>: <n> candidates, <m> runs` whose body
-   has the triage counts per verdict, one line per run with kept-mass@50/200 and $/run, the crawler
-   failures if any, and `Closes #<n>` for each `evaluate` issue run.
+   has the triage counts per verdict, one line per run with kept-mass@50/200, $/run and its
+   verification (`verified: <n> Modal calls finished, <m> rerankers x 75 cases` or the `failed`
+   problems verbatim), the crawler failures if any, and `Closes #<n>` for each `evaluate` issue run.
 9b. **Slack DM** to Marcus Dominguez-Kuhne (Slack user `U0BQQC4046P`), with the session's Slack
    tools, on every run (also when a step failed). First line: `Please merge: <PR URL>` (or
-   `No PR today: nothing new`). Then one line per model run today (kept-mass@50/200, $/run), and
+   `No PR today: nothing new`). Then one line per model run today (kept-mass@50/200, $/run,
+   verified or failed with the problems), and
    the list of `proposed` items awaiting his approval on the site (label + note). No channel posts.
 10. **Nothing new** (no candidates, no issues, no submissions): stop without a PR, send the step 9b
    DM saying so, and say so in the session's final message.
