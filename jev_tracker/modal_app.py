@@ -1226,7 +1226,8 @@ def score_cases_gguf(job_json: str) -> str:
     (tqdm; reused next time), llama-server serves it on localhost with `run.concurrency` slots,
     and the API posting loop is pointed at it, so the shard files are those of every scorer and
     kept-mass, warm GPU-seconds, $/1k and latency need no new code. Load time = download + server
-    start; warm time = the posting loop."""
+    start + one warm-up request (the mmap'd weights are paged in by the first forward pass, not
+    by /health); warm time = the posting loop."""
     from huggingface_hub import hf_hub_download
     from huggingface_hub.errors import EntryNotFoundError
 
@@ -1246,15 +1247,20 @@ def score_cases_gguf(job_json: str) -> str:
     hf_cache.commit()
     server = _start_llama_server(path, run.concurrency)
     client = httpx.Client(timeout=API_TIMEOUT)
-    answer = functools.partial(
-        _post_answer, client, f"{LLAMA_URL}/v1/systemone", out, method, run.model, threading.Lock()
-    )
-    loaded = time.time()
+    url = f"{LLAMA_URL}/v1/systemone"
+    answer = functools.partial(_post_answer, client, url, out, method, run.model, threading.Lock())
     try:
+        cases = run.shard_cases(job.shard)
+        if cases:
+            first = batches(cases[0].input, run.max_items, run.max_chars)[0]
+            body = request(method, cases[0].input.query, first, run.model).body()
+            client.post(url, json=body).raise_for_status()
+        loaded = time.time()
         n = _answer_shard(job, done, answer)
     finally:
         client.close()
         server.terminate()
+        print(LLAMA_LOG.read_text()[-2500:], flush=True)
     scored = time.time()
     return ShardSummary(
         reranker=run.reranker,

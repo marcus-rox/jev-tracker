@@ -1,0 +1,25 @@
+# Smoke test of the GGUF producer: first 2 cases, Kev-4B Q4_K_M via llama-server on 1 L40S, noul
+# only. The bar is bf16 Kev-4B on L40S ($7.35/1k, keen-emu). ~$0.20.
+name: kev4b_gguf_smoke
+cases: 2
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev4b_q4_noul:
+    source: gguf
+    model: ggml-org/Kev-4B-GGUF@d924f2e2c3872da8b8aaf3eb4453b4126deceb79
+    file: Kev-4B-Q4_K_M.gguf
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    gpu: L40S
+    concurrency: 8
