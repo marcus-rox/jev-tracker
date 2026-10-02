@@ -18,6 +18,11 @@ validated into the same `SystemOneResponse`:
   bare prompt per question (jev_tracker.autotrust), one child per request.
 * JevAny (``score_cases_jevany``): a pointer LoRA on a Qwen3.5 base through the JevAny release's
   ``JevModel``, which answers the request body in-process.
+* RSI-Jev (``score_cases_rsi_jev``): a fine-tuned Qwen3.5 tower + option scorer, loaded by the
+  release's ``load_release`` and scored with its ``rsijev.evaluate.predict`` (jev_tracker.rsi_jev
+  maps the request body to its typed questions, as its server's wire.py does).
+* MiniCPM5-Jev (``score_cases_minicpm_jev``): a LoRA + letter readout on MiniCPM5-2B through the
+  release's ``MiniCPMSystemOne``, which converts the request body itself (jev_tracker.minicpm_jev).
 * API (``score_cases_api``): any hosted model that answers the System One request at a URL; a CPU
   container posts the bodies unchanged with a bearer key from a Modal Secret. The only scorer
   that leaves the container.
@@ -138,11 +143,40 @@ JEVANY_REF = "f8701e76bb61f7cc60e5a40125ed6a8361c9ab87"
 JEVANY_PKG = f"jevany[local,fast] @ git+https://github.com/SimpleJev/JevAny.git@{JEVANY_REF}"
 # The base's Qwen3.5 processor config makes transformers load an image processor (torchvision, Pillow).
 JEVANY_PKGS = (JEVANY_PKG, "torch==2.14.0", "torchvision==0.29.0", "pillow==12.3.0")
+# huggingface.co/shgao/rsi-jev-v3.0-qwen3.5-2b (2026-10-02): code/ holds load_release + rsijev; the
+# base Qwen/Qwen3.5-2B-Base is read from the Hub by load_release (main: b1485b2f on 2026-10-02).
+# Kernel stack as the release card (fla 0.5.2); torchvision + pillow back the base's processor.
+RSI_JEV_REVISION = {
+    "shgao/rsi-jev-v3.0-qwen3.5-2b": "c778b68dd5c20e67ac7ca8d8ef1f9a1258a687a5",
+}
+RSI_JEV_PKGS = (
+    "torch==2.14.0",
+    "torchvision==0.29.0",
+    "transformers==5.17.0",
+    "flash-linear-attention==0.5.2",
+    "safetensors==0.8.0",
+    "pillow==12.3.0",
+)
+RSI_JEV_BATCH = 4  # questions per forward pass (each repeats the whole state)
+# huggingface.co/ytbai/MiniCPM5-2B-Jev (2026-10-02): model.py + adapter + head.pt; its loader reads
+# the base openbmb/MiniCPM5-2B (a Llama, main: f9740005 on 2026-10-02) from the Hub.
+MINICPM_JEV_REVISION = {
+    "ytbai/MiniCPM5-2B-Jev": "27afc6f17ceb7eb95b6442047ec54e43fbed5ed1",
+}
+# Its requirements.txt floors; peft as the adapter's peft_version.
+MINICPM_JEV_PKGS = (
+    "torch==2.14.0",
+    "transformers==5.17.0",
+    "peft==0.21.0",
+    "safetensors==0.8.0",
+    "numpy==2.5.3",
+)
 JEVANY_REVISION = {
     "SimpleJev/JevAny-Qwen3.5-4B-LoRA": "1c7aa9bab14ac347aeb917c0bcd757838a8a78ce",
 }
 GPU_FOR = {
     "jaredpalmer/kev-0.8b": "L4",
+    "Glax147/kev-0.8b-ba-lora": "L4",  # a Kev-0.8B post-train: as Kev-0.8B
     "jaredpalmer/kev-4b": "L40S",
     "jaredpalmer/kev-9b": "H100",
     "jaredpalmer/kev-27b": "H200",  # 55 GB bf16 weights; 25-item states OOM an 80 GB H100
@@ -152,6 +186,8 @@ GPU_FOR = {
     MATILDA_MODEL: "H200",  # 26.1B, as Kev-27B: the budget line
     AUTOTRUST_MODEL: "H200",  # 27B, as Kev-27B: the budget line
     "SimpleJev/JevAny-Qwen3.5-4B-LoRA": "L40S",  # as Kev-4B
+    **{m: "L40S" for m in RSI_JEV_REVISION},  # 2B, fp32 tower (the release's evaluation precision)
+    **{m: "L4" for m in MINICPM_JEV_REVISION},  # 2B bf16, as Kev-0.8B
 }
 DEFAULT_KEV_GPU = "H100"  # a Kev checkpoint not in GPU_FOR
 # Kev-27B stages its bf16 weights through host memory while loading (upstream: --memory-mb 131072).
@@ -184,7 +220,9 @@ class ScoringRun(BaseModel):
 
     experiment: str  # experiment id; answers live under raw/<experiment>/<reranker>/ on the Volume
     reranker: str
-    engine: Literal["kev", "laya", "clef", "matilda", "autotrust", "jevany", "api"]
+    engine: Literal[
+        "kev", "laya", "clef", "matilda", "autotrust", "jevany", "rsi_jev", "minicpm_jev", "api"
+    ]
     model: str
     method: str
     max_items: int | None  # children per System One request; None = the whole case
@@ -278,6 +316,8 @@ clef_image = _mount(_base().pip_install(*CLEF_PKGS))
 matilda_image = _mount(_base().pip_install(*MATILDA_PKGS))
 autotrust_image = _mount(_base().pip_install(*AUTOTRUST_PKGS))
 jevany_image = _mount(_base().pip_install(*JEVANY_PKGS))
+rsi_jev_image = _mount(_base().pip_install(*RSI_JEV_PKGS))
+minicpm_jev_image = _mount(_base().pip_install(*MINICPM_JEV_PKGS))
 api_image = _mount(_base())
 progress_image = _mount(_base().pip_install(FASTAPI_PKG))
 
@@ -833,6 +873,168 @@ def score_cases_jevany(job_json: str) -> str:
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 
+@app.function(
+    image=rsi_jev_image,
+    gpu="L40S",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_rsi_jev(job_json: str) -> str:
+    """Answer every batch of this shard's cases with an RSI-Jev release; resumable like score_cases.
+
+    The release's `load_release` rebuilds the scored model (fp32 tower, fp32 scorer, its fitted
+    calibration) and `rsijev.evaluate.predict` scores each question as one encoded row; the
+    request body becomes its typed questions through jev_tracker.rsi_jev. As its server, the state
+    is not cut (max_length = rsi_jev.MAX_INPUT_TOKENS)."""
+    import dataclasses
+    import sys
+
+    import torch
+    from huggingface_hub import snapshot_download
+
+    from jev_tracker import rsi_jev
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    revision = RSI_JEV_REVISION[run.repo]
+    path = snapshot_download(run.repo, revision=revision)
+    sys.path.insert(0, f"{path}/code")
+    from load_release import load_release
+    from rsijev.contract import Case, Question
+    from rsijev.encode import encode_question
+    from rsijev.evaluate import predict
+
+    model, tokenizer, encode_config, meta = load_release(path, device="cuda")
+    encode_config = dataclasses.replace(encode_config, max_length=rsi_jev.MAX_INPUT_TOKENS)
+    max_options = meta["spec"]["max_options"]
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(
+        f"loaded {run.repo}@{revision[:12]} (calibration {meta['calibration']}) in "
+        f"{loaded - t0:.0f}s",
+        flush=True,
+    )
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, run.model).body()
+        asked = {q.key: q for q in rsi_jev.questions(body)}
+        state = rsi_jev.state_text(body)
+        typed = tuple(Question(**q.model_dump()) for q in asked.values())
+        uniform = {q.key: tuple(1 / len(q.options) for _ in q.options) for q in typed}
+        rsi_case = Case(
+            case_id=case.id, source="jev-tracker", state=state, questions=typed, gold=uniform
+        )
+        input_tokens = sum(
+            len(encode_question(tokenizer, state, q, encode_config)["input_ids"]) for q in typed
+        )
+        t = time.time()
+        predictions = predict(
+            model,
+            tokenizer,
+            [rsi_case],
+            encode_config,
+            max_options=max_options,
+            device="cuda",
+            batch_size=RSI_JEV_BATCH,
+        )
+        resp = SystemOneResponse.model_validate(
+            {
+                "model": run.model,
+                "answers": {
+                    q.key: rsi_jev.answer(asked[q.key], list(prediction.probs))
+                    for _, q, prediction in predictions
+                },
+                "usage": {"input_tokens": input_tokens, "output_tokens": 0},
+            }
+        )
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, input_tokens)
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    return _summary(job, t0, loaded, n, len(done), resident_gb)
+
+
+@app.function(
+    image=minicpm_jev_image,
+    gpu="L4",
+    timeout=4 * HOUR,
+    single_use_containers=True,
+    volumes=VOLUMES,
+)
+def score_cases_minicpm_jev(job_json: str) -> str:
+    """Answer every batch of this shard's cases with MiniCPM5-2B-Jev; resumable like score_cases.
+
+    The release's model.py loads the checkpoint (`MiniCPMSystemOne.load_checkpoint`, bf16),
+    converts the request body (`to_internal_record`, date facts on) and scores every question in
+    one pass at its serving limits, exactly as its /v1/systemone server does (PriDe off)."""
+    import sys
+
+    import torch
+    from huggingface_hub import snapshot_download
+
+    from jev_tracker import minicpm_jev
+
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
+
+    t0 = time.time()
+    revision = MINICPM_JEV_REVISION[run.repo]
+    path = snapshot_download(run.repo, revision=revision)
+    sys.path.insert(0, path)
+    from model import (
+        SERVE_MAX_BRANCH,
+        SERVE_MAX_STATE,
+        MiniCPMSystemOne,
+        encode_record,
+        to_internal_record,
+    )
+
+    model, tokenizer = MiniCPMSystemOne.load_checkpoint(path, device="cuda", dtype=torch.bfloat16)
+    loaded = time.time()
+    resident_gb = torch.cuda.memory_allocated() / 1e9
+    torch.cuda.reset_peak_memory_stats()
+    print(f"loaded {run.repo}@{revision[:12]} in {loaded - t0:.0f}s", flush=True)
+
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        body = request(method, case.input.query, batch, run.model).body()
+        internal = to_internal_record(body, add_date_facts=True)
+        encoded = encode_record(
+            tokenizer,
+            internal,
+            max_state=SERVE_MAX_STATE,
+            max_branch=SERVE_MAX_BRANCH,
+            strict=False,
+        )
+        t = time.time()
+        outputs = model.logits_and_probs(encoded)
+        input_tokens = len(encoded["ids"])
+        resp = SystemOneResponse.model_validate(
+            minicpm_jev.response(
+                run.model,
+                internal["questions"],
+                [probs.float().tolist() for _, probs in outputs],
+                input_tokens,
+            )
+        )
+        latency_s = time.time() - t
+        rec = record(method, case.id, bi, batch, resp, latency_s, t, input_tokens)
+        append_jsonl_gz(out, rec)
+
+    n = _answer_shard(job, done, answer)
+    return _summary(job, t0, loaded, n, len(done), resident_gb)
+
+
 @app.function(image=api_image, timeout=4 * HOUR, single_use_containers=True, volumes=VOLUMES)
 def score_cases_api(job_json: str) -> str:
     """Post every batch of this shard's cases to a hosted System One endpoint; resumable.
@@ -931,6 +1133,8 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
         "matilda": score_cases_matilda,
         "autotrust": score_cases_autotrust,
         "jevany": score_cases_jevany,
+        "rsi_jev": score_cases_rsi_jev,
+        "minicpm_jev": score_cases_minicpm_jev,
         "api": score_cases_api,
     }
     run = job.run

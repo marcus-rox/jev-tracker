@@ -5,7 +5,7 @@ const INDENT_SPACES = 2
 
 type Node = { text: string; children: Node[] }
 
-/** Parse the nested-bullet markdown the daily run writes; a line without a dash is a paragraph (depth -1). */
+/** Parse the nested-bullet markdown the hourly run writes; a line without a dash is a paragraph (depth -1). */
 function parse(text: string): { paragraphs: string[]; roots: Node[] } {
   const paragraphs: string[] = []
   const roots: Node[] = []

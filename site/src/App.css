@@ -136,3 +136,14 @@ td.n a:hover { color: var(--accent); text-decoration: none; }
 .hbar .hot .lbl, .hbar .hot .n { color:var(--text); font-weight:600; }
 .hbar .hot .t { outline:1px solid var(--accent); }
 .hbar .lbl, .hbar .t, .hbar .n { cursor:default; }
+table.sugg td { vertical-align:top; }
+table.sugg .when { width:1%; font-variant-numeric:tabular-nums; color:var(--muted); }
+table.sugg td.text { width:100%; white-space:normal; overflow-wrap:anywhere; }
+table.sugg .file { width:1%; text-align:right; }
+table.sugg th.text, table.sugg th.file { cursor:default; }
+table.sugg tbody tr:hover td { background:var(--bg); }
+table.sugg tr.open td { background:var(--hl); }
+.more { margin-left:8px; padding:0 6px; border:1px solid var(--border); border-radius:10px; background:var(--panel); color:var(--accent); font-size:11px; line-height:18px; cursor:pointer; }
+.more:hover { border-color:var(--accent); }
+.card .note.open { display:block; -webkit-line-clamp:unset; overflow:visible; white-space:pre-wrap; overflow-wrap:anywhere; }
+.more.note-toggle { margin:4px 0 0; }

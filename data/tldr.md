@@ -4,17 +4,15 @@
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-- Two models finish today.
-  - AutoTrust: 0.883 / 0.959
-  - AutoTrust costs $11.89.
-  - MATILDA: 0.876 / 0.952
-  - MATILDA costs $10.86.
-  - JevAny run failed.
-- AutoTrust passes Clef-27B.
-  - AutoTrust takes third place.
-  - 0.010 behind at k=50
-  - Clef-27B: 0.880 / 0.946
-  - MATILDA is below Clef-27B.
-- k=50 separates models.
-  - k=200 does not.
-  - Random keeps 0.749 at k=200.
+- Three models finish today.
+  - RSI-Jev: 0.739 / 0.899
+  - RSI-Jev costs $10.47.
+  - MiniCPM5-Jev: 0.731 / 0.892
+  - MiniCPM5-Jev costs $2.20.
+  - Kev-0.8B BA-LoRA: 0.648 / 0.851
+  - Kev-0.8B BA-LoRA costs $0.25.
+- The top three stay.
+  - Jev, Kev-27B, AutoTrust lead.
+  - New models trail Jev.
+  - BA-LoRA is below production.
+  - Production keeps 0.711 at k=50.

@@ -1,0 +1,139 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "rsi_jev_noul": {
+   "gpu": "L40S",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 169.59343075752258,
+   "warm_gpu_s": 9589.416823148727,
+   "in_function_s": 9759.010255336761,
+   "warm_usd": 5.197463918146609,
+   "in_function_usd": 5.289383558392524,
+   "requests": 2790,
+   "forward_passes": 2790,
+   "resident_gb": 7.65755392,
+   "peak_gb": 17.552602624,
+   "warm_usd_per_1k": 69.29951890862147
+  },
+  "rsi_jev_score": {
+   "gpu": "L40S",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 165.557293176651,
+   "warm_gpu_s": 9724.867641925812,
+   "in_function_s": 9890.424936532974,
+   "warm_usd": 5.270878261923789,
+   "in_function_usd": 5.360610315600871,
+   "requests": 2790,
+   "forward_passes": 2790,
+   "resident_gb": 7.65755392,
+   "peak_gb": 17.63234816,
+   "warm_usd_per_1k": 70.27837682565053
+  }
+ },
+ "shards": {
+  "rsi_jev_noul": [
+   {
+    "reranker": "rsi_jev_noul",
+    "shard": 0,
+    "gpu": "L40S",
+    "load_s": 74.81521439552307,
+    "warm_s": 3609.4085693359375,
+    "total_s": 3684.2237842082977,
+    "requests": 1078,
+    "device": "NVIDIA L40S",
+    "resident_gb": 7.65755392,
+    "peak_gb": 14.221242368,
+    "forward_passes": 1078,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rsi_jev_noul",
+    "shard": 1,
+    "gpu": "L40S",
+    "load_s": 49.47666096687317,
+    "warm_s": 2714.1736574172974,
+    "total_s": 2763.6503188610077,
+    "requests": 759,
+    "device": "NVIDIA L40S",
+    "resident_gb": 7.65755392,
+    "peak_gb": 17.552602624,
+    "forward_passes": 759,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rsi_jev_noul",
+    "shard": 2,
+    "gpu": "L40S",
+    "load_s": 45.30155539512634,
+    "warm_s": 3265.8345963954926,
+    "total_s": 3311.136152267456,
+    "requests": 953,
+    "device": "NVIDIA L40S",
+    "resident_gb": 7.65755392,
+    "peak_gb": 13.4173568,
+    "forward_passes": 953,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ],
+  "rsi_jev_score": [
+   {
+    "reranker": "rsi_jev_score",
+    "shard": 0,
+    "gpu": "L40S",
+    "load_s": 48.27991437911987,
+    "warm_s": 3657.4949963092804,
+    "total_s": 3705.7749111652374,
+    "requests": 1078,
+    "device": "NVIDIA L40S",
+    "resident_gb": 7.65755392,
+    "peak_gb": 14.298902528,
+    "forward_passes": 1078,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rsi_jev_score",
+    "shard": 1,
+    "gpu": "L40S",
+    "load_s": 66.92441654205322,
+    "warm_s": 2745.0222663879395,
+    "total_s": 2811.94668340683,
+    "requests": 759,
+    "device": "NVIDIA L40S",
+    "resident_gb": 7.65755392,
+    "peak_gb": 17.63234816,
+    "forward_passes": 759,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rsi_jev_score",
+    "shard": 2,
+    "gpu": "L40S",
+    "load_s": 50.352962255477905,
+    "warm_s": 3322.350379228592,
+    "total_s": 3372.703341960907,
+    "requests": 953,
+    "device": "NVIDIA L40S",
+    "resident_gb": 7.65755392,
+    "peak_gb": 13.48621824,
+    "forward_passes": 953,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ]
+ }
+}

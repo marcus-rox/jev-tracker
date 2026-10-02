@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { blob, type Evidence, type QueueItem, type QueueStatus } from './types'
 import { SKIP_PHRASE, type Decide, type QueueState } from './queue'
 import { nextRun, untilText, whenText } from './schedule'
@@ -28,7 +28,7 @@ function since(item: QueueItem, now: Date): string {
   return `${item.status === 'proposed' ? 'proposed' : 'queued'} ${age(item.queued_at, now)} ago`
 }
 
-/** Approve queues the model for the next daily run (which builds whatever the note says is missing); Skip drops it. */
+/** Approve queues the model for the next hourly run (which builds whatever the note says is missing); Skip drops it. */
 /** Skip is guarded: the phrase typed exactly plus the server's password, then one Skip click. */
 function SkipConfirm({ item, decide, onCancel }: { item: QueueItem; decide: Decide; onCancel: () => void }) {
   const [phrase, setPhrase] = useState('')
@@ -102,6 +102,28 @@ function Dismiss({ item, decide }: { item: QueueItem; decide: Decide }) {
   return <div className="actions"><button type="button" className="reject" onClick={() => setConfirming(true)}>Skip</button></div>
 }
 
+/** The note is clamped to two lines; the toggle appears only when the clamp actually hides text. */
+function Note({ text }: { text: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false)
+  const [clamped, setClamped] = useState(false)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el || open) return
+    const update = () => setClamped(el.scrollHeight > el.clientHeight)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [text, open])
+  return (
+    <>
+      <div ref={ref} className={`note${open ? ' open' : ''}`}>{text}</div>
+      {(clamped || open) && <button type="button" className="more note-toggle" onClick={() => setOpen(!open)} aria-expanded={open}>{open ? 'collapse' : 'expand'}</button>}
+    </>
+  )
+}
+
 const SOURCE_COLOR: Record<string, string> = {
   huggingface: '#f0a94a', github: '#9b6fd0', arxiv: '#c0d86a', web: '#6fcfe8', twitter: '#6fa8ea', hackernews: '#e8864a', slack: '#5ec9a6', submitted: '#b05fb8', manual: '#b05fb8',
 }
@@ -112,7 +134,7 @@ function Card({ item, now, decide, progress }: { item: QueueItem; now: Date; dec
       <div className="body">
         <div className="head"><span className="dot" /><span className="m">{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</span></div>
         <div className="meta">{since(item, now)}</div>
-        {item.note && <div className="note" title={item.note}>{item.note}</div>}
+        {item.note && <Note text={item.note} />}
         {item.status === 'running' && <RunProgress config={item.config} state={progress} />}
         {item.status === 'proposed' && <Actions item={item} decide={decide} />}
         {item.status === 'failed' && item.evidence && <EvidenceList evidence={item.evidence} />}
@@ -127,12 +149,12 @@ function Card({ item, now, decide, progress }: { item: QueueItem; now: Date; dec
   )
 }
 
-/** Queued models run in the next daily automation; it fires once a day, so this is when the lane drains. */
+/** Queued models run in the next automation run; it fires every hour, so this is when the lane drains. */
 function NextRun({ now }: { now: Date }) {
   const at = nextRun(now)
   return (
     <div className="next" title={at.toISOString()}>
-      <span className="clock" />next run in <b>{untilText(now, at)}</b><span className="when">{whenText(at)} · daily</span>
+      <span className="clock" />next run in <b>{untilText(now, at)}</b><span className="when">{whenText(at)} · hourly</span>
     </div>
   )
 }

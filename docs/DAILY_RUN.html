@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content="Devin artifact kit" />
-    <title>How the daily jev-tracker run works</title>
+    <title>How the hourly jev-tracker run works</title>
     <style>
 /* Devin artifact kit — self-contained styles for standalone HTML artifacts.
    Tokens are translated from the Devin product design system. Light is the
@@ -1184,8 +1184,8 @@ details.a-disclosure[open] > summary::before {
     <main class="a-shell">
       <header class="a-header">
         <div>
-          <h1 class="a-header__title">How the daily jev-tracker run works</h1>
-          <p class="a-header__subtitle">What happens between the 06:17 PT trigger and the pull request you merge: components, one day's sequence, and the guardrails.</p>
+          <h1 class="a-header__title">How the hourly jev-tracker run works</h1>
+          <p class="a-header__subtitle">What happens between the hourly trigger (at :17) and the commit that lands on main: components, one run's sequence, and the guardrails.</p>
         </div>
         <button
           type="button"
@@ -1237,7 +1237,7 @@ details.a-disclosure[open] > summary::before {
     <li><a href="#sequence">3. Figure 2: one day's run as a sequence diagram</a></li>
     <li><a href="#steps">4. Table 1: the nine steps, who does them, what can fail</a></li>
     <li><a href="#triage">5. Table 2: the one judgment call (triage)</a></li>
-    <li><a href="#pr">6. Table 3: what lands in the daily PR</a></li>
+    <li><a href="#pr">6. Table 3: what lands in each commit</a></li>
     <li><a href="#guardrails">7. Table 4: guardrails</a></li>
     <li><a href="#today">8. Today's test run</a></li>
   </ul>
@@ -1251,15 +1251,15 @@ details.a-disclosure[open] > summary::before {
     judgment Devin makes and writes down as data. The script searches seven places (six public sources and Rox's Slack) for new Jev-like
     models, decides which of the new hits can be run as-is, runs at most ten of them on Modal
     against the frozen 75-case benchmark, regenerates the leaderboard data and static site, runs
-    the test suite, and opens one pull request into <code>main</code>. Nothing reaches
-    <code>main</code> until you merge that PR.
+    the test suite, and pushes one commit straight to <code>main</code>; the site redeploys from
+    it with no merge step.
   </p>
 </section>
 
 <section class="a-section" aria-labelledby="block">
   <h2 class="a-section__title" id="block">2. Figure 1: block diagram of the system</h2>
   <p class="a-section__note">
-    Figure 1. Components and the data that flows between them during one daily run. Boxes are
+    Figure 1. Components and the data that flows between them during one hourly run. Boxes are
     components; dashed frames are ownership boundaries; arrows are labelled with what crosses them.
     Select a box for its responsibility; drag to pan; <kbd>+</kbd>/<kbd>−</kbd>/<kbd>0</kbd> zoom.
   </p>
@@ -1272,7 +1272,7 @@ details.a-disclosure[open] > summary::before {
     </div>
 
     <svg class="a-diagram__canvas" data-a-diagram-canvas viewBox="0 0 1000 620" role="img"
-      aria-label="Diagram: a scheduler starts a daily Devin session; the session crawls seven discovery sources, triages the hits, reads evaluate issues, site submissions and approved proposals from GitHub, runs up to ten configs on Modal (which pulls weights from Hugging Face), regenerates the static site and opens a pull request on GitHub, which Marcus reviews and merges.">
+      aria-label="Diagram: a scheduler starts an hourly Devin session; the session crawls seven discovery sources, triages the hits, reads evaluate issues, site submissions and approved proposals from GitHub, runs up to ten configs on Modal (which pulls weights from Hugging Face), regenerates the static site and pushes one commit to main on GitHub, from which the site redeploys.">
       <defs>
         <marker id="a-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
@@ -1280,7 +1280,7 @@ details.a-disclosure[open] > summary::before {
       </defs>
       <g data-a-diagram-viewport class="a-diagram__viewport">
         <g class="a-group"><rect x="20" y="40" width="260" height="520" /><text x="34" y="62">people &amp; schedule</text></g>
-        <g class="a-group"><rect x="290" y="40" width="310" height="520" /><text x="304" y="62">daily run · one Devin session</text></g>
+        <g class="a-group"><rect x="290" y="40" width="310" height="520" /><text x="304" y="62">hourly run · one Devin session</text></g>
         <g class="a-group"><rect x="660" y="40" width="320" height="520" /><text x="674" y="62">external systems</text></g>
 
         <!-- pipeline inside the session -->
@@ -1292,7 +1292,7 @@ details.a-disclosure[open] > summary::before {
 
         <!-- cross-boundary edges -->
         <path class="a-edge" d="M240,108 H310" marker-end="url(#a-arrow)" />
-        <text class="a-edge__label" x="246" y="100">starts · daily</text>
+        <text class="a-edge__label" x="246" y="100">starts · hourly</text>
 
         <path class="a-edge" d="M580,108 H680" marker-end="url(#a-arrow)" />
         <path class="a-edge a-edge--dim" d="M680,122 H580" marker-end="url(#a-arrow)" />
@@ -1314,25 +1314,25 @@ details.a-disclosure[open] > summary::before {
         <text class="a-edge__label" x="236" y="396">site data + build</text>
 
         <path class="a-edge" d="M580,520 H680" marker-end="url(#a-arrow)" />
-        <text class="a-edge__label" x="606" y="512">open PR</text>
+        <text class="a-edge__label" x="606" y="512">push to main</text>
 
         <path class="a-edge" d="M140,536 V590 H820 V536" marker-end="url(#a-arrow)" />
         <path class="a-edge a-edge--dim" d="M840,536 V600 H160 V536" marker-end="url(#a-arrow)" />
-        <text class="a-edge__label" x="400" y="584">review &amp; merge PR · submit a model</text>
-        <text class="a-edge__label" x="560" y="614">PR + CI result</text>
+        <text class="a-edge__label" x="400" y="584">approve / skip · submit a model</text>
+        <text class="a-edge__label" x="560" y="614">commit + CI result</text>
 
         <!-- column A -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Scheduler"
-          data-a-detail="A Devin Automation. Fires once a day (06:17 Pacific), runs as Marcus, and starts one fresh session with the runbook as its prompt. At most one run at a time; a failed dispatch emails Marcus. Can also be fired by hand for a test run.">
-          <rect x="40" y="80" width="200" height="56" /><text class="a-node__title" x="54" y="105">Scheduler</text><text class="a-node__sub" x="54" y="123">daily · runs as Marcus</text>
+          data-a-detail="A Devin Automation. Fires once an hour (at :17), runs as Marcus, and starts one fresh session with the runbook as its prompt. At most one run at a time; a failed dispatch emails Marcus. Can also be fired by hand for a test run.">
+          <rect x="40" y="80" width="200" height="56" /><text class="a-node__title" x="54" y="105">Scheduler</text><text class="a-node__sub" x="54" y="123">hourly · runs as Marcus</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Static leaderboard site"
-          data-a-detail="Summary (last updated, best-alternative cards, the run's TLDR) plus the quality, cost and latency tables, with filters and sort. It reads data files that the daily run regenerates and commits, so merging the PR is what updates the site. A small Python server hosts it and files whatever is typed into 'Evaluate a new model' under requests/ for the next run.">
+          data-a-detail="Summary (last updated, best-alternative cards, the run's TLDR) plus the quality, cost and latency tables, with filters and sort. It reads data files that each run regenerates and pushes to main, so the push is what updates the site. A small Python server hosts it and files whatever is typed into 'Evaluate a new model' under requests/ for the next run.">
           <rect x="40" y="320" width="200" height="56" /><text class="a-node__title" x="54" y="345">Static leaderboard site</text><text class="a-node__sub" x="54" y="363">no backend · reads repo data</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Marcus"
-          data-a-detail="Reviews and merges the daily PR (the only path to main). Can request a specific model by typing a link into the site's box (filed under requests/) or by filing an issue labelled evaluate; the next run picks either up.">
-          <rect x="40" y="480" width="200" height="56" /><text class="a-node__title" x="54" y="505">Marcus</text><text class="a-node__sub" x="54" y="523">merges PR · files requests</text>
+          data-a-detail="Approves or skips proposed models on the site and reads the commits the runs push. Can request a specific model by typing a link into the site's box (filed under requests/) or by filing an issue labelled evaluate; the next run picks either up.">
+          <rect x="40" y="480" width="200" height="56" /><text class="a-node__title" x="54" y="505">Marcus</text><text class="a-node__sub" x="54" y="523">approves · files requests</text>
         </g>
 
         <!-- column B -->
@@ -1349,16 +1349,16 @@ details.a-disclosure[open] > summary::before {
           <rect x="310" y="240" width="270" height="56" /><text class="a-node__title" x="324" y="265">3 · Issue intake</text><text class="a-node__sub" x="324" y="283">Python · evaluate issues → run configs</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="4 · Run experiments (Python)"
-          data-a-detail="For each new or approved config, at most ten per day: scores the new model, production, and Jev's committed answers on all 75 benchmark cases on Modal GPUs, then computes kept-mass@k, cost per run, and latency. Raw answers and metrics are written under the data folder so every number in the PR is reproducible. A failed run is reported, not retried.">
+          data-a-detail="For each new or approved config, at most ten per run: scores the new model, production, and Jev's committed answers on all 75 benchmark cases on Modal GPUs, then computes kept-mass@k, cost per run, and latency. Raw answers and metrics are written under the data folder so every number in the commit is reproducible. A failed run is reported, not retried.">
           <rect x="310" y="320" width="270" height="56" /><text class="a-node__title" x="324" y="345">4 · Run experiments</text><text class="a-node__sub" x="324" y="363">Python · ≤10 runs · 75 cases each</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="5 · Regenerate &amp; check (Python)"
           data-a-detail="Rebuilds the site's data files and static assets from the registry plus every experiment folder, then runs lint, formatting, and the full test suite (which re-scores every committed experiment from its raw answers).">
           <rect x="310" y="400" width="270" height="56" /><text class="a-node__title" x="324" y="425">5 · Regenerate &amp; check</text><text class="a-node__sub" x="324" y="443">Python · site data · lint · tests</text>
         </g>
-        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="6 · Open PR (Python + GitHub API)"
-          data-a-detail="Commits the candidate list, triage decisions, new configs, experiment artifacts, and rebuilt site to a dated branch and opens exactly one PR into main. Body: triage counts per verdict, one line per run with kept-mass@50/200 and cost, any step that failed. If nothing was new, no PR.">
-          <rect x="310" y="480" width="270" height="56" /><text class="a-node__title" x="324" y="505">6 · Open PR</text><text class="a-node__sub" x="324" y="523">one dated branch · one PR into main</text>
+        <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="6 · Push to main (git)"
+          data-a-detail="Commits the candidate list, triage decisions, new configs, experiment artifacts, and rebuilt site and pushes that one commit straight to main (fast-forward; rebase once if main moved, never force). Message body: triage counts per verdict, one line per run with kept-mass@50/200 and cost, any step that failed. If nothing was new, no commit.">
+          <rect x="310" y="480" width="270" height="56" /><text class="a-node__title" x="324" y="505">6 · Push to main</text><text class="a-node__sub" x="324" y="523">one commit · fast-forward to main</text>
         </g>
 
         <!-- column C -->
@@ -1376,7 +1376,7 @@ details.a-disclosure[open] > summary::before {
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="GitHub repository"
           data-a-detail="System of record: benchmark data, raw answers, configs, registry, crawler state, site. Also the inbox (evaluate issues) and the review gate (PRs with CI: lint, tests, site build). The session authenticates with Marcus's token.">
-          <rect x="680" y="480" width="280" height="56" /><text class="a-node__title" x="694" y="505">GitHub repository</text><text class="a-node__sub" x="694" y="523">data · issues inbox · PR gate · CI</text>
+          <rect x="680" y="480" width="280" height="56" /><text class="a-node__title" x="694" y="505">GitHub repository</text><text class="a-node__sub" x="694" y="523">data · issues inbox · CI</text>
         </g>
       </g>
     </svg>
@@ -1392,8 +1392,8 @@ details.a-disclosure[open] > summary::before {
   <p class="a-section__note">
     Legend. Numbered boxes (1–6) are the steps of the run in order; "Python" means a checked-in
     command with no discretion, "Devin judgment" means a decision Devin makes and records. Solid
-    arrows carry requests or data forward; dimmed arrows are replies. The site has no server: it
-    changes only when a PR is merged.
+    arrows carry requests or data forward; dimmed arrows are replies. The site
+    changes when a run's commit lands on main (and when a click on the board is committed).
   </p>
 </section>
 
@@ -1406,7 +1406,7 @@ details.a-disclosure[open] > summary::before {
   </p>
   <figure class="a-panel" style="padding: 8px 0 0">
     <svg viewBox="0 0 1040 790" role="img" style="width: 100%; height: auto; display: block"
-      aria-label="Sequence: scheduler starts session; session clones repository, queries discovery sources, dedupes and triages, reads evaluate issues, loops up to ten times running a config on Modal and receiving scores, regenerates the site and runs checks, pushes a branch and opens a PR; Marcus reviews and merges.">
+      aria-label="Sequence: scheduler starts session; session clones repository, queries discovery sources, dedupes and triages, reads evaluate issues, loops up to ten times running a config on Modal and receiving scores, regenerates the site and runs checks, pushes one commit to main; the site redeploys.">
       <defs>
         <marker id="seq-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
@@ -1414,7 +1414,7 @@ details.a-disclosure[open] > summary::before {
       </defs>
       <!-- participants -->
       <g class="a-node"><rect x="20" y="20" width="140" height="40" /><text class="a-node__title" x="90" y="45" text-anchor="middle">Scheduler</text></g>
-      <g class="a-node"><rect x="200" y="20" width="140" height="40" /><text class="a-node__title" x="270" y="45" text-anchor="middle">Daily session</text></g>
+      <g class="a-node"><rect x="200" y="20" width="140" height="40" /><text class="a-node__title" x="270" y="45" text-anchor="middle">Hourly session</text></g>
       <g class="a-node"><rect x="380" y="20" width="140" height="40" /><text class="a-node__title" x="450" y="45" text-anchor="middle">Discovery sources</text></g>
       <g class="a-node"><rect x="560" y="20" width="140" height="40" /><text class="a-node__title" x="630" y="45" text-anchor="middle">GitHub</text></g>
       <g class="a-node"><rect x="740" y="20" width="140" height="40" /><text class="a-node__title" x="810" y="45" text-anchor="middle">Modal GPUs</text></g>
@@ -1433,7 +1433,7 @@ details.a-disclosure[open] > summary::before {
       <g class="a-group"><rect x="190" y="440" width="700" height="130" /><text x="204" y="462">loop · for each new config, at most 3 per day</text></g>
 
       <!-- messages -->
-      <path class="a-edge" d="M90,100 H262" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="100" y="94">1 start the daily run (06:17 PT)</text>
+      <path class="a-edge" d="M90,100 H262" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="100" y="94">1 start the hourly run (at :17)</text>
       <path class="a-edge" d="M278,140 H628" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="290" y="134">2 clone main · create today's branch</text>
       <path class="a-edge" d="M278,180 H448" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="290" y="174">3 search since last run (43 queries)</text>
       <path class="a-edge a-edge--dim" d="M448,210 H278" marker-end="url(#seq-arrow)" style="stroke-dasharray: 6 4" /><text class="a-edge__label" x="290" y="226">hits (title · link · snippet · date)</text>
@@ -1447,15 +1447,15 @@ details.a-disclosure[open] > summary::before {
       <path class="a-edge a-edge--dim" d="M802,550 H278" marker-end="url(#seq-arrow)" style="stroke-dasharray: 6 4" /><text class="a-edge__label" x="290" y="565">answers · kept-mass@k · cost · latency (written to the data folder)</text>
 
       <path class="a-edge" d="M278,600 H320 V620 H278" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="330" y="614">8 regenerate site data + build · lint · tests</text>
-      <path class="a-edge" d="M278,660 H628" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="290" y="654">9 push branch · open the one PR into main (or none if nothing new)</text>
-      <path class="a-edge" d="M636,700 H958" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="646" y="694">CI runs · PR ready for review</text>
-      <path class="a-edge" d="M954,740 H636" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="646" y="760">review · merge → main (site updates)</text>
+      <path class="a-edge" d="M278,660 H628" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="290" y="654">9 push the one commit to main (or none if nothing new)</text>
+      <path class="a-edge" d="M636,700 H958" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="646" y="694">CI runs on main</text>
+      <path class="a-edge" d="M954,740 H636" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="646" y="760">Render redeploys the site</text>
     </svg>
   </figure>
   <p class="a-section__note">
     Legend. Numbers match the step numbers in Table 1 (steps 4–5 are internal to the session and
-    shown as self-calls). Steps 3–9 can each fail independently; a failure is written into the PR
-    body and the remaining steps that do not depend on it still run.
+    shown as self-calls). Steps 3–9 can each fail independently; a failure is written into the commit
+    message and the remaining steps that do not depend on it still run.
   </p>
 </section>
 
@@ -1468,14 +1468,14 @@ details.a-disclosure[open] > summary::before {
       <thead><tr><th scope="col">Step</th><th scope="col">Who</th><th scope="col">Input</th><th scope="col">Output</th><th scope="col">If it fails</th></tr></thead>
       <tbody>
         <tr><th scope="row">1 Checkout</th><td>Python / git</td><td><code>main</code></td><td>Dated branch, dependencies installed, Modal + GitHub credentials in the environment</td><td>Run stops; dispatch failure email</td></tr>
-        <tr><th scope="row">2 Crawl</th><td>Python</td><td>Query list, seen set, last-run date</td><td>Today's candidate list; seen set extended</td><td>Per (source, query); the rest continue, failures listed in the PR</td></tr>
+        <tr><th scope="row">2 Crawl</th><td>Python</td><td>Query list, seen set, last-run date</td><td>Today's candidate list; seen set extended</td><td>Per (source, query); the rest continue, failures listed in the commit message</td></tr>
         <tr><th scope="row">3 Triage</th><td><strong>Devin judgment</strong></td><td>Today's candidates</td><td>One verdict per candidate; a run config per runnable one; registry rows</td><td>Checker exits non-zero until every candidate has a verdict and every runnable one a config</td></tr>
-        <tr><th scope="row">4 Issue intake</th><td>Python</td><td>Open issues labelled <code>evaluate</code></td><td>One run config per issue (skipped if it already exists)</td><td>Reported in PR; crawler candidates still run</td></tr>
-        <tr><th scope="row">5 Run</th><td>Python on Modal</td><td>New and approved configs (max 10)</td><td>Per experiment: raw answers, kept-mass@50/100/150/200, cost, latency</td><td>Reported in PR, not retried</td></tr>
-        <tr><th scope="row">6 Regenerate</th><td>Python + site build</td><td>Registry + all experiment folders</td><td>Site data files and static assets</td><td>Reported in PR</td></tr>
-        <tr><th scope="row">7 Check</th><td>Python</td><td>Whole repository</td><td>Lint, formatting, full test suite green</td><td>Reported in PR; CI will show red</td></tr>
-        <tr><th scope="row">8 PR</th><td>Python + GitHub API</td><td>Everything above</td><td>One PR into <code>main</code></td><td>Final session message carries the report instead</td></tr>
-        <tr><th scope="row">9 Nothing new</th><td>Python</td><td>No candidates and no issues</td><td>No PR; "nothing new" in the final message</td><td>—</td></tr>
+        <tr><th scope="row">4 Issue intake</th><td>Python</td><td>Open issues labelled <code>evaluate</code></td><td>One run config per issue (skipped if it already exists)</td><td>Reported in the commit message; crawler candidates still run</td></tr>
+        <tr><th scope="row">5 Run</th><td>Python on Modal</td><td>New and approved configs (max 10)</td><td>Per experiment: raw answers, kept-mass@50/100/150/200, cost, latency</td><td>Reported in the commit message, not retried</td></tr>
+        <tr><th scope="row">6 Regenerate</th><td>Python + site build</td><td>Registry + all experiment folders</td><td>Site data files and static assets</td><td>Reported in the commit message</td></tr>
+        <tr><th scope="row">7 Check</th><td>Python</td><td>Whole repository</td><td>Lint, formatting, full test suite green</td><td>Reported in the commit message; CI on main will show red</td></tr>
+        <tr><th scope="row">8 Push</th><td>git</td><td>Everything above</td><td>One fast-forward commit on <code>main</code></td><td>Rebase once and retry; then the final session message carries the report instead</td></tr>
+        <tr><th scope="row">9 Nothing new</th><td>Python</td><td>No candidates and no issues</td><td>No commit, no DM; "nothing new" in the final message</td><td>—</td></tr>
       </tbody>
     </table>
   </div>
@@ -1490,31 +1490,31 @@ details.a-disclosure[open] > summary::before {
       <thead><tr><th scope="col">Verdict</th><th scope="col">Means</th><th scope="col">Consequence</th><th scope="col">Typical example</th></tr></thead>
       <tbody>
         <tr><th scope="row">runnable</th><td>The harness can already call it: a Kev-family or Laya checkpoint on the Hub, or a hosted endpoint whose key is already a Modal secret</td><td>A run config is written (production + Jev answers + the model, all 75 cases) and it is run today if within the budget of ten</td><td>A new Kev checkpoint under a different account</td></tr>
-        <tr><th scope="row">needs_adapter</th><td>A real Jev alternative the harness cannot call yet: new serving stack, new request format, key not provisioned, or over the Kev-27B cost line</td><td>Recorded with the missing piece named; nothing runs; shows up in the PR for a human to decide</td><td>A model that needs a serving framework the harness does not ship</td></tr>
+        <tr><th scope="row">needs_adapter</th><td>A real Jev alternative the harness cannot call yet: new serving stack, new request format, key not provisioned, or over the Kev-27B cost line</td><td>Recorded with the missing piece named; nothing runs; shows up on the site's board for Marcus to approve or skip</td><td>A model that needs a serving framework the harness does not ship</td></tr>
         <tr><th scope="row">not_jev</th><td>Unrelated hit</td><td>Recorded with a one-line reason so it is never re-reviewed</td><td>A person named Kev; a Laya who is a voice actor</td></tr>
       </tbody>
     </table>
   </div>
   <p class="a-prose">
-    The verdicts are committed as a dated file, so the PR diff is the audit trail of what Devin
+    The verdicts are committed as a dated file, so the commit diff is the audit trail of what Devin
     decided and why. A mechanical checker runs after triage: every candidate must have a verdict,
     and every runnable verdict must point at an existing config; otherwise the run cannot proceed.
   </p>
 </section>
 
 <section class="a-section" aria-labelledby="pr">
-  <h2 class="a-section__title" id="pr">6. Table 3: what lands in the daily PR</h2>
-  <p class="a-section__note">Table 3. Contents of the PR titled "Daily &lt;date&gt;: &lt;n&gt; candidates, &lt;m&gt; runs".</p>
+  <h2 class="a-section__title" id="pr">6. Table 3: what lands in each commit</h2>
+  <p class="a-section__note">Table 3. Contents of the commit titled "Run &lt;date time UTC&gt;: &lt;n&gt; candidates, &lt;m&gt; runs", pushed to main.</p>
   <div class="a-table-scroll">
     <table class="a-table">
-      <caption class="a-visually-hidden">Files and body of the daily pull request</caption>
+      <caption class="a-visually-hidden">Files and message of each run's commit</caption>
       <thead><tr><th scope="col">Part</th><th scope="col">Contains</th><th scope="col">Why it is in git</th></tr></thead>
       <tbody>
         <tr><th scope="row">Crawler state</th><td>Today's candidate list, the extended seen set, the triage verdict file</td><td>Tomorrow's run starts from it; the verdicts are the audit trail</td></tr>
         <tr><th scope="row">Configs + registry</th><td>One config per model run; row labels for the site</td><td>Anyone can rerun the exact experiment</td></tr>
         <tr><th scope="row">Experiment folders</th><td>Config, calls, kept-mass, cost, latency, raw answers (gzipped)</td><td>Every number on the site links back to its source; the test suite re-scores from the raw answers</td></tr>
         <tr><th scope="row">Site</th><td>Regenerated data files and built static assets</td><td>The site has no backend; merging is deploying</td></tr>
-        <tr><th scope="row">PR body</th><td>Triage counts per verdict; one line per run with kept-mass@50/200 and cost; crawler failures; "Closes #n" for each evaluate issue run</td><td>Review without opening files</td></tr>
+        <tr><th scope="row">Commit message</th><td>Triage counts per verdict; one line per run with kept-mass@50/200 and cost; crawler failures; "Closes #n" for each evaluate issue run</td><td>Review without opening files</td></tr>
       </tbody>
     </table>
   </div>
@@ -1525,11 +1525,11 @@ details.a-disclosure[open] > summary::before {
   <p class="a-section__note">Table 4. What bounds the run, and where each bound is enforced.</p>
   <div class="a-table-scroll">
     <table class="a-table">
-      <caption class="a-visually-hidden">Guardrails on the daily automation</caption>
+      <caption class="a-visually-hidden">Guardrails on the hourly automation</caption>
       <thead><tr><th scope="col">Bound</th><th scope="col">Value</th><th scope="col">Enforced by</th></tr></thead>
       <tbody>
         <tr><th scope="row">Experiments per day</th><td>At most 3; none larger than the Kev-27B batched config</td><td>Runbook; over-budget candidates become needs_adapter</td></tr>
-        <tr><th scope="row">Writes to main</th><td>None; one PR per day</td><td>Runbook + prompt; your merge is the gate; CI must be green</td></tr>
+        <tr><th scope="row">Writes to main</th><td>Fast-forward commits only; never force-push or amend</td><td>Runbook + prompt; CI runs on main after the push</td></tr>
         <tr><th scope="row">Concurrency</th><td>One run at a time, no queue</td><td>Automation settings</td></tr>
         <tr><th scope="row">Compute per session</th><td>40 ACU cap</td><td>Automation settings</td></tr>
         <tr><th scope="row">Network</th><td>Allow-list: GitHub, Hugging Face, arXiv, web search, Hacker News, Modal, package registries</td><td>Automation network policy</td></tr>
@@ -1553,7 +1553,7 @@ details.a-disclosure[open] > summary::before {
 </section>
 
 
-      <footer class="a-footnote">Describes the runbook in docs/AUTOMATION.md and the Devin Automation "jev-tracker daily" as of 2 Oct 2026. Diagram labels are high level on purpose; file and command names live in the runbook.</footer>
+      <footer class="a-footnote">Describes the runbook in docs/AUTOMATION.md and the Devin Automation "jev-tracker hourly" as of 2 Oct 2026. Diagram labels are high level on purpose; file and command names live in the runbook.</footer>
     </main>
     <script>
 /* Devin artifact kit — self-contained behavior for standalone HTML artifacts.
