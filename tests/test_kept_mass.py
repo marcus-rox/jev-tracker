@@ -5,6 +5,7 @@ committed experiment's raw answers must re-score to its committed kept_mass_<id>
 """
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -58,9 +59,19 @@ def _rescorable(id: str) -> bool:
 
 
 COMMITTED = sorted(p.name for p in EXPERIMENTS_DIR.iterdir() if p.is_dir())
+# CI sets this on pull requests to the experiments the PR touches (comma-separated, possibly
+# empty); unset means every committed experiment.
+SELECTED_ENV = "JEV_RESCORE_EXPERIMENTS"
 
 
-@pytest.mark.parametrize("id", [e for e in COMMITTED if _rescorable(e)])
+def _selected() -> list[str]:
+    chosen = os.environ.get(SELECTED_ENV)
+    if chosen is None:
+        return COMMITTED
+    return [e for e in COMMITTED if e in chosen.split(",")]
+
+
+@pytest.mark.parametrize("id", [e for e in _selected() if _rescorable(e)])
 def test_R4_committed_raw_answers_rescore_to_the_committed_table(id: str) -> None:
     p = Paths(id)
     exp = load_config(p.config)

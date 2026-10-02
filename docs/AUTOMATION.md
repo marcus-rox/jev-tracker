@@ -74,7 +74,7 @@ for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` fo
    not `demonstrate`), no idioms.
 7. **Regenerate**: `uv run python -m jev_tracker.site_data` (reads `data/tldr.md`), then
    `cd site && npm ci && npm run build && cd ..`.
-8. **Check**: `uv run ruff check . && uv run ruff format --check . && uv run pytest -q`.
+8. **Check**: `uv run ruff check . && uv run ruff format --check . && uv run pytest -q -n auto`.
 9. **PR**: commit `crawler/`, `configs/`, `data/` (including `data/queue.json` with the finished
    items removed), `site/public/data`, `site/dist` (explicit
    paths, no `git add .`); push; open a PR titled `Daily <date>: <n> candidates, <m> runs` whose body
