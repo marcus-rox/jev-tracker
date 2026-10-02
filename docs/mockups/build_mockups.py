@@ -14,28 +14,11 @@ OUT = Path(__file__).resolve().parent
 DATA = json.loads((ROOT / "site/public/data/rows.json").read_text())
 TLDR = (ROOT / "data/tldr.md").read_text()
 
-MOCK_RUNS = [
-    {
-        "model": "kev9b_v2 · noul",
-        "gpu": "H100",
-        "started_min": 12,
-        "state": "running",
-        "progress": 0.6,
-    },
-    {
-        "model": "kev2b (per2021) · score",
-        "gpu": "L4",
-        "started_min": 3,
-        "state": "running",
-        "progress": 0.15,
-    },
-    {
-        "model": "laya421m_typed · reworded",
-        "gpu": "L4",
-        "started_min": 0,
-        "state": "queued",
-        "progress": 0.0,
-    },
+MOCK_QUEUE = [
+    {"label": "kev9b_v2_noul", "source": "huggingface", "status": "running", "min": 12},
+    {"label": "kev2b_per2021", "source": "huggingface", "status": "running", "min": 3},
+    {"label": "laya421m_typed_reworded", "source": "submitted", "status": "queued", "min": 95},
+    {"label": "issue_4_mxbai_rerank", "source": "issue", "status": "queued", "min": 1440},
 ]
 
 THEMES = {
@@ -89,6 +72,8 @@ a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: un
 .toolbar .label { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-right:2px; }
 .chip { border:1px solid var(--border); background:var(--panel); border-radius:14px; padding:2px 10px; font-size:12px; cursor:pointer; user-select:none; color:var(--text); }
 .chip.on { background:var(--chip); border-color:var(--chipborder); color:var(--accent); font-weight:600; }
+.bar i.busy { width:35%%; animation: slide 1.6s ease-in-out infinite alternate; }
+@keyframes slide { from { margin-left:0 } to { margin-left:65%% } }
 .chip.reset { border-style:dashed; color:var(--muted); }
 .dd { position:relative; }
 .dd > button { border:1px solid var(--border); background:var(--panel); color:var(--text); border-radius:6px; padding:5px 10px; font-size:13px; cursor:pointer; min-width:150px; text-align:left; display:flex; justify-content:space-between; gap:10px; }
@@ -237,9 +222,15 @@ function numWidget(card, better) {
   return widget(4, card.label.split(' (')[0], `<div class="num"><div class="v">${card.value}<span class="delta ${good ? 'good' : 'bad'}">${rel >= 0 ? '+' : ''}${(100 * rel).toFixed(0)}% vs Jev</span></div><div class="who">${esc(who)}</div><div class="cmp">${card.label.match(/\((.*)\)/)[1]} · Jev ${jev}</div></div>`);
 }
 
-function statusWidget() {
-  const jobs = RUNS.map(j => `<div class="job ${j.state}"><div class="m"><span class="dot"></span>${esc(j.model)}</div><div class="meta">${j.gpu} · ${j.state === 'running' ? `started ${j.started_min} min ago · ${Math.round(100 * j.progress)}% of 75 queries` : 'queued'}</div><div class="bar"><i style="width:${100 * j.progress}%"></i></div></div>`).join('');
-  return widget(12, 'Modal runs in flight', `<div class="status">${jobs}<div class="job" style="flex:0 0 260px;background:none"><div class="m">Today's daily run</div><div class="meta">1372 candidates triaged · 38 runnable · 3 launched · opens a PR when done</div></div></div>`, '<span class="mock">MOCK</span> live source TBD · refreshes every 60 s');
+function queueWidget() {
+  const age = m => m < 60 ? `${m} min` : m < 1440 ? `${Math.round(m / 60)} h` : `${Math.round(m / 1440)} d`;
+  const items = QUEUE.map(j => `<div class="job ${j.status}"><div class="m"><span class="dot"></span>${esc(j.label)}</div>
+    <div class="meta">${j.status === 'running' ? `running · started ${age(j.min)} ago` : `queued · waiting ${age(j.min)}`} · from ${esc(j.source)}</div>
+    ${j.status === 'running' ? '<div class="bar"><i class="busy"></i></div>' : ''}</div>`).join('');
+  const running = QUEUE.filter(j => j.status === 'running').length;
+  return widget(12, `Model evaluation queue <span class="sub">${running} running · ${QUEUE.length - running} waiting</span>`,
+    `<div class="status">${items || '<div class="meta">queue is empty</div>'}</div>`,
+    '<span class="mock">MOCK</span> source: data/queue.json on main · several can run at once · a finished model leaves the queue and appears in the Model list');
 }
 
 function render() {
@@ -248,7 +239,7 @@ function render() {
   document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === state.tab));
   const rows = visible(); let g = '';
   if (state.tab === 'summary') {
-    g += statusWidget();
+    g += queueWidget();
     g += numWidget(D.cards[0], 'high') + numWidget(D.cards[1], 'low') + numWidget(D.cards[2], 'low');
     g += widget(8, 'Quality · kept-mass@k', lineChart(rows, 300), 'Top 10 shown (best run per model, Jev / production / random always included) · full list in the table · click a legend entry to hide it');
     g += widget(4, 'TLDR', `<div class="tldr">${D.tldr.split('\n').filter(l => l.trim()).map(l => `<p>${esc(l)}</p>`).join('')}</div>`, 'written by the daily run');
@@ -285,7 +276,7 @@ HTML = """<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker ·
 <nav class="tabs"><button data-t="summary">Summary</button><button data-t="quality">Quality</button><button data-t="cost">Cost</button><button data-t="latency">Latency</button><button data-t="evaluate">Evaluate a new model</button></nav>
 <main class="grid" id="grid"></main>
 <p class="foot">Mockup rendered from site/public/data/rows.json (%(n)d rows, %(ne)d experiments). Widgets marked MOCK use placeholder data.</p>
-<script>const DATA = %(data)s; const RUNS = %(runs)s;</script>
+<script>const DATA = %(data)s; const QUEUE = %(runs)s;</script>
 <script>%(js)s</script>
 </body></html>
 """
@@ -298,7 +289,7 @@ for theme, colors in THEMES.items():
         "n": len(DATA["rows"]),
         "ne": len(DATA["experiments"]),
         "data": json.dumps({**DATA, "tldr": TLDR}),
-        "runs": json.dumps(MOCK_RUNS),
+        "runs": json.dumps(MOCK_QUEUE),
         "js": JS,
     }
     (OUT / f"dashboard_{theme}.html").write_text(html)
