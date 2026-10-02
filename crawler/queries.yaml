@@ -1,0 +1,37 @@
+# R-8: what each source is asked. Source of truth; crawler/__main__.py reads one list per source.
+# GitHub repository search (pushed since the window start), arXiv (all fields, terms ANDed) and
+# DuckDuckGo take free text with quoted phrases. Hugging Face matches model ids by substring, so
+# phrases are useless there and `decision-model` is the Hub tag Kev-style models carry.
+github:
+  - jev
+  - kev
+  - laya
+  - systemone
+  - '"system one"'
+  - noul
+  - '"decision model" reranker'
+  - jaredpalmer/kev
+huggingface:
+  - jev
+  - kev
+  - laya
+  - systemone
+  - noul
+  - decision-model
+arxiv:
+  - jev
+  - kev
+  - laya
+  - systemone
+  - '"system one"'
+  - noul
+  - '"decision model" reranker'
+web:
+  - jev
+  - kev
+  - laya
+  - systemone
+  - '"system one"'
+  - noul
+  - '"decision model" reranker'
+  - jaredpalmer/kev

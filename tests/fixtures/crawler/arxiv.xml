@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/VbbbwsY9pWib9q2xdoAjfDy7kbI</id>
+  <title>arXiv Query: search_query=all:"decision model" AND all:reranker&amp;id_list=&amp;start=0&amp;max_results=2</title>
+  <updated>2026-10-02T00:40:16Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:%22decision+model%22+AND+all:reranker&amp;start=0&amp;max_results=2&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>2</opensearch:itemsPerPage>
+  <opensearch:totalResults>3</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2609.37832v1</id>
+    <title>Can a Cacheable Decision Model Follow Rules?</title>
+    <updated>2026-09-29T15:37:18Z</updated>
+    <link href="https://arxiv.org/abs/2609.37832v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.37832v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Certo is a small non-generative decision model (Qwen3-4B): it scores candidate actions from their text and returns a probability, instead of generating an answer. The accurate design reads the state, the rules, and each candidate together (a joint scorer), so cost grows with the menu. Independent encoding lets each candidate be encoded once and reused across states (about 5x cheaper at 77 candidates), but separates state from candidate. We ask how much rule-sensitivity survives that move, and whether it can be trained back.
+  Four experiments on Certo: (1) the tested conversion to cacheable scoring loses rule-sensitivity (recall@1 1.00 -&gt; 0.24) while the joint scorer holds 1.00, and a shortlist+rerank rescue fails; (2) targeted counterfactual supervision restores strong performance on held-out synthetic rule tasks (paraphrase, counterfactual, composition; reproducible across seeds), though we do not isolate whether predictions depend on the supplied rule; (3) on real rules the added benefit is not established -- after fixing a truncation confound, the joint scorer wins significantly on the short tier (0.861 vs 0.500) and directionally on the hard tier (0.655 vs 0.483, n=29); (4) a matched cross-domain real-prose mixture did not help and reduced contract accuracy (-9.3, -16.2 points). A cacheable encoder can be made rule-sensitive on its training distribution, but transfer to unseen-source real rules is not established; the joint scorer keeps an edge at the cost of caching.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-29T15:37:18Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Dushyant Rajput</name>
+      <arxiv:affiliation>AltSlate Labs LLP</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Nirdesh Chauhan</name>
+      <arxiv:affiliation>AltSlate Labs LLP</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Siddharth Kosaraju</name>
+      <arxiv:affiliation>AltSlate Labs LLP</arxiv:affiliation>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.34227v1</id>
+    <title>When Does Selection Replace Extraction? A Pre-Registered Test of Agent Memory with a Typed Decision Model</title>
+    <updated>2026-09-28T03:34:07Z</updated>
+    <link href="https://arxiv.org/abs/2609.34227v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.34227v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Does conversational memory need LLM-extracted facts, or is selecting the right raw turns enough? Published results disagree. Extraction-based systems report gains from distilled facts. Recent studies find raw history with good ranking does as well, but disagree about whether ranking matters. We ran a pre-registered study on held-out LoCoMo conversations and LongMemEval. At a tight budget on LoCoMo, raw turns selected by a single call to Jev, a typed decision model, are non-inferior to an LLM-extraction memory (one-sided 95% bound -3.0 points against a -5-point margin). Blind human grading narrows the margin but does not change the result. Raw turns cost 3,061 times less to write, and the result holds with a second answer model. Within this study, reranking's gain shrinks as the budget grows. It adds 17.4 points on LoCoMo and 9.1 on LongMemEval when three of 30 candidates are kept. At generous budgets it adds 1.5 and 1.1, and extraction systems are more accurate. This suggests why published results disagree. At matched context, Jev selects as accurately as an LLM reranker (non-inferiority bound -2.0) at a third of the latency, and more accurately than a multi-call graph traversal. Reranking lowers correct abstention. Plans, code and graded answers are released.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.IR" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-28T03:34:07Z</published>
+    <arxiv:comment>21 pages, 9 figures. Pre-registered: plan doi:10.5281/zenodo.22970745, amendment doi:10.5281/zenodo.22977848. Preprint also at doi:10.5281/zenodo.22985242. Code and data: https://github.com/ris3abh/Engram</arxiv:comment>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Rishabh Sharma</name>
+    </author>
+    <author>
+      <name>Rishika Lall</name>
+    </author>
+  </entry>
+</feed>

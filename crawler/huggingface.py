@@ -1,0 +1,35 @@
+"""Hugging Face Hub model search, newest modification first, cut at `since` client-side."""
+
+from datetime import datetime
+
+import httpx
+
+from crawler.contract import HTTP_TIMEOUT_SECONDS, Candidate, utcnow
+
+MODELS_URL = "https://huggingface.co/api/models"
+MODEL_PAGE = "https://huggingface.co/{id}"
+LIMIT = 100
+
+
+def search(query: str, since: datetime) -> list[Candidate]:
+    params = {"search": query, "sort": "lastModified", "direction": -1, "limit": LIMIT}
+    response = httpx.get(MODELS_URL, params=params, timeout=HTTP_TIMEOUT_SECONDS)
+    response.raise_for_status()
+    return parse(response.json(), query, since, utcnow())
+
+
+def parse(
+    payload: list[dict], query: str, since: datetime, first_seen: datetime
+) -> list[Candidate]:
+    return [
+        Candidate(
+            source="huggingface",
+            url=MODEL_PAGE.format(id=model["id"]),
+            title=model["id"],
+            snippet=", ".join(model.get("tags", [])),
+            first_seen=first_seen,
+            query=query,
+        )
+        for model in payload
+        if datetime.fromisoformat(model["lastModified"]) >= since
+    ]

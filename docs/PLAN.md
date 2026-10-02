@@ -39,9 +39,10 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
    `kev27b_batched` (3 × H200, ~$30). Falsifier: |Δ kept-mass| > 0.002 at any k. Cost: ~$32.
 3. **Site (Phase 2)**: Vite + React static build reading `site/public/data/*.json`; falsifier:
    a number on the page differs from the attached report.
-4. **Crawler + automation (Phase 3)**: prior-work survey, then `crawler/`; then the daily Devin
-   automation that opens a PR. Falsifier: the first automation PR has no new candidate or fails
-   to regenerate the site.
+4. **Crawler + automation (Phase 3)**: ✅ crawler built (`crawler/`, survey in
+   `docs/CRAWLER_PRIOR_WORK.md`, `tests/test_crawler.py`); next the daily Devin automation that
+   opens a PR. Falsifier: the first automation PR has no new candidate or fails to regenerate the
+   site.
 
 ## Decided
 

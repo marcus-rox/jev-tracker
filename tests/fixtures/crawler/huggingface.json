@@ -1,0 +1,27 @@
+[
+ {
+  "id": "kevinlu4588/llmfold-aicr",
+  "lastModified": "2026-10-01T22:24:30.000Z",
+  "tags": [
+   "region:us"
+  ],
+  "createdAt": "2026-09-25T20:09:15.000Z"
+ },
+ {
+  "id": "ggml-org/Kev-4B-GGUF",
+  "lastModified": "2026-10-01T21:32:40.000Z",
+  "tags": [
+   "gguf",
+   "quantized",
+   "decision-model",
+   "text-classification",
+   "base_model:jaredpalmer/kev-4b",
+   "base_model:quantized:jaredpalmer/kev-4b",
+   "license:apache-2.0",
+   "endpoints_compatible",
+   "region:us",
+   "conversational"
+  ],
+  "createdAt": "2026-10-01T21:32:10.000Z"
+ }
+]
