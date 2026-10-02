@@ -206,6 +206,7 @@ export default function App() {
         <nav className="tabs">
           {TABS.map(([t, name]) => <button key={t} className={tab === t ? 'on' : ''} onClick={() => { setTab(t); setSort(null) }}>{name}</button>)}
         </nav>
+        <p className="note">Click any column header to sort; click again to reverse, a third time to clear.</p>
         {tab === 'summary' && <>
           <p className="note">Each model family's 75-query ranker with the highest mean kept-mass over @50–200, with that run's cost and latency. Click a number for its source JSON.</p>
           <Table rows={bestPerFamily(rows)} cols={[...kept, MEAN, COST[5], LATENCY[1]]} sort={sort} setSort={setSort} />
