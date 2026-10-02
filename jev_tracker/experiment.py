@@ -17,7 +17,7 @@ Everything the experiment produced lives in data/experiments/<id>/ and carries t
 
 Rerankers are declared by `source`: `production` (the frozen ranking in the dataset), `answers`
 (raw answers already on disk, e.g. Jev's), `kev`, `laya`, `clef`, `matilda`, `autotrust`, `jevany`,
-`rsi_jev` or `minicpm_jev`
+`rsi_jev`, `minicpm_jev` or `startlux`
 (scored now, in-process on Modal, sharded over GPUs), `gguf` (one quantized .gguf file served by
 llama.cpp on a Modal GPU), `ollaya` (an ONNX decision model served by the Ollaya daemon on a Modal
 GPU) or `api` (any hosted model that answers the System One request at a URL,
@@ -231,6 +231,68 @@ class MiniCpmJevSource(BaseModel):
     gpu: str | None = None
 
 
+class StartLuxSource(BaseModel):
+    """StartLux-Decision: a Qwen3.5 decoder read out at the option letters, answered by the
+    release's own `startlux_decision.StartLuxDecision.decide` on the request body.
+
+    Each question is one prompt that repeats the state (65,536 tokens each); 12 children / 12,000
+    characters per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["startlux"]
+    method: str
+    model: Literal["startlux-models/StartLux-Decision-9B"]
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
+class VonSource(BaseModel):
+    """Von: a 395M encoder + option-marker head behind von-sdk's `VonEngine`, asked in-process
+    with the request's raw question dicts (as its /v1/systemone server does).
+
+    The engine truncates a too-long state itself; 12 children / 12,000 characters per request
+    matches configs/kev27b_batched.yaml. One in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["von"]
+    method: str
+    model: Literal["wfzyx/von"] = modal_app.VON_REPO
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
+class BekkoSource(BaseModel):
+    """Bekko System One v0: hotchpotch's Ettin-based shared-prefix decision encoders (17M / 68M /
+    400M), asked through the release's `BekkoSentenceTransformer.predict` (jev_tracker.bekko maps
+    the request body to one input object).
+
+    The native prefix cap is ~8,000 tokens shared by instructions and state; 12 children /
+    12,000 characters per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+
+    model_config = {"frozen": True}
+
+    source: Literal["bekko"]
+    method: str
+    model: Literal[
+        "hotchpotch/bekko-system-one-v0-17m",
+        "hotchpotch/bekko-system-one-v0-68m",
+        "hotchpotch/bekko-system-one-v0-400m",
+    ]
+    max_items: int | None = 12
+    max_chars: int | None = 12_000
+    shards: int = 1
+    concurrency: Literal[1] = 1
+    gpu: str | None = None
+
+
 class ApiSource(BaseModel):
     """Any hosted model that answers the System One request body at `url` (Jev, Liquid d1, ...).
 
@@ -297,6 +359,9 @@ ModelSource = (
     | JevAnySource
     | RsiJevSource
     | MiniCpmJevSource
+    | StartLuxSource
+    | VonSource
+    | BekkoSource
     | ApiSource
     | GgufSource
     | OllayaSource

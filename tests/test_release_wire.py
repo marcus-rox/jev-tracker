@@ -1,6 +1,8 @@
+import json
 import math
+from types import SimpleNamespace
 
-from jev_tracker import minicpm_jev, rsi_jev
+from jev_tracker import bekko, minicpm_jev, rsi_jev, von
 from jev_tracker.methods import METHODS, Item, request
 from jev_tracker.systemone import SystemOneResponse
 
@@ -62,3 +64,81 @@ def test_minicpm_jev_response_maps_keys_to_answers() -> None:
     assert math.isclose(resp.answers["i1"].score, 1.7)
     assert resp.answers["i1"].probabilities == {"0": 0.1, "1": 0.1, "2": 0.8}
     assert resp.usage.input_tokens == 42
+
+
+def _fake_model_dump(**fields: object) -> SimpleNamespace:
+    return SimpleNamespace(model_dump=lambda: fields)
+
+
+def test_bekko_input_object_is_state_json_plus_one_judgment_per_question() -> None:
+    noul = body("noul_query_in_state", "hotchpotch/bekko-system-one-v0-400m")
+    obj = bekko.input_object(noul)
+    state = json.loads(obj["state_json"])
+    assert state["items"]["i0"] == "Paris is the capital of France."
+    assert state["query"] == "capital of France?"
+    assert [d["id"] for d in obj["decisions"]] == list(noul["questions"])
+    first = obj["decisions"][0]
+    assert first["kind"] == "judgment" and first["type"] == "noul"
+    assert json.loads(first["instructions_json"]).startswith("Is `items.i0`")
+    assert [c["id"] for c in first["criteria"]] == ["false", "true"]
+    assert all(c["value"] is None for c in first["criteria"])
+
+
+def test_bekko_score_criteria_carry_the_level_index_as_id_and_value() -> None:
+    score = body("score_query_in_question", "hotchpotch/bekko-system-one-v0-400m")
+    spec = score["questions"]["i0"]
+    dec = bekko.decision("i0", spec)
+    assert dec["type"] == "score"
+    assert [(c["id"], c["value"]) for c in dec["criteria"]] == [
+        ("0", 0.0),
+        ("1", 1.0),
+        ("2", 2.0),
+        ("3", 3.0),
+    ]
+    prediction = {
+        "score": 2.0,
+        "normalized_score": 2 / 3,
+        "probabilities": {"0": 0.0, "1": 0.0, "2": 1.0, "3": 0.0},
+        "values": {"0": 0.0, "1": 1.0, "2": 2.0, "3": 3.0},
+    }
+    resp = SystemOneResponse.model_validate(
+        {
+            "model": "bekko",
+            "answers": {"i0": bekko.answer(spec, prediction)},
+            "usage": {"input_tokens": 0, "output_tokens": 0},
+        }
+    )
+    assert resp.answers["i0"].score == 2.0
+    assert resp.answers["i0"].confidence == 1.0
+    assert resp.answers["i0"].probabilities["2"] == 1.0
+
+
+def test_bekko_noul_and_choice_answers() -> None:
+    noul = body("noul_query_in_state", "m")
+    noul_spec = noul["questions"]["i0"]
+    assert bekko.answer(
+        noul_spec, {"probability_yes": 0.9, "probabilities": {"false": 0.1, "true": 0.9}}
+    ) == {"type": "noul", "noul": 0.9}
+    choice = body("choice_over_children", "m")
+    choice_spec = choice["questions"]["best"]
+    assert (
+        bekko.answer(choice_spec, {"selected_id": "i1", "probabilities": {"i0": 0.2, "i1": 0.8}})[
+            "choice"
+        ]
+        == "i1"
+    )
+
+
+def test_von_response_restores_the_answer_type() -> None:
+    noul = body("noul_query_in_state", "wfzyx/von")
+    result = SimpleNamespace(
+        answers={
+            "i0": _fake_model_dump(noul=0.9),
+            "i1": _fake_model_dump(noul=0.1),
+        },
+        usage=_fake_model_dump(input_tokens=11, output_tokens=0),
+    )
+    resp = SystemOneResponse.model_validate(von.response("wfzyx/von", noul["questions"], result))
+    assert resp.answers["i0"].noul == 0.9
+    assert resp.model == "wfzyx/von"
+    assert resp.usage.input_tokens == 11

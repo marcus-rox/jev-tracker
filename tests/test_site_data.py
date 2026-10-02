@@ -19,7 +19,16 @@ from jev_tracker.server import (
     request_path,
     suggestions,
 )
-from jev_tracker.site_data import API_TIMING, OUT, REGISTRY, TLDR, build, read_api_timing, updated
+from jev_tracker.site_data import (
+    API_TIMING,
+    OUT,
+    REGISTRY,
+    RUNTIMES,
+    TLDR,
+    build,
+    read_api_timing,
+    updated,
+)
 
 DATA = build(
     yaml.safe_load(REGISTRY.read_text()),
@@ -90,6 +99,14 @@ def test_R6_every_shown_number_names_its_source() -> None:
 
 
 # R-7: the server takes the box's text and files it under requests/ (the GitHub write is not tested).
+def test_R6_every_row_names_a_known_runtime() -> None:
+    assert {r["runtime"] for r in DATA["rows"]} <= RUNTIMES
+    registry = yaml.safe_load(REGISTRY.read_text())
+    registry["rows"][0]["runtime"] = "TensorFlow"
+    with pytest.raises(ValueError, match="TensorFlow"):
+        build(registry, EXPERIMENTS_DIR, read_api_timing(API_TIMING))
+
+
 def test_R7_parse_request_accepts_any_text() -> None:
     assert (
         parse_request(b'{"text": " https://huggingface.co/org/model "}')

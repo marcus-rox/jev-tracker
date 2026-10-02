@@ -13,6 +13,7 @@ export type Sort = { key: string; dir: 1 | -1 } | null
 const LABELS: [string, (r: Row) => string][] = [
   ['ranker', (r) => r.label],
   ['serving', (r) => r.serving],
+  ['runtime', (r) => r.runtime],
   ['GPU', (r) => r.gpu],
 ]
 
