@@ -46,17 +46,25 @@ function Actions({ item, decide }: { item: QueueItem; decide: Decide }) {
   )
 }
 
-function Row({ item, now, decide }: { item: QueueItem; now: Date; decide: Decide }) {
+const SOURCE_COLOR: Record<string, string> = {
+  huggingface: '#f0a94a', github: '#9b6fd0', arxiv: '#c0d86a', web: '#6fcfe8', twitter: '#6fa8ea', hackernews: '#e8864a', slack: '#5ec9a6', submitted: '#b05fb8', manual: '#b05fb8',
+}
+
+function Card({ item, now, decide }: { item: QueueItem; now: Date; decide: Decide }) {
   return (
-    <li className={`row ${item.status}`}>
-      <div className="head">
-        <span className="dot" />
-        <span className="m">{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</span>
-        <span className="meta">{since(item, now)}</span>
+    <li className={`card ${item.status}`}>
+      <div className="body">
+        <div className="head"><span className="dot" /><span className="m">{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.label}</a> : item.label}</span></div>
+        <div className="meta">{since(item, now)}</div>
+        {item.note && <div className="note" title={item.note}>{item.note}</div>}
+        {item.status === 'running' && <div className="bar"><i /></div>}
+        {item.status === 'proposed' && <Actions item={item} decide={decide} />}
       </div>
-      <div className="meta">from {item.source}{item.note && <> · <span className="note" title={item.note}>{item.note}</span></>}</div>
-      {item.status === 'running' && <div className="bar"><i /></div>}
-      {item.status === 'proposed' && <Actions item={item} decide={decide} />}
+      <div className="foot">
+        <span><b>Source</b>{item.source}</span>
+        <span className="r"><b>Found</b>{age(item.queued_at, now)} ago</span>
+      </div>
+      <div className="strip" style={{ background: SOURCE_COLOR[item.source] ?? 'var(--muted)' }}>{item.config.replace(/^configs\//, '').replace(/\.yaml$/, '')}</div>
     </li>
   )
 }
@@ -65,23 +73,17 @@ export function QueueBody({ state, decide }: { state: QueueState; decide: Decide
   if (state.kind === 'loading') return <p className="hint">Loading…</p>
   if (state.kind === 'error') return <p className="hint">Queue unavailable: {state.message}.</p>
   if (state.queue.items.length === 0) return <p className="hint">Queue is empty — every runnable model has been evaluated; results are in the table below.</p>
-  const byStage = STAGES.map((stage) => state.queue.items.filter((item) => item.status === stage.status))
-  // A stage with more in it gets more width, capped so an empty stage still reads as a stage.
-  const columns = byStage.map((items) => `minmax(0, ${1 + Math.min(items.length, 3)}fr)`).join(' ')
   return (
-    <div className="pipeline" style={{ gridTemplateColumns: columns }}>
-      {STAGES.map((stage, i) => {
-        const items = byStage[i]
+    <div className="board">
+      {STAGES.map((stage) => {
+        const items = state.queue.items.filter((item) => item.status === stage.status)
         return (
-          <div key={stage.status} className="stagewrap">
-            {i > 0 && <div className="arrow" aria-hidden="true">→</div>}
-            <section className={`stage ${stage.status}`}>
-              <h3>{stage.title} <span className="count">{items.length}</span></h3>
-              {items.length === 0 ? <p className="hint">{stage.empty}</p> : (
-                <ul>{items.map((item) => <Row key={item.config} item={item} now={state.at} decide={decide} />)}</ul>
-              )}
-            </section>
-          </div>
+          <section key={stage.status} className={`lane ${stage.status}${items.length ? ' busy' : ''}`}>
+            <h3><span className="ring" />{stage.title}<span className="count">{items.length}</span></h3>
+            <ul>
+              {items.length === 0 ? <li className="hint">{stage.empty}</li> : items.map((item) => <Card key={item.config} item={item} now={state.at} decide={decide} />)}
+            </ul>
+          </section>
         )
       })}
     </div>
