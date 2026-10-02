@@ -6,6 +6,8 @@ POST /api/requests {"text": "<whatever was typed>"} commits requests/<YYYY-MM-DD
 to `main` through the GitHub Contents API; the daily run reads that folder (crawler/submitted.py).
 GET /api/queue returns data/queue.json as it is on `main` right now (jev_tracker.evaluation_queue),
 so the site shows the evaluation queue without a redeploy; cached for QUEUE_CACHE_SECONDS.
+POST /api/queue/decide {"config": "configs/<name>.yaml", "decision": "approve" | "reject"} moves a
+proposed item to queued (or drops it) and commits the new data/queue.json to `main`.
 """
 
 import argparse
@@ -21,10 +23,12 @@ from functools import partial
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from typing import Literal
 
 import httpx
 from pydantic import BaseModel
 
+from jev_tracker.evaluation_queue import Queue, approved, rejected
 from jev_tracker.experiment import REPO_DIR
 
 CONTENTS_URL = "https://api.github.com/repos/marcus-rox/jev-tracker/contents"
@@ -33,7 +37,10 @@ REQUESTS_DIR = "requests"
 TOKEN_ENV = "GITHUB_TOKEN"
 API_PATH = "/api/requests"
 QUEUE_PATH = "/api/queue"
+DECIDE_PATH = "/api/queue/decide"
 QUEUE_FILE = "data/queue.json"
+Decision = Literal["approve", "reject"]
+DECISIONS: tuple[Decision, ...] = ("approve", "reject")
 QUEUE_CACHE_SECONDS = 30.0
 EMPTY_QUEUE = b'{"items": []}\n'
 DEFAULT_PORT = 8000
@@ -62,6 +69,25 @@ def parse_request(body: bytes) -> str:
     if not isinstance(text, str) or not text.strip():
         raise ValueError(f"expected {{'text': '<non-empty text>'}}, got {payload!r}")
     return text.strip()
+
+
+def parse_decision(body: bytes) -> tuple[Path, Decision]:
+    """(config, decision) from a POST body, or ValueError naming what was wrong with it."""
+    try:
+        payload = json.loads(body)
+    except ValueError as e:
+        raise ValueError(f"body is not JSON: {e}") from e
+    config = payload.get("config") if isinstance(payload, dict) else None
+    decision = payload.get("decision") if isinstance(payload, dict) else None
+    if not isinstance(config, str) or not config or decision not in DECISIONS:
+        raise ValueError(
+            f"expected {{'config': 'configs/<name>.yaml', 'decision': {'|'.join(DECISIONS)}}}, got {payload!r}"
+        )
+    return Path(config), decision
+
+
+def decided(queue: Queue, config: Path, decision: Decision, now: datetime) -> Queue:
+    return approved(queue, [config], now) if decision == "approve" else rejected(queue, [config])
 
 
 def request_path(text: str, now: datetime) -> str:
@@ -99,6 +125,42 @@ def fetch_queue(token: str, client: httpx.Client) -> bytes:
     return response.content
 
 
+def fetch_queue_with_sha(token: str, client: httpx.Client) -> tuple[Queue, str | None]:
+    """(queue, blob sha) of data/queue.json on `main`; sha None when the file does not exist yet."""
+    response = client.get(
+        f"{CONTENTS_URL}/{QUEUE_FILE}",
+        params={"ref": BRANCH},
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},
+    )
+    if response.status_code == HTTPStatus.NOT_FOUND:
+        return Queue(), None
+    response.raise_for_status()
+    payload = response.json()
+    return Queue.model_validate_json(base64.b64decode(payload["content"])), payload["sha"]
+
+
+def commit_decision(
+    config: Path, decision: Decision, now: datetime, token: str, client: httpx.Client
+) -> Queue:
+    """Applies the decision to data/queue.json on `main` and returns the new queue."""
+    queue, sha = fetch_queue_with_sha(token, client)
+    new_queue = decided(queue, config, decision, now)
+    body = {
+        "message": f"queue: {decision} {config}",
+        "content": base64.b64encode((new_queue.model_dump_json(indent=1) + "\n").encode()).decode(),
+        "branch": BRANCH,
+    }
+    if sha is not None:
+        body["sha"] = sha
+    response = client.put(
+        f"{CONTENTS_URL}/{QUEUE_FILE}",
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},
+        json=body,
+    )
+    response.raise_for_status()
+    return new_queue
+
+
 class QueueCache:
     """Serves one fetch per QUEUE_CACHE_SECONDS so page loads do not each hit GitHub."""
 
@@ -114,12 +176,22 @@ class QueueCache:
             self.fetched_at = time.monotonic()
         return self.body
 
+    def replace(self, body: bytes) -> None:
+        self.body = body
+        self.fetched_at = time.monotonic()
+
 
 class SiteHandler(SimpleHTTPRequestHandler):
     def __init__(
-        self, *args, commit: Callable[[str, datetime], str], queue: QueueCache, **kwargs
+        self,
+        *args,
+        commit: Callable[[str, datetime], str],
+        decide: Callable[[Path, Decision, datetime], Queue],
+        queue: QueueCache,
+        **kwargs,
     ) -> None:
         self.commit = commit
+        self.decide = decide
         self.queue = queue
         super().__init__(*args, **kwargs)
 
@@ -140,24 +212,29 @@ class SiteHandler(SimpleHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_POST(self) -> None:  # noqa: N802  (http.server's name)
-        if self.path != API_PATH:
+        if self.path not in (API_PATH, DECIDE_PATH):
             self.send_error(HTTPStatus.NOT_FOUND, f"no POST route {self.path}")
             return
         length = int(self.headers.get("Content-Length", "0"))
         if length > MAX_BODY_BYTES:
             self.send_error(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, f"body is {length} bytes")
             return
+        body = self.rfile.read(length)
+        now = datetime.now(UTC).replace(microsecond=0)
         try:
-            text = parse_request(self.rfile.read(length))
+            if self.path == API_PATH:
+                text = parse_request(body)
+                html_url = self.commit(text, now)
+                self._json(HTTPStatus.CREATED, {"text": text, "html_url": html_url})
+            else:
+                config, decision = parse_decision(body)
+                queue = self.decide(config, decision, now)
+                self.queue.replace(queue.model_dump_json(indent=1).encode() + b"\n")
+                self._json(HTTPStatus.OK, queue.model_dump(mode="json"))
         except ValueError as e:
             self._json(HTTPStatus.BAD_REQUEST, {"error": str(e)})
-            return
-        try:
-            html_url = self.commit(text, datetime.now(UTC).replace(microsecond=0))
         except httpx.HTTPError as e:  # boundary: report the GitHub failure to the browser
             self._json(HTTPStatus.BAD_GATEWAY, {"error": f"GitHub write failed: {e}"})
-            return
-        self._json(HTTPStatus.CREATED, {"text": text, "html_url": html_url})
 
     def _json(self, status: HTTPStatus, payload: dict) -> None:
         body = json.dumps(payload).encode()
@@ -182,10 +259,14 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     client = httpx.Client(timeout=HTTP_TIMEOUT_SECONDS)
     commit = partial(commit_request, token=token, client=client)
+    decide = partial(commit_decision, token=token, client=client)
     queue = QueueCache(partial(fetch_queue, token=token, client=client))
-    handler = partial(SiteHandler, directory=str(args.dist), commit=commit, queue=queue)
+    handler = partial(
+        SiteHandler, directory=str(args.dist), commit=commit, decide=decide, queue=queue
+    )
     print(
-        f"serving {args.dist} on http://localhost:{args.port}  (POST {API_PATH}, GET {QUEUE_PATH})"
+        f"serving {args.dist} on http://localhost:{args.port}  "
+        f"(POST {API_PATH}, GET {QUEUE_PATH}, POST {DECIDE_PATH})"
     )
     ThreadingHTTPServer(("", args.port), handler).serve_forever()
     return 0

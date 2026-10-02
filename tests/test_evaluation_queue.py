@@ -2,7 +2,16 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from crawler.triage import TriageDecision
-from jev_tracker.evaluation_queue import Queue, enqueued, finished, read_queue, started, write_queue
+from jev_tracker.evaluation_queue import (
+    Queue,
+    approved,
+    enqueued,
+    finished,
+    read_queue,
+    rejected,
+    started,
+    write_queue,
+)
 
 NOW = datetime(2026, 10, 2, 13, 0, tzinfo=UTC)
 LATER = datetime(2026, 10, 2, 13, 5, tzinfo=UTC)
@@ -14,6 +23,16 @@ RUNNABLE = TriageDecision(
     config=Path("configs/kev9b_v2.yaml"),
 )
 SKIPPED = TriageDecision(key="https://x", url="https://x", verdict="not_jev", reason="a person")
+PROPOSED = TriageDecision(
+    key="hf:acme/clef-9b@def",
+    url="https://huggingface.co/acme/clef-9b",
+    verdict="needs_adapter",
+    reason="own serving stack; needs a clef source",
+    config=Path("configs/clef9b.yaml"),
+)
+NO_CONFIG = TriageDecision(
+    key="https://y", url="https://y", verdict="needs_adapter", reason="GGUF export"
+)
 
 
 def test_lifecycle_queued_running_gone(tmp_path: Path) -> None:
@@ -32,3 +51,19 @@ def test_lifecycle_queued_running_gone(tmp_path: Path) -> None:
     assert read_queue(path) == queue
     assert finished(queue, [RUNNABLE.config]).items == queue.items[1:]
     assert read_queue(tmp_path / "missing.json") == Queue()
+
+
+def test_proposed_needs_approval_before_it_is_queued() -> None:
+    queue = enqueued(Queue(), [PROPOSED, NO_CONFIG, RUNNABLE], NOW)
+    assert [(i.label, i.status, i.note) for i in queue.items] == [
+        ("clef9b", "proposed", "own serving stack; needs a clef source"),
+        ("kev9b_v2", "queued", ""),
+    ]
+    assert approved(queue, [RUNNABLE.config], LATER) == queue  # only proposed items change
+    approved_queue = approved(queue, [PROPOSED.config], LATER)
+    assert [(i.status, i.queued_at) for i in approved_queue.items] == [
+        ("queued", LATER),
+        ("queued", NOW),
+    ]
+    assert rejected(queue, [PROPOSED.config, RUNNABLE.config]).items == queue.items[1:]
+    assert read_queue(Path("data/queue.json")).items is not None  # the committed file still parses
