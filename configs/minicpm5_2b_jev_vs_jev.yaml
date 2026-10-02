@@ -21,8 +21,10 @@ rerankers:
     model: ytbai/MiniCPM5-2B-Jev
     method: noul_query_in_state
     shards: 3
+    concurrency: 8
   minicpm5_jev_score:
     source: minicpm_jev
     model: ytbai/MiniCPM5-2B-Jev
     method: score_query_in_question
     shards: 3
+    concurrency: 8

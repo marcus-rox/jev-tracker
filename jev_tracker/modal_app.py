@@ -501,6 +501,67 @@ def _answer_shard(
     return n
 
 
+def _answer_forward_shard(
+    job: ShardJob,
+    done: set[tuple[str, int]],
+    predict: Callable[[list[dict]], list[dict]],
+) -> tuple[int, int]:
+    """(requests, forward passes): the shard's unanswered requests in passes of
+    `run.forward_batch` bodies per `predict` call, `run.concurrency` calls in flight.
+
+    For engines whose predict already takes a list (Bekko's input objects, RSI-Jev's
+    cases): one call answers a whole chunk, the true batch; the threads keep more
+    passes in flight on top of it."""
+    run = job.run
+    method: Method = METHODS[run.method]
+    out = run.shard_path(job.shard)
+    todo = [
+        (case, bi, batch)
+        for case in run.shard_cases(job.shard)
+        for bi, batch in enumerate(batches(case.input, run.max_items, run.max_chars))
+        if (case.id, bi) not in done
+    ]
+    chunks = [todo[lo : lo + run.forward_batch] for lo in range(0, len(todo), run.forward_batch)]
+    last_commit = time.time()
+    n = passes = 0
+    bar = ProgressBar(job, resumed=len(done), total=len(done) + len(todo))
+
+    def answer(chunk: list[tuple[DataPoint, int, list[Item]]]):
+        bodies = [
+            request(method, case.input.query, batch, run.model).body() for case, _bi, batch in chunk
+        ]
+        t = time.time()
+        resps = predict(bodies)
+        return chunk, resps, t, time.time() - t
+
+    pbar = tqdm(total=len(todo), desc=job.desc, unit="batch", mininterval=5)
+    with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
+        for chunk, resps, t, dt in pool.map(answer, chunks):
+            for (case, bi, batch), resp in zip(chunk, resps, strict=True):
+                resp_obj = SystemOneResponse.model_validate(resp)
+                rec = record(
+                    method,
+                    case.id,
+                    bi,
+                    batch,
+                    resp_obj,
+                    dt,
+                    t,
+                    resp_obj.usage.input_tokens or None,
+                )
+                append_jsonl_gz(out, rec)
+            n += len(chunk)
+            passes += 1
+            pbar.update(len(chunk))
+            bar.update(len(done) + n)
+            if time.time() - last_commit > COMMIT_EVERY_S:
+                runs_volume.commit()
+                last_commit = time.time()
+    pbar.close()
+    runs_volume.commit()
+    return n, passes
+
+
 @app.function(
     image=kev_image,
     gpu="L40S",
@@ -967,7 +1028,6 @@ def score_cases_rsi_jev(job_json: str) -> str:
 
     job = ShardJob.model_validate_json(job_json)
     run = job.run
-    method = METHODS[run.method]
     out = run.shard_path(job.shard)
     done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
 
@@ -978,7 +1038,7 @@ def score_cases_rsi_jev(job_json: str) -> str:
     from load_release import load_release
     from rsijev.contract import Case, Question
     from rsijev.encode import encode_question
-    from rsijev.evaluate import predict
+    from rsijev.evaluate import predict as rsi_predict
 
     model, tokenizer, encode_config, meta = load_release(path, device="cuda")
     encode_config = dataclasses.replace(encode_config, max_length=rsi_jev.MAX_INPUT_TOKENS)
@@ -992,43 +1052,46 @@ def score_cases_rsi_jev(job_json: str) -> str:
         flush=True,
     )
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
-        body = request(method, case.input.query, batch, run.model).body()
-        asked = {q.key: q for q in rsi_jev.questions(body)}
-        state = rsi_jev.state_text(body)
-        typed = tuple(Question(**q.model_dump()) for q in asked.values())
-        uniform = {q.key: tuple(1 / len(q.options) for _ in q.options) for q in typed}
-        rsi_case = Case(
-            case_id=case.id, source="jev-tracker", state=state, questions=typed, gold=uniform
-        )
-        input_tokens = sum(
-            len(encode_question(tokenizer, state, q, encode_config)["input_ids"]) for q in typed
-        )
-        t = time.time()
-        predictions = predict(
+    def predict(bodies: list[dict]) -> list[dict]:
+        requests_ = []
+        for body in bodies:
+            asked = {q.key: q for q in rsi_jev.questions(body)}
+            state = rsi_jev.state_text(body)
+            typed = tuple(Question(**q.model_dump()) for q in asked.values())
+            uniform = {q.key: tuple(1 / len(q.options) for _ in q.options) for q in typed}
+            rsi_case = Case(
+                case_id="x", source="jev-tracker", state=state, questions=typed, gold=uniform
+            )
+            input_tokens = sum(
+                len(encode_question(tokenizer, state, q, encode_config)["input_ids"]) for q in typed
+            )
+            requests_.append((body, asked, rsi_case, input_tokens))
+        predictions = rsi_predict(
             model,
             tokenizer,
-            [rsi_case],
+            [rsi_case for _, _, rsi_case, _ in requests_],
             encode_config,
             max_options=max_options,
             device="cuda",
             batch_size=RSI_JEV_BATCH,
         )
-        resp = SystemOneResponse.model_validate(
+        index_of = {id(rsi_case): i for i, (_, _, rsi_case, _) in enumerate(requests_)}
+        grouped: list[list] = [[] for _ in requests_]
+        for rsi_case, q, prediction in predictions:
+            grouped[index_of[id(rsi_case)]].append((q, prediction))
+        return [
             {
                 "model": run.model,
                 "answers": {
                     q.key: rsi_jev.answer(asked[q.key], list(prediction.probs))
-                    for _, q, prediction in predictions
+                    for q, prediction in grouped[i]
                 },
                 "usage": {"input_tokens": input_tokens, "output_tokens": 0},
             }
-        )
-        latency_s = time.time() - t
-        rec = record(method, case.id, bi, batch, resp, latency_s, t, input_tokens)
-        append_jsonl_gz(out, rec)
+            for i, (body, asked, rsi_case, input_tokens) in enumerate(requests_)
+        ]
 
-    n = _answer_shard(job, done, answer)
+    n, _forward_passes = _answer_forward_shard(job, done, predict)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 
@@ -1227,7 +1290,6 @@ def score_cases_bekko(job_json: str) -> str:
 
     job = ShardJob.model_validate_json(job_json)
     run = job.run
-    method = METHODS[run.method]
     out = run.shard_path(job.shard)
     done = {(r.case_id, r.batch) for r in read_jsonl_gz(out)}
 
@@ -1246,12 +1308,10 @@ def score_cases_bekko(job_json: str) -> str:
         flush=True,
     )
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
-        body = request(method, case.input.query, batch, run.model).body()
-        asked = bekko.input_object(body)
-        t = time.time()
-        result = model.predict(asked)
-        resp = SystemOneResponse.model_validate(
+    def predict(bodies: list[dict]) -> list[dict]:
+        inputs = [bekko.input_object(body) for body in bodies]
+        results = model.predict(inputs, show_progress_bar=False)
+        return [
             {
                 "model": run.model,
                 "answers": {
@@ -1260,12 +1320,10 @@ def score_cases_bekko(job_json: str) -> str:
                 },
                 "usage": {"input_tokens": 0, "output_tokens": 0},  # predict reports no tokens
             }
-        )
-        latency_s = time.time() - t
-        rec = record(method, case.id, bi, batch, resp, latency_s, t)
-        append_jsonl_gz(out, rec)
+            for body, result in zip(bodies, results, strict=True)
+        ]
 
-    n = _answer_shard(job, done, answer)
+    n, _forward_passes = _answer_forward_shard(job, done, predict)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 

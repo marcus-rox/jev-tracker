@@ -21,8 +21,10 @@ rerankers:
     model: Maincode/matilda-jev-v1
     method: noul_query_in_state
     shards: 3
+    concurrency: 8
   matilda_score:
     source: matilda
     model: Maincode/matilda-jev-v1
     method: score_query_in_question
     shards: 3
+    concurrency: 8

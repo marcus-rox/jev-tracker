@@ -101,7 +101,7 @@
    "status": "running",
    "note": "jev-reranker (hotchpotch) small decision models; own architecture",
    "queued_at": "2026-10-02T20:34:48Z",
-   "started_at": "2026-10-02T22:39:58Z",
+   "started_at": "2026-10-02T23:13:00Z",
    "finished_at": null,
    "evidence": null
   },
@@ -125,7 +125,7 @@
    "status": "running",
    "note": "Von: open-source 395M System One model; own architecture / serving",
    "queued_at": "2026-10-02T21:45:40Z",
-   "started_at": "2026-10-02T22:39:58Z",
+   "started_at": "2026-10-02T23:13:00Z",
    "finished_at": null,
    "evidence": null
   },

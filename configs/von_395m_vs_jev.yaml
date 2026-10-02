@@ -20,7 +20,9 @@ rerankers:
     source: von
     model: wfzyx/von
     method: noul_query_in_state
+    concurrency: 8
   von_score:
     source: von
     model: wfzyx/von
     method: score_query_in_question
+    concurrency: 8

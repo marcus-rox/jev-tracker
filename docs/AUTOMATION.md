@@ -10,6 +10,14 @@ the queue as runs start (A1), the search results (B4), and the results (J5); not
 is new.
 **Budget**: at most 10 new experiments per run; a config whose GPUs or shards exceed those of
 `configs/kev27b_batched.yaml` is left as `needs_adapter` with the reason "over budget".
+**Batching** (hard rule, Marcus 2026-10-02): every experiment runs batched — never launch a
+config whose rerankers answer requests one at a time. Each engine must use the harness's batched
+path: server-side request queueing (`concurrency` > 1) or multi-request forward batches
+(`forward_batch` > 1 bodies per predict call). A `queued` config or running experiment that is
+un-batched (`concurrency: 1` with `forward_batch: 1`) gets stopped, its adapter gets the batched
+path it is missing, and it re-runs batched — the commit message records the kill and the re-run.
+A proposal whose adapter cannot be made batched in the session stays `queued`/`proposed` with
+the gap in its note; it never runs un-batched. Launch every runnable experiment in parallel.
 
 ## Steps
 
@@ -132,6 +140,7 @@ J7. **Nothing new** (nothing queued to run, and Track B found no candidates, iss
 
 - Force-push, amend, rewrite history on `main`, open PRs, or edit `docs/SPEC.md`.
 - Run more than 10 experiments or a config over the Kev-27B budget line.
+- Run an experiment un-batched (see **Batching** above).
 - Run a `needs_adapter` model Marcus has not approved on the site (or via
   `jev_tracker.evaluation_queue approve`).
 - Print or commit a token.

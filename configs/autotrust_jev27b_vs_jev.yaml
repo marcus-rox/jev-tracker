@@ -21,8 +21,10 @@ rerankers:
     model: autotrust/JEV-27B
     method: noul_query_in_state
     shards: 3
+    concurrency: 8
   autotrust_score:
     source: autotrust
     model: autotrust/JEV-27B
     method: score_query_in_question
     shards: 3
+    concurrency: 8

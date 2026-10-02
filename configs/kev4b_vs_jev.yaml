@@ -22,6 +22,7 @@ rerankers:             # table rows, in order; "prod" is what win-rates are meas
     max_items: 25      # children per request; Kev's state limit is 8,192 tokens
     max_chars: 24000
     shards: 10         # L40S GPUs; ~2.5 min model load + ~2 min scoring
+    concurrency: 16  # 16 requests in flight; the server batches the queue
   kev4b_score:
     source: kev
     model: jaredpalmer/kev-4b
@@ -29,3 +30,4 @@ rerankers:             # table rows, in order; "prod" is what win-rates are meas
     max_items: 25
     max_chars: 24000
     shards: 10
+    concurrency: 16

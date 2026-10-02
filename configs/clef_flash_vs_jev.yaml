@@ -22,8 +22,10 @@ rerankers:
     model: Cloudflare/clef-flash
     method: noul_query_in_state
     shards: 3
+    concurrency: 8
   clef_flash_score:
     source: clef
     model: Cloudflare/clef-flash
     method: score_query_in_question
     shards: 3
+    concurrency: 8

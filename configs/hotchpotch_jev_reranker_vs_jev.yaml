@@ -21,23 +21,35 @@ rerankers:
     source: bekko
     model: hotchpotch/bekko-system-one-v0-17m
     method: noul_query_in_state
+    forward_batch: 8
+    concurrency: 2
   bekko17m_score:
     source: bekko
     model: hotchpotch/bekko-system-one-v0-17m
     method: score_query_in_question
+    forward_batch: 8
+    concurrency: 2
   bekko68m_noul:
     source: bekko
     model: hotchpotch/bekko-system-one-v0-68m
     method: noul_query_in_state
+    forward_batch: 8
+    concurrency: 2
   bekko68m_score:
     source: bekko
     model: hotchpotch/bekko-system-one-v0-68m
     method: score_query_in_question
+    forward_batch: 8
+    concurrency: 2
   bekko400m_noul:
     source: bekko
     model: hotchpotch/bekko-system-one-v0-400m
     method: noul_query_in_state
+    forward_batch: 8
+    concurrency: 2
   bekko400m_score:
     source: bekko
     model: hotchpotch/bekko-system-one-v0-400m
     method: score_query_in_question
+    forward_batch: 8
+    concurrency: 2

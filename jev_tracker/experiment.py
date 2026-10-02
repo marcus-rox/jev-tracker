@@ -119,7 +119,7 @@ class ClefSource(BaseModel):
     """Cloudflare Clef / Clef-Flash: a Qwen3.5 backbone plus a joint schema head that answers the
     System One request body in-process (the release's `joint_schema_model.systemone`).
 
-    One request per forward pass, so one in flight per GPU; the release reads up to 16,384
+    One request per forward pass; the release reads up to 16,384
     tokens, 12 children / 12,000 characters per request matches configs/kev27b_batched.yaml."""
 
     model_config = {"frozen": True}
@@ -130,7 +130,7 @@ class ClefSource(BaseModel):
     max_items: int | None = 12
     max_chars: int | None = 12_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -139,7 +139,7 @@ class MatildaSource(BaseModel):
     release's own runtime (`maincode_jev_serve.decide`, as its /v1/systemone server does).
 
     The runtime repeats the state once per question, so a request holds one child: query + child,
-    one question, one forward pass (as Laya); one in flight per GPU."""
+    one question, one forward pass (as Laya)."""
 
     model_config = {"frozen": True}
 
@@ -149,7 +149,7 @@ class MatildaSource(BaseModel):
     max_items: Literal[1] = 1
     max_chars: None = None
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -157,7 +157,7 @@ class AutoTrustSource(BaseModel):
     """AutoTrust JEV-27B: Qwen3.8-27B + LoRA + a 24-slot decision head, asked through the release's
     bare prompt one question at a time (jev_tracker.autotrust, the README's transformers path).
 
-    Each question repeats the whole state, so a request holds one child (as Laya); one in flight."""
+    Each question repeats the whole state, so a request holds one child (as Laya)."""
 
     model_config = {"frozen": True}
 
@@ -167,7 +167,7 @@ class AutoTrustSource(BaseModel):
     max_items: Literal[1] = 1
     max_chars: None = None
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -177,7 +177,7 @@ class JevAnySource(BaseModel):
 
     The runtime packs the state once plus one branch per question into 8,192 tokens (and rejects,
     not truncates, anything longer: such a request is split in two); 12 children / 12,000
-    characters per request matches configs/kev27b_batched.yaml. One in flight (it holds a lock)."""
+    characters per request matches configs/kev27b_batched.yaml (it holds a lock)."""
 
     model_config = {"frozen": True}
 
@@ -187,7 +187,7 @@ class JevAnySource(BaseModel):
     max_items: int | None = 12
     max_chars: int | None = 12_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -196,7 +196,8 @@ class RsiJevSource(BaseModel):
     and scored with its `rsijev.evaluate.predict`, one encoded row (state + question) per question.
 
     Its server does not cut a state (32,768 tokens per question); 12 children / 12,000 characters
-    per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+    per request matches configs/kev27b_batched.yaml. `predict` scores a list of cases in one
+    call, so `forward_batch` requests share it."""
 
     model_config = {"frozen": True}
 
@@ -206,7 +207,8 @@ class RsiJevSource(BaseModel):
     max_items: int | None = 12
     max_chars: int | None = 12_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
+    forward_batch: int = Field(1, ge=1)  # cases per predict() call
     gpu: str | None = None
 
 
@@ -215,7 +217,7 @@ class MiniCpmJevSource(BaseModel):
     `MiniCPMSystemOne`, which takes the request body (state once, one branch per question).
 
     Its server keeps 2,560 state tokens (and trims beyond), so a request holds 8 children /
-    8,000 characters. One in flight per GPU."""
+    8,000 characters."""
 
     model_config = {"frozen": True}
 
@@ -225,7 +227,7 @@ class MiniCpmJevSource(BaseModel):
     max_items: int | None = 8
     max_chars: int | None = 8_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -234,7 +236,7 @@ class StartLuxSource(BaseModel):
     release's own `startlux_decision.StartLuxDecision.decide` on the request body.
 
     Each question is one prompt that repeats the state (65,536 tokens each); 12 children / 12,000
-    characters per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+    characters per request matches configs/kev27b_batched.yaml."""
 
     model_config = {"frozen": True}
 
@@ -244,7 +246,7 @@ class StartLuxSource(BaseModel):
     max_items: int | None = 12
     max_chars: int | None = 12_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -253,7 +255,7 @@ class VonSource(BaseModel):
     with the request's raw question dicts (as its /v1/systemone server does).
 
     The engine truncates a too-long state itself; 12 children / 12,000 characters per request
-    matches configs/kev27b_batched.yaml. One in flight per GPU."""
+    matches configs/kev27b_batched.yaml."""
 
     model_config = {"frozen": True}
 
@@ -263,7 +265,7 @@ class VonSource(BaseModel):
     max_items: int | None = 12
     max_chars: int | None = 12_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
     gpu: str | None = None
 
 
@@ -273,7 +275,8 @@ class BekkoSource(BaseModel):
     the request body to one input object).
 
     The native prefix cap is ~8,000 tokens shared by instructions and state; 12 children /
-    12,000 characters per request matches configs/kev27b_batched.yaml. One in flight per GPU."""
+    12,000 characters per request matches configs/kev27b_batched.yaml. `predict` takes a list
+    of input objects in one call, so `forward_batch` requests share it."""
 
     model_config = {"frozen": True}
 
@@ -287,7 +290,8 @@ class BekkoSource(BaseModel):
     max_items: int | None = 12
     max_chars: int | None = 12_000
     shards: int = 1
-    concurrency: Literal[1] = 1
+    concurrency: int = 1
+    forward_batch: int = Field(1, ge=1)  # input objects per predict() call
     gpu: str | None = None
 
 
@@ -365,7 +369,7 @@ class Experiment(BaseModel):
             cases=self.cases,
             shards=src.shards,
             concurrency=src.concurrency,
-            forward_batch=src.forward_batch if isinstance(src, LayaSource) else 1,
+            forward_batch=getattr(src, "forward_batch", 1),
             gpu=None if isinstance(src, ApiSource) else src.gpu,
             api=(
                 modal_app.ApiEndpoint(url=src.url, secret=src.secret, key_env=src.key_env)
