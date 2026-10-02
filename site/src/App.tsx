@@ -113,6 +113,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('summary')
   const [models, setModels] = useState<Set<string> | null>(null)
   const [gpus, setGpus] = useState<Set<string> | null>(null)
+  const [runtimes, setRuntimes] = useState<Set<string> | null>(null)
   const [hidden, setHidden] = useState(new Set<string>())
   const [sort, setSort] = useState<Sort>(null)
   const [bounds, setBounds] = useState(new Set<string>())
@@ -127,17 +128,19 @@ export default function App() {
   const all = useMemo(() => (data?.rows ?? []).filter((r) => r.queries === FROZEN_QUERIES), [data])
   const MODELS = useMemo(() => uniq(all.map((r) => r.label)).sort((a, b) => a.localeCompare(b)), [all])
   const GPUS = useMemo(() => uniq(all.map((r) => r.gpu)), [all])
+  const RUNTIMES = useMemo(() => uniq(all.map((r) => r.runtime)).sort((a, b) => a.localeCompare(b)), [all])
   if (!data) return <p className="hint" style={{ padding: 20 }}>Loading data/rows.json…</p>
 
   const modelSet = models ?? new Set(MODELS)
   const gpuSet = gpus ?? new Set(GPUS)
+  const runtimeSet = runtimes ?? new Set(RUNTIMES)
   const prod = all.find((r) => r.family === PROD_FAMILY) ?? null
   const active = BOUNDS.filter(([m]) => bounds.has(m))
   const inBounds = (r: Row) => r.family === PROD_FAMILY || prod === null || active.every(([, , col]) => beatsProd(r, prod, col))
-  const rows = ranked(all.filter((r) => modelSet.has(r.label) && gpuSet.has(r.gpu) && inBounds(r)), metric)
+  const rows = ranked(all.filter((r) => modelSet.has(r.label) && gpuSet.has(r.gpu) && runtimeSet.has(r.runtime) && inBounds(r)), metric)
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
   const kept = data.ks.map(keptCol)
-  const reset = () => { setModels(null); setGpus(null); setHidden(new Set()); setSort(null); setBounds(new Set()); setMetric(null) }
+  const reset = () => { setModels(null); setGpus(null); setRuntimes(null); setHidden(new Set()); setSort(null); setBounds(new Set()); setMetric(null) }
   const sortTable = (s: Sort) => { setSort(s); setMetric(null) }
   const pickMetric = (m: Metric) => { setMetric(metric === m ? null : m); setSort(null) }
   const prodValue = (col: Col) => {
@@ -172,6 +175,7 @@ export default function App() {
       <div className="toolbar">
         <Dropdown name="Model" options={MODELS} selected={modelSet} onChange={setModels} />
         <Dropdown name="GPU" options={GPUS} selected={gpuSet} onChange={setGpus} />
+        <Dropdown name="Runtime" options={RUNTIMES} selected={runtimeSet} onChange={setRuntimes} />
         <span className="label">below prod</span>
         {BOUNDS.map(([m, , col]) => (
           <span key={m} className={`chip${bounds.has(m) ? ' on' : ''}`} title={prodValue(col)} onClick={() => setBounds(toggled(bounds, m))}>{m} &lt; prod</span>

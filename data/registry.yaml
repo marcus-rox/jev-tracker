@@ -43,6 +43,7 @@ rows:
   label: oracle
   family: oracle
   serving: '-'
+  runtime: '-'
   gpu: '-'
   buffer: '-'
   queries: 75
@@ -54,6 +55,7 @@ rows:
   label: random (seed 0)
   family: random
   serving: '-'
+  runtime: '-'
   gpu: '-'
   buffer: '-'
   queries: 75
@@ -65,6 +67,7 @@ rows:
   label: production
   family: production
   serving: gpt-5-mini, 3 listwise passes + RRF
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 75
@@ -80,6 +83,7 @@ rows:
   label: jev_noul
   family: jev
   serving: API
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 75
@@ -95,6 +99,7 @@ rows:
   label: jev_score
   family: jev
   serving: API
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 75
@@ -110,6 +115,7 @@ rows:
   label: clm8b_cosine
   family: clm8b
   serving: earlier experiment
+  runtime: PyTorch
   gpu: L40S
   buffer: '-'
   queries: 75
@@ -121,6 +127,7 @@ rows:
   label: kev4b_noul
   family: kev4b
   serving: first run
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -134,6 +141,7 @@ rows:
   label: kev4b_score
   family: kev4b
   serving: first run
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -147,6 +155,7 @@ rows:
   label: kev9b_noul
   family: kev9b
   serving: first run
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -160,6 +169,7 @@ rows:
   label: kev9b_score
   family: kev9b
   serving: first run
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -173,6 +183,7 @@ rows:
   label: kev27b_noul
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -186,6 +197,7 @@ rows:
   label: kev27b_score
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -199,6 +211,7 @@ rows:
   label: kev27b_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -212,6 +225,7 @@ rows:
   label: kev27b_score
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -225,6 +239,7 @@ rows:
   label: kev27b_FP8_w8a8_noul
   family: kev27b
   serving: batched, FP8 W8A8
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -238,6 +253,7 @@ rows:
   label: kev27b_FP8_w8a8_score
   family: kev27b
   serving: batched, FP8 W8A8
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -251,6 +267,7 @@ rows:
   label: kev27b_bf16_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -264,6 +281,7 @@ rows:
   label: kev27b_bf16_score
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -277,6 +295,7 @@ rows:
   label: kev27b_FP8_wo_noul
   family: kev27b
   serving: batched, FP8 weight-only
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -290,6 +309,7 @@ rows:
   label: kev27b_FP8_wo_score
   family: kev27b
   serving: batched, FP8 weight-only
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -303,6 +323,7 @@ rows:
   label: kev27b_FP8_w8a8_noul
   family: kev27b
   serving: batched, FP8 W8A8
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -316,6 +337,7 @@ rows:
   label: kev27b_FP8_w8a8_score
   family: kev27b
   serving: batched, FP8 W8A8
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -329,6 +351,7 @@ rows:
   label: kev27b_batched_c32_noul
   family: kev27b
   serving: 'batched: 12 children, 32 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -342,6 +365,7 @@ rows:
   label: kev27b_FP8_w8a8_c32_noul
   family: kev27b
   serving: batched, FP8 W8A8, 32 in flight
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -355,6 +379,7 @@ rows:
   label: kev27b_FP8_w8a8_c32_score
   family: kev27b
   serving: batched, FP8 W8A8, 32 in flight
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -368,6 +393,7 @@ rows:
   label: kev27b_FP8_w8a8_c64_noul
   family: kev27b
   serving: batched, FP8 W8A8, 64 in flight
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -381,6 +407,7 @@ rows:
   label: kev27b_FP8_w8a8_c64_score
   family: kev27b
   serving: batched, FP8 W8A8, 64 in flight
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -394,6 +421,7 @@ rows:
   label: kev27b_batched_H100_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -407,6 +435,7 @@ rows:
   label: kev27b_batched_A100_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: A100-80GB
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -420,6 +449,7 @@ rows:
   label: kev27b_batched_RTXPRO6000_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: RTX-PRO-6000
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -433,6 +463,7 @@ rows:
   label: kev27b_FP8_w8a8_RTXPRO6000_noul
   family: kev27b
   serving: batched, FP8 W8A8
+  runtime: PyTorch
   gpu: RTX-PRO-6000
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -446,6 +477,7 @@ rows:
   label: kev27b_FP8_w8a8_L40S_noul
   family: kev27b
   serving: 'batched, FP8 W8A8: could not load'
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -460,6 +492,7 @@ rows:
   label: kev27b_noul
   family: kev27b
   serving: batched, R-1 timers (baseline)
+  runtime: PyTorch
   gpu: 3 x H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -473,6 +506,7 @@ rows:
   label: kev27b_score
   family: kev27b
   serving: batched, R-1 timers (baseline)
+  runtime: PyTorch
   gpu: 3 x H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -486,6 +520,7 @@ rows:
   label: kev27b_noul_c12_w4096x16
   family: kev27b
   serving: 'H-1, 12 children: Kev''s server'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -499,6 +534,7 @@ rows:
   label: kev27b_noul_c12_w4096x16_rerun
   family: kev27b
   serving: 'H-1, 12 children: Kev re-run'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -512,6 +548,7 @@ rows:
   label: kev27b_noul_c12_w8192x16
   family: kev27b
   serving: 'H-1, 12 children: widened'
+  runtime: PyTorch
   gpu: H100
   buffer: 8,192 x 16
   queries: 75
@@ -525,6 +562,7 @@ rows:
   label: kev27b_noul_c12_w8192x8
   family: kev27b
   serving: 'H-1, 12 children: widened, same memory'
+  runtime: PyTorch
   gpu: H100
   buffer: 8,192 x 8
   queries: 75
@@ -538,6 +576,7 @@ rows:
   label: kev27b_noul_c18_w4096x16
   family: kev27b
   serving: 'H-1, 18 children: Kev''s server'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -551,6 +590,7 @@ rows:
   label: kev27b_noul_c18_w4096x16_rerun
   family: kev27b
   serving: 'H-1, 18 children: Kev re-run'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -564,6 +604,7 @@ rows:
   label: kev27b_noul_c18_w8192x16
   family: kev27b
   serving: 'H-1, 18 children: widened'
+  runtime: PyTorch
   gpu: H100
   buffer: 8,192 x 16
   queries: 75
@@ -577,6 +618,7 @@ rows:
   label: kev27b_noul_c18_w8192x8
   family: kev27b
   serving: 'H-1, 18 children: widened, same memory'
+  runtime: PyTorch
   gpu: H100
   buffer: 8,192 x 8
   queries: 75
@@ -590,6 +632,7 @@ rows:
   label: kev27b_noul_c24_w4096x16
   family: kev27b
   serving: 'H-1, 24 children: Kev''s server'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -603,6 +646,7 @@ rows:
   label: kev27b_noul_c24_w4096x16_rerun
   family: kev27b
   serving: 'H-1, 24 children: Kev re-run'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -616,6 +660,7 @@ rows:
   label: kev27b_noul_c24_w8192x16
   family: kev27b
   serving: 'H-1, 24 children: widened'
+  runtime: PyTorch
   gpu: H100
   buffer: 8,192 x 16
   queries: 75
@@ -629,6 +674,7 @@ rows:
   label: kev27b_noul_c24_w8192x8
   family: kev27b
   serving: 'H-1, 24 children: widened, same memory'
+  runtime: PyTorch
   gpu: H100
   buffer: 8,192 x 8
   queries: 75
@@ -642,6 +688,7 @@ rows:
   label: kev27b_noul
   family: kev27b
   serving: 'H-2 vLLM: Kev''s server'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -655,6 +702,7 @@ rows:
   label: kev27b_rerun_noul
   family: kev27b
   serving: 'H-2 vLLM: Kev re-run'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -668,6 +716,7 @@ rows:
   label: kev27b_vllm_noul
   family: kev27b
   serving: 'H-2 vLLM: vLLM + Kev''s readout, 6 queries only (too slow for 75: killed)'
+  runtime: vLLM
   gpu: H100
   buffer: '-'
   queries: 6
@@ -681,6 +730,7 @@ rows:
   label: kev27b_noul
   family: kev27b
   serving: 'H-3 SGLang: Kev''s server'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -694,6 +744,7 @@ rows:
   label: kev27b_rerun_noul
   family: kev27b
   serving: 'H-3 SGLang: Kev re-run'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -707,6 +758,7 @@ rows:
   label: kev27b_sglang_noul
   family: kev27b
   serving: 'H-3 SGLang: SGLang + Kev''s readout, 6 queries only (too slow for 75: killed)'
+  runtime: SGLang
   gpu: H100
   buffer: '-'
   queries: 6
@@ -720,6 +772,7 @@ rows:
   label: laya421m_noul
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -733,6 +786,7 @@ rows:
   label: laya421m_score
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -746,6 +800,7 @@ rows:
   label: laya421m_noul_reworded
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -759,6 +814,7 @@ rows:
   label: laya322m_multilingual_noul
   family: laya322m_multilingual
   serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -772,6 +828,7 @@ rows:
   label: laya322m_multilingual_score
   family: laya322m_multilingual
   serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -785,6 +842,7 @@ rows:
   label: laya322m_multilingual_noul_reworded
   family: laya322m_multilingual
   serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -798,6 +856,7 @@ rows:
   label: laya421m_typed_noul
   family: laya421m_typed
   serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -811,6 +870,7 @@ rows:
   label: laya421m_typed_score
   family: laya421m_typed
   serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -824,6 +884,7 @@ rows:
   label: laya421m_typed_noul_reworded
   family: laya421m_typed
   serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -837,6 +898,7 @@ rows:
   label: d1_noul
   family: d1
   serving: d1:free API, up to 105 children per request, 8 in flight
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 75
@@ -851,6 +913,7 @@ rows:
   label: d1_score
   family: d1
   serving: d1:free API, up to 105 children per request, 8 in flight
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 75
@@ -865,6 +928,7 @@ rows:
   label: d1_noul_rerun
   family: d1
   serving: d1:free API, up to 105 children per request, 8 in flight
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 75
@@ -879,6 +943,7 @@ rows:
   label: kev27b_vllm_floor_noul
   family: kev27b
   serving: 'H-2 vLLM: vLLM, no readout (speed floor)'
+  runtime: vLLM
   gpu: H100
   buffer: '-'
   queries: 75
@@ -891,6 +956,7 @@ rows:
   label: kev27b_sglang_floor_noul
   family: kev27b
   serving: 'H-3 SGLang: SGLang, no readout (speed floor)'
+  runtime: SGLang
   gpu: H100
   buffer: '-'
   queries: 75
@@ -903,6 +969,7 @@ rows:
   label: production
   family: production
   serving: the frozen ranking
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 2
@@ -914,6 +981,7 @@ rows:
   label: jev_noul
   family: jev
   serving: its answers from the 75-query run
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 2
@@ -925,6 +993,7 @@ rows:
   label: jev_score
   family: jev
   serving: its answers from the 75-query run
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 2
@@ -936,6 +1005,7 @@ rows:
   label: d1_noul
   family: d1
   serving: d1:free API, 1 request at a time
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 2
@@ -947,6 +1017,7 @@ rows:
   label: d1_score
   family: d1
   serving: d1:free API, 1 request at a time
+  runtime: hosted API
   gpu: API
   buffer: '-'
   queries: 2
@@ -958,6 +1029,7 @@ rows:
   label: kev4b_noul
   family: kev4b
   serving: first run
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -971,6 +1043,7 @@ rows:
   label: kev4b_score
   family: kev4b
   serving: first run
+  runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -984,6 +1057,7 @@ rows:
   label: laya_noul
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -997,6 +1071,7 @@ rows:
   label: laya_score
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -1010,6 +1085,7 @@ rows:
   label: kev27b_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1023,6 +1099,7 @@ rows:
   label: kev27b_score
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1036,6 +1113,7 @@ rows:
   label: kev27b_noul_v2
   family: kev27b v2
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1049,6 +1127,7 @@ rows:
   label: kev27b_score_v2
   family: kev27b v2
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1062,6 +1141,7 @@ rows:
   label: kev08b_noul
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1075,6 +1155,7 @@ rows:
   label: kev08b_score
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1088,6 +1169,7 @@ rows:
   label: kev9b_noul_v2
   family: kev9b v2
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1101,6 +1183,7 @@ rows:
   label: kev9b_score_v2
   family: kev9b v2
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1114,6 +1197,7 @@ rows:
   label: kev2b_noul
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1127,6 +1211,7 @@ rows:
   label: kev2b_score
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1140,6 +1225,7 @@ rows:
   label: kev05b_noul
   family: kev05b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1153,6 +1239,7 @@ rows:
   label: kev05b_score
   family: kev05b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1166,6 +1253,7 @@ rows:
   label: clef_flash_noul
   family: clef-flash
   serving: 'joint schema head: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: '-'
   queries: 75
@@ -1179,6 +1267,7 @@ rows:
   label: clef_flash_score
   family: clef-flash
   serving: 'joint schema head: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: H100
   buffer: '-'
   queries: 75
@@ -1192,6 +1281,7 @@ rows:
   label: clef_noul
   family: clef
   serving: 'joint schema head: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: '-'
   queries: 75
@@ -1205,6 +1295,7 @@ rows:
   label: clef_score
   family: clef
   serving: 'joint schema head: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: '-'
   queries: 75
@@ -1218,6 +1309,7 @@ rows:
   label: matilda_noul
   family: matilda
   serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: '-'
   queries: 75
@@ -1231,6 +1323,7 @@ rows:
   label: matilda_score
   family: matilda
   serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: '-'
   queries: 75
@@ -1244,6 +1337,7 @@ rows:
   label: autotrust_noul
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: '-'
   queries: 75
@@ -1257,6 +1351,7 @@ rows:
   label: autotrust_score
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
+  runtime: PyTorch
   gpu: H200
   buffer: '-'
   queries: 75
@@ -1270,6 +1365,7 @@ rows:
   label: jevany_noul
   family: jevany
   serving: 'jevany JevModel: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: L40S
   buffer: '-'
   queries: 75
@@ -1284,6 +1380,7 @@ rows:
   label: jevany_score
   family: jevany
   serving: 'jevany JevModel: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: L40S
   buffer: '-'
   queries: 75
@@ -1298,6 +1395,7 @@ rows:
   label: kev08b_ba_lora_noul
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1311,6 +1409,7 @@ rows:
   label: kev08b_ba_lora_score
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
   queries: 75
@@ -1324,6 +1423,7 @@ rows:
   label: minicpm5_jev_noul
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -1337,6 +1437,7 @@ rows:
   label: minicpm5_jev_score
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
+  runtime: PyTorch
   gpu: L4
   buffer: '-'
   queries: 75
@@ -1350,6 +1451,7 @@ rows:
   label: rsi_jev_noul
   family: rsi_jev
   serving: 'rsijev predict: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: L40S
   buffer: '-'
   queries: 75
@@ -1363,6 +1465,7 @@ rows:
   label: rsi_jev_score
   family: rsi_jev
   serving: 'rsijev predict: 12 children, 1 in flight'
+  runtime: PyTorch
   gpu: L40S
   buffer: '-'
   queries: 75

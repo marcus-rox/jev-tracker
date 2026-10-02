@@ -23,6 +23,11 @@ API_TIMING = REPO_DIR / "data" / "timing_summary_prod_jev.csv"
 OUT = REPO_DIR / "site" / "public" / "data" / "rows.json"
 TLDR = REPO_DIR / "data" / "tldr.md"
 BASELINE_FAMILIES = frozenset({"jev", "production", "oracle", "random"})
+# How a row's answers were produced; GGUF / ONNX / MLX / Core ML are the exported-weight runtimes
+# the harness has no source for yet (docs/JEV_ALTERNATIVES.html).
+RUNTIMES = frozenset(
+    {"PyTorch", "vLLM", "SGLang", "GGUF (llama.cpp)", "ONNX", "MLX", "Core ML", "hosted API", "-"}
+)
 BENCHMARK_QUERIES = 75
 PACIFIC = ZoneInfo("America/Los_Angeles")
 EXPERIMENT_STAMP = re.compile(r"^(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_")
@@ -178,6 +183,10 @@ def build(
     """Pure: one site row per registry row, numbers read from that experiment's committed JSONs."""
     rows = []
     for r in registry["rows"]:
+        if r["runtime"] not in RUNTIMES:
+            raise ValueError(
+                f"{r['experiment']}/{r['reranker']}: runtime {r['runtime']!r} not in {sorted(RUNTIMES)}"
+            )
         p = Paths(r["experiment"], experiments_dir)
         report_path = p.report_base.with_suffix(".json")
         report, costs = _json(report_path), _json(p.costs)
@@ -192,7 +201,16 @@ def build(
         rows.append(
             {
                 **{
-                    k: r[k] for k in ("experiment", "reranker", "label", "family", "serving", "gpu")
+                    k: r[k]
+                    for k in (
+                        "experiment",
+                        "reranker",
+                        "label",
+                        "family",
+                        "serving",
+                        "runtime",
+                        "gpu",
+                    )
                 },
                 "buffer": r["buffer"],
                 "queries": queries,
