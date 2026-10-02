@@ -3,8 +3,9 @@ import type { K, Row } from './types'
 
 const TOP_N = 10
 const REFS = new Set(['jev', 'production', 'random'])
-// Okabe-Ito colorblind-safe palette; every series also gets its own marker shape and dash so colour is never the only cue.
-const PALETTE = ['#0072b2', '#e69f00', '#009e73', '#d55e00', '#56b4e9', '#cc79a7', '#b8a400']
+// Okabe-Ito colorblind-safe palette minus its oranges, which are reserved for the production reference; every series
+// also gets its own marker shape and dash so colour is never the only cue.
+const PALETTE = ['#0072b2', '#009e73', '#56b4e9', '#cc79a7', '#b8a400']
 const MARKERS = ['circle', 'square', 'triangle', 'diamond'] as const
 type Marker = (typeof MARKERS)[number]
 
