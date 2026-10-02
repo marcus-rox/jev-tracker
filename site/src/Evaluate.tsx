@@ -28,14 +28,14 @@ export default function Evaluate() {
   }
   return (
     <form className="eval" onSubmit={go}>
-      <p className="note">
-        Paste <b>one web link</b> (a Hugging Face model, a GitHub repo, a paper, an API page). Submitting saves it under{' '}
-        <a href={blob('requests')} target="_blank" rel="noreferrer">requests/</a> in the repository; the next daily run picks it up and Devin works out how to evaluate it.
+      <p className="hint">
+        Paste one link (a Hugging Face model, a GitHub repo, a paper, an API page) or describe the model. It is saved under{' '}
+        <a href={blob('requests')} target="_blank" rel="noreferrer">requests/</a>; the next daily run picks it up and Devin works out how to evaluate it.
       </p>
       <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="text here:" />
-      <button className="btn" type="submit" disabled={state.kind === 'busy' || text.trim() === ''}>{state.kind === 'busy' ? 'Submitting…' : 'Submit'}</button>
-      {state.kind === 'done' && <p className="note">Saved: <a href={state.html_url} target="_blank" rel="noreferrer">{state.html_url}</a></p>}
-      {state.kind === 'error' && <p className="note err">{state.message}</p>}
+      <button type="submit" disabled={state.kind === 'busy' || text.trim() === ''}>{state.kind === 'busy' ? 'Submitting…' : 'Submit'}</button>
+      {state.kind === 'done' && <p className="hint">Saved: <a href={state.html_url} target="_blank" rel="noreferrer">{state.html_url}</a></p>}
+      {state.kind === 'error' && <p className="hint err">{state.message}</p>}
     </form>
   )
 }
