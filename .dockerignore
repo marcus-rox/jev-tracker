@@ -8,7 +8,9 @@ site/node_modules
 site/src
 site/public
 data
-crawler
+crawler/candidates
+crawler/seen.jsonl
+crawler/triage
 configs
 docs
 requests

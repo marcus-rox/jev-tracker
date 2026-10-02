@@ -8,6 +8,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 COPY jev_tracker ./jev_tracker
+COPY crawler ./crawler
 COPY site/dist ./site/dist
 RUN uv sync --frozen --no-dev
 
