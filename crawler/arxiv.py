@@ -41,10 +41,12 @@ def parse(atom_xml: str, query: str, since: datetime, first_seen: datetime) -> l
         updated = datetime.fromisoformat(entry.findtext("a:updated", "", ATOM))
         if updated < since:
             continue
+        url = entry.findtext("a:id", "", ATOM).strip()
         out.append(
             Candidate(
                 source="arxiv",
-                url=entry.findtext("a:id", "", ATOM).strip(),
+                url=url,
+                key=url,
                 title=" ".join(entry.findtext("a:title", "", ATOM).split()),
                 snippet=" ".join(entry.findtext("a:summary", "", ATOM).split()),
                 first_seen=first_seen,

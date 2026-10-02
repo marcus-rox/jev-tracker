@@ -1,6 +1,6 @@
 # jev-tracker — specification
 
-**Status · 2026-10-02 · 9 requirements, 7 bound (R-1..R-4 Phase 1, R-5..R-7 Phase 2), 2 unbound (crawler, automation).** Approved by Marcus on
+**Status · 2026-10-02 · 9 requirements, 8 bound (R-1..R-4 Phase 1, R-5..R-7 Phase 2, R-8 Phase 3), 1 unbound (automation).** Approved by Marcus on
 2026-10-01 with four decisions (raw answers in the repo under `data/`; automation opens a PR; one
 batched Kev-27B revalidation; no Slack report). Only Marcus edits this file after that.
 
@@ -78,14 +78,18 @@ with the new data and the regenerated site.
 - **R-7 Submit.** The site SHALL have an "Evaluate a new model" form (URL or Hugging Face id, model
   name, source type, methods) that produces the YAML config and opens a prefilled GitHub issue
   labelled `evaluate` on this repository. No token is shipped to the browser.
-- **R-8 Crawler.** `python -m crawler` SHALL search GitHub, Hugging Face Hub, arXiv and the web for
-  new Jev / System One / decision-model mentions since the last run, dedupe against
-  `crawler/seen.jsonl`, and write `crawler/candidates/<date>.jsonl` (url, title, snippet,
-  first_seen). Design is preceded by a short prior-work survey in `docs/`.
+- **R-8 Crawler.** `python -m crawler` SHALL search GitHub, Hugging Face Hub, arXiv, X (via web
+  search, `site:x.com`), Hacker News and the web (Tavily keyless; DuckDuckGo is blocked from
+  datacenter IPs) for new Jev / System One / decision-model mentions since the last run, dedupe
+  against `crawler/seen.jsonl` on `key` (= `url`, except Hugging Face models: `hf:<id>@<sha>`, so
+  new weights under the same id count as new), and write `crawler/candidates/<date>.jsonl`
+  (source, query, key, url, title, snippet, first_seen). Design is preceded by a short prior-work
+  survey in `docs/`. *(Edited 2026-10-02 with Marcus's approval: fields, dedupe key, sources.)*
 - **R-9 Automation.** A daily Devin automation SHALL crawl, triage candidates (runnable now /
-  needs adapter / not a Jev), run approved configs and `evaluate` issues on Modal, regenerate the
-  site data, and open a PR to `main`. Python does the mechanical steps; Devin only decides what to
-  include.
+  needs adapter / not a Jev) into `crawler/triage/<date>.yaml`, run approved configs and `evaluate`
+  issues on Modal, regenerate the site data, and open a PR to `main`. Python does the mechanical
+  steps (`crawler`, `crawler.triage check`, `jev_tracker.evaluate_issues`, `jev_tracker.experiment`,
+  `jev_tracker.site_data`); Devin only decides what to include. Runbook: `docs/AUTOMATION.md`.
 
 ## Not required
 
@@ -112,5 +116,5 @@ None.
 | R-5 | `site/` | `npm run build` + `python3 -m http.server -d site/dist` (checked 2026-10-02); manual (Marcus) | bound |
 | R-6 | `jev_tracker.site_data` | `tests/test_site_data.py::test_R6_*` | bound |
 | R-7 | `site/` | `tests/test_site_data.py::test_R7_*` | bound |
-| R-8 | `crawler/` | `tests/test_crawler.py::test_R8_*` | unbound |
-| R-9 | automation | manual: first PR opened by the automation | unbound |
+| R-8 | `crawler/` | `tests/test_crawler.py::test_R8_*` | bound |
+| R-9 | automation | `docs/AUTOMATION.md`; manual: first PR opened by the automation | unbound |

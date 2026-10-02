@@ -6,6 +6,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
 - `docs/PLAN.md` — phases, decisions, next steps
 - `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
+- `docs/AUTOMATION.md` — the daily automation's runbook (R-9): crawl, triage, run, regenerate, open a PR
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
   experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
 - `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
@@ -16,7 +17,8 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `site/` — Vite + React static site: summary / quality / cost / latency tables, filters, compare,
   "Evaluate a new model" form; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
-  arXiv, web); `crawler/queries.yaml`, `crawler/seen.jsonl`, `crawler/candidates/<date>.jsonl`
+  arXiv, web, X/Twitter, Hacker News); `crawler/queries.yaml`, `crawler/seen.jsonl`,
+  `crawler/candidates/<date>.jsonl`
 
 ## Run
 
@@ -49,9 +51,26 @@ uv run python -m crawler --since 2026-09-01 --out crawler/candidates/
 GITHUB_TOKEN=... uv run python -m crawler                  # 30 instead of 10 GitHub searches/min
 ```
 
-Queries are in `crawler/queries.yaml` (one list per source). Each run dedupes on URL against
-`crawler/seen.jsonl`, appends the new URLs there and writes one JSON object per candidate
-(`source, url, title, snippet, first_seen, query`) to `crawler/candidates/<YYYY-MM-DD>.jsonl`.
-A failing (source, query) is printed and skipped; the exit code is 1 if any failed. DuckDuckGo
-answers with a bot challenge from some networks; that source then logs and returns nothing.
-Prior-work survey: `docs/PRIOR_WORK.md`.
+Sources: `github`, `huggingface`, `arxiv`, `web`, `twitter`, `hackernews` (one module each in
+`crawler/`). Queries are in `crawler/queries.yaml` (one list per source). Each run dedupes on
+`key` against `crawler/seen.jsonl`, appends the new keys there and writes one JSON object per
+candidate (`source, url, key, title, snippet, first_seen, query`) to
+`crawler/candidates/<YYYY-MM-DD>.jsonl`. `key` is the url for every source except Hugging Face,
+where it is `hf:<id>@<sha>` so new weights under an existing model id surface once more. A failing
+(source, query) is printed and skipped; the exit code is 1 if any failed. `web` and `twitter` use
+Tavily's keyless mode (no API key; `twitter` appends `site:x.com`); when Tavily rate-limits with
+HTTP 429 the source logs and returns nothing. Prior-work survey: `docs/PRIOR_WORK.md`.
+
+## Automation
+
+A Devin Automation runs `docs/AUTOMATION.md` once a day and opens a PR; nothing lands on `main`
+without a merge. Devin's decisions are data in that PR: `crawler/triage/<date>.yaml` (a verdict
+per candidate) and the `configs/*.yaml` it wrote for runnable ones.
+
+```bash
+uv run python -m crawler                                   # 1. new candidates
+uv run python -m crawler.triage check crawler/triage/<date>.yaml crawler/candidates/<date>.jsonl
+uv run python -m jev_tracker.evaluate_issues               # 2. open `evaluate` issues -> configs/
+uv run python -m jev_tracker.experiment run configs/<new>.yaml --wait   # 3. per new config
+uv run python -m jev_tracker.site_data && (cd site && npm ci && npm run build)   # 4. regenerate
+```

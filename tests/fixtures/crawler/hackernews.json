@@ -1,0 +1,38 @@
+{
+ "hits": [
+  {
+   "objectID": "49928555",
+   "title": null,
+   "story_title": "OpenAI has a LOT of work to do if they think Luna can compete with Jev",
+   "url": null,
+   "story_url": "https://anth.us/blog/openai-decisions-api-preview/",
+   "created_at": "2026-10-02T00:25:52Z",
+   "created_at_i": 1790900752,
+   "author": "verdverm",
+   "_tags": [
+    "comment",
+    "author_verdverm",
+    "story_49927854"
+   ],
+   "comment_text": "apples and oranges, also Clef and Kev (the middle path)<p><a href=\"https:&#x2F;&#x2F;blog.cloudflare.com&#x2F;clef-decision-models&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.cloudflare.com&#x2F;clef-decision-models&#x2F;</a><p><a href=\"https:&#x2F;&#x2F;github.com&#x2F;jaredpalmer&#x2F;kev&#x2F;tree&#x2F;main\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;jaredpalmer&#x2F;kev&#x2F;tree&#x2F;main</a>"
+  },
+  {
+   "objectID": "49783999",
+   "title": "Kev: Tiny Jev-like family of decision models built on top of Qwen3.5",
+   "story_title": null,
+   "url": "https://github.com/jaredpalmer/kev/tree/main",
+   "story_url": null,
+   "created_at": "2026-09-21T07:11:55Z",
+   "created_at_i": 1789974715,
+   "author": "tosh",
+   "_tags": [
+    "story",
+    "author_tosh",
+    "story_49783999"
+   ],
+   "comment_text": null
+  }
+ ],
+ "nbHits": 19,
+ "query": "\"jaredpalmer\""
+}

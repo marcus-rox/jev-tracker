@@ -1,15 +1,18 @@
 [
  {
+  "_id": "6ab6d4eb143c2e0535ad8d2b",
   "id": "kevinlu4588/llmfold-aicr",
   "lastModified": "2026-10-01T22:24:30.000Z",
+  "sha": "53fd7e33d6ff926044e56f85d73844e5daab11a9",
   "tags": [
    "region:us"
-  ],
-  "createdAt": "2026-09-25T20:09:15.000Z"
+  ]
  },
  {
+  "_id": "6abed15a0f195dd845e1cbbe",
   "id": "ggml-org/Kev-4B-GGUF",
   "lastModified": "2026-10-01T21:32:40.000Z",
+  "sha": "d924f2e2c3872da8b8aaf3eb4453b4126deceb79",
   "tags": [
    "gguf",
    "quantized",
@@ -21,7 +24,6 @@
    "endpoints_compatible",
    "region:us",
    "conversational"
-  ],
-  "createdAt": "2026-10-01T21:32:10.000Z"
+  ]
  }
 ]

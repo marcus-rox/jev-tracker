@@ -1,0 +1,17 @@
+{
+ "query": "jaredpalmer/kev",
+ "results": [
+  {
+   "url": "https://x.com/jaredpalmer/status/2101715352258232539",
+   "title": "Jared Palmer on X: \"UPDATE: Kev-0.6B, 4B, and 8B are now available. Kev is a family of small open source Jev-like decision models you can train and run yourself. This new family is based on Qwen3 using the same LoRA + small pointer head technique as before, but scaled up. Out of domain, on data… / X",
+   "content": "Sep 20\n\n  The entire Kev family is 100% open source. Code, evals, etc on GitHub: github.com/jaredpalmer/ke… Weights, model cards, datasets on HF: huggingface.co/collections/ja…\n\n  3\n @airesearch12\n\n  Florian S@airesearch12\n\n  Sep 20\n\n  Hi @jaredpalmer, this is how kev 0.6B scores on JevBench. It's currently the strongest of the kev variants in our bench and lands at #9. See details here: benchmarkheaven.com/jev-models [...] an H100 • Repeated documents hit a KV cache: 2-2.5x faster • Apache 2.0 License. Kev-4B trains in 40 minutes on one H100. Kev-8B in 83 minutes. Code, weights, evals: github.com/jaredpalmer/kev [...] ~40 ms on an H100 • Repeated documents hit a KV cache: 2-2.5x faster • Apache 2.0 License. Kev-4B trains in 40 minutes on one H100. Kev-8B in 83 minutes. Code, weights, evals: github.com/jaredpalmer/kev",
+   "published_date": null
+  },
+  {
+   "url": "https://github.com/jaredpalmer/kev",
+   "title": "GitHub - jaredpalmer/kev: tiny Jev-like family of decision models built on top of Qwen3.5 you can train and run on your own · GitHub",
+   "content": "```\nuv run python -m kev.train --data train.jsonl --base Qwen/Qwen3.5-4B-Base --init_from jaredpalmer/kev-4b \\ --epochs 2 --lr 2e-5 --batch 1 --accum 8 --dtype bf16 --checkpointing 1 --device cuda --out runs/mine uv run python -m kev.benchmark --run runs/mine --data heldout.jsonl --out runs/mine-eval KEV_DTYPE=bf16 uv run --extra serve python -m kev.serve --run runs/mine --port 8009\n``` [...] A web playground for trying your own inputs and checking how option order affects the answers. Or try Kev-4B and Kev-0.8B in the browser at huggingface.co/spaces/jaredpalmer/kev, no install needed. [...] ## Quick Start\n\nYou'll need Python 3.12+ and uv.\n\n```\n&& cd\n```\n\nThis starts Kev-4B locally. The first run downloads the adapter and base model. `--run` also accepts a local checkpoint directory or a Hub revision, such as `jaredpalmer/kev-4b@qwen3` for the previous generation.\n\nIn another terminal, send it a ticket:",
+   "published_date": null
+  }
+ ]
+}
