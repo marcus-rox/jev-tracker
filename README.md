@@ -7,6 +7,7 @@ this repository; a daily automation reruns new models on Modal and opens a PR wi
 - `docs/PLAN.md` — phases, decisions, next steps
 - `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
 - `docs/AUTOMATION.md` — the daily automation's runbook (R-9): crawl, triage, run, regenerate, open a PR
+- `docs/DAILY_RUN.html` — how the daily run works: block diagram, sequence diagram, steps, triage verdicts, guardrails (open in a browser)
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
   experiment lifecycle (`run` / `status` / `finish` / `costs` / `latency`)
 - `configs/` — one YAML per experiment (which models, methods, GPUs, shards)
