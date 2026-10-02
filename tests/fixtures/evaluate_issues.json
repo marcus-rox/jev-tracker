@@ -1,0 +1,18 @@
+[
+  {
+    "number": 7,
+    "html_url": "https://github.com/marcus-rox/jev-tracker/issues/7",
+    "state": "open",
+    "title": "evaluate: kev7b",
+    "labels": [{"name": "evaluate"}],
+    "body": "Please evaluate this model on the 75 frozen cases.\n\n```yaml\nname: kev7b\ncases: null\nk: {start: 50, stop: 200, step: 10}\nrerankers:\n  prod:\n    source: production\n  jev_noul:\n    source: answers\n    method: noul_query_in_state\n    path: data/jev/noul_query_in_state.json.gz\n  kev7b_noul:\n    source: kev\n    model: jaredpalmer/kev-7b\n    max_items: 12\n    max_chars: 12000\n    shards: 3\n    concurrency: 16\n    method: noul_query_in_state\n```\n"
+  },
+  {
+    "number": 8,
+    "html_url": "https://github.com/marcus-rox/jev-tracker/issues/8",
+    "state": "open",
+    "title": "evaluate: Laya Typed",
+    "labels": [{"name": "evaluate"}],
+    "body": "Can you run convaiinnovations/laya-typed-decisions? No config, sorry."
+  }
+]
