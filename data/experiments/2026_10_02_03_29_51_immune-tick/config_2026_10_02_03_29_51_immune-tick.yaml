@@ -1,0 +1,36 @@
+# Kev-2B (per2021/kev-2b-qwen3.5, unofficial Kev-recipe LoRA on Qwen3.5-2B-Base) vs Jev (committed answers) vs production, on the frozen 75 cases, kept-mass@k for
+# k = 50..200 step 10. Serving as configs/kev27b_batched.yaml (the budget line): 3 shards,
+# 12 children per request, 16 requests in flight per container. Added by the daily automation.
+#   uv run python -m jev_tracker.experiment run configs/kev2b_per2021_vs_jev.yaml --wait
+name: kev2b_per2021_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev2b_noul:
+    source: kev
+    model: per2021/kev-2b-qwen3.5@ac97885b54011dd6002cf2c82fbcc0aa6033e8cf
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+    gpu: L4
+  kev2b_score:
+    source: kev
+    model: per2021/kev-2b-qwen3.5@ac97885b54011dd6002cf2c82fbcc0aa6033e8cf
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 16
+    gpu: L4

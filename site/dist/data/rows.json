@@ -26,7 +26,10 @@
   "2026_10_01_23_53_13_keen-emu": "kev4b_vs_jev: Kev-4B rerun (R-4 validation), 10 x L40S",
   "2026_10_01_23_53_20_frank-moray": "laya_vs_jev: Laya 421M rerun (R-4 validation), 4 x L4, batched",
   "2026_10_02_00_08_39_safe-joey": "kev27b_batched_v1: Kev-27B @01b8199 (2026-09-24 weights) rerun (R-4 validation), 3 x H200",
-  "2026_10_01_23_53_25_fit-macaw": "kev27b_batched: Kev-27B v2 (Hub main since 2026-09-30, round 23), 3 x H200"
+  "2026_10_01_23_53_25_fit-macaw": "kev27b_batched: Kev-27B v2 (Hub main since 2026-09-30, round 23), 3 x H200",
+  "2026_10_02_03_29_11_above-dog": "kev08b_vs_jev: Kev-0.8B @bf75a6a, 3 x L4, batched (daily 2026-10-02)",
+  "2026_10_02_03_29_31_humble-sawfly": "kev9b_v2_vs_jev: Kev-9B v2 @db029f0, 3 x H100, batched (daily 2026-10-02)",
+  "2026_10_02_03_29_51_immune-tick": "kev2b_per2021_vs_jev: per2021/kev-2b-qwen3.5 @ac97885 (unofficial), 3 x L4, batched (daily 2026-10-02)"
  },
  "rows": [
   {
@@ -3347,6 +3350,270 @@
     "cost": "data/experiments/2026_10_01_23_53_25_fit-macaw/costs_2026_10_01_23_53_25_fit-macaw.json",
     "latency": "data/experiments/2026_10_01_23_53_25_fit-macaw/costs_2026_10_01_23_53_25_fit-macaw.json",
     "config": "data/experiments/2026_10_01_23_53_25_fit-macaw/config_2026_10_01_23_53_25_fit-macaw.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_03_29_11_above-dog",
+   "reranker": "kev08b_noul",
+   "label": "kev08b_noul",
+   "family": "kev08b",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.6419386463333333,
+    "100": 0.71235837464,
+    "150": 0.7765114789733333,
+    "200": 0.8459286133333334
+   },
+   "mean_kept_mass": 0.74418427832,
+   "cost": {
+    "warm_gpu_s": 513.668318271637,
+    "load_s": 347.7696087360382,
+    "warm_usd": 0.11403436665630341,
+    "in_function_usd": 0.19131776764297487,
+    "usd_per_query": 0.0015204582220840455,
+    "usd_per_1k": 1.5204582220840455,
+    "peak_gb": 4.796755456
+   },
+   "latency": {
+    "run_s": 513.668318271637,
+    "s_per_query": 6.848910910288493,
+    "h_per_1k": 1.9024752528579145
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_03_29_11_above-dog/kept_mass_2026_10_02_03_29_11_above-dog.json",
+    "cost": "data/experiments/2026_10_02_03_29_11_above-dog/costs_2026_10_02_03_29_11_above-dog.json",
+    "latency": "data/experiments/2026_10_02_03_29_11_above-dog/costs_2026_10_02_03_29_11_above-dog.json",
+    "config": "data/experiments/2026_10_02_03_29_11_above-dog/config_2026_10_02_03_29_11_above-dog.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_03_29_11_above-dog",
+   "reranker": "kev08b_score",
+   "label": "kev08b_score",
+   "family": "kev08b",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.5528561606533333,
+    "100": 0.6359272636933333,
+    "150": 0.7084916223333333,
+    "200": 0.8001042982266666
+   },
+   "mean_kept_mass": 0.6743448362266666,
+   "cost": {
+    "warm_gpu_s": 675.751761674881,
+    "load_s": 373.36266350746155,
+    "warm_usd": 0.1500168910918236,
+    "in_function_usd": 0.23291689106225968,
+    "usd_per_query": 0.0020002252145576477,
+    "usd_per_1k": 2.000225214557648,
+    "peak_gb": 4.757206528
+   },
+   "latency": {
+    "run_s": 675.751761674881,
+    "s_per_query": 9.010023488998414,
+    "h_per_1k": 2.5027843024995593
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_03_29_11_above-dog/kept_mass_2026_10_02_03_29_11_above-dog.json",
+    "cost": "data/experiments/2026_10_02_03_29_11_above-dog/costs_2026_10_02_03_29_11_above-dog.json",
+    "latency": "data/experiments/2026_10_02_03_29_11_above-dog/costs_2026_10_02_03_29_11_above-dog.json",
+    "config": "data/experiments/2026_10_02_03_29_11_above-dog/config_2026_10_02_03_29_11_above-dog.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_03_29_31_humble-sawfly",
+   "reranker": "kev9b_noul",
+   "label": "kev9b_noul_v2",
+   "family": "kev9b v2",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "H100",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.75267717812,
+    "100": 0.7884841566266667,
+    "150": 0.8310554919066666,
+    "200": 0.8891216450666667
+   },
+   "mean_kept_mass": 0.8153346179300001,
+   "cost": {
+    "warm_gpu_s": 384.59060192108154,
+    "load_s": 120.92920804023743,
+    "warm_usd": 0.42189589030742647,
+    "in_function_usd": 0.5548143893244267,
+    "usd_per_query": 0.005625278537432353,
+    "usd_per_1k": 5.6252785374323535,
+    "peak_gb": 24.340451328
+   },
+   "latency": {
+    "run_s": 384.59060192108154,
+    "s_per_query": 5.127874692281087,
+    "h_per_1k": 1.4244096367447463
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_03_29_31_humble-sawfly/kept_mass_2026_10_02_03_29_31_humble-sawfly.json",
+    "cost": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
+    "latency": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
+    "config": "data/experiments/2026_10_02_03_29_31_humble-sawfly/config_2026_10_02_03_29_31_humble-sawfly.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_03_29_31_humble-sawfly",
+   "reranker": "kev9b_score",
+   "label": "kev9b_score_v2",
+   "family": "kev9b v2",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "H100",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.5421968819066667,
+    "100": 0.6236638654133333,
+    "150": 0.71862108388,
+    "200": 0.82228117048
+   },
+   "mean_kept_mass": 0.67669075042,
+   "cost": {
+    "warm_gpu_s": 463.3133726119995,
+    "load_s": 108.51185059547424,
+    "warm_usd": 0.5082547697553635,
+    "in_function_usd": 0.6273622036399842,
+    "usd_per_query": 0.006776730263404847,
+    "usd_per_1k": 6.776730263404848,
+    "peak_gb": 24.390537728
+   },
+   "latency": {
+    "run_s": 463.3133726119995,
+    "s_per_query": 6.1775116348266605,
+    "h_per_1k": 1.7159754541185168
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_03_29_31_humble-sawfly/kept_mass_2026_10_02_03_29_31_humble-sawfly.json",
+    "cost": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
+    "latency": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
+    "config": "data/experiments/2026_10_02_03_29_31_humble-sawfly/config_2026_10_02_03_29_31_humble-sawfly.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_03_29_51_immune-tick",
+   "reranker": "kev2b_noul",
+   "label": "kev2b_noul",
+   "family": "kev2b (per2021)",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.6839143443066666,
+    "100": 0.75227685888,
+    "150": 0.8028956572,
+    "200": 0.86793941972
+   },
+   "mean_kept_mass": 0.7767565700266666,
+   "cost": {
+    "warm_gpu_s": 790.1157777309418,
+    "load_s": 434.4274551868439,
+    "warm_usd": 0.17540570265626906,
+    "in_function_usd": 0.27186314146471025,
+    "usd_per_query": 0.0023387427020835874,
+    "usd_per_1k": 2.3387427020835876,
+    "peak_gb": 7.094264832
+   },
+   "latency": {
+    "run_s": 790.1157777309418,
+    "s_per_query": 10.534877036412556,
+    "h_per_1k": 2.926354732336821
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_03_29_51_immune-tick/kept_mass_2026_10_02_03_29_51_immune-tick.json",
+    "cost": "data/experiments/2026_10_02_03_29_51_immune-tick/costs_2026_10_02_03_29_51_immune-tick.json",
+    "latency": "data/experiments/2026_10_02_03_29_51_immune-tick/costs_2026_10_02_03_29_51_immune-tick.json",
+    "config": "data/experiments/2026_10_02_03_29_51_immune-tick/config_2026_10_02_03_29_51_immune-tick.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_03_29_51_immune-tick",
+   "reranker": "kev2b_score",
+   "label": "kev2b_score",
+   "family": "kev2b (per2021)",
+   "serving": "batched: 12 children, 16 in flight",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.5558766368,
+    "100": 0.6343305095066667,
+    "150": 0.7170158887733333,
+    "200": 0.8080760808933334
+   },
+   "mean_kept_mass": 0.6788247789933334,
+   "cost": {
+    "warm_gpu_s": 984.8592548370361,
+    "load_s": 436.5801749229431,
+    "warm_usd": 0.21863875457382204,
+    "in_function_usd": 0.3156260333003998,
+    "usd_per_query": 0.002915183394317627,
+    "usd_per_1k": 2.9151833943176273,
+    "peak_gb": 7.119847936
+   },
+   "latency": {
+    "run_s": 984.8592548370361,
+    "s_per_query": 13.131456731160482,
+    "h_per_1k": 3.6476268697668006
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_03_29_51_immune-tick/kept_mass_2026_10_02_03_29_51_immune-tick.json",
+    "cost": "data/experiments/2026_10_02_03_29_51_immune-tick/costs_2026_10_02_03_29_51_immune-tick.json",
+    "latency": "data/experiments/2026_10_02_03_29_51_immune-tick/costs_2026_10_02_03_29_51_immune-tick.json",
+    "config": "data/experiments/2026_10_02_03_29_51_immune-tick/config_2026_10_02_03_29_51_immune-tick.yaml"
    }
   }
  ]
