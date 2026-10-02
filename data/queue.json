@@ -97,18 +97,6 @@
    "evidence": null
   },
   {
-   "config": "configs/decider_vs_jev.yaml",
-   "label": "decider_vs_jev",
-   "source": "github",
-   "url": "https://github.com/Mapika/decider",
-   "status": "proposed",
-   "note": "decider family (Qwen3.5 / Gemma-4 fine-tunes, own decider-ai package and server); HN reports decider-4B above Kev at lower latency; needs a decider source",
-   "queued_at": "2026-10-02T09:38:32Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/api_openrouter_mercury_decide_vs_jev.yaml",
    "label": "api_openrouter_mercury_decide_vs_jev",
    "source": "hackernews",
