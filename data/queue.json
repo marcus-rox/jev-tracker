@@ -128,18 +128,6 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
-  },
-  {
-   "config": "configs/canopy_jev_27b_vs_jev.yaml",
-   "label": "canopy_jev_27b_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/Camellia86/Canopy-Jev-27B",
-   "status": "proposed",
-   "note": "Canopy-Jev-27B: decision LoRA + prior on Qwen3.8-27B with its own probability readout; no harness source (27B fits the Kev-27B line)",
-   "queued_at": "2026-10-02T17:17:11Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
   }
  ]
 }
