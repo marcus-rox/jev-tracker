@@ -273,7 +273,7 @@ render();
 HTML = """<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker · dashboard mockup</title><style>%(css)s</style></head>
 <body>
 <header class="topbar"><span class="brand">jev-tracker</span><span class="crumb">Dashboards › Jev alternatives · 75 frozen queries</span>
-  <div class="right"><span>Last updated %(updated)s</span><span class="pill">↻ 1 min</span><select class="theme" id="theme" title="theme"><option value="system">theme: system</option><option value="light">theme: light</option><option value="dark">theme: dark</option></select><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
+  <div class="right"><span>Last updated %(updated)s</span><span class="pill">↻ 1 min</span><select class="theme" id="theme" title="theme"><option value="system">system</option><option value="light">light</option><option value="dark">dark</option></select><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
 <div class="toolbar"><div class="dd" id="fams"></div><div class="dd" id="gpus"></div><span class="chip reset" id="reset">reset</span><span class="label" id="shown"></span></div>
 <nav class="tabs"><button data-t="summary">Summary</button><button data-t="quality">Quality</button><button data-t="cost">Cost</button><button data-t="latency">Latency</button><button data-t="evaluate">Evaluate a new model</button></nav>
 <main class="grid" id="grid"></main>
