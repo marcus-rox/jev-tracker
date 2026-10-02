@@ -81,11 +81,17 @@ key covers both. Rox-research's `reranker_alts` had no crawler; candidates there
 ## 5. Decisions taken in `crawler/`
 
 - One module per source with one `search(query, since) -> list[Candidate]` seam; a source can be
-  swapped (e.g. DuckDuckGo → Brave) without touching the run loop.
+  swapped (e.g. Tavily → Brave) without touching the run loop. Sources: GitHub, Hugging Face,
+  arXiv, web, X/Twitter, Hacker News.
 - Queries live in `crawler/queries.yaml`, one list per source, because the Hub only matches ids
-  (phrases are useless there) while GitHub/arXiv/web take free text.
-- Dedupe on `url` with an append-only `crawler/seen.jsonl`; `first_seen` is the crawler's clock,
-  and the next run's default window starts at the last run's max `first_seen`.
-- Web results carry no dates, so the seen set alone defines "new" for that source.
-- A blocked source (DuckDuckGo 403/202 bot wall) returns `[]` and is logged; any other failure
-  is reported per (source, query) and the run exits 1 at the end.
+  (phrases are useless there), HN fuzzy-matches bare words (quoted phrases only), while
+  GitHub/arXiv/web take free text.
+- Dedupe on `key` with an append-only `crawler/seen.jsonl`: `key = url` for every source except
+  Hugging Face, where `key = hf:<id>@<sha>` so a weights update under a seen id surfaces once more.
+  `first_seen` is the crawler's clock, and the next run's default window starts at the last run's
+  max `first_seen`.
+- Web and X/Twitter use Tavily keyless (`X-Tavily-Access-Mode: keyless`, no key); `since` becomes
+  the `days` request field and the seen set alone defines "new" for those sources. Twitter is the
+  same call with ` site:x.com` appended, keeping only x.com / twitter.com hosts.
+- A rate-limited Tavily call (HTTP 429) returns `[]` and is logged; any other failure is reported
+  per (source, query) and the run exits 1 at the end.

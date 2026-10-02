@@ -5,7 +5,7 @@
 
 `check` exits 1 listing candidates with no decision and `runnable` decisions whose config file
 does not exist (paths relative to the repo root); otherwise it prints counts per verdict.
-Decisions are matched to candidates by `url` until `Candidate.key` lands (see candidate_key).
+Decisions are matched to candidates by `Candidate.key` (hf:<id>@<sha> for Hugging Face, url otherwise).
 """
 
 import argparse
@@ -34,7 +34,7 @@ class TriageDecision(BaseModel):
 
 
 def candidate_key(candidate: Candidate) -> str:
-    return candidate.url
+    return candidate.key
 
 
 def read_triage(path: Path) -> list[TriageDecision]:

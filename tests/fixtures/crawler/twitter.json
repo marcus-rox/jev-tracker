@@ -1,0 +1,23 @@
+{
+ "query": "jaredpalmer kev",
+ "results": [
+  {
+   "url": "https://x.com/jaredpalmer/highlights",
+   "title": "Highlights by Jared Palmer (@jaredpalmer) ...",
+   "content": "UPDATE: Kev-0.6B, 4B, and 8B are now available. Kev is a family of small open source Jev-like decision models you can train and run yourself.",
+   "published_date": null
+  },
+  {
+   "url": "https://x.com/jaredpalmer/status/2101715352258232539",
+   "title": "Jared Palmer on X: \"UPDATE: Kev-0.6B, 4B, and 8B are now available. Kev is a family of small open source Jev-like decision models you can train and run yourself. This new family is based on Qwen3 using the same LoRA + small pointer head technique as before, but scaled up. Out of domain, on data… / X",
+   "content": "Sep 20\n\n  The entire Kev family is 100% open source. Code, evals, etc on GitHub: github.com/jaredpalmer/ke… Weights, model cards, datasets on HF: huggingface.co/collections/ja…\n\n  3\n @airesearch12\n\n  Florian S@airesearch12\n\n  Sep 20\n\n  Hi @jaredpalmer, this is how kev 0.6B scores on JevBench. It's currently the strongest of the kev variants in our bench and lands at #9. See details here: benchmarkheaven.com/jev-models [...] an H100 • Repeated documents hit a KV cache: 2-2.5x faster • Apache 2.0 License. Kev-4B trains in 40 minutes on one H100. Kev-8B in 83 minutes. Code, weights, evals: github.com/jaredpalmer/kev [...] ~40 ms on an H100 • Repeated documents hit a KV cache: 2-2.5x faster • Apache 2.0 License. Kev-4B trains in 40 minutes on one H100. Kev-8B in 83 minutes. Code, weights, evals: github.com/jaredpalmer/kev",
+   "published_date": null
+  },
+  {
+   "url": "https://x.com/OpenRouter/status/2103560670205886744",
+   "title": "OpenRouter",
+   "content": "1/ Kev 4B, a small open-weight System One model by @jaredpalmer is now on OpenRouter. Send it state and typed questions, get typed answers",
+   "published_date": null
+  }
+ ]
+}

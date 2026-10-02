@@ -32,6 +32,7 @@ def parse(payload: dict, query: str, since: datetime, first_seen: datetime) -> l
         Candidate(
             source="github",
             url=item["html_url"],
+            key=item["html_url"],
             title=item["full_name"],
             snippet=item.get("description") or "",
             first_seen=first_seen,
