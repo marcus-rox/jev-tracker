@@ -81,3 +81,23 @@ export interface Evidence {
 export interface Queue {
   items: QueueItem[]
 }
+
+/** One Modal shard's tqdm bar, as published by the shard while it runs (`jev_tracker.modal_app.ShardProgress`). */
+export interface ShardProgress {
+  config: string | null
+  experiment: string
+  reranker: string
+  shard: number
+  shards: number
+  done: number
+  total: number
+  resumed: number
+  started_at: number
+  updated_at: number
+}
+
+/** The progress feed: every bar touched in the last day, newest first, and the server clock it was read at. */
+export interface ProgressFeed {
+  at: number
+  shards: ShardProgress[]
+}

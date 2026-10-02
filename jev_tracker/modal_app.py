@@ -50,6 +50,11 @@ HF_CACHE_DIR = "/root/.cache/huggingface"
 PYTHON_VERSION = "3.12"
 HOUR = 60 * 60
 COMMIT_EVERY_S = 60
+PROGRESS_DICT_NAME = "jev-tracker-progress"
+PROGRESS_LABEL = "jev-tracker-progress"  # web endpoint: https://<workspace>--<label>.modal.run
+PROGRESS_EVERY_S = 5  # the bars' tqdm mininterval, so the site sees what the terminal sees
+PROGRESS_STALE_S = 24 * HOUR  # a bar not touched for this long is no longer served
+FASTAPI_PKG = "fastapi[standard]>=0.115"  # Modal's web endpoints are FastAPI handlers
 
 # Runtime deps of jev_tracker inside the containers (the repo is mounted, not installed).
 RUNTIME_DEPS = ("pydantic>=2.13.4", "tqdm>=4.67", "httpx>=0.28.1", "pyyaml>=6.0.3")
@@ -116,6 +121,7 @@ class ScoringRun(BaseModel):
     forward_batch: int = 1  # Laya only: one-child requests per GPU forward pass (laya_batch)
     gpu: str | None = None  # Modal GPU type; None = GPU_FOR[model]
     api: ApiEndpoint | None = None  # api only
+    config: str | None = None  # configs/<name>.yaml this run came from: the site's queue item key
 
     @property
     def repo(self) -> str:
@@ -193,10 +199,85 @@ kev_image = _mount(
 )
 laya_image = _mount(_base().pip_install(LAYA_PKG))  # brings torch + transformers
 api_image = _mount(_base())
+progress_image = _mount(_base().pip_install(FASTAPI_PKG))
 
 runs_volume = modal.Volume.from_name(RUNS_VOLUME_NAME, create_if_missing=True)
 hf_cache = modal.Volume.from_name(HF_CACHE_VOLUME_NAME, create_if_missing=True)
 VOLUMES = {str(RUNS_ROOT): runs_volume, HF_CACHE_DIR: hf_cache}
+progress_dict = modal.Dict.from_name(PROGRESS_DICT_NAME, create_if_missing=True)
+
+
+class ShardProgress(BaseModel):
+    """One shard's tqdm bar as data, so the site can draw it on the queue item `config`."""
+
+    model_config = {"frozen": True}
+
+    config: str | None
+    experiment: str
+    reranker: str
+    shard: int
+    shards: int
+    done: int  # requests answered so far, the resumed ones included
+    total: int  # requests in this shard
+    resumed: int  # answered by an earlier call of this shard, so not part of this call's rate
+    started_at: float  # epoch seconds this call began answering
+    updated_at: float
+
+    @property
+    def key(self) -> str:
+        return f"{self.experiment}/{self.reranker}/{self.shard:02d}"
+
+    @property
+    def finished(self) -> bool:
+        return self.done >= self.total
+
+
+def shard_progress(
+    job: ShardJob, done: int, total: int, resumed: int, started_at: float, now: float
+) -> ShardProgress:
+    return ShardProgress(
+        config=job.run.config,
+        experiment=job.run.experiment,
+        reranker=job.run.reranker,
+        shard=job.shard,
+        shards=job.run.shards,
+        done=done,
+        total=total,
+        resumed=resumed,
+        started_at=started_at,
+        updated_at=now,
+    )
+
+
+class ProgressBar:
+    """Publishes a shard's bar to `store` at most every PROGRESS_EVERY_S seconds, and at the end."""
+
+    def __init__(
+        self,
+        job: ShardJob,
+        resumed: int,
+        total: int,
+        store: modal.Dict = progress_dict,
+        clock: Callable[[], float] = time.time,
+    ) -> None:
+        self.job, self.resumed, self.total, self.store, self.clock = (
+            job,
+            resumed,
+            total,
+            store,
+            clock,
+        )
+        self.started_at = clock()
+        self.published_at = float("-inf")
+        self.update(resumed)
+
+    def update(self, done: int) -> None:
+        now = self.clock()
+        if now - self.published_at < PROGRESS_EVERY_S and done < self.total:
+            return
+        bar = shard_progress(self.job, done, self.total, self.resumed, self.started_at, now)
+        self.store.put(bar.key, bar.model_dump())
+        self.published_at = now
 
 
 def _answer_shard(
@@ -217,10 +298,12 @@ def _answer_shard(
     ]
     last_commit = time.time()
     n = 0
+    bar = ProgressBar(job, resumed=len(done), total=len(done) + len(todo))
     with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
         results = pool.map(lambda t: answer(*t), todo)
         for _ in tqdm(results, total=len(todo), desc=job.desc, unit="batch", mininterval=5):
             n += 1
+            bar.update(len(done) + n)
             if time.time() - last_commit > COMMIT_EVERY_S:
                 runs_volume.commit()
                 last_commit = time.time()
@@ -365,7 +448,10 @@ def _answer_laya_shard(
     out = run.shard_path(job.shard)
     last_commit = time.time()
     n = passes = 0
-    for case in tqdm(run.shard_cases(job.shard), desc=job.desc, unit="case", mininterval=5):
+    cases = run.shard_cases(job.shard)
+    total = sum(len(batches(case.input, run.max_items, run.max_chars)) for case in cases)
+    bar = ProgressBar(job, resumed=len(done), total=total)
+    for case in tqdm(cases, desc=job.desc, unit="case", mininterval=5):
         todo = sorted(
             (
                 (bi, batch)
@@ -389,6 +475,7 @@ def _answer_laya_shard(
                 append_jsonl_gz(out, rec)
             n += len(chunk)
             passes += 1
+            bar.update(len(done) + n)
         if time.time() - last_commit > COMMIT_EVERY_S:
             runs_volume.commit()
             last_commit = time.time()
@@ -463,10 +550,20 @@ def score_cases_api(job_json: str) -> str:
     ).model_dump_json()
 
 
+@app.function(image=progress_image)
+@modal.fastapi_endpoint(label=PROGRESS_LABEL)
+def progress() -> dict:
+    """Every shard bar touched in the last PROGRESS_STALE_S; the site polls it (CORS on, nothing secret)."""
+    now = time.time()
+    shards = [bar for bar in progress_dict.values() if now - bar["updated_at"] < PROGRESS_STALE_S]
+    return {"at": now, "shards": sorted(shards, key=lambda bar: bar["updated_at"], reverse=True)}
+
+
 def deploy() -> None:
     """Publish this working tree as APP_NAME; every later spawn runs this code."""
     with modal.enable_output():
         app.deploy(name=APP_NAME)
+    print(f"progress feed: {progress.get_web_url()}", flush=True)
 
 
 def spawn(run: ScoringRun, calls_file: Path) -> None:
