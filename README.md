@@ -6,7 +6,7 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 - `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
 - `docs/PLAN.md` — phases, decisions, next steps
 - `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
-- `docs/AUTOMATION.md` — the hourly automation's runbook (R-9): crawl, triage, run, regenerate, push to `main`
+- `docs/AUTOMATION.md` — the hourly automation's runbook (R-9): two parallel tracks — run the queue on Modal / web-search into the queue — then regenerate, push to `main`
 - `docs/DAILY_RUN.html` — how an automation run works: block diagram, sequence diagram, steps, triage verdicts, guardrails (open in a browser)
 - `docs/JEV_ALTERNATIVES.html` — every crawler hit triaged as a real Jev alternative, grouped by what stops it running, one row per distinct model, with filters (open in a browser; rebuild with `python3 docs/src/build_jev_alternatives.py` + the artifact kit)
 - `jev_tracker/` — harness: System One contract, methods, kept-mass metric, Modal runner,
@@ -74,7 +74,7 @@ running, and Marcus's Approve / Skip clicks on the site land there immediately; 
 elapsed < ETA, rate — which the Modal workers publish while they run). Models the harness cannot call yet are *proposed*, not run: the
 site lists them under "Awaiting your approval" and only an approved one is built and benchmarked.
 
-**Figure 2. One day's run, as a sequence diagram.**
+**Figure 2. One hourly run, as a sequence diagram.**
 
 ```mermaid
 sequenceDiagram
@@ -85,30 +85,33 @@ sequenceDiagram
   participant R as Repository
   participant M as Modal GPUs
   A->>R: clone main
-  A->>C: crawl since last run
-  loop every (source, query) pair (~43)
-    C->>S: search(query, since)
-    S-->>C: hits (url, title, snippet)
+  par Track A: run the queue right away
+    A->>R: push queue (queued → running) to main
+    loop each queued config (max 10 per run)
+      A->>M: run all 75 cases (batched, sharded, in the background)
+      M-->>A: raw answers + timers
+    end
+  and Track B: web search into the queue
+    A->>C: crawl since last run
+    loop every (source, query) pair (~43)
+      C->>S: search(query, since)
+      S-->>C: hits (url, title, snippet)
+    end
+    C-->>A: today's candidates (new keys only)
+    A->>A: triage every candidate (runnable / needs_adapter / not_jev)
+    A->>R: push verdicts, configs, queue (runnable → queued, worth-an-adapter → proposed)
   end
-  C->>R: read submitted requests
-  C->>R: drop keys already seen, append new keys
-  C-->>A: today's candidates
-  A->>A: triage every candidate (runnable / needs_adapter / not_jev)
-  A->>R: write verdicts + a config per new runnable model
-  A->>R: push queue (runnable → queued, worth-an-adapter → proposed) to main
-  loop each new runnable or approved config (max 10)
-    A->>M: run all 75 cases (batched, sharded)
-    M-->>A: raw answers + timers
-    A->>R: score kept-mass, cost, latency
-  end
+  A->>M: start the newly queued and approved configs (same budget of 10)
+  A->>R: verify each run on Modal, score kept-mass, cost, latency
   A->>R: rewrite TLDR, regenerate site data + build
   A->>R: push commit "Run DATE TIME: n candidates, m runs" to main
   A->>A: Slack DM to Marcus (when something was pushed or failed): runs + models awaiting approval
   Note over R: Render redeploys the site from main
 ```
 
-Legend: solid arrows are calls, dashed arrows are replies, boxes marked `loop` repeat. Steps 3–7 are
-the crawl, step 8 is triage, steps 11–13 are one benchmark run.
+Legend: solid arrows are calls, dashed arrows are replies, boxes marked `loop` repeat, the `par`
+box holds the two tracks that run at the same time. Steps 2–4 are Track A (the runs), steps 5–10
+are Track B (crawl and triage), steps 11–16 are the join.
 
 **Figure 3. What happens to one search hit.**
 
