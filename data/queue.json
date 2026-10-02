@@ -53,9 +53,9 @@
    "label": "minicpm5_2b_jev_vs_jev",
    "source": "huggingface",
    "url": "https://huggingface.co/ytbai/MiniCPM5-2B-Jev",
-   "status": "proposed",
+   "status": "queued",
    "note": "LoRA on MiniCPM5-2B with its own /v1/systemone server; kev source only verified on Qwen3.5/3.8 bases",
-   "queued_at": "2026-10-02T07:00:43Z",
+   "queued_at": "2026-10-02T17:12:58Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
