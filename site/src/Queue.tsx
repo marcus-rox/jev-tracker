@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { blob, type Decision, type QueueItem, type QueueStatus } from './types'
 import type { Decide, QueueState } from './queue'
+import { nextRun, untilText, whenText } from './schedule'
 
 const MINUTE_MS = 60_000
 
@@ -69,6 +70,16 @@ function Card({ item, now, decide }: { item: QueueItem; now: Date; decide: Decid
   )
 }
 
+/** Queued models run in the next daily automation; it fires once a day, so this is when the lane drains. */
+function NextRun({ now }: { now: Date }) {
+  const at = nextRun(now)
+  return (
+    <div className="next" title={at.toISOString()}>
+      <span className="clock" />next run in <b>{untilText(now, at)}</b><span className="when">{whenText(at)} · daily</span>
+    </div>
+  )
+}
+
 export function QueueBody({ state, decide }: { state: QueueState; decide: Decide }) {
   if (state.kind === 'loading') return <p className="hint">Loading…</p>
   if (state.kind === 'error') return <p className="hint">Queue unavailable: {state.message}.</p>
@@ -80,6 +91,7 @@ export function QueueBody({ state, decide }: { state: QueueState; decide: Decide
         return (
           <section key={stage.status} className={`lane ${stage.status}${items.length ? ' busy' : ''}`}>
             <h3><span className="ring" />{stage.title}<span className="count">{items.length}</span></h3>
+            {stage.status === 'queued' && <NextRun now={state.at} />}
             <ul>
               {items.length === 0 ? <li className="hint">{stage.empty}</li> : items.map((item) => <Card key={item.config} item={item} now={state.at} decide={decide} />)}
             </ul>
