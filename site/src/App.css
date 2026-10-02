@@ -129,6 +129,8 @@ td.n a:hover { color: var(--accent); text-decoration: none; }
 .hbar .n { text-align:right; font-variant-numeric: tabular-nums; }
 .hbar .t { height:10px; background:var(--grid); border-radius:3px; overflow:hidden; } .hbar .t i { display:block; height:100%; background:var(--accent); }
 .hbar .jev .t i { background:var(--text); }
+.hbar .prod .t i { background:var(--prod); }
+.hbar .prod .lbl { color:var(--prod); font-weight:600; }
 .hbar .lbl { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .foot { padding:0 20px 24px; color:var(--muted); font-size:12px; }
 .chartwrap { position:relative; }
