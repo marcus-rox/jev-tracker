@@ -225,3 +225,5 @@ uv run python -m jev_tracker.evaluate_issues               # 2. open `evaluate` 
 uv run python -m jev_tracker.experiment run configs/<new>.yaml --wait   # 3. per new config
 uv run python -m jev_tracker.site_data && (cd site && npm ci && npm run build)   # 4. regenerate
 ```
+
+<!-- deploy check 2026-10-02T09:44Z -->
