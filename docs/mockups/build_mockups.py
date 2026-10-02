@@ -1,6 +1,8 @@
 """Render the CloudWatch-style dashboard mockups from the committed site data.
 
-    uv run python docs/mockups/build_mockups.py   ->  docs/mockups/dashboard_{light,dark}.html
+    uv run python docs/mockups/build_mockups.py   ->  docs/mockups/dashboard.html
+
+One file; the header's theme menu switches light / dark / system (default: follows the OS).
 
 Each mockup is one self-contained HTML file (data inlined); the "Modal runs" widget shows
 placeholder jobs, marked MOCK, because no live status source exists yet.
@@ -57,9 +59,9 @@ THEMES = {
 }
 
 CSS = """
-:root { --bg:%(bg)s; --panel:%(panel)s; --border:%(border)s; --text:%(text)s; --muted:%(muted)s; --head:%(head)s;
-  --headtext:%(headtext)s; --accent:%(accent)s; --grid:%(grid)s; --hl:%(hl)s; --good:%(good)s; --bad:%(bad)s;
-  --chip:%(chip)s; --chipborder:%(chipborder)s; }
+%(vars)s
+select.theme { background: transparent; color: #cfd8e3; border: 1px solid #4b5563; border-radius: 4px; padding: 2px 6px; font: inherit; font-size: 12px; }
+select.theme option { color: #16191f; }
 * { box-sizing: border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font: 14px/1.45 "Amazon Ember", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
@@ -268,10 +270,10 @@ $('#reset').onclick = () => { state.fams = new Set(FAMS); state.gpus = new Set(G
 render();
 """
 
-HTML = """<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker · dashboard mockup (%(theme)s)</title><style>%(css)s</style></head>
+HTML = """<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker · dashboard mockup</title><style>%(css)s</style></head>
 <body>
 <header class="topbar"><span class="brand">jev-tracker</span><span class="crumb">Dashboards › Jev alternatives · 75 frozen queries</span>
-  <div class="right"><span>Last updated %(updated)s</span><span class="pill">↻ 1 min</span><span class="pill">%(theme)s</span><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
+  <div class="right"><span>Last updated %(updated)s</span><span class="pill">↻ 1 min</span><select class="theme" id="theme" title="theme"><option value="system">theme: system</option><option value="light">theme: light</option><option value="dark">theme: dark</option></select><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
 <div class="toolbar"><div class="dd" id="fams"></div><div class="dd" id="gpus"></div><span class="chip reset" id="reset">reset</span><span class="label" id="shown"></span></div>
 <nav class="tabs"><button data-t="summary">Summary</button><button data-t="quality">Quality</button><button data-t="cost">Cost</button><button data-t="latency">Latency</button><button data-t="evaluate">Evaluate a new model</button></nav>
 <main class="grid" id="grid"></main>
@@ -281,16 +283,36 @@ HTML = """<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker ·
 </body></html>
 """
 
-for theme, colors in THEMES.items():
-    html = HTML % {
-        "theme": theme,
-        "css": CSS % colors,
-        "updated": DATA["updated"],
-        "n": len(DATA["rows"]),
-        "ne": len(DATA["experiments"]),
-        "data": json.dumps({**DATA, "tldr": TLDR}),
-        "runs": json.dumps(MOCK_QUEUE),
-        "js": JS,
-    }
-    (OUT / f"dashboard_{theme}.html").write_text(html)
-    print(f"wrote docs/mockups/dashboard_{theme}.html ({len(html) // 1024} KB)")
+VARS = """
+:root, [data-theme=light] { %(light)s }
+[data-theme=dark] { %(dark)s }
+@media (prefers-color-scheme: dark) { :root:not([data-theme=light]) { %(dark)s } }
+"""
+
+THEME_JS = """
+const themeSel = document.getElementById('theme');
+const applyTheme = v => {
+  if (v === 'system') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = v;
+  localStorage.setItem('theme', v);
+  themeSel.value = v;
+};
+applyTheme(localStorage.getItem('theme') || 'system');
+themeSel.onchange = () => applyTheme(themeSel.value);
+"""
+
+
+def css_vars(colors: dict[str, str]) -> str:
+    return " ".join(f"--{name}:{value};" for name, value in colors.items())
+
+
+html = HTML % {
+    "css": CSS % {"vars": VARS % {name: css_vars(colors) for name, colors in THEMES.items()}},
+    "updated": DATA["updated"],
+    "n": len(DATA["rows"]),
+    "ne": len(DATA["experiments"]),
+    "data": json.dumps({**DATA, "tldr": TLDR}),
+    "runs": json.dumps(MOCK_QUEUE),
+    "js": JS + THEME_JS,
+}
+(OUT / "dashboard.html").write_text(html)
+print(f"wrote docs/mockups/dashboard.html ({len(html) // 1024} KB)")

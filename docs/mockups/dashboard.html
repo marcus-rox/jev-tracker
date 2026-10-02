@@ -1,7 +1,11 @@
-<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker · dashboard mockup (dark)</title><style>
-:root { --bg:#0f1b2a; --panel:#161e2d; --border:#2a3650; --text:#d1d5db; --muted:#8d99ae; --head:#0b1320;
-  --headtext:#f3f4f6; --accent:#539fe5; --grid:#223049; --hl:#2a2b1c; --good:#29ad32; --bad:#ff7a66;
-  --chip:#1b2a44; --chipborder:#3b5a8a; }
+<!doctype html><html><head><meta charset="utf-8"><title>jev-tracker · dashboard mockup</title><style>
+
+:root, [data-theme=light] { --bg:#f2f3f3; --panel:#ffffff; --border:#d5dbdb; --text:#16191f; --muted:#687078; --head:#232f3e; --headtext:#ffffff; --accent:#0972d3; --grid:#eaeded; --hl:#fff7e0; --good:#1d8102; --bad:#d13212; --chip:#f1faff; --chipborder:#8fb8e0; }
+[data-theme=dark] { --bg:#0f1b2a; --panel:#161e2d; --border:#2a3650; --text:#d1d5db; --muted:#8d99ae; --head:#0b1320; --headtext:#f3f4f6; --accent:#539fe5; --grid:#223049; --hl:#2a2b1c; --good:#29ad32; --bad:#ff7a66; --chip:#1b2a44; --chipborder:#3b5a8a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme=light]) { --bg:#0f1b2a; --panel:#161e2d; --border:#2a3650; --text:#d1d5db; --muted:#8d99ae; --head:#0b1320; --headtext:#f3f4f6; --accent:#539fe5; --grid:#223049; --hl:#2a2b1c; --good:#29ad32; --bad:#ff7a66; --chip:#1b2a44; --chipborder:#3b5a8a; } }
+
+select.theme { background: transparent; color: #cfd8e3; border: 1px solid #4b5563; border-radius: 4px; padding: 2px 6px; font: inherit; font-size: 12px; }
+select.theme option { color: #16191f; }
 * { box-sizing: border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font: 14px/1.45 "Amazon Ember", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
@@ -73,7 +77,7 @@ td.dim { color: var(--muted); }
 </style></head>
 <body>
 <header class="topbar"><span class="brand">jev-tracker</span><span class="crumb">Dashboards › Jev alternatives · 75 frozen queries</span>
-  <div class="right"><span>Last updated 2026-10-01 20:29 PDT</span><span class="pill">↻ 1 min</span><span class="pill">dark</span><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
+  <div class="right"><span>Last updated 2026-10-01 20:29 PDT</span><span class="pill">↻ 1 min</span><select class="theme" id="theme" title="theme"><option value="system">theme: system</option><option value="light">theme: light</option><option value="dark">theme: dark</option></select><a style="color:#cfd8e3" href="https://github.com/marcus-rox/jev-tracker">GitHub</a></div></header>
 <div class="toolbar"><div class="dd" id="fams"></div><div class="dd" id="gpus"></div><span class="chip reset" id="reset">reset</span><span class="label" id="shown"></span></div>
 <nav class="tabs"><button data-t="summary">Summary</button><button data-t="quality">Quality</button><button data-t="cost">Cost</button><button data-t="latency">Latency</button><button data-t="evaluate">Evaluate a new model</button></nav>
 <main class="grid" id="grid"></main>
@@ -215,5 +219,14 @@ function render() {
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { state.tab = b.dataset.t; state.sort = null; render(); });
 $('#reset').onclick = () => { state.fams = new Set(FAMS); state.gpus = new Set(GPUS); state.hidden.clear(); state.sort = null; render(); };
 render();
+
+const themeSel = document.getElementById('theme');
+const applyTheme = v => {
+  if (v === 'system') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = v;
+  localStorage.setItem('theme', v);
+  themeSel.value = v;
+};
+applyTheme(localStorage.getItem('theme') || 'system');
+themeSel.onchange = () => applyTheme(themeSel.value);
 </script>
 </body></html>
