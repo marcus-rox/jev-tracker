@@ -10,8 +10,9 @@
   - Rune-26B uses 47.1 s/query.
 - No experiments run this hour.
   - 0 queued or running
-  - 17 proposals await approval.
-- Search adds no proposal.
-  - 53 new candidates
-  - 5 need adapters.
-  - 48 are not alternatives.
+  - 19 proposals await approval.
+- Search adds two proposals.
+  - 34 new candidates
+  - Qev-4B needs adapter.
+  - AJev-12B needs adapter.
+  - 30 are not alternatives.
