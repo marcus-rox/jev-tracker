@@ -21,6 +21,7 @@
   "2026_10_02_09_46_36_holy-hare": "kev05b_vs_jev: Kev-0.5B prototype @9ce2fd3, 3 x L4, batched (daily 2026-10-02 rerun)",
   "2026_10_02_09_47_49_fair-lizard": "clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
+  "2026_10_02_10_46_48_star-hare": "matilda_jev_v1_vs_jev: Maincode MATILDA-jev v1 26.1B @c87f575, 3 x H200, own runtime (daily 2026-10-02)",
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
   "2026_10_02_17_18_05_proven-shiner": "kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)",
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
@@ -1391,6 +1392,51 @@
     "cost": "data/experiments/2026_10_02_09_49_26_alert-jay/costs_2026_10_02_09_49_26_alert-jay.json",
     "latency": "data/experiments/2026_10_03_07_25_30_happy-ghoul/latency_2026_10_03_07_25_30_happy-ghoul.json",
     "config": "data/experiments/2026_10_02_09_49_26_alert-jay/config_2026_10_02_09_49_26_alert-jay.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_10_46_48_star-hare",
+   "reranker": "matilda_noul",
+   "label": "matilda_noul",
+   "family": "matilda",
+   "serving": "maincode_jev_serve runtime: 1 child, 1 in flight",
+   "runtime": "PyTorch",
+   "gpu": "H200",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.8567801662,
+    "100": 0.8879588621866666,
+    "150": 0.9165121999866667,
+    "200": 0.9502396793733333
+   },
+   "mean_kept_mass": 0.9028727269366666,
+   "cost": {
+    "warm_gpu_s": 3398.830022096634,
+    "load_s": 759.2884669303894,
+    "warm_usd": 5.251736196942835,
+    "in_function_usd": 6.424958365978574,
+    "usd_per_query": 0.07002314929257113,
+    "usd_per_1k": 70.02314929257113,
+    "peak_gb": 52.903665152
+   },
+   "latency": {
+    "s_per_query": 3.43484,
+    "p50_s": 1.988,
+    "p95_s": 11.166
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_46_48_star-hare/kept_mass_2026_10_02_10_46_48_star-hare.json",
+    "cost": "data/experiments/2026_10_02_10_46_48_star-hare/costs_2026_10_02_10_46_48_star-hare.json",
+    "latency": "data/experiments/2026_10_03_12_01_09_first-bird/latency_2026_10_03_12_01_09_first-bird.json",
+    "config": "data/experiments/2026_10_02_10_46_48_star-hare/config_2026_10_02_10_46_48_star-hare.yaml"
    }
   },
   {

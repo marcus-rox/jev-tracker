@@ -3320,5 +3320,99 @@
    }
   },
   "app": "jev-ff-quick-moray-kev27b-batched-c32-noul"
+ },
+ {
+  "config": "fanout_star_hare_matilda_noul.yaml",
+  "gpu": "H200",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_12_01_09_first-bird",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 3.43,
+   "median_s_per_query": 1.99,
+   "p95_s_per_query": 11.17,
+   "max_s_per_query": 29.6
+  },
+  "latency_all": {
+   "star_hare_matilda_noul": {
+    "mean_s_per_query": 3.43,
+    "median_s_per_query": 1.99,
+    "p95_s_per_query": 11.17,
+    "max_s_per_query": 29.6
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.8708675308227539,
+   "max": 29.483624591827393
+  },
+  "recv_per_worker": {
+   "0": 720,
+   "1": 715,
+   "2": 714,
+   "3": 714,
+   "4": 713,
+   "5": 712,
+   "6": 712,
+   "7": 712,
+   "8": 710,
+   "9": 707,
+   "10": 704,
+   "11": 704,
+   "12": 702,
+   "13": 700,
+   "14": 697,
+   "15": 696,
+   "16": 695,
+   "17": 692,
+   "18": 691,
+   "19": 689,
+   "20": 688,
+   "21": 686,
+   "22": 684,
+   "23": 683,
+   "24": 683,
+   "25": 681,
+   "26": 681,
+   "27": 679,
+   "28": 678,
+   "29": 674,
+   "30": 671,
+   "31": 671,
+   "32": 669,
+   "33": 668,
+   "34": 666,
+   "35": 663,
+   "36": 662,
+   "37": 662,
+   "38": 659,
+   "39": 658,
+   "40": 655,
+   "41": 653,
+   "42": 652,
+   "43": 652,
+   "44": 649,
+   "45": 647
+  },
+  "rows": {
+   "2026_10_02_10_46_48_star-hare/matilda_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_10_46_48_star-hare/raw_matilda_noul_2026_10_02_10_46_48_star-hare.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_12_01_09_first-bird/raw_star_hare_matilda_noul_2026_10_03_12_01_09_first-bird.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-star-hare-matilda-noul"
  }
 ]

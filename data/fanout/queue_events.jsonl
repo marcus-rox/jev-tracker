@@ -164,3 +164,6 @@
 {"event": "start", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "app": "jev-ff-quick-moray-kev27b-batched-c32-noul", "t": "11:42:34"}
 {"event": "timed_phase", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "app": "jev-ff-quick-moray-kev27b-batched-c32-noul", "t": "11:45:40"}
 {"event": "adopt_done", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "stopped": true, "t": "11:48:25"}
+{"event": "start", "config": "fanout_star_hare_matilda_noul.yaml", "app": "jev-ff-star-hare-matilda-noul", "t": "12:01:08"}
+{"event": "timed_phase", "config": "fanout_star_hare_matilda_noul.yaml", "app": "jev-ff-star-hare-matilda-noul", "t": "12:04:13"}
+{"event": "ok", "config": "fanout_star_hare_matilda_noul.yaml", "exp": "2026_10_03_12_01_09_first-bird", "t": "12:10:23"}

@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_10_46_48_star-hare/matilda_noul
+name: fanout_star_hare_matilda_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  star_hare_matilda_noul:
+    source: matilda
+    model: Maincode/matilda-jev-v1
+    method: noul_query_in_state
+    max_items: 1
+    max_chars: null
+    forward_batch: 1
+    concurrency: 1
+    gpu: H200
+    fanout: true
+    shards: 46
