@@ -87,6 +87,7 @@ class _Fanoutable(BaseModel):
 
     fanout: bool = False
     sweep: list[modal_app.SweepPoint] | Literal["default"] | None = None
+    cache_warm: bool = False  # Kev only: time each query right after an untimed send of it
 
 
 class KevSource(_Fanoutable):
@@ -424,6 +425,11 @@ class Experiment(BaseModel):
                     raise ValueError(f"{name}: sweep needs fanout: true")
                 if src.shards != 1:
                     raise ValueError(f"{name}: a sweep runs on a pool of 1 (shards: 1)")
+            if getattr(src, "cache_warm", False):
+                if not src.fanout:
+                    raise ValueError(f"{name}: cache_warm needs fanout: true")
+                if src.source != "kev":
+                    raise ValueError(f"{name}: cache_warm is a Kev prefix-cache run only")
         return self
 
     def _sweep_points(self, src: ModelSource) -> list[modal_app.SweepPoint] | None:
@@ -466,6 +472,7 @@ class Experiment(BaseModel):
             ),
             fanout=src.fanout,
             sweep=self._sweep_points(src),
+            cache_warm=getattr(src, "cache_warm", False),
         )
 
 

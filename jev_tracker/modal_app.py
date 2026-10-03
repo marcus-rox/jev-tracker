@@ -355,6 +355,7 @@ class ScoringRun(BaseModel):
     # Latency runs: `shards` is the GPU pool; dispatch_cases deals one case's requests over it.
     fanout: bool = False
     sweep: list[SweepPoint] | None = None  # batch-size probes instead of the case pass
+    cache_warm: bool = False  # Kev: prime the prefix cache, then time the same query again
 
     @property
     def queue_name(self) -> str:
@@ -914,13 +915,16 @@ def _dispatch_case(
     case: DataPoint,
     warmup: bool,
     pool: ThreadPoolExecutor,
+    reset: bool = True,
 ) -> list[dict]:
     """Reset the workers, send one case's requests over the pool, collect every answer.
 
     Requests are the original `batches(case.input, run.max_items, run.max_chars)` — fan-out
     only decides which GPU answers each one, never the request composition (answers depend
-    on which children share a request)."""
-    _reset_workers(run, q, pool)
+    on which children share a request). `reset=False` keeps each worker's state (the
+    cache-warm variant's timed send, right after its priming send)."""
+    if reset:
+        _reset_workers(run, q, pool)
     m = run.max_items
     n_requests = len(batches(case.input, m, run.max_chars))
     sent: dict[tuple[str, int], float] = {}
@@ -961,7 +965,12 @@ def _dispatch_run(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> 
     timed_from = t_gap + 1.0
     with tqdm(cases, desc=f"{run.reranker} dispatch", unit="case", mininterval=5) as bar:
         for case in bar:
-            rows += _dispatch_case(run, q, case, False, pool)
+            if run.cache_warm:
+                # Prime the workers' prefix caches with this same query, untimed.
+                rows += _dispatch_case(run, q, case, True, pool)
+                rows += _dispatch_case(run, q, case, False, pool, reset=False)
+            else:
+                rows += _dispatch_case(run, q, case, False, pool)
             wall = max(r["recv"] for r in rows if r["case_id"] == case.id) - min(
                 r["sent"] for r in rows if r["case_id"] == case.id
             )
@@ -1165,6 +1174,7 @@ def score_cases(job_json: str) -> str:
 
     n = _answer_shard(job, done, answer, reset)
     scored = time.time()
+    prefix_hits, prefix_misses = server.prefix_cache.hits, server.prefix_cache.misses
     server.close()
     return ShardSummary(
         reranker=run.reranker,
@@ -1180,6 +1190,8 @@ def score_cases(job_json: str) -> str:
         peak_gb=torch.cuda.max_memory_allocated() / 1e9,
         forward_passes=server.batches,
         graphs=model.graphs.stats() if model.graphs is not None else None,
+        prefix_hits=prefix_hits,
+        prefix_misses=prefix_misses,
     ).model_dump_json()
 
 
