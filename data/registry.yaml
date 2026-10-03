@@ -876,9 +876,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_noul
-  latency_from:
-    experiment: 2026_10_03_07_02_53_tender-jackal
-    reranker: top_ram_laya421m_noul
+  pending_fanout: 'fan-out run 2026_10_03_07_02_53_tender-jackal failed the answer check vs this run (answer max 0.199, kept-mass 0.0035; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya421m_noul
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -893,9 +891,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_score
-  latency_from:
-    experiment: 2026_10_03_07_07_34_next-kit
-    reranker: top_ram_laya421m_score
+  pending_fanout: 'fan-out run 2026_10_03_07_07_34_next-kit failed the answer check vs this run (answer max 0.094, kept-mass 0.0025; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya421m_score
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -1181,9 +1177,7 @@ rows:
   highlight: false
 - experiment: 2026_10_01_23_53_20_frank-moray
   reranker: laya_noul
-  latency_from:
-    experiment: 2026_10_03_07_02_53_tender-jackal
-    reranker: top_ram_laya421m_noul
+  pending_fanout: 'fan-out run 2026_10_03_07_02_53_tender-jackal failed the answer check vs this run (answer max 0.199, kept-mass 0.0035; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya_noul
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -1198,9 +1192,7 @@ rows:
   highlight: false
 - experiment: 2026_10_01_23_53_20_frank-moray
   reranker: laya_score
-  latency_from:
-    experiment: 2026_10_03_07_07_34_next-kit
-    reranker: top_ram_laya421m_score
+  pending_fanout: 'fan-out run 2026_10_03_07_07_34_next-kit failed the answer check vs this run (answer max 0.094, kept-mass 0.0025; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya_score
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -1266,9 +1258,7 @@ rows:
   highlight: false
 - experiment: 2026_10_01_23_53_25_fit-macaw
   reranker: kev27b_score
-  latency_from:
-    experiment: 2026_10_03_08_23_35_able-hermit
-    reranker: fit_macaw_kev27b_score
+  pending_fanout: 'fan-out run 2026_10_03_08_23_35_able-hermit failed the answer check vs this run (answer max 0.085; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev27b_score_v2
   family: kev27b v2
   serving: 'batched: 12 children, 16 in flight'
@@ -1283,9 +1273,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_noul
-  latency_from:
-    experiment: 2026_10_03_07_13_01_viable-adder
-    reranker: above_dog_kev08b_noul
+  pending_fanout: 'fan-out run 2026_10_03_07_13_01_viable-adder failed the answer check vs this run (kept-mass 0.0023; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev08b_noul
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
@@ -1300,9 +1288,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_score
-  latency_from:
-    experiment: 2026_10_03_07_18_29_happy-hare
-    reranker: above_dog_kev08b_score
+  pending_fanout: 'fan-out run 2026_10_03_07_18_29_happy-hare failed the answer check vs this run (kept-mass 0.0038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev08b_score
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
@@ -1334,9 +1320,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_03_29_31_humble-sawfly
   reranker: kev9b_score
-  latency_from:
-    experiment: 2026_10_03_08_32_57_tender-weevil
-    reranker: humble_sawfly_kev9b_score
+  pending_fanout: 'fan-out run 2026_10_03_08_32_57_tender-weevil failed the answer check vs this run (answer max 0.043; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev9b_score_v2
   family: kev9b v2
   serving: 'batched: 12 children, 16 in flight'
@@ -1351,9 +1335,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_noul
-  latency_from:
-    experiment: 2026_10_03_08_36_04_right-molly
-    reranker: immune_tick_kev2b_noul
+  pending_fanout: 'fan-out run 2026_10_03_08_36_04_right-molly failed the answer check vs this run (kept-mass 0.0028; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev2b_noul
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
@@ -1368,9 +1350,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_score
-  latency_from:
-    experiment: 2026_10_03_08_39_11_key-chimp
-    reranker: immune_tick_kev2b_score
+  pending_fanout: 'fan-out run 2026_10_03_08_39_11_key-chimp failed the answer check vs this run (answer max 0.038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev2b_score
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
