@@ -234,18 +234,6 @@
    "evidence": null
   },
   {
-   "config": "configs/rune_26b_a4b_gguf_vs_jev.yaml",
-   "label": "rune_26b_a4b_gguf_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/owao/surogate-rune-26b-a4b-systemone",
-   "status": "running",
-   "note": "",
-   "queued_at": "2026-10-03T04:25:32Z",
-   "started_at": "2026-10-03T04:25:53Z",
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/gutsy_0p8b_vs_jev.yaml",
    "label": "gutsy_0p8b_vs_jev",
    "source": "hackernews",

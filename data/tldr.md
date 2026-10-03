@@ -4,11 +4,11 @@
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-- One model finishes today.
-  - Kev-4B BA-LoRA: 0.748 / 0.891
-  - Kev-4B BA-LoRA costs $0.63.
-  - StartLux-Decision-9B run fails.
+- One model finishes this hour.
+  - Rune-26B GGUF: 0.843 / 0.935
+  - Rune-26B costs $1.18.
+  - Rune-26B uses 47.1 s/query.
 - The top three stay.
   - Jev, Kev-27B, AutoTrust lead.
-  - Kev-4B BA-LoRA trails Jev.
+  - Rune-26B trails Jev.
   - Production keeps 0.711 at k=50

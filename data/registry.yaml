@@ -43,6 +43,7 @@ experiments:
   2026_10_02_17_22_11_merry-corgi: 'minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)'
   2026_10_02_18_00_38_large-corgi: 'rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)'
   2026_10_02_20_58_42_vast-filly: 'kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)'
+  2026_10_03_04_25_56_helped-shad: 'rune_26b_a4b_gguf_vs_jev: owao Rune-26B-A4B System One GGUF Q4_K_M @da27a15, 3 x L40S, llama-server, 8 in flight (hourly 2026-10-03)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1703,6 +1704,34 @@ rows:
   runtime: PyTorch
   gpu: RTX-PRO-6000
   buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_04_25_56_helped-shad
+  reranker: rune26b_q4_noul
+  label: rune26b_q4_noul
+  family: rune26b_q4
+  serving: 'batched: 12 children, 8 in flight'
+  runtime: GGUF (llama.cpp)
+  gpu: L40S
+  buffer: 8,192 ctx x 8 slots
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_04_25_56_helped-shad
+  reranker: rune26b_q4_score
+  label: rune26b_q4_score
+  family: rune26b_q4
+  serving: 'batched: 12 children, 8 in flight'
+  runtime: GGUF (llama.cpp)
+  gpu: L40S
+  buffer: 8,192 ctx x 8 slots
   queries: 75
   tables:
   - quality

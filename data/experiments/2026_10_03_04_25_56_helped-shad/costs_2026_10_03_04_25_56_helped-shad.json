@@ -1,0 +1,139 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "rune26b_q4_noul": {
+   "gpu": "L40S",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 373.86502146720886,
+   "warm_gpu_s": 1995.150395154953,
+   "in_function_s": 2369.015449523926,
+   "warm_usd": 1.0813715141739844,
+   "in_function_usd": 1.2840063736419676,
+   "requests": 2790,
+   "forward_passes": null,
+   "resident_gb": null,
+   "peak_gb": null,
+   "warm_usd_per_1k": 14.418286855653125
+  },
+  "rune26b_q4_score": {
+   "gpu": "L40S",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 380.1432662010193,
+   "warm_gpu_s": 2168.9587738513947,
+   "in_function_s": 2549.1020748615265,
+   "warm_usd": 1.1755756554274557,
+   "in_function_usd": 1.3816133245749471,
+   "requests": 2790,
+   "forward_passes": null,
+   "resident_gb": null,
+   "peak_gb": null,
+   "warm_usd_per_1k": 15.674342072366077
+  }
+ },
+ "shards": {
+  "rune26b_q4_noul": [
+   {
+    "reranker": "rune26b_q4_noul",
+    "shard": 0,
+    "gpu": "L40S",
+    "load_s": 121.85745930671692,
+    "warm_s": 725.8812370300293,
+    "total_s": 847.738706111908,
+    "requests": 1078,
+    "device": null,
+    "resident_gb": null,
+    "peak_gb": null,
+    "forward_passes": null,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rune26b_q4_noul",
+    "shard": 1,
+    "gpu": "L40S",
+    "load_s": 125.07738327980042,
+    "warm_s": 572.5706596374512,
+    "total_s": 697.6480524539948,
+    "requests": 759,
+    "device": null,
+    "resident_gb": null,
+    "peak_gb": null,
+    "forward_passes": null,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rune26b_q4_noul",
+    "shard": 2,
+    "gpu": "L40S",
+    "load_s": 126.93017888069153,
+    "warm_s": 696.6984984874725,
+    "total_s": 823.6286909580231,
+    "requests": 953,
+    "device": null,
+    "resident_gb": null,
+    "peak_gb": null,
+    "forward_passes": null,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ],
+  "rune26b_q4_score": [
+   {
+    "reranker": "rune26b_q4_score",
+    "shard": 0,
+    "gpu": "L40S",
+    "load_s": 132.04467272758484,
+    "warm_s": 802.4830293655396,
+    "total_s": 934.5277123451233,
+    "requests": 1078,
+    "device": null,
+    "resident_gb": null,
+    "peak_gb": null,
+    "forward_passes": null,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rune26b_q4_score",
+    "shard": 1,
+    "gpu": "L40S",
+    "load_s": 120.85406684875488,
+    "warm_s": 622.8630304336548,
+    "total_s": 743.7171103954315,
+    "requests": 759,
+    "device": null,
+    "resident_gb": null,
+    "peak_gb": null,
+    "forward_passes": null,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "rune26b_q4_score",
+    "shard": 2,
+    "gpu": "L40S",
+    "load_s": 127.24452662467957,
+    "warm_s": 743.6127140522003,
+    "total_s": 870.8572521209717,
+    "requests": 953,
+    "device": null,
+    "resident_gb": null,
+    "peak_gb": null,
+    "forward_passes": null,
+    "graphs": null,
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ]
+ }
+}
