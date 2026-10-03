@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_09_49_26_alert-jay/clef_score
+name: fanout_alert_jay_clef_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  alert_jay_clef_score:
+    source: clef
+    model: Cloudflare/clef
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    forward_batch: 1
+    concurrency: 1
+    gpu: H200
+    fanout: true
+    shards: 46

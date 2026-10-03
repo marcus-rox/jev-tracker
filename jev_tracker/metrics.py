@@ -54,6 +54,8 @@ class ShardSummary(BaseModel):
     resident_gb: float | None = None
     peak_gb: float | None = None  # max allocated while scoring
     forward_passes: int | None = None
+    prefix_hits: int | None = None  # kev PrefixCache hits (evidence the cache-warm run hit)
+    prefix_misses: int | None = None
     graphs: dict[str, int] | None = None  # kev CudaGraphs.stats() at the end
     option_isolation: bool | None = None  # vLLM/SGLang shards: the checkpoint's flag (H-2, H-3)
     resumed: int = 0  # requests already on the Volume when this call started; warm_s excludes them

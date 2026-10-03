@@ -23,6 +23,15 @@ FAILED = {
 }
 
 
+def _latency_only(id: str) -> bool:
+    """A fan-out latency run or batch-size sweep: no production arm, its rows serve `latency_from`."""
+    exp = load_config(Paths(id).config)
+    return all(
+        getattr(s, "fanout", False) or getattr(s, "sweep", None) is not None
+        for s in exp.rerankers.values()
+    )
+
+
 def _kept_mass(id: str) -> dict:
     return json.loads((Paths(id).dir / f"kept_mass_{id}.json").read_text())
 
@@ -51,7 +60,8 @@ def test_R3_experiment_dir_holds_config_and_kept_mass_under_its_id(id: str) -> N
         assert p.calls.exists() and not list(p.dir.glob("raw_*")), id
     else:
         km = _kept_mass(id)
-        assert set(km) >= {"n_cases", "kept_mass"} and "prod" in km["kept_mass"]
+        assert set(km) >= {"n_cases", "kept_mass"}
+        assert "prod" in km["kept_mass"] or _latency_only(id), id
     for f in p.dir.iterdir():
         assert id in f.name, f  # nothing anonymous: every artifact carries the experiment id
         if f.name.startswith("raw_"):

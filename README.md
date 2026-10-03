@@ -17,7 +17,8 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 - `data/jev/` — Jev's committed answers
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
 - `data/registry.yaml` — row labels (model family, serving, runtime, GPU) for every reranker shown;
-  a row with `deprecated: <reason>` never reaches the site; `latency_from: {experiment, reranker}`
+  a row with `deprecated: <reason>` never reaches the site, nor does one with `pending_fanout: <reason>`
+  (a valid row hidden until its fan-out latency run lands); `latency_from: {experiment, reranker}`
   takes the row's latency (and its `sources.latency` link) from another experiment's
   `latency_<id>.json` — used for fan-out latency runs, whose quality and cost come from the
   row's own experiment

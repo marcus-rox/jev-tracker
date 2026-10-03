@@ -178,7 +178,7 @@ def build(
     """Pure: one site row per registry row, numbers read from that experiment's committed JSONs."""
     rows = []
     for r in registry["rows"]:
-        if "deprecated" in r:
+        if "deprecated" in r or "pending_fanout" in r:
             continue
         if r["runtime"] not in RUNTIMES:
             raise ValueError(

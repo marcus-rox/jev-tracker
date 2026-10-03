@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+fit_macaw_kev27b_noul,75,0.78,0.59,1.66,0.36,2.46,37.2

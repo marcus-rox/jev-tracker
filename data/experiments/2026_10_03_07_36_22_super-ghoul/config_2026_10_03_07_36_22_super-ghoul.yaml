@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_03_00_31_36_clear-flea/kev27b_batched_RTXPRO6000_noul
+name: fanout_clear_flea_kev27b_batched_RTXPRO6000_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  clear_flea_kev27b_batched_RTXPRO6000_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    gpu: RTX-PRO-6000
+    forward_batch: 1
+    fanout: true
+    shards: 46

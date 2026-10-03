@@ -1,0 +1,16 @@
+# Fan-out check: Kev-9B v2 noul, one query at a time, its original requests (12 children,
+# 12,000 chars, as humble-sawfly) spread one per warm H100: 252 = the largest query's requests.
+name: fanout_check_kev9b
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  kev9b_v2_noul:
+    source: kev
+    model: jaredpalmer/kev-9b@db029f08b290afd9fee4aa4bbcd9ae48602d1eb0
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 46
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true

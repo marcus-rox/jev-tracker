@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+alert_jay_clef_noul,75,2.24,1.53,4.59,1.19,8.60,37.2

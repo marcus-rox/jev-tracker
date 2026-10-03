@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+above_dog_kev08b_noul,75,0.52,0.36,1.63,0.24,2.31,37.2

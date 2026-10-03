@@ -87,6 +87,7 @@ class _Fanoutable(BaseModel):
 
     fanout: bool = False
     sweep: list[modal_app.SweepPoint] | Literal["default"] | None = None
+    cache_warm: bool = False  # Kev only: time each query right after an untimed send of it
 
 
 class KevSource(_Fanoutable):
@@ -424,6 +425,11 @@ class Experiment(BaseModel):
                     raise ValueError(f"{name}: sweep needs fanout: true")
                 if src.shards != 1:
                     raise ValueError(f"{name}: a sweep runs on a pool of 1 (shards: 1)")
+            if getattr(src, "cache_warm", False):
+                if not src.fanout:
+                    raise ValueError(f"{name}: cache_warm needs fanout: true")
+                if src.source != "kev":
+                    raise ValueError(f"{name}: cache_warm is a Kev prefix-cache run only")
         return self
 
     def _sweep_points(self, src: ModelSource) -> list[modal_app.SweepPoint] | None:
@@ -466,6 +472,7 @@ class Experiment(BaseModel):
             ),
             fanout=src.fanout,
             sweep=self._sweep_points(src),
+            cache_warm=getattr(src, "cache_warm", False),
         )
 
 
@@ -800,7 +807,7 @@ def finish(id: str) -> None:
             run_name = scoring.name
             if scoring.sweep:
                 rows = modal_app.pull_json(scoring, "sweep.json")
-                dest = p.dir / f"sweep_{name}.json"
+                dest = p.dir / f"sweep_{name}_{p.id}.json"
                 dest.write_text(json.dumps(rows, indent=1) + "\n")
                 sweeps[name] = sweep_stats(rows)
                 print(f"wrote {dest}: {len(rows)} reps")
@@ -808,7 +815,7 @@ def finish(id: str) -> None:
             records = modal_app.pull(scoring)
             if scoring.fanout:
                 dispatched = modal_app.pull_json(scoring, "dispatch.json")
-                (p.dir / f"dispatch_{name}.json").write_text(
+                (p.dir / f"dispatch_{name}_{p.id}.json").write_text(
                     json.dumps(dispatched, indent=1) + "\n"
                 )
                 records = apply_dispatch(records, dispatched)
@@ -884,7 +891,7 @@ def evidence(id: str, calls: dict[str, str]) -> Evidence:
         if isinstance(src, ProductionSource):
             continue
         if isinstance(src, _Fanoutable) and src.sweep is not None:
-            if not (p.dir / f"sweep_{name}.json").exists():
+            if not (p.dir / f"sweep_{name}_{p.id}.json").exists():
                 problems.append(f"{name}: no sweep results")
             continue
         if not p.raw(name).exists():

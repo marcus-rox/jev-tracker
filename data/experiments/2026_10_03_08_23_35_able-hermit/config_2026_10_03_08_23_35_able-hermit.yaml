@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_01_23_53_25_fit-macaw/kev27b_score
+name: fanout_fit_macaw_kev27b_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  fit_macaw_kev27b_score:
+    source: kev
+    model: jaredpalmer/kev-27b@af0e6d551bdc2cc724f3e9d7a8bee1cd4fb8f7bf
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    forward_batch: 1
+    gpu: H200
+    fanout: true
+    shards: 46

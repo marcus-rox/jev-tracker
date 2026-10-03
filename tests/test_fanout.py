@@ -150,10 +150,11 @@ class _FakeQueue:
     """Enough of modal.Queue for `_dispatch_case`: puts land per partition, and canned
     acks / done tuples answer the reads."""
 
-    def __init__(self, n_workers: int, dones: list[tuple]) -> None:
+    def __init__(self, n_workers: int, dones: list[tuple], repeat: bool = False) -> None:
         self.puts: dict[str, list] = {}
         self._acks = [("reset_ok", w) for w in range(n_workers)]
         self._dones = list(dones)
+        self._repeat = repeat  # return the same dones every call (multi-dispatch tests)
 
     def put(self, v, partition=None) -> None:
         self.puts.setdefault(partition, []).append(v)
@@ -165,6 +166,8 @@ class _FakeQueue:
         if partition == "ack":
             return self._acks
         if partition == "done":
+            if self._repeat:
+                return list(self._dones)
             dones, self._dones = self._dones, []
             return dones
         raise AssertionError(partition)
@@ -175,6 +178,50 @@ def _exp_run(src: dict):
         {"name": "x", "rerankers": {"prod": {"source": "production"}, "m": src}}
     )
     return exp.scoring_run("e", "m", exp.rerankers["m"])
+
+
+def test_cache_warm_primes_then_times_a_case_without_a_second_reset(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(modal_app, "DISPATCH_WARMUP_CASES", 0)
+    run = _exp_run(
+        {
+            "source": "kev",
+            "method": "noul_query_in_state",
+            "shards": 4,
+            "fanout": True,
+            "cache_warm": True,
+        }
+    )
+    assert run.cache_warm
+    case = load_cases()[0]
+    monkeypatch.setattr(modal_app, "load_cases", lambda: [case])
+    n_requests = len(batches(case.input, run.max_items, run.max_chars))
+    dones = [(case.id, bi, 0.0, 0.1, 1) for bi in range(n_requests)]
+    q = _FakeQueue(run.shards, dones, repeat=True)
+    with ThreadPoolExecutor(4) as pool:
+        rows = modal_app._dispatch_run(run, q, pool)["rows"]
+    for w in range(run.shards):
+        resets = [v for v in q.puts[f"w{w}"] if v == ("reset",)]
+        items = [v for v in q.puts[f"w{w}"] if len(v) == 3]
+        # one reset for the priming send; the timed send goes straight to the workers
+        assert len(resets) == 1 and len(items) == 2
+        assert items[0][1] == items[1][1] == [j for j in range(n_requests) if j % run.shards == w]
+    prime = [r for r in rows if r["warmup"]]
+    timed = [r for r in rows if not r["warmup"]]
+    assert {r["batch"] for r in prime} == {r["batch"] for r in timed} == set(range(n_requests))
+
+
+def test_cache_warm_needs_fanout_and_kev() -> None:
+    cfg = {
+        "name": "x",
+        "rerankers": {
+            "prod": {"source": "production"},
+            "m": {"source": "kev", "method": "noul_query_in_state", "cache_warm": True},
+        },
+    }
+    with pytest.raises(ValidationError, match="cache_warm needs fanout"):
+        Experiment.model_validate(cfg)
 
 
 def test_collect_done_times_out_naming_missing_batch_and_worker(
