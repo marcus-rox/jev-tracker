@@ -176,3 +176,6 @@
 {"event": "start", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "13:19:25"}
 {"event": "timed_phase", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "13:20:59"}
 {"event": "ok", "config": "fanout_keen_emu_kev4b_noul.yaml", "exp": "2026_10_03_13_19_27_noted-oriole", "t": "13:24:04"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "13:24:05"}
+{"event": "timed_phase", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "13:26:36"}
+{"event": "ok", "config": "fanout_keen_emu_kev4b_score.yaml", "exp": "2026_10_03_13_24_07_trusty-asp", "t": "13:29:42"}

@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_01_23_53_13_keen-emu/kev4b_score, 2026_10_03_00_31_36_proper-bee/kev4b_score
+name: fanout_keen_emu_kev4b_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  keen_emu_kev4b_score:
+    source: kev
+    model: jaredpalmer/kev-4b@139fdd94f1b6a6ad80cc15e08fcb99cac885a101
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    forward_batch: 1
+    concurrency: 1
+    gpu: L40S
+    fanout: true
+    shards: 46
