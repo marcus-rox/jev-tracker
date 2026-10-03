@@ -63,6 +63,35 @@ def test_apply_dispatch_drops_warmup_and_shares_split_times() -> None:
     ]
 
 
+def test_apply_dispatch_drops_cache_warm_primes() -> None:
+    records = [
+        _record("case_1", 0, started_at_s=105.0),  # the cache-warm prime's answer
+        _record("case_1", 0, started_at_s=110.5),  # the timed answer
+    ]
+    dispatched = _dispatched(
+        [
+            {
+                "case_id": "case_1",
+                "batch": 0,
+                "sent": 100.0,
+                "recv": 100.5,
+                "warmup": True,
+                "worker_start": 105.0,
+            },
+            {
+                "case_id": "case_1",
+                "batch": 0,
+                "sent": 110.0,
+                "recv": 112.0,
+                "warmup": False,
+                "worker_start": 110.5,
+            },
+        ]
+    )
+    out = apply_dispatch(records, dispatched)
+    assert [(r.started_at_s, r.latency_s) for r in out] == [(110.0, 2.0)]
+
+
 def test_apply_dispatch_rejects_a_record_the_dispatcher_never_sent() -> None:
     with pytest.raises(ValueError, match="no dispatch record"):
         apply_dispatch([_record("case_1", 0)], _dispatched([]))
