@@ -51,14 +51,14 @@ const METRICS: [Metric, string, Col, 1 | -1][] = [
   ['cost', 'cost ($ / 1k)', COST_PER_1K, 1],
   ['latency', 'latency (s / query)', S_PER_QUERY, 1],
 ]
-const BOUNDS = METRICS.filter(([m]) => m !== 'quality')
+const BOUNDS = METRICS
 const PROD_FAMILY = 'production'
 
 /** A zero cost or latency means the run was never timed, not that it was free. */
 const measured = (v: number | null) => (v === null || v === 0 ? null : v)
-const beatsProd = (r: Row, prod: Row, col: Col) => {
+const beatsProd = (r: Row, prod: Row, col: Col, dir: 1 | -1) => {
   const v = measured(col.value(r)), p = measured(col.value(prod))
-  return v !== null && p !== null && v < p
+  return v !== null && p !== null && (v - p) * dir < 0
 }
 const ranked = (rows: Row[], metric: Metric | null) => {
   const m = METRICS.find(([k]) => k === metric)
@@ -136,7 +136,7 @@ export default function App() {
   const runtimeSet = runtimes ?? new Set(RUNTIMES)
   const prod = all.find((r) => r.family === PROD_FAMILY) ?? null
   const active = BOUNDS.filter(([m]) => bounds.has(m))
-  const inBounds = (r: Row) => r.family === PROD_FAMILY || prod === null || active.every(([, , col]) => beatsProd(r, prod, col))
+  const inBounds = (r: Row) => r.family === PROD_FAMILY || prod === null || active.every(([, , col, dir]) => beatsProd(r, prod, col, dir))
   const rows = ranked(all.filter((r) => modelSet.has(r.label) && gpuSet.has(r.gpu) && runtimeSet.has(r.runtime) && inBounds(r)), metric)
   const forTable = (t: string) => rows.filter((r) => r.tables.includes(t))
   const kept = data.ks.map(keptCol)
@@ -176,9 +176,9 @@ export default function App() {
         <Dropdown name="Model" options={MODELS} selected={modelSet} onChange={setModels} />
         <Dropdown name="GPU" options={GPUS} selected={gpuSet} onChange={setGpus} />
         <Dropdown name="Runtime" options={RUNTIMES} selected={runtimeSet} onChange={setRuntimes} />
-        <span className="label">below prod</span>
-        {BOUNDS.map(([m, , col]) => (
-          <span key={m} className={`chip${bounds.has(m) ? ' on' : ''}`} title={prodValue(col)} onClick={() => setBounds(toggled(bounds, m))}>{m} &lt; prod</span>
+        <span className="label">beats prod</span>
+        {BOUNDS.map(([m, , col, dir]) => (
+          <span key={m} className={`chip${bounds.has(m) ? ' on' : ''}`} title={prodValue(col)} onClick={() => setBounds(toggled(bounds, m))}>{m} {dir === 1 ? '<' : '>'} prod</span>
         ))}
         <span className="label">sort by</span>
         {METRICS.map(([m, name, , dir]) => (
