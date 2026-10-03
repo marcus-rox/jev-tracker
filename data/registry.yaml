@@ -68,6 +68,11 @@ experiments:
   2026_10_03_08_36_04_right-molly: 'fanout_immune_tick_kev2b_noul: fan-out latency, 46 x L4, original requests, one query at a time (0.56 s/query mean)'
   2026_10_03_08_39_11_key-chimp: 'fanout_immune_tick_kev2b_score: fan-out latency, 46 x L4, original requests, one query at a time (0.82 s/query mean)'
   2026_10_03_02_10_36_simple-jay: 'fanout_sweep_v1: batch-size sweep, one warm GPU per model, 1-128 children per request and 1-8 requests per GPU'
+  2026_10_03_09_05_26_safe-bunny: 'fanout_loving_loon_autotrust_noul: fan-out latency, 46 x H200, original requests, one query at a time (2.89 s/query mean)'
+  2026_10_03_08_41_32_prime-tiger: 'fanout_large_corgi_rsi_jev_noul: fan-out latency, 46 x L40S, original requests, one query at a time (12.25 s/query mean)'
+  2026_10_03_08_46_11_free-calf: 'fanout_large_corgi_rsi_jev_score: fan-out latency, 46 x L40S, original requests, one query at a time (11.9 s/query mean)'
+  2026_10_03_09_48_55_proper-mule: 'fanout_merry_corgi_minicpm5_jev_noul: fan-out latency, 46 x L4, original requests, one query at a time (2.67 s/query mean)'
+  2026_10_03_09_56_01_subtle-grub: 'fanout_merry_corgi_minicpm5_jev_score: fan-out latency, 46 x L4, original requests, one query at a time (3.25 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -819,9 +824,7 @@ rows:
   - latency
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_noul
-  latency_from:
-    experiment: 2026_10_03_07_02_53_tender-jackal
-    reranker: top_ram_laya421m_noul
+  pending_fanout: 'fan-out run 2026_10_03_07_02_53_tender-jackal failed the answer check vs this run (answer max 0.199, kept-mass 0.0035; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya421m_noul
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -835,9 +838,7 @@ rows:
   - latency
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_score
-  latency_from:
-    experiment: 2026_10_03_07_07_34_next-kit
-    reranker: top_ram_laya421m_score
+  pending_fanout: 'fan-out run 2026_10_03_07_07_34_next-kit failed the answer check vs this run (answer max 0.094, kept-mass 0.0025; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya421m_score
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -1103,9 +1104,7 @@ rows:
   - latency
 - experiment: 2026_10_01_23_53_20_frank-moray
   reranker: laya_noul
-  latency_from:
-    experiment: 2026_10_03_07_02_53_tender-jackal
-    reranker: top_ram_laya421m_noul
+  pending_fanout: 'fan-out run 2026_10_03_07_02_53_tender-jackal failed the answer check vs this run (answer max 0.199, kept-mass 0.0035; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya_noul
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -1119,9 +1118,7 @@ rows:
   - latency
 - experiment: 2026_10_01_23_53_20_frank-moray
   reranker: laya_score
-  latency_from:
-    experiment: 2026_10_03_07_07_34_next-kit
-    reranker: top_ram_laya421m_score
+  pending_fanout: 'fan-out run 2026_10_03_07_07_34_next-kit failed the answer check vs this run (answer max 0.094, kept-mass 0.0025; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: laya_score
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -1183,9 +1180,7 @@ rows:
   - latency
 - experiment: 2026_10_01_23_53_25_fit-macaw
   reranker: kev27b_score
-  latency_from:
-    experiment: 2026_10_03_08_23_35_able-hermit
-    reranker: fit_macaw_kev27b_score
+  pending_fanout: 'fan-out run 2026_10_03_08_23_35_able-hermit failed the answer check vs this run (answer max 0.085; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev27b_score_v2
   family: kev27b v2
   serving: 'batched: 12 children, 16 in flight'
@@ -1199,9 +1194,7 @@ rows:
   - latency
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_noul
-  latency_from:
-    experiment: 2026_10_03_07_13_01_viable-adder
-    reranker: above_dog_kev08b_noul
+  pending_fanout: 'fan-out run 2026_10_03_07_13_01_viable-adder failed the answer check vs this run (kept-mass 0.0023; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev08b_noul
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
@@ -1215,9 +1208,7 @@ rows:
   - latency
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_score
-  latency_from:
-    experiment: 2026_10_03_07_18_29_happy-hare
-    reranker: above_dog_kev08b_score
+  pending_fanout: 'fan-out run 2026_10_03_07_18_29_happy-hare failed the answer check vs this run (kept-mass 0.0038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev08b_score
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
@@ -1247,9 +1238,7 @@ rows:
   - latency
 - experiment: 2026_10_02_03_29_31_humble-sawfly
   reranker: kev9b_score
-  latency_from:
-    experiment: 2026_10_03_08_32_57_tender-weevil
-    reranker: humble_sawfly_kev9b_score
+  pending_fanout: 'fan-out run 2026_10_03_08_32_57_tender-weevil failed the answer check vs this run (answer max 0.043; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev9b_score_v2
   family: kev9b v2
   serving: 'batched: 12 children, 16 in flight'
@@ -1263,9 +1252,7 @@ rows:
   - latency
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_noul
-  latency_from:
-    experiment: 2026_10_03_08_36_04_right-molly
-    reranker: immune_tick_kev2b_noul
+  pending_fanout: 'fan-out run 2026_10_03_08_36_04_right-molly failed the answer check vs this run (kept-mass 0.0028; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev2b_noul
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
@@ -1279,9 +1266,7 @@ rows:
   - latency
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_score
-  latency_from:
-    experiment: 2026_10_03_08_39_11_key-chimp
-    reranker: immune_tick_kev2b_score
+  pending_fanout: 'fan-out run 2026_10_03_08_39_11_key-chimp failed the answer check vs this run (answer max 0.038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev2b_score
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
@@ -1419,7 +1404,9 @@ rows:
   - latency
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_09_05_26_safe-bunny
+    reranker: loving_loon_autotrust_noul
   label: autotrust_noul
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
@@ -1505,7 +1492,9 @@ rows:
   - latency
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_09_48_55_proper-mule
+    reranker: merry_corgi_minicpm5_jev_noul
   label: minicpm5_jev_noul
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
@@ -1519,7 +1508,9 @@ rows:
   - latency
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_09_56_01_subtle-grub
+    reranker: merry_corgi_minicpm5_jev_score
   label: minicpm5_jev_score
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
@@ -1533,7 +1524,9 @@ rows:
   - latency
 - experiment: 2026_10_02_18_00_38_large-corgi
   reranker: rsi_jev_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_08_41_32_prime-tiger
+    reranker: large_corgi_rsi_jev_noul
   label: rsi_jev_noul
   family: rsi_jev
   serving: 'rsijev predict: 12 children, 1 in flight'
@@ -1547,7 +1540,9 @@ rows:
   - latency
 - experiment: 2026_10_02_18_00_38_large-corgi
   reranker: rsi_jev_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_08_46_11_free-calf
+    reranker: large_corgi_rsi_jev_score
   label: rsi_jev_score
   family: rsi_jev
   serving: 'rsijev predict: 12 children, 1 in flight'

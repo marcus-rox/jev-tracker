@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+merry_corgi_minicpm5_jev_score,75,3.25,2.65,8.19,1.57,14.01,57.1

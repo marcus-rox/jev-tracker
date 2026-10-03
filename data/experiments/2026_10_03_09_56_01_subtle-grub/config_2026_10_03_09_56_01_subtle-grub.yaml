@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_17_22_11_merry-corgi/minicpm5_jev_score
+name: fanout_merry_corgi_minicpm5_jev_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  merry_corgi_minicpm5_jev_score:
+    source: minicpm_jev
+    model: ytbai/MiniCPM5-2B-Jev
+    method: score_query_in_question
+    max_items: 8
+    max_chars: 8000
+    forward_batch: 1
+    concurrency: 1
+    gpu: L4
+    fanout: true
+    shards: 46

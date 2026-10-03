@@ -124,3 +124,18 @@
 {"event": "timed_phase", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "app": "jev-ff-large-corgi-rsi-jev-noul", "t": "08:46:10"}
 {"event": "overlap_launch", "config": "fanout_large_corgi_rsi_jev_score.yaml", "t": "08:46:10"}
 {"event": "start", "config": "fanout_large_corgi_rsi_jev_score.yaml", "app": "jev-ff-large-corgi-rsi-jev-score", "t": "08:46:10"}
+{"event": "overlap_launch", "config": "fanout_loving_loon_autotrust_noul.yaml", "t": "09:05:25"}
+{"event": "start", "config": "fanout_loving_loon_autotrust_noul.yaml", "app": "jev-ff-loving-loon-autotrust-noul", "t": "09:05:25"}
+{"event": "ok", "config": "fanout_loving_loon_autotrust_noul.yaml", "exp": "2026_10_03_09_05_26_safe-bunny", "t": "09:28:50"}
+{"event": "adopt_done", "config": "fanout_loving_loon_autotrust_noul.yaml", "stopped": false, "t": "09:28:51"}
+{"event": "failed", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "code": 1, "t": "09:02:19"}
+{"event": "ok", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "exp": "2026_10_03_08_41_32_prime-tiger", "note": "repaired shard03", "t": "09:07:41"}
+{"event": "timed_phase", "config": "fanout_large_corgi_rsi_jev_score.yaml", "app": "jev-ff-large-corgi-rsi-jev-score", "t": "09:05:25"}
+{"event": "ok", "config": "fanout_large_corgi_rsi_jev_score.yaml", "exp": "2026_10_03_08_46_11_free-calf", "t": "09:21:31"}
+{"event": "adopt_done", "config": "fanout_large_corgi_rsi_jev_score.yaml", "stopped": false, "t": "09:21:32"}
+{"event": "start", "config": "fanout_merry_corgi_minicpm5_jev_noul.yaml", "app": "jev-ff-merry-corgi-minicpm5-jev-noul", "t": "09:48:54"}
+{"event": "timed_phase", "config": "fanout_merry_corgi_minicpm5_jev_noul.yaml", "app": "jev-ff-merry-corgi-minicpm5-jev-noul", "t": "09:51:22"}
+{"event": "ok", "config": "fanout_merry_corgi_minicpm5_jev_noul.yaml", "exp": "2026_10_03_09_48_55_proper-mule", "t": "09:55:59"}
+{"event": "start", "config": "fanout_merry_corgi_minicpm5_jev_score.yaml", "app": "jev-ff-merry-corgi-minicpm5-jev-score", "t": "09:56:00"}
+{"event": "timed_phase", "config": "fanout_merry_corgi_minicpm5_jev_score.yaml", "app": "jev-ff-merry-corgi-minicpm5-jev-score", "t": "09:58:19"}
+{"event": "ok", "config": "fanout_merry_corgi_minicpm5_jev_score.yaml", "exp": "2026_10_03_09_56_01_subtle-grub", "t": "10:03:43"}
