@@ -4,11 +4,11 @@
 - Kev-27B is closest.
   - 0.887 / 0.953 kept-mass
   - 0.006 behind at k=50
-- One model finishes this hour.
+- Rune-26B is the latest run.
   - Rune-26B GGUF: 0.843 / 0.935
   - Rune-26B costs $1.18.
   - Rune-26B uses 47.1 s/query.
-- The top three stay.
-  - Jev, Kev-27B, AutoTrust lead.
-  - Rune-26B trails Jev.
+- No run finishes this hour.
+  - Search finds 77 candidates.
+  - Two new proposals wait.
   - Production keeps 0.711 at k=50
