@@ -26,21 +26,40 @@ const CHART_SUB = 'Top 10 shown (best run per model, Jev / production / random a
 
 const f = (digits: number) => (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
-const keptCol = (k: K): Col => ({ head: `@${k}`, value: (r) => r.kept_mass?.[k] ?? null, fmt: f(3), source: (r) => r.sources.kept_mass })
-const MEAN: Col = { head: 'mean', value: (r) => r.mean_kept_mass, fmt: f(3), source: (r) => r.sources.kept_mass }
+const RATING = 'A rating is the mean of 3 grader votes, each 0 to 3.'
+const keptCol = (k: K): Col => ({
+  head: `@${k}`, value: (r) => r.kept_mass?.[k] ?? null, fmt: f(3), source: (r) => r.sources.kept_mass,
+  help: `kept-mass@${k}. For each query: add up the ratings of the ${k} children this ranker puts on top, then divide by the best sum any ${k} children could reach (${k} is capped at the query's labeled children). Averaged over the queries; 1.0 means as good as the ideal order. ${RATING}`,
+})
+const MEAN: Col = {
+  head: 'mean', value: (r) => r.mean_kept_mass, fmt: f(3), source: (r) => r.sources.kept_mass,
+  help: 'Conglomerate quality score: the average of kept-mass @50, @100, @150 and @200. The best-quality card, the "quality > prod" filter and the quality sort use this number.',
+}
+const API_ROWS = 'Production and Jev rows use their hosted-API bill for the run.'
 const COST: Col[] = [
-  { head: 'warm GPU-s', value: (r) => r.cost?.warm_gpu_s ?? null, fmt: f(0), source: (r) => r.sources.cost },
-  { head: 'load s', value: (r) => r.cost?.load_s ?? null, fmt: f(0), source: (r) => r.sources.cost },
-  { head: '$ / run', value: (r) => r.cost?.warm_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
-  { head: '$ / run + load', value: (r) => r.cost?.in_function_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
-  { head: '$ / query', value: (r) => r.cost?.usd_per_query ?? null, fmt: f(4), source: (r) => r.sources.cost },
-  { head: '$ / 1k queries', value: (r) => r.cost?.usd_per_1k ?? null, fmt: f(1), source: (r) => r.sources.cost },
-  { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost },
+  { head: 'warm GPU-s', value: (r) => r.cost?.warm_gpu_s ?? null, fmt: f(0), source: (r) => r.sources.cost,
+    help: 'GPU-seconds spent answering. For each GPU: time from model loaded to its last answer, at full load (16 requests in flight per GPU by default). Summed over every GPU in the run. Model loading is not included. Blank for hosted-API rows.' },
+  { head: 'load s', value: (r) => r.cost?.load_s ?? null, fmt: f(0), source: (r) => r.sources.cost,
+    help: 'Start-up seconds: from container start to model loaded and ready, summed over every GPU in the run. Not included in $ / run.' },
+  { head: '$ / run', value: (r) => r.cost?.warm_usd ?? null, fmt: f(2), source: (r) => r.sources.cost,
+    help: `Cost of one run (every query once): warm GPU-s times Modal's list price per second for that GPU, plus the reserved host RAM per GiB-second. Load time, failed calls, CPU and network are not counted. ${API_ROWS}` },
+  { head: '$ / run + load', value: (r) => r.cost?.in_function_usd ?? null, fmt: f(2), source: (r) => r.sources.cost,
+    help: `The same prices applied to each GPU's whole function time (start-up, answering and shutdown), summed over every GPU. ${API_ROWS}` },
+  { head: '$ / query', value: (r) => r.cost?.usd_per_query ?? null, fmt: f(4), source: (r) => r.sources.cost,
+    help: '$ / run divided by the number of queries in the run.' },
+  { head: '$ / 1k queries', value: (r) => r.cost?.usd_per_1k ?? null, fmt: f(1), source: (r) => r.sources.cost,
+    help: '$ / run times 1000, divided by the number of queries in the run (straight-line scaling). The cheapest card, the "cost < prod" filter and the cost sort use this number.' },
+  { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost,
+    help: 'The most GPU memory allocated at any moment while answering; the largest value over the run\'s GPUs.' },
 ]
+const WALL = 'Per-query wall clock: the time from sending a query\'s first request to receiving its last answer.'
 const LATENCY: Col[] = [
-  { head: 's / query (mean)', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency },
-  { head: 'median', value: (r) => r.latency?.p50_s ?? null, fmt: f(2), source: (r) => r.sources.latency },
-  { head: 'p95', value: (r) => r.latency?.p95_s ?? null, fmt: f(2), source: (r) => r.sources.latency },
+  { head: 's / query (mean)', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency,
+    help: `${WALL} This column is the average over the queries. Fan-out GPU rows run one query at a time, with its requests spread over a pool of GPUs, after 3 untimed warm-up queries. GPU rows without a fan-out run were timed inside the full-load run, with other queries in flight on the same GPU, so they read higher. Production and Jev rows use the same measurement against the hosted API. The fastest card, the "latency < prod" filter and the latency sort use this number.` },
+  { head: 'median', value: (r) => r.latency?.p50_s ?? null, fmt: f(2), source: (r) => r.sources.latency,
+    help: `${WALL} This column is the median over the queries.` },
+  { head: 'p95', value: (r) => r.latency?.p95_s ?? null, fmt: f(2), source: (r) => r.sources.latency,
+    help: `${WALL} This column is the 95th percentile over the queries: about 95% of queries finished within this time.` },
 ]
 const COST_PER_1K = COST[5], S_PER_QUERY = LATENCY[0]
 
