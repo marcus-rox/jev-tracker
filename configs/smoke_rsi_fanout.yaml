@@ -1,0 +1,15 @@
+# RSI-Jev fan-out smoke: 2 cases over a 4x L4 pool, engine-default request composition
+# (same as configs/rsi_jev_v3_2b_vs_jev.yaml). Not a benchmark run.
+name: smoke_rsi_fanout
+cases: 2
+rerankers:
+  prod:
+    source: production
+  rsi_jev_noul:
+    source: rsi_jev
+    model: shgao/rsi-jev-v3.0-qwen3.5-2b
+    method: noul_query_in_state
+    shards: 4
+    concurrency: 16
+    gpu: L4
+    fanout: true

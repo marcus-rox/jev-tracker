@@ -1,0 +1,404 @@
+# Batch-size sweeps for the fan-out latency runs: every GPU model shown on the site, one warm GPU
+# each, Kev's prefix cache cleared before every rep. Per point: 3 warm-up + 20 timed reps.
+#   default = 1 request of 1, 2, 4, 8, 16, 32, 64, 128 children, then 2 / 4 / 8 requests of max_items.
+#   Matilda / AutoTrust hold one child per request: 1, 2, 4, 8, 16 one-child requests at once.
+# Weights pinned to the revisions the site rows ran (Kev-27B 9/29 runs = 01b8199, fit-macaw = v2 af0e6d5).
+#   uv run python -m jev_tracker.experiment run configs/fanout_sweep_v1.yaml --wait
+name: fanout_sweep_v1
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  kev05b_noul:
+    source: kev
+    model: jaredpalmer/kev-0.5b@9ce2fd39db3a397c89733f94af948e3d1fdfffcd
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev05b_score:
+    source: kev
+    model: jaredpalmer/kev-0.5b@9ce2fd39db3a397c89733f94af948e3d1fdfffcd
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev08b_noul:
+    source: kev
+    model: jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev08b_score:
+    source: kev
+    model: jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev08b_ba_lora_noul:
+    source: kev
+    model: Glax147/kev-0.8b-ba-lora@6f3864febcef263cd5d520d5520c0c5aa92472f0
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev08b_ba_lora_score:
+    source: kev
+    model: Glax147/kev-0.8b-ba-lora@6f3864febcef263cd5d520d5520c0c5aa92472f0
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev2b_noul:
+    source: kev
+    model: per2021/kev-2b-qwen3.5@ac97885b54011dd6002cf2c82fbcc0aa6033e8cf
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev2b_score:
+    source: kev
+    model: per2021/kev-2b-qwen3.5@ac97885b54011dd6002cf2c82fbcc0aa6033e8cf
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  kev4b_v1_noul:
+    source: kev
+    model: jaredpalmer/kev-4b@139fdd94f1b6a6ad80cc15e08fcb99cac885a101
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L40S'
+    fanout: true
+    sweep: default
+  kev4b_v1_score:
+    source: kev
+    model: jaredpalmer/kev-4b@139fdd94f1b6a6ad80cc15e08fcb99cac885a101
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L40S'
+    fanout: true
+    sweep: default
+  kev4b_ba_lora_noul:
+    source: kev
+    model: Glax147/kev-4b-ba-lora@3d5932a57af805c36e3ce51256316997b8494e31
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L40S'
+    fanout: true
+    sweep: default
+  kev4b_ba_lora_score:
+    source: kev
+    model: Glax147/kev-4b-ba-lora@3d5932a57af805c36e3ce51256316997b8494e31
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L40S'
+    fanout: true
+    sweep: default
+  kev9b_v1_noul:
+    source: kev
+    model: jaredpalmer/kev-9b@2629c06a5aeb0feb3b9783bafed17ed8f39ecf5c
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  kev9b_v1_score:
+    source: kev
+    model: jaredpalmer/kev-9b@2629c06a5aeb0feb3b9783bafed17ed8f39ecf5c
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  kev9b_v2_noul:
+    source: kev
+    model: jaredpalmer/kev-9b@db029f08b290afd9fee4aa4bbcd9ae48602d1eb0
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  kev9b_v2_score:
+    source: kev
+    model: jaredpalmer/kev-9b@db029f08b290afd9fee4aa4bbcd9ae48602d1eb0
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  kev27b_v1_h100_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  kev27b_v1_h100_score:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  kev27b_v1_h200_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep: default
+  kev27b_v1_h200_score:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep: default
+  kev27b_v1_a100_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'A100-80GB'
+    fanout: true
+    sweep: default
+  kev27b_v1_rtxpro6000_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'RTX-PRO-6000'
+    fanout: true
+    sweep: default
+  kev27b_v2_h200_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@af0e6d551bdc2cc724f3e9d7a8bee1cd4fb8f7bf
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep: default
+  kev27b_v2_h200_score:
+    source: kev
+    model: jaredpalmer/kev-27b@af0e6d551bdc2cc724f3e9d7a8bee1cd4fb8f7bf
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep: default
+  clef_noul:
+    source: clef
+    model: Cloudflare/clef
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep: default
+  clef_score:
+    source: clef
+    model: Cloudflare/clef
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep: default
+  clef_flash_noul:
+    source: clef
+    model: Cloudflare/clef-flash
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  clef_flash_score:
+    source: clef
+    model: Cloudflare/clef-flash
+    method: score_query_in_question
+    max_items: 12
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H100!'
+    fanout: true
+    sweep: default
+  matilda_noul:
+    source: matilda
+    model: Maincode/matilda-jev-v1
+    method: noul_query_in_state
+    max_items: 1
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep:
+      - {requests: 1, children: 1}
+      - {requests: 2, children: 1}
+      - {requests: 4, children: 1}
+      - {requests: 8, children: 1}
+      - {requests: 16, children: 1}
+  matilda_score:
+    source: matilda
+    model: Maincode/matilda-jev-v1
+    method: score_query_in_question
+    max_items: 1
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep:
+      - {requests: 1, children: 1}
+      - {requests: 2, children: 1}
+      - {requests: 4, children: 1}
+      - {requests: 8, children: 1}
+      - {requests: 16, children: 1}
+  autotrust_noul:
+    source: autotrust
+    model: autotrust/JEV-27B
+    method: noul_query_in_state
+    max_items: 1
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep:
+      - {requests: 1, children: 1}
+      - {requests: 2, children: 1}
+      - {requests: 4, children: 1}
+      - {requests: 8, children: 1}
+      - {requests: 16, children: 1}
+  autotrust_score:
+    source: autotrust
+    model: autotrust/JEV-27B
+    method: score_query_in_question
+    max_items: 1
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'H200'
+    fanout: true
+    sweep:
+      - {requests: 1, children: 1}
+      - {requests: 2, children: 1}
+      - {requests: 4, children: 1}
+      - {requests: 8, children: 1}
+      - {requests: 16, children: 1}
+  minicpm5_jev_noul:
+    source: minicpm_jev
+    model: ytbai/MiniCPM5-2B-Jev
+    method: noul_query_in_state
+    max_items: 8
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default
+  minicpm5_jev_score:
+    source: minicpm_jev
+    model: ytbai/MiniCPM5-2B-Jev
+    method: score_query_in_question
+    max_items: 8
+    max_chars: null
+    shards: 1
+    concurrency: 16
+    gpu: 'L4'
+    fanout: true
+    sweep: default

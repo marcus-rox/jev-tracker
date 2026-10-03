@@ -1,0 +1,36 @@
+# Fan-out smoke for the pass engines: Laya and RSI-Jev over a 4-GPU pool plus a small Laya
+# sweep, 2 cases. Not a benchmark run — timing/protocol check only.
+name: smoke_pass_fanout
+cases: 2
+rerankers:
+  prod:
+    source: production
+  laya421m_noul:
+    source: laya
+    model: convaiinnovations/laya
+    method: noul_query_in_state
+    shards: 4
+    forward_batch: 64
+    gpu: L4
+    fanout: true
+  laya421m_sweep:
+    source: laya
+    model: convaiinnovations/laya
+    method: noul_query_in_state
+    shards: 1
+    forward_batch: 64
+    gpu: L4
+    fanout: true
+    sweep:
+      - {requests: 1, children: 1}
+      - {requests: 16, children: 1}
+      - {requests: 64, children: 1}
+      - {requests: 128, children: 1}
+  rsi_jev_noul:
+    source: rsi_jev
+    model: shgao/rsi-jev-v3.0-qwen3.5-2b
+    method: noul_query_in_state
+    shards: 4
+    concurrency: 16
+    gpu: L4
+    fanout: true

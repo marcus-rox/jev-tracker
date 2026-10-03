@@ -119,6 +119,7 @@ rows:
   api_usd_per_1k: 6.1
 - experiment: 2026_09_28_04_15_00_super-pigeon
   reranker: clm8b_cosine
+  deprecated: 'never timed: no cost or latency measured'
   label: clm8b_cosine
   family: clm8b
   serving: earlier experiment
@@ -746,6 +747,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_09_45_47_causal-urchin
   reranker: kev27b_vllm_noul
+  deprecated: 'vLLM: not rerun (Marcus: skip vLLM/SGLang)'
   label: kev27b_vllm_noul
   family: kev27b
   serving: 'H-2 vLLM: vLLM + Kev''s readout, 6 queries only (too slow for 75: killed)'
@@ -788,6 +790,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_10_43_20_united-snake
   reranker: kev27b_sglang_noul
+  deprecated: 'SGLang: not rerun (Marcus: skip vLLM/SGLang)'
   label: kev27b_sglang_noul
   family: kev27b
   serving: 'H-3 SGLang: SGLang + Kev''s readout, 6 queries only (too slow for 75: killed)'
