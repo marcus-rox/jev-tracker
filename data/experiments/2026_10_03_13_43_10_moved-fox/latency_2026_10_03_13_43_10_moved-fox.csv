@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+above_dog_kev08b_noul_cachewarm,75,0.41,0.31,0.80,0.28,4.49,37.2

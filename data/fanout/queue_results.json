@@ -3898,5 +3898,53 @@
    }
   },
   "app": "jev-ff-proper-bee-kev27b-noul"
+ },
+ {
+  "config": "fanout_cachewarm_above_dog_kev08b_noul.yaml",
+  "experiment": "2026_10_03_13_43_10_moved-fox",
+  "experiment_dir": "data/experiments/2026_10_03_13_43_10_moved-fox",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.41,
+   "median_s_per_query": 0.31,
+   "p95_s_per_query": 0.8,
+   "max_s_per_query": 4.49
+  },
+  "prefix_hits": 2701,
+  "prefix_misses": 3000,
+  "paired_cleared_mean": 0.52,
+  "rows": {
+   "2026_10_02_03_29_11_above-dog/kev08b_noul": {
+    "answer_max": 0.020000000000000018,
+    "kept_mass_delta": 0.002292791666666738
+   }
+  },
+  "note": "recovered via experiment finish on 493c0fd (apply_dispatch prime drop)"
+ },
+ {
+  "config": "fanout_cachewarm_above_dog_kev08b_score.yaml",
+  "experiment": "2026_10_03_13_51_03_ace-kodiak",
+  "experiment_dir": "data/experiments/2026_10_03_13_51_03_ace-kodiak",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.52,
+   "median_s_per_query": 0.36,
+   "p95_s_per_query": 1.0,
+   "max_s_per_query": 7.57
+  },
+  "prefix_hits": 2705,
+  "prefix_misses": 2996,
+  "paired_cleared_mean": 0.93,
+  "rows": {
+   "2026_10_02_03_29_11_above-dog/kev08b_score": {
+    "answer_max": 0.03190000000000004,
+    "kept_mass_delta": 0.00378897261333333
+   }
+  },
+  "note": "recovered via experiment finish on 493c0fd (apply_dispatch prime drop)"
  }
 ]
