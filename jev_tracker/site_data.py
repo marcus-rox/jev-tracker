@@ -23,6 +23,7 @@ API_TIMING = REPO_DIR / "data" / "timing_summary_prod_jev.csv"
 OUT = REPO_DIR / "site" / "public" / "data" / "rows.json"
 TLDR = REPO_DIR / "data" / "tldr.md"
 BASELINE_FAMILIES = frozenset({"jev", "production", "oracle", "random"})
+REFERENCE_FAMILIES = ("jev", "production")
 # How a row's answers were produced; GGUF / ONNX / MLX / Core ML are the exported-weight runtimes
 # the harness has no source for yet (docs/JEV_ALTERNATIVES.html).
 RUNTIMES = frozenset(
@@ -215,7 +216,7 @@ def build(
                 "buffer": r["buffer"],
                 "queries": queries,
                 "tables": r["tables"],
-                "highlight": r["highlight"],
+                "highlight": r["family"] in REFERENCE_FAMILIES,
                 "blank": r.get("blank", "-"),
                 "kept_mass": kept,
                 "mean_kept_mass": sum(kept.values()) / len(KS) if kept else None,

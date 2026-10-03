@@ -240,7 +240,7 @@
     "cost",
     "latency"
    ],
-   "highlight": true,
+   "highlight": false,
    "blank": "-",
    "kept_mass": {
     "50": 0.8752001079866667,
@@ -285,7 +285,7 @@
     "cost",
     "latency"
    ],
-   "highlight": true,
+   "highlight": false,
    "blank": "-",
    "kept_mass": {
     "50": 0.8865324542533334,
@@ -868,7 +868,7 @@
    "tables": [
     "appendix"
    ],
-   "highlight": false,
+   "highlight": true,
    "blank": "-",
    "kept_mass": {
     "50": 0.646424434,
@@ -899,7 +899,7 @@
    "tables": [
     "appendix"
    ],
-   "highlight": false,
+   "highlight": true,
    "blank": "-",
    "kept_mass": {
     "50": 0.9482306475,
@@ -930,7 +930,7 @@
    "tables": [
     "appendix"
    ],
-   "highlight": false,
+   "highlight": true,
    "blank": "-",
    "kept_mass": {
     "50": 0.961858873,

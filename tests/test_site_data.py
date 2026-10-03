@@ -106,6 +106,18 @@ def test_R6_no_deprecated_or_pending_row_reaches_rows_json() -> None:
     assert set(DATA["experiments"]) == {r["experiment"] for r in DATA["rows"]}
 
 
+def test_R6_highlights_only_jev_and_production_rows() -> None:
+    assert all(r["highlight"] == (r["family"] in ("jev", "production")) for r in DATA["rows"])
+    baseline_rows = [
+        r
+        for r in DATA["rows"]
+        if r["experiment"] == "2026_09_29_08_47_55_good-midge"
+        and r["reranker"] in {"kev27b_noul", "kev27b_score"}
+    ]
+    assert {r["reranker"] for r in baseline_rows} == {"kev27b_noul", "kev27b_score"}
+    assert all(r["gpu"] == "3 x H100" and not r["highlight"] for r in baseline_rows)
+
+
 def test_R6_committed_rows_json_is_the_generated_one() -> None:
     assert json.loads(OUT.read_text()) == DATA
 
