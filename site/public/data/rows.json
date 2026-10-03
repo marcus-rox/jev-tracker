@@ -26,6 +26,7 @@
   "2026_10_02_09_47_49_fair-lizard": "clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
+  "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
   "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
   "2026_10_03_04_25_56_helped-shad": "rune_26b_a4b_gguf_vs_jev: owao Rune-26B-A4B System One GGUF Q4_K_M @da27a15, 3 x L40S, llama-server, 8 in flight (hourly 2026-10-03)"
  },
@@ -1889,6 +1890,51 @@
     "cost": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
     "latency": "data/experiments/2026_10_03_09_05_26_safe-bunny/latency_2026_10_03_09_05_26_safe-bunny.json",
     "config": "data/experiments/2026_10_02_10_47_08_loving-loon/config_2026_10_02_10_47_08_loving-loon.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_17_22_11_merry-corgi",
+   "reranker": "minicpm5_jev_noul",
+   "label": "minicpm5_jev_noul",
+   "family": "minicpm5_jev",
+   "serving": "MiniCPMSystemOne: 8 children, 1 in flight",
+   "runtime": "PyTorch",
+   "gpu": "L4",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.73088296252,
+    "100": 0.7809987322266667,
+    "150": 0.8391443449866667,
+    "200": 0.89199214112
+   },
+   "mean_kept_mass": 0.8107545452133333,
+   "cost": {
+    "warm_gpu_s": 4935.318799972534,
+    "load_s": 134.81608867645264,
+    "warm_usd": 1.0956407735939027,
+    "in_function_usd": 1.1255699457564354,
+    "usd_per_query": 0.014608543647918703,
+    "usd_per_1k": 14.608543647918703,
+    "peak_gb": 4.98081024
+   },
+   "latency": {
+    "s_per_query": 2.6714933333333333,
+    "p50_s": 1.836,
+    "p95_s": 5.579
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_22_11_merry-corgi/kept_mass_2026_10_02_17_22_11_merry-corgi.json",
+    "cost": "data/experiments/2026_10_02_17_22_11_merry-corgi/costs_2026_10_02_17_22_11_merry-corgi.json",
+    "latency": "data/experiments/2026_10_03_09_48_55_proper-mule/latency_2026_10_03_09_48_55_proper-mule.json",
+    "config": "data/experiments/2026_10_02_17_22_11_merry-corgi/config_2026_10_02_17_22_11_merry-corgi.yaml"
    }
   },
   {
