@@ -139,3 +139,60 @@
 {"event": "start", "config": "fanout_merry_corgi_minicpm5_jev_score.yaml", "app": "jev-ff-merry-corgi-minicpm5-jev-score", "t": "09:56:00"}
 {"event": "timed_phase", "config": "fanout_merry_corgi_minicpm5_jev_score.yaml", "app": "jev-ff-merry-corgi-minicpm5-jev-score", "t": "09:58:19"}
 {"event": "ok", "config": "fanout_merry_corgi_minicpm5_jev_score.yaml", "exp": "2026_10_03_09_56_01_subtle-grub", "t": "10:03:43"}
+{"event": "start", "config": "fanout_loving_loon_autotrust_score.yaml", "app": "jev-ff-loving-loon-autotrust-score", "t": "09:30:14"}
+{"event": "start", "config": "fanout_loving_loon_autotrust_score.yaml", "app": "jev-ff-loving-loon-autotrust-score", "t": "09:30:26"}
+{"event": "timed_phase", "config": "fanout_loving_loon_autotrust_score.yaml", "app": "jev-ff-loving-loon-autotrust-score", "t": "09:33:21"}
+{"event": "timed_phase", "config": "fanout_loving_loon_autotrust_score.yaml", "app": "jev-ff-loving-loon-autotrust-score", "t": "09:33:31"}
+{"event": "failed", "config": "fanout_loving_loon_autotrust_score.yaml", "code": 143, "t": "09:48:53"}
+{"event": "start", "config": "fanout_loving_loon_autotrust_score.yaml", "app": "jev-ff-loving-loon-autotrust-score", "t": "10:34:28"}
+{"event": "timed_phase", "config": "fanout_loving_loon_autotrust_score.yaml", "app": "jev-ff-loving-loon-autotrust-score", "t": "10:38:19"}
+{"event": "ok", "config": "fanout_loving_loon_autotrust_score.yaml", "exp": "2026_10_03_10_34_30_robust-alpaca", "t": "10:44:29"}
+{"event": "start", "config": "fanout_proper_bee_kev27b_score.yaml", "app": "jev-ff-proper-bee-kev27b-score", "t": "10:44:30"}
+{"event": "timed_phase", "config": "fanout_proper_bee_kev27b_score.yaml", "app": "jev-ff-proper-bee-kev27b-score", "t": "10:46:57"}
+{"event": "ok", "config": "fanout_proper_bee_kev27b_score.yaml", "exp": "2026_10_03_10_44_32_poetic-walrus", "t": "10:51:34"}
+{"event": "start", "config": "fanout_proper_bee_kev9b_noul.yaml", "app": "jev-ff-proper-bee-kev9b-noul", "t": "10:51:34"}
+{"event": "timed_phase", "config": "fanout_proper_bee_kev9b_noul.yaml", "app": "jev-ff-proper-bee-kev9b-noul", "t": "10:53:58"}
+{"event": "ok", "config": "fanout_proper_bee_kev9b_noul.yaml", "exp": "2026_10_03_10_51_36_fun-falcon", "t": "10:56:16"}
+{"event": "start", "config": "fanout_proper_bee_kev9b_score.yaml", "app": "jev-ff-proper-bee-kev9b-score", "t": "10:56:17"}
+{"event": "timed_phase", "config": "fanout_proper_bee_kev9b_score.yaml", "app": "jev-ff-proper-bee-kev9b-score", "t": "10:58:47"}
+{"event": "ok", "config": "fanout_proper_bee_kev9b_score.yaml", "exp": "2026_10_03_10_56_19_sought-ibex", "t": "11:01:52"}
+{"event": "start", "config": "fanout_proven_shiner_kev08b_ba_lora_noul.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-noul", "t": "11:01:52"}
+{"event": "ok", "config": "fanout_proven_shiner_kev08b_ba_lora_noul.yaml", "exp": "2026_10_03_11_01_54_epic-osprey", "t": "11:07:13"}
+{"event": "start", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-score", "t": "11:38:41"}
+{"event": "timed_phase", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-score", "t": "11:41:00"}
+{"event": "ok", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "exp": "2026_10_03_11_38_43_strong-newt", "t": "11:42:33"}
+{"event": "start", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "app": "jev-ff-quick-moray-kev27b-batched-c32-noul", "t": "11:42:34"}
+{"event": "timed_phase", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "app": "jev-ff-quick-moray-kev27b-batched-c32-noul", "t": "11:45:40"}
+{"event": "adopt_done", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "stopped": true, "t": "11:48:25"}
+{"event": "start", "config": "fanout_star_hare_matilda_noul.yaml", "app": "jev-ff-star-hare-matilda-noul", "t": "12:01:08"}
+{"event": "timed_phase", "config": "fanout_star_hare_matilda_noul.yaml", "app": "jev-ff-star-hare-matilda-noul", "t": "12:04:13"}
+{"event": "ok", "config": "fanout_star_hare_matilda_noul.yaml", "exp": "2026_10_03_12_01_09_first-bird", "t": "12:10:23"}
+{"event": "start", "config": "fanout_star_hare_matilda_score.yaml", "app": "jev-ff-star-hare-matilda-score", "t": "12:10:24"}
+{"event": "timed_phase", "config": "fanout_star_hare_matilda_score.yaml", "app": "jev-ff-star-hare-matilda-score", "t": "12:13:30"}
+{"event": "ok", "config": "fanout_star_hare_matilda_score.yaml", "exp": "2026_10_03_12_10_25_holy-ox", "t": "12:18:53"}
+{"event": "start", "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml", "app": "jev-ff-vast-filly-kev4b-ba-lora-noul", "t": "13:09:46"}
+{"event": "timed_phase", "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml", "app": "jev-ff-vast-filly-kev4b-ba-lora-noul", "t": "13:12:18"}
+{"event": "ok", "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml", "exp": "2026_10_03_13_09_47_mint-llama", "t": "13:13:51"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "13:19:25"}
+{"event": "timed_phase", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "13:20:59"}
+{"event": "ok", "config": "fanout_keen_emu_kev4b_noul.yaml", "exp": "2026_10_03_13_19_27_noted-oriole", "t": "13:24:04"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "13:24:05"}
+{"event": "timed_phase", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "13:26:36"}
+{"event": "ok", "config": "fanout_keen_emu_kev4b_score.yaml", "exp": "2026_10_03_13_24_07_trusty-asp", "t": "13:29:42"}
+{"event": "start", "config": "fanout_proper_bee_kev27b_noul.yaml", "app": "jev-ff-proper-bee-kev27b-noul", "t": "10:03:44"}
+{"event": "stall", "config": "fanout_proper_bee_kev27b_noul.yaml", "app": "jev-ff-proper-bee-kev27b-noul", "ready": 10, "of": 46, "t": "10:26:44"}
+{"event": "partial_pool", "config": "fanout_proper_bee_kev27b_noul.yaml", "exp": "2026_10_03_10_26_47_novel-fly", "t": "10:34:25"}
+{"event": "start", "config": "fanout_proper_bee_kev27b_noul.yaml", "app": "jev-ff-proper-bee-kev27b-noul", "t": "13:29:43"}
+{"event": "adopt_done", "config": "fanout_proper_bee_kev27b_noul.yaml", "stopped": true, "t": "13:36:09"}
+{"event": "result_committed", "config": "fanout_cachewarm_above_dog_kev08b_noul.yaml", "note": "cachewarm rows added hidden (paired row hidden)"}
+{"event": "result_committed", "config": "fanout_cachewarm_above_dog_kev08b_score.yaml", "note": "cachewarm rows added hidden (paired row hidden)"}
+{"event": "result_committed", "config": "fanout_cachewarm_good_midge_kev27b_noul.yaml", "note": "cachewarm row public (paired row public, gate pass, 2702 hits)"}
+{"event": "result_committed", "config": "fanout_cachewarm_good_midge_kev27b_score.yaml", "note": "cachewarm row public"}
+{"event": "result_committed", "config": "fanout_cachewarm_holy_hare_kev05b_noul.yaml", "note": "cachewarm row hidden: kept-mass gate fail"}
+{"event": "result_committed", "config": "fanout_cachewarm_holy_hare_kev05b_score.yaml", "note": "cachewarm row hidden: gate fail 0.0549/0.0037"}
+{"event": "result_committed", "config": "fanout_cachewarm_humble_sawfly_kev9b_noul.yaml", "note": "cachewarm row public, 2708 hits"}
+{"event": "result_committed", "config": "fanout_cachewarm_humble_sawfly_kev9b_score.yaml", "note": "cachewarm row hidden: pair hidden; also gate fail 0.0429"}
+{"event": "result_committed", "config": "fanout_cachewarm_immune_tick_kev2b_noul.yaml", "note": "cachewarm row hidden: pair hidden"}
+{"event": "result_committed", "config": "fanout_cachewarm_immune_tick_kev2b_score.yaml", "note": "cachewarm row hidden: pair hidden; also gate fail 0.0379"}
+{"event": "result_committed", "config": "fanout_cachewarm_keen_emu_kev4b_noul.yaml", "note": "cachewarm row public, 1382 hits"}
+{"event": "result_committed", "config": "fanout_cachewarm_keen_emu_kev4b_score.yaml", "note": "cachewarm row public, 1382 hits"}

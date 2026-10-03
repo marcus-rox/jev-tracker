@@ -106,6 +106,19 @@ def test_R6_no_deprecated_or_pending_row_reaches_rows_json() -> None:
     assert set(DATA["experiments"]) == {r["experiment"] for r in DATA["rows"]}
 
 
+def test_R6_every_public_gpu_row_takes_latency_from_a_fanout_run() -> None:
+    registry = yaml.safe_load(REGISTRY.read_text())
+    missing = [
+        f"{r['experiment']}/{r['reranker']}"
+        for r in registry["rows"]
+        if "deprecated" not in r
+        and "pending_fanout" not in r
+        and r.get("runtime") not in ("hosted API", "-")
+        and "latency_from" not in r
+    ]
+    assert not missing
+
+
 def test_R6_highlights_only_jev_and_production_rows() -> None:
     assert all(r["highlight"] == (r["family"] in ("jev", "production")) for r in DATA["rows"])
     baseline_rows = [
@@ -348,6 +361,7 @@ def test_R6_latency_from_overrides_latency_but_not_cost() -> None:
         for r in registry["rows"]
         if (r["experiment"], r["reranker"]) == (donor["experiment"], donor["reranker"])
     )
+    row.pop("pending_fanout", None)
     row["latency_from"] = donor_reg.get(
         "latency_from", {"experiment": donor["experiment"], "reranker": donor["reranker"]}
     )
@@ -359,5 +373,38 @@ def test_R6_latency_from_overrides_latency_but_not_cost() -> None:
     )
     assert built["latency"] == donor["latency"]
     assert built["sources"]["latency"] == donor["sources"]["latency"]
-    own = _row("2026_10_03_00_31_36_proper-bee", "kev4b_noul")
+    own_registry = yaml.safe_load(REGISTRY.read_text())
+    next(
+        r
+        for r in own_registry["rows"]
+        if (r["experiment"], r["reranker"]) == (row["experiment"], row["reranker"])
+    ).pop("pending_fanout", None)
+    own = next(
+        r
+        for r in build(own_registry, EXPERIMENTS_DIR, read_api_timing(API_TIMING))["rows"]
+        if (r["experiment"], r["reranker"]) == (row["experiment"], row["reranker"])
+    )
     assert built["cost"] == own["cost"] and built["kept_mass"] == own["kept_mass"]
+
+
+def test_R6_cost_from_overrides_cost_only() -> None:
+    donor = _row("2026_10_02_00_08_39_safe-joey", "kev27b_noul")
+    key = ("2026_10_03_00_31_36_proper-bee", "kev4b_noul")
+
+    def built_row(cost_from: dict | None) -> dict:
+        registry = yaml.safe_load(REGISTRY.read_text())
+        row = next(r for r in registry["rows"] if (r["experiment"], r["reranker"]) == key)
+        row.pop("pending_fanout", None)
+        if cost_from is not None:
+            row["cost_from"] = cost_from
+        return next(
+            r
+            for r in build(registry, EXPERIMENTS_DIR, read_api_timing(API_TIMING))["rows"]
+            if (r["experiment"], r["reranker"]) == key
+        )
+
+    built = built_row({"experiment": donor["experiment"], "reranker": donor["reranker"]})
+    own = built_row(None)
+    assert built["cost"] == donor["cost"]
+    assert built["sources"]["cost"] == donor["sources"]["cost"]
+    assert built["kept_mass"] == own["kept_mass"] and built["latency"] == own["latency"]

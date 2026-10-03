@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+star_hare_matilda_score,75,2.98,1.98,10.80,0.62,22.01,419.6

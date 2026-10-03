@@ -189,10 +189,13 @@ def build(
         lat_from = r.get("latency_from")
         lat_p = Paths(lat_from["experiment"], experiments_dir) if lat_from else p
         lat_reranker = lat_from["reranker"] if lat_from else r["reranker"]
+        cost_from = r.get("cost_from")
+        cost_p = Paths(cost_from["experiment"], experiments_dir) if cost_from else p
+        cost_reranker = cost_from["reranker"] if cost_from else r["reranker"]
         report_path = p.report_base.with_suffix(".json")
-        report, costs, lat = _json(report_path), _json(p.costs), _json(lat_p.latency)
+        report, lat = _json(report_path), _json(lat_p.latency)
         queries = r["queries"]
-        cost = _api_cost(r) or _gpu_cost(costs, r["reranker"], queries)
+        cost = _api_cost(r) or _gpu_cost(_json(cost_p.costs), cost_reranker, queries)
         latency = (
             _api_latency(api_timing, API_TIMING_NAMES.get(r["reranker"], r["reranker"]))
             if "api_usd_per_run" in r
@@ -224,7 +227,7 @@ def build(
                 "latency": latency,
                 "sources": {
                     "kept_mass": _rel(report_path) if report_path.exists() else None,
-                    "cost": _rel(REGISTRY) if "api_usd_per_run" in r else _rel(p.costs),
+                    "cost": _rel(REGISTRY) if "api_usd_per_run" in r else _rel(cost_p.costs),
                     "latency": _rel(API_TIMING) if "api_usd_per_run" in r else _rel(lat_p.latency),
                     "config": _rel(p.config),
                 },

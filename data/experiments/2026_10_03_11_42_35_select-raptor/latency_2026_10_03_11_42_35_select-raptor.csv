@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+quick_moray_kev27b_batched_c32_noul,75,1.23,0.96,2.61,0.70,3.33,37.2

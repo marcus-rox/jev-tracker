@@ -1,0 +1,21 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_03_29_11_above-dog/kev08b_score
+name: fanout_cachewarm_above_dog_kev08b_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  above_dog_kev08b_score_cachewarm:
+    source: kev
+    model: jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    forward_batch: 1
+    gpu: L4
+    fanout: true
+    cache_warm: true
+    shards: 46

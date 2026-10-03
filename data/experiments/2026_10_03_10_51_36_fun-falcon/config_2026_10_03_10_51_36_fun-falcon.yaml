@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_03_00_31_36_proper-bee/kev9b_noul
+name: fanout_proper_bee_kev9b_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  proper_bee_kev9b_noul:
+    source: kev
+    model: jaredpalmer/kev-9b@2629c06a5aeb0feb3b9783bafed17ed8f39ecf5c
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    forward_batch: 1
+    concurrency: 1
+    gpu: H100!
+    fanout: true
+    shards: 46

@@ -683,12 +683,22 @@ def _slice(records: list[RawRecord], cases: int | None) -> list[RawRecord]:
 
 def apply_dispatch(records: list[RawRecord], dispatched: dict) -> list[RawRecord]:
     """Fan-out timing: each pulled record gets the dispatcher's sent / recv (client-side wall
-    clock). Warm-up answers (worker-side started_at_s before timed_from) are dropped; the two
-    records of a 422-split request share the parent's times (same case, batch)."""
-    times = {
-        (d["case_id"], d["batch"]): (d["sent"], d["recv"])
+    clock). Warm-up answers (worker-side started_at_s before timed_from) are dropped, as are
+    cache-warm primes (dropped by worker-side start time); the two records of a 422-split
+    request share the parent's times (same case, batch)."""
+    timed_rows = [d for d in dispatched["rows"] if not d["warmup"]]
+    times = {(d["case_id"], d["batch"]): (d["sent"], d["recv"]) for d in timed_rows}
+    timed_start = {
+        (d["case_id"], d["batch"]): d["worker_start"] for d in timed_rows if "worker_start" in d
+    }
+    cut = {
+        (d["case_id"], d["batch"]): (d["worker_start"] + timed_start[(d["case_id"], d["batch"])])
+        / 2
         for d in dispatched["rows"]
-        if not d["warmup"]
+        if d["warmup"]
+        and "worker_start" in d
+        and d["sent"] >= dispatched["timed_from"]
+        and (d["case_id"], d["batch"]) in timed_start
     }
     out = []
     seen: set[tuple[str, int]] = set()
@@ -696,6 +706,8 @@ def apply_dispatch(records: list[RawRecord], dispatched: dict) -> list[RawRecord
         if r.started_at_s is not None and r.started_at_s < dispatched["timed_from"]:
             continue
         key = (r.case_id, r.batch)
+        if key in cut and r.started_at_s < cut[key]:
+            continue
         if key not in times:
             raise ValueError(f"{r.case_id} batch {r.batch}: no dispatch record")
         seen.add(key)

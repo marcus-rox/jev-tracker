@@ -73,6 +73,31 @@ experiments:
   2026_10_03_08_46_11_free-calf: 'fanout_large_corgi_rsi_jev_score: fan-out latency, 46 x L40S, original requests, one query at a time (11.9 s/query mean)'
   2026_10_03_09_48_55_proper-mule: 'fanout_merry_corgi_minicpm5_jev_noul: fan-out latency, 46 x L4, original requests, one query at a time (2.67 s/query mean)'
   2026_10_03_09_56_01_subtle-grub: 'fanout_merry_corgi_minicpm5_jev_score: fan-out latency, 46 x L4, original requests, one query at a time (3.25 s/query mean)'
+  2026_10_03_10_34_30_robust-alpaca: 'fanout_loving_loon_autotrust_score: fan-out latency, 46 x H200, original requests, one query at a time (4.09 s/query mean)'
+  2026_10_03_10_44_32_poetic-walrus: 'fanout_proper_bee_kev27b_score: fan-out latency, 46 x H200, original requests, one query at a time (2.32 s/query mean)'
+  2026_10_03_10_51_36_fun-falcon: 'fanout_proper_bee_kev9b_noul: fan-out latency, 46 x H100!, original requests, one query at a time (1.28 s/query mean)'
+  2026_10_03_10_56_19_sought-ibex: 'fanout_proper_bee_kev9b_score: fan-out latency, 46 x H100!, original requests, one query at a time (1.48 s/query mean)'
+  2026_10_03_11_01_54_epic-osprey: 'fanout_proven_shiner_kev08b_ba_lora_noul: fan-out latency, 46 x L4, original requests, one query at a time (0.51 s/query mean)'
+  2026_10_03_11_38_43_strong-newt: 'fanout_proven_shiner_kev08b_ba_lora_score: fan-out latency, 46 x L4, original requests, one query at a time (0.59 s/query mean)'
+  2026_10_03_11_42_35_select-raptor: 'fanout_quick_moray_kev27b_batched_c32_noul: fan-out latency, 46 x H100!, original requests, one query at a time (1.23 s/query mean)'
+  2026_10_03_12_01_09_first-bird: 'fanout_star_hare_matilda_noul: fan-out latency, 46 x H200, original requests, one query at a time (3.43 s/query mean)'
+  2026_10_03_12_10_25_holy-ox: 'fanout_star_hare_matilda_score: fan-out latency, 46 x H200, original requests, one query at a time (2.98 s/query mean)'
+  2026_10_03_13_09_47_mint-llama: 'fanout_vast_filly_kev4b_ba_lora_noul: fan-out latency, 46 x L40S, original requests, one query at a time (0.45 s/query mean)'
+  2026_10_03_13_19_27_noted-oriole: 'fanout_keen_emu_kev4b_noul: fan-out latency, 46 x L40S, original requests, one query at a time (1.48 s/query mean)'
+  2026_10_03_13_24_07_trusty-asp: 'fanout_keen_emu_kev4b_score: fan-out latency, 46 x L40S, original requests, one query at a time (1.25 s/query mean)'
+  2026_10_03_13_29_45_moving-mayfly: 'fanout_proper_bee_kev27b_noul: fan-out latency, 46 x H200, original requests, one query at a time (2.18 s/query mean)'
+  2026_10_03_13_43_10_moved-fox: 'fanout_cachewarm_above_dog_kev08b_noul: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.41 s/query mean)'
+  2026_10_03_15_06_46_usable-hyena: 'fanout_cachewarm_keen_emu_kev4b_score: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (0.93 s/query mean)'
+  2026_10_03_15_00_25_epic-ant: 'fanout_cachewarm_keen_emu_kev4b_noul: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (1.03 s/query mean)'
+  2026_10_03_14_56_31_vast-lynx: 'fanout_cachewarm_immune_tick_kev2b_score: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.41 s/query mean)'
+  2026_10_03_14_51_52_fit-toucan: 'fanout_cachewarm_immune_tick_kev2b_noul: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.42 s/query mean)'
+  2026_10_03_14_47_47_living-lamb: 'fanout_cachewarm_humble_sawfly_kev9b_score: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.32 s/query mean)'
+  2026_10_03_14_42_22_sunny-liger: 'fanout_cachewarm_humble_sawfly_kev9b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.6 s/query mean)'
+  2026_10_03_14_38_25_vast-rat: 'fanout_cachewarm_holy_hare_kev05b_score: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (0.27 s/query mean)'
+  2026_10_03_14_34_32_dear-jackal: 'fanout_cachewarm_holy_hare_kev05b_noul: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (0.42 s/query mean)'
+  2026_10_03_14_28_20_funky-pug: 'fanout_cachewarm_good_midge_kev27b_score: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.51 s/query mean)'
+  2026_10_03_14_02_56_solid-marlin: 'fanout_cachewarm_good_midge_kev27b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.44 s/query mean)'
+  2026_10_03_13_51_03_ace-kodiak: 'fanout_cachewarm_above_dog_kev08b_score: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.52 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -534,6 +559,25 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_14_02_56_solid-marlin
+  reranker: good_midge_kev27b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_02_56_solid-marlin
+    reranker: good_midge_kev27b_noul_cachewarm
+  cost_from:
+    experiment: 2026_09_29_08_47_55_good-midge
+    reranker: kev27b_noul
+  label: kev27b_noul cache warm
+  family: kev27b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: 3 x H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: kev27b_score
   latency_from:
@@ -542,6 +586,25 @@ rows:
   label: kev27b_score
   family: kev27b
   serving: batched, R-1 timers (baseline)
+  runtime: PyTorch
+  gpu: 3 x H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_14_28_20_funky-pug
+  reranker: good_midge_kev27b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_28_20_funky-pug
+    reranker: good_midge_kev27b_score_cachewarm
+  cost_from:
+    experiment: 2026_09_29_08_47_55_good-midge
+    reranker: kev27b_score
+  label: kev27b_score cache warm
+  family: kev27b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: 3 x H100
   buffer: 4,096 x 16 (default)
@@ -1076,7 +1139,9 @@ rows:
   - appendix
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_13_19_27_noted-oriole
+    reranker: keen_emu_kev4b_noul
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -1088,12 +1153,52 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_15_00_25_epic-ant
+  reranker: keen_emu_kev4b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_15_00_25_epic-ant
+    reranker: keen_emu_kev4b_noul_cachewarm
+  cost_from:
+    experiment: 2026_10_01_23_53_13_keen-emu
+    reranker: kev4b_noul
+  label: kev4b_noul cache warm
+  family: kev4b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_13_24_07_trusty-asp
+    reranker: keen_emu_kev4b_score
   label: kev4b_score
   family: kev4b
   serving: first run
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_15_06_46_usable-hyena
+  reranker: keen_emu_kev4b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_15_06_46_usable-hyena
+    reranker: keen_emu_kev4b_score_cachewarm
+  cost_from:
+    experiment: 2026_10_01_23_53_13_keen-emu
+    reranker: kev4b_score
+  label: kev4b_score cache warm
+  family: kev4b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)
@@ -1206,12 +1311,52 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_13_43_10_moved-fox
+  reranker: above_dog_kev08b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_13_43_10_moved-fox
+    reranker: above_dog_kev08b_noul_cachewarm
+  cost_from:
+    experiment: 2026_10_02_03_29_11_above-dog
+    reranker: kev08b_noul
+  pending_fanout: 'paired cache-cleared row 2026_10_02_03_29_11_above-dog/kev08b_noul is hidden; hidden with it'
+  label: kev08b_noul cache warm
+  family: kev08b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_score
   pending_fanout: 'fan-out run 2026_10_03_07_18_29_happy-hare failed the answer check vs this run (kept-mass 0.0038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev08b_score
   family: kev08b
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_13_51_03_ace-kodiak
+  reranker: above_dog_kev08b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_13_51_03_ace-kodiak
+    reranker: above_dog_kev08b_score_cachewarm
+  cost_from:
+    experiment: 2026_10_02_03_29_11_above-dog
+    reranker: kev08b_score
+  pending_fanout: 'paired cache-cleared row 2026_10_02_03_29_11_above-dog/kev08b_score is hidden; hidden with it'
+  label: kev08b_score cache warm
+  family: kev08b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
@@ -1236,12 +1381,51 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_14_42_22_sunny-liger
+  reranker: humble_sawfly_kev9b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_42_22_sunny-liger
+    reranker: humble_sawfly_kev9b_noul_cachewarm
+  cost_from:
+    experiment: 2026_10_02_03_29_31_humble-sawfly
+    reranker: kev9b_noul
+  label: kev9b_noul cache warm
+  family: kev9b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_10_02_03_29_31_humble-sawfly
   reranker: kev9b_score
   pending_fanout: 'fan-out run 2026_10_03_08_32_57_tender-weevil failed the answer check vs this run (answer max 0.043; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev9b_score_v2
   family: kev9b v2
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_14_47_47_living-lamb
+  reranker: humble_sawfly_kev9b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_47_47_living-lamb
+    reranker: humble_sawfly_kev9b_score_cachewarm
+  cost_from:
+    experiment: 2026_10_02_03_29_31_humble-sawfly
+    reranker: kev9b_score
+  pending_fanout: 'paired cache-cleared row 2026_10_02_03_29_31_humble-sawfly/kev9b_score is hidden; hidden with it'
+  label: kev9b_score cache warm
+  family: kev9b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: H100
   buffer: 4,096 x 16 (default)
@@ -1264,12 +1448,52 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_14_51_52_fit-toucan
+  reranker: immune_tick_kev2b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_51_52_fit-toucan
+    reranker: immune_tick_kev2b_noul_cachewarm
+  cost_from:
+    experiment: 2026_10_02_03_29_51_immune-tick
+    reranker: kev2b_noul
+  pending_fanout: 'paired cache-cleared row 2026_10_02_03_29_51_immune-tick/kev2b_noul is hidden; hidden with it'
+  label: kev2b_noul cache warm
+  family: kev2b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_score
   pending_fanout: 'fan-out run 2026_10_03_08_39_11_key-chimp failed the answer check vs this run (answer max 0.038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
   label: kev2b_score
   family: kev2b (per2021)
   serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_14_56_31_vast-lynx
+  reranker: immune_tick_kev2b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_56_31_vast-lynx
+    reranker: immune_tick_kev2b_score_cachewarm
+  cost_from:
+    experiment: 2026_10_02_03_29_51_immune-tick
+    reranker: kev2b_score
+  pending_fanout: 'paired cache-cleared row 2026_10_02_03_29_51_immune-tick/kev2b_score is hidden; hidden with it'
+  label: kev2b_score cache warm
+  family: kev2b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: L4
   buffer: 4,096 x 16 (default)
@@ -1294,6 +1518,26 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_14_34_32_dear-jackal
+  reranker: holy_hare_kev05b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_34_32_dear-jackal
+    reranker: holy_hare_kev05b_noul_cachewarm
+  cost_from:
+    experiment: 2026_10_02_09_46_36_holy-hare
+    reranker: kev05b_noul
+  pending_fanout: 'cache-warm run 2026_10_03_14_34_32_dear-jackal failed the gate vs the original (answer max 0.0283 <= 0.035; kept-mass 0.0039 > 0.002); hidden until resolved'
+  label: kev05b_noul cache warm
+  family: kev05b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_10_02_09_46_36_holy-hare
   reranker: kev05b_score
   latency_from:
@@ -1304,6 +1548,26 @@ rows:
   serving: 'batched: 12 children, 16 in flight'
   runtime: PyTorch
   gpu: L4
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_14_38_25_vast-rat
+  reranker: holy_hare_kev05b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_38_25_vast-rat
+    reranker: holy_hare_kev05b_score_cachewarm
+  cost_from:
+    experiment: 2026_10_02_09_46_36_holy-hare
+    reranker: kev05b_score
+  pending_fanout: 'cache-warm run 2026_10_03_14_38_25_vast-rat failed the gate vs the original (answer max 0.0549 > 0.035; kept-mass 0.0037 > 0.002); hidden until resolved'
+  label: kev05b_score cache warm
+  family: kev05b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: L40S
   buffer: 4,096 x 16 (default)
   queries: 75
   tables:
@@ -1376,7 +1640,9 @@ rows:
   - latency
 - experiment: 2026_10_02_10_46_48_star-hare
   reranker: matilda_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_12_01_09_first-bird
+    reranker: star_hare_matilda_noul
   label: matilda_noul
   family: matilda
   serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
@@ -1390,7 +1656,9 @@ rows:
   - latency
 - experiment: 2026_10_02_10_46_48_star-hare
   reranker: matilda_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_12_10_25_holy-ox
+    reranker: star_hare_matilda_score
   label: matilda_score
   family: matilda
   serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
@@ -1420,7 +1688,9 @@ rows:
   - latency
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_10_34_30_robust-alpaca
+    reranker: loving_loon_autotrust_score
   label: autotrust_score
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
@@ -1464,7 +1734,9 @@ rows:
   blank: failed
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_11_01_54_epic-osprey
+    reranker: proven_shiner_kev08b_ba_lora_noul
   label: kev08b_ba_lora_noul
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
@@ -1478,7 +1750,9 @@ rows:
   - latency
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_11_38_43_strong-newt
+    reranker: proven_shiner_kev08b_ba_lora_score
   label: kev08b_ba_lora_score
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
@@ -1556,7 +1830,9 @@ rows:
   - latency
 - experiment: 2026_10_02_20_58_42_vast-filly
   reranker: kev4b_ba_lora_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_13_09_47_mint-llama
+    reranker: vast_filly_kev4b_ba_lora_noul
   label: kev4b_ba_lora_noul
   family: kev4b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
@@ -1584,6 +1860,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_noul
+  latency_from:
+    experiment: 2026_10_03_13_19_27_noted-oriole
+    reranker: keen_emu_kev4b_noul
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -1597,6 +1876,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_score
+  latency_from:
+    experiment: 2026_10_03_13_24_07_trusty-asp
+    reranker: keen_emu_kev4b_score
   label: kev4b_score
   family: kev4b
   serving: first run
@@ -1610,6 +1892,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev9b_noul
+  latency_from:
+    experiment: 2026_10_03_10_51_36_fun-falcon
+    reranker: proper_bee_kev9b_noul
   label: kev9b_noul
   family: kev9b
   serving: first run
@@ -1623,6 +1908,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev9b_score
+  latency_from:
+    experiment: 2026_10_03_10_56_19_sought-ibex
+    reranker: proper_bee_kev9b_score
   label: kev9b_score
   family: kev9b
   serving: first run
@@ -1636,6 +1924,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev27b_noul
+  latency_from:
+    experiment: 2026_10_03_13_29_45_moving-mayfly
+    reranker: proper_bee_kev27b_noul
   label: kev27b_noul
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -1649,6 +1940,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev27b_score
+  latency_from:
+    experiment: 2026_10_03_10_44_32_poetic-walrus
+    reranker: proper_bee_kev27b_score
   label: kev27b_score
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -1694,6 +1988,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_quick-moray
   reranker: kev27b_batched_c32_noul
+  latency_from:
+    experiment: 2026_10_03_11_42_35_select-raptor
+    reranker: quick_moray_kev27b_batched_c32_noul
   label: kev27b_batched_c32_noul
   family: kev27b
   serving: 'batched: 12 children, 32 in flight'
@@ -1755,6 +2052,7 @@ rows:
   - latency
 - experiment: 2026_10_03_04_25_56_helped-shad
   reranker: rune26b_q4_noul
+  pending_fanout: 'fan-out not implemented for the gguf (llama.cpp) source; hidden until it is (Marcus, 2026-10-03)'
   label: rune26b_q4_noul
   family: rune26b_q4
   serving: 'batched: 12 children, 8 in flight'
@@ -1768,6 +2066,7 @@ rows:
   - latency
 - experiment: 2026_10_03_04_25_56_helped-shad
   reranker: rune26b_q4_score
+  pending_fanout: 'fan-out not implemented for the gguf (llama.cpp) source; hidden until it is (Marcus, 2026-10-03)'
   label: rune26b_q4_score
   family: rune26b_q4
   serving: 'batched: 12 children, 8 in flight'

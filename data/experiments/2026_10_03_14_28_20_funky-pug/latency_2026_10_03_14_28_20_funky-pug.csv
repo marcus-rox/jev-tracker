@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+good_midge_kev27b_score_cachewarm,75,0.51,0.42,0.86,0.29,2.37,37.2

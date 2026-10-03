@@ -1,0 +1,21 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_09_46_36_holy-hare/kev05b_noul
+name: fanout_cachewarm_holy_hare_kev05b_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  holy_hare_kev05b_noul_cachewarm:
+    source: kev
+    model: jaredpalmer/kev-0.5b@9ce2fd39db3a397c89733f94af948e3d1fdfffcd
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    gpu: L4
+    forward_batch: 1
+    fanout: true
+    cache_warm: true
+    shards: 46

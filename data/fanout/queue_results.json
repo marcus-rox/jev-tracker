@@ -507,25 +507,6 @@
   "app": "jev-ff-good-midge-kev27b-score"
  },
  {
-  "config": "fanout_keen_emu_kev4b_noul.yaml",
-  "gpu": "L40S",
-  "shards_requested": 46,
-  "shards_ready": 46,
-  "status": "failed",
-  "reason": "dispatch hang",
-  "timeline": "app 05:39:54, 46/46 ready ~05:40:30, dispatch bar 0/75 for ~42min, killed 06:23",
-  "experiment_dir": "data/experiments/2026_10_03_05_39_55_trusty-mayfly",
-  "app_logs": "session-local fanout_full/logs/keen_emu_noul_applogs.txt",
-  "log_tail": "shards finished:   0%|          | 0/47 [39:44<?, ?shard/s]\nshards finished:   0%|          | 0/47 [40:04<?, ?shard/s]\nshards finished:   0%|          | 0/47 [40:23<?, ?shard/s]\nshards finished:   0%|          | 0/47 [40:43<?, ?shard/s]\nshards finished:   0%|          | 0/47 [41:02<?, ?shard/s]\nshards finished:   0%|          | 0/47 [41:21<?, ?shard/s]\nshards finished:   0%|          | 0/47 [41:41<?, ?shard/s]\nshards finished:   0%|          | 0/47 [42:00<?, ?shard/s]\nshards finished:   0%|          | 0/47 [42:19<?, ?shard/s]\nshards finished:   0%|          | 0/47 [42:39<?, ?shard/s]\nshards finished:   0%|          | 0/47 [42:58<?, ?shard/s]\nshards finished:   0%|          | 0/47 [43:18<?, ?shard/s]"
- },
- {
-  "config": "fanout_keen_emu_kev4b_score.yaml",
-  "status": "aborted",
-  "note": "launched in error during restart; local proc killed but Modal app kept 41 tasks, holding ~41 GPUs and causing the super_orca c18 stall",
-  "app": "jev-ff-keen-emu-kev4b-score",
-  "stopped": "manual"
- },
- {
   "config": "fanout_super_orca_kev27b_noul_c24_w4096x16.yaml",
   "gpu": "H100!",
   "shards_requested": 46,
@@ -2661,5 +2642,1575 @@
    }
   },
   "app": "jev-ff-merry-corgi-minicpm5-jev-score"
+ },
+ {
+  "config": "fanout_loving_loon_autotrust_score.yaml",
+  "gpu": "H200",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_10_34_30_robust-alpaca",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 4.09,
+   "median_s_per_query": 2.82,
+   "p95_s_per_query": 10.81,
+   "max_s_per_query": 30.7
+  },
+  "latency_all": {
+   "loving_loon_autotrust_score": {
+    "mean_s_per_query": 4.09,
+    "median_s_per_query": 2.82,
+    "p95_s_per_query": 10.81,
+    "max_s_per_query": 30.7
+   }
+  },
+  "queue_overhead": {
+   "p50": 1.21251194190979,
+   "max": 30.524677103042603
+  },
+  "recv_per_worker": {
+   "0": 720,
+   "1": 715,
+   "2": 714,
+   "3": 714,
+   "4": 713,
+   "5": 712,
+   "6": 712,
+   "7": 712,
+   "8": 710,
+   "9": 707,
+   "10": 704,
+   "11": 704,
+   "12": 702,
+   "13": 700,
+   "14": 697,
+   "15": 696,
+   "16": 695,
+   "17": 692,
+   "18": 691,
+   "19": 689,
+   "20": 688,
+   "21": 686,
+   "22": 684,
+   "23": 683,
+   "24": 683,
+   "25": 681,
+   "26": 681,
+   "27": 679,
+   "28": 678,
+   "29": 674,
+   "30": 671,
+   "31": 671,
+   "32": 669,
+   "33": 668,
+   "34": 666,
+   "35": 663,
+   "36": 662,
+   "37": 662,
+   "38": 659,
+   "39": 658,
+   "40": 655,
+   "41": 653,
+   "42": 652,
+   "43": 652,
+   "44": 649,
+   "45": 647
+  },
+  "rows": {
+   "2026_10_02_10_47_08_loving-loon/autotrust_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_10_47_08_loving-loon/raw_autotrust_score_2026_10_02_10_47_08_loving-loon.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_10_34_30_robust-alpaca/raw_loving_loon_autotrust_score_2026_10_03_10_34_30_robust-alpaca.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-loving-loon-autotrust-score"
+ },
+ {
+  "config": "fanout_proper_bee_kev27b_score.yaml",
+  "gpu": "H200",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_10_44_32_poetic-walrus",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 2.32,
+   "median_s_per_query": 2.21,
+   "p95_s_per_query": 4.25,
+   "max_s_per_query": 5.27
+  },
+  "latency_all": {
+   "proper_bee_kev27b_score": {
+    "mean_s_per_query": 2.32,
+    "median_s_per_query": 2.21,
+    "p95_s_per_query": 4.25,
+    "max_s_per_query": 5.27
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.14830043220520017,
+   "max": 3.323374069213867
+  },
+  "recv_per_worker": {
+   "0": 79,
+   "1": 79,
+   "2": 78,
+   "3": 78,
+   "4": 77,
+   "5": 77,
+   "6": 77,
+   "7": 77,
+   "8": 75,
+   "9": 64,
+   "10": 53,
+   "11": 46,
+   "12": 37,
+   "13": 35,
+   "14": 33,
+   "15": 33,
+   "16": 31,
+   "17": 29,
+   "18": 24,
+   "19": 22,
+   "20": 22,
+   "21": 21,
+   "22": 21,
+   "23": 20,
+   "24": 17,
+   "25": 15,
+   "26": 14,
+   "27": 12,
+   "28": 11,
+   "29": 9,
+   "30": 9,
+   "31": 8,
+   "32": 8,
+   "33": 8,
+   "34": 8,
+   "35": 8,
+   "36": 8,
+   "37": 7,
+   "38": 7,
+   "39": 7,
+   "40": 7,
+   "41": 7,
+   "42": 6,
+   "43": 5,
+   "44": 5,
+   "45": 5
+  },
+  "rows": {
+   "2026_10_03_00_31_36_proper-bee/kev27b_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_proper-bee/raw_kev27b_score_2026_10_03_00_31_36_proper-bee.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_10_44_32_poetic-walrus/raw_proper_bee_kev27b_score_2026_10_03_10_44_32_poetic-walrus.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-proper-bee-kev27b-score"
+ },
+ {
+  "config": "fanout_proper_bee_kev9b_noul.yaml",
+  "gpu": "H100!",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_10_51_36_fun-falcon",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 1.28,
+   "median_s_per_query": 1.11,
+   "p95_s_per_query": 2.69,
+   "max_s_per_query": 3.04
+  },
+  "latency_all": {
+   "proper_bee_kev9b_noul": {
+    "mean_s_per_query": 1.28,
+    "median_s_per_query": 1.11,
+    "p95_s_per_query": 2.69,
+    "max_s_per_query": 3.04
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.10706350326538083,
+   "max": 2.4695474529266357
+  },
+  "recv_per_worker": {
+   "0": 79,
+   "1": 79,
+   "2": 78,
+   "3": 78,
+   "4": 77,
+   "5": 77,
+   "6": 77,
+   "7": 77,
+   "8": 75,
+   "9": 64,
+   "10": 53,
+   "11": 46,
+   "12": 37,
+   "13": 35,
+   "14": 33,
+   "15": 33,
+   "16": 31,
+   "17": 29,
+   "18": 24,
+   "19": 22,
+   "20": 22,
+   "21": 21,
+   "22": 21,
+   "23": 20,
+   "24": 17,
+   "25": 15,
+   "26": 14,
+   "27": 12,
+   "28": 11,
+   "29": 9,
+   "30": 9,
+   "31": 8,
+   "32": 8,
+   "33": 8,
+   "34": 8,
+   "35": 8,
+   "36": 8,
+   "37": 7,
+   "38": 7,
+   "39": 7,
+   "40": 7,
+   "41": 7,
+   "42": 6,
+   "43": 5,
+   "44": 5,
+   "45": 5
+  },
+  "rows": {
+   "2026_10_03_00_31_36_proper-bee/kev9b_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_proper-bee/raw_kev9b_noul_2026_10_03_00_31_36_proper-bee.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_10_51_36_fun-falcon/raw_proper_bee_kev9b_noul_2026_10_03_10_51_36_fun-falcon.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-proper-bee-kev9b-noul"
+ },
+ {
+  "config": "fanout_proper_bee_kev9b_score.yaml",
+  "gpu": "H100!",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_10_56_19_sought-ibex",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 1.48,
+   "median_s_per_query": 1.42,
+   "p95_s_per_query": 3.05,
+   "max_s_per_query": 3.31
+  },
+  "latency_all": {
+   "proper_bee_kev9b_score": {
+    "mean_s_per_query": 1.48,
+    "median_s_per_query": 1.42,
+    "p95_s_per_query": 3.05,
+    "max_s_per_query": 3.31
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.42970508003234864,
+   "max": 2.362061408996582
+  },
+  "recv_per_worker": {
+   "0": 79,
+   "1": 79,
+   "2": 78,
+   "3": 78,
+   "4": 77,
+   "5": 77,
+   "6": 77,
+   "7": 77,
+   "8": 75,
+   "9": 64,
+   "10": 53,
+   "11": 46,
+   "12": 37,
+   "13": 35,
+   "14": 33,
+   "15": 33,
+   "16": 31,
+   "17": 29,
+   "18": 24,
+   "19": 22,
+   "20": 22,
+   "21": 21,
+   "22": 21,
+   "23": 20,
+   "24": 17,
+   "25": 15,
+   "26": 14,
+   "27": 12,
+   "28": 11,
+   "29": 9,
+   "30": 9,
+   "31": 8,
+   "32": 8,
+   "33": 8,
+   "34": 8,
+   "35": 8,
+   "36": 8,
+   "37": 7,
+   "38": 7,
+   "39": 7,
+   "40": 7,
+   "41": 7,
+   "42": 6,
+   "43": 5,
+   "44": 5,
+   "45": 5
+  },
+  "rows": {
+   "2026_10_03_00_31_36_proper-bee/kev9b_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_proper-bee/raw_kev9b_score_2026_10_03_00_31_36_proper-bee.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_10_56_19_sought-ibex/raw_proper_bee_kev9b_score_2026_10_03_10_56_19_sought-ibex.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-proper-bee-kev9b-score"
+ },
+ {
+  "config": "fanout_proven_shiner_kev08b_ba_lora_noul.yaml",
+  "gpu": "L4",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_11_01_54_epic-osprey",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 0.51,
+   "median_s_per_query": 0.34,
+   "p95_s_per_query": 1.29,
+   "max_s_per_query": 4.05
+  },
+  "latency_all": {
+   "proven_shiner_kev08b_ba_lora_noul": {
+    "mean_s_per_query": 0.51,
+    "median_s_per_query": 0.34,
+    "p95_s_per_query": 1.29,
+    "max_s_per_query": 4.05
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.06664764785766603,
+   "max": 3.1372089920043944
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_02_17_18_05_proven-shiner/kev08b_ba_lora_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000098 p50=0.0 p90=0.0 p99=0.0032000000000000084 max=0.020499999999999963",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_17_18_05_proven-shiner/raw_kev08b_ba_lora_noul_2026_10_02_17_18_05_proven-shiner.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_11_01_54_epic-osprey/raw_proven_shiner_kev08b_ba_lora_noul_2026_10_03_11_01_54_epic-osprey.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 9.821116512566328e-05,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0032000000000000084,
+     "max": 0.020499999999999963
+    },
+    "kept_mass_max_delta": 0.0006662284666667517
+   }
+  },
+  "app": "jev-ff-proven-shiner-kev08b-ba-lora-noul"
+ },
+ {
+  "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml",
+  "gpu": "L4",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_11_38_43_strong-newt",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 0.59,
+   "median_s_per_query": 0.42,
+   "p95_s_per_query": 1.52,
+   "max_s_per_query": 1.85
+  },
+  "latency_all": {
+   "proven_shiner_kev08b_ba_lora_score": {
+    "mean_s_per_query": 0.59,
+    "median_s_per_query": 0.42,
+    "p95_s_per_query": 1.52,
+    "max_s_per_query": 1.85
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.09562275505065918,
+   "max": 1.369352294921875
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_02_17_18_05_proven-shiner/kev08b_ba_lora_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.001236 p50=0.0 p90=0.005199999999999982 p99=0.01529999999999987 max=0.03259999999999996",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_17_18_05_proven-shiner/raw_kev08b_ba_lora_score_2026_10_02_17_18_05_proven-shiner.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_11_38_43_strong-newt/raw_proven_shiner_kev08b_ba_lora_score_2026_10_03_11_38_43_strong-newt.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0012360372382677217,
+     "p50": 0.0,
+     "p90": 0.005199999999999982,
+     "p99": 0.01529999999999987,
+     "max": 0.03259999999999996
+    },
+    "kept_mass_max_delta": 0.0017320090266667032,
+    "flagged": true
+   }
+  },
+  "app": "jev-ff-proven-shiner-kev08b-ba-lora-score"
+ },
+ {
+  "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml",
+  "gpu": "H100!",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_11_42_35_select-raptor",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 1.23,
+   "median_s_per_query": 0.96,
+   "p95_s_per_query": 2.61,
+   "max_s_per_query": 3.33
+  },
+  "latency_all": {
+   "quick_moray_kev27b_batched_c32_noul": {
+    "mean_s_per_query": 1.23,
+    "median_s_per_query": 0.96,
+    "p95_s_per_query": 2.61,
+    "max_s_per_query": 3.33
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.47502339744567873,
+   "max": 3.112993299484253
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_03_00_31_36_quick-moray/kev27b_batched_c32_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000055 p50=0.0 p90=0.0 p99=0.0017000000000000348 max=0.015000000000000013",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_quick-moray/raw_kev27b_batched_c32_noul_2026_10_03_00_31_36_quick-moray.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_11_42_35_select-raptor/raw_quick_moray_kev27b_batched_c32_noul_2026_10_03_11_42_35_select-raptor.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 5.486925301051692e-05,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0017000000000000348,
+     "max": 0.015000000000000013
+    },
+    "kept_mass_max_delta": 0.00023810046666672413
+   }
+  },
+  "app": "jev-ff-quick-moray-kev27b-batched-c32-noul"
+ },
+ {
+  "config": "fanout_star_hare_matilda_noul.yaml",
+  "gpu": "H200",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_12_01_09_first-bird",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 3.43,
+   "median_s_per_query": 1.99,
+   "p95_s_per_query": 11.17,
+   "max_s_per_query": 29.6
+  },
+  "latency_all": {
+   "star_hare_matilda_noul": {
+    "mean_s_per_query": 3.43,
+    "median_s_per_query": 1.99,
+    "p95_s_per_query": 11.17,
+    "max_s_per_query": 29.6
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.8708675308227539,
+   "max": 29.483624591827393
+  },
+  "recv_per_worker": {
+   "0": 720,
+   "1": 715,
+   "2": 714,
+   "3": 714,
+   "4": 713,
+   "5": 712,
+   "6": 712,
+   "7": 712,
+   "8": 710,
+   "9": 707,
+   "10": 704,
+   "11": 704,
+   "12": 702,
+   "13": 700,
+   "14": 697,
+   "15": 696,
+   "16": 695,
+   "17": 692,
+   "18": 691,
+   "19": 689,
+   "20": 688,
+   "21": 686,
+   "22": 684,
+   "23": 683,
+   "24": 683,
+   "25": 681,
+   "26": 681,
+   "27": 679,
+   "28": 678,
+   "29": 674,
+   "30": 671,
+   "31": 671,
+   "32": 669,
+   "33": 668,
+   "34": 666,
+   "35": 663,
+   "36": 662,
+   "37": 662,
+   "38": 659,
+   "39": 658,
+   "40": 655,
+   "41": 653,
+   "42": 652,
+   "43": 652,
+   "44": 649,
+   "45": 647
+  },
+  "rows": {
+   "2026_10_02_10_46_48_star-hare/matilda_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_10_46_48_star-hare/raw_matilda_noul_2026_10_02_10_46_48_star-hare.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_12_01_09_first-bird/raw_star_hare_matilda_noul_2026_10_03_12_01_09_first-bird.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-star-hare-matilda-noul"
+ },
+ {
+  "config": "fanout_star_hare_matilda_score.yaml",
+  "gpu": "H200",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_12_10_25_holy-ox",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 2.98,
+   "median_s_per_query": 1.98,
+   "p95_s_per_query": 10.8,
+   "max_s_per_query": 22.01
+  },
+  "latency_all": {
+   "star_hare_matilda_score": {
+    "mean_s_per_query": 2.98,
+    "median_s_per_query": 1.98,
+    "p95_s_per_query": 10.8,
+    "max_s_per_query": 22.01
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.9025864486694336,
+   "max": 21.896298044204713
+  },
+  "recv_per_worker": {
+   "0": 720,
+   "1": 715,
+   "2": 714,
+   "3": 714,
+   "4": 713,
+   "5": 712,
+   "6": 712,
+   "7": 712,
+   "8": 710,
+   "9": 707,
+   "10": 704,
+   "11": 704,
+   "12": 702,
+   "13": 700,
+   "14": 697,
+   "15": 696,
+   "16": 695,
+   "17": 692,
+   "18": 691,
+   "19": 689,
+   "20": 688,
+   "21": 686,
+   "22": 684,
+   "23": 683,
+   "24": 683,
+   "25": 681,
+   "26": 681,
+   "27": 679,
+   "28": 678,
+   "29": 674,
+   "30": 671,
+   "31": 671,
+   "32": 669,
+   "33": 668,
+   "34": 666,
+   "35": 663,
+   "36": 662,
+   "37": 662,
+   "38": 659,
+   "39": 658,
+   "40": 655,
+   "41": 653,
+   "42": 652,
+   "43": 652,
+   "44": 649,
+   "45": 647
+  },
+  "rows": {
+   "2026_10_02_10_46_48_star-hare/matilda_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_10_46_48_star-hare/raw_matilda_score_2026_10_02_10_46_48_star-hare.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_12_10_25_holy-ox/raw_star_hare_matilda_score_2026_10_03_12_10_25_holy-ox.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-star-hare-matilda-score"
+ },
+ {
+  "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml",
+  "gpu": "L40S",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_13_09_47_mint-llama",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 0.45,
+   "median_s_per_query": 0.29,
+   "p95_s_per_query": 1.11,
+   "max_s_per_query": 2.31
+  },
+  "latency_all": {
+   "vast_filly_kev4b_ba_lora_noul": {
+    "mean_s_per_query": 0.45,
+    "median_s_per_query": 0.29,
+    "p95_s_per_query": 1.11,
+    "max_s_per_query": 2.31
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.04992512702941895,
+   "max": 0.8362351150512695
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_02_20_58_42_vast-filly/kev4b_ba_lora_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000127 p50=0.0 p90=0.0 p99=0.0040999999999999925 max=0.033399999999999985",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_20_58_42_vast-filly/raw_kev4b_ba_lora_noul_2026_10_02_20_58_42_vast-filly.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_13_09_47_mint-llama/raw_vast_filly_kev4b_ba_lora_noul_2026_10_03_13_09_47_mint-llama.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0001265116131287135,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0040999999999999925,
+     "max": 0.033399999999999985
+    },
+    "kept_mass_max_delta": 0.00020250446666669752,
+    "flagged": true
+   }
+  },
+  "app": "jev-ff-vast-filly-kev4b-ba-lora-noul"
+ },
+ {
+  "config": "fanout_keen_emu_kev4b_noul.yaml",
+  "gpu": "L40S",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_13_19_27_noted-oriole",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 1.48,
+   "median_s_per_query": 1.26,
+   "p95_s_per_query": 4.03,
+   "max_s_per_query": 6.66
+  },
+  "latency_all": {
+   "keen_emu_kev4b_noul": {
+    "mean_s_per_query": 1.48,
+    "median_s_per_query": 1.26,
+    "p95_s_per_query": 4.03,
+    "max_s_per_query": 6.66
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.0457159538269043,
+   "max": 4.09181491279602
+  },
+  "recv_per_worker": {
+   "0": 79,
+   "1": 79,
+   "2": 78,
+   "3": 78,
+   "4": 77,
+   "5": 77,
+   "6": 77,
+   "7": 77,
+   "8": 75,
+   "9": 64,
+   "10": 53,
+   "11": 46,
+   "12": 37,
+   "13": 35,
+   "14": 33,
+   "15": 33,
+   "16": 31,
+   "17": 29,
+   "18": 24,
+   "19": 22,
+   "20": 22,
+   "21": 21,
+   "22": 21,
+   "23": 20,
+   "24": 17,
+   "25": 15,
+   "26": 14,
+   "27": 12,
+   "28": 11,
+   "29": 9,
+   "30": 9,
+   "31": 8,
+   "32": 8,
+   "33": 8,
+   "34": 8,
+   "35": 8,
+   "36": 8,
+   "37": 7,
+   "38": 7,
+   "39": 7,
+   "40": 7,
+   "41": 7,
+   "42": 6,
+   "43": 5,
+   "44": 5,
+   "45": 5
+  },
+  "rows": {
+   "2026_10_01_23_53_13_keen-emu/kev4b_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_01_23_53_13_keen-emu/raw_kev4b_noul_2026_10_01_23_53_13_keen-emu.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_13_19_27_noted-oriole/raw_keen_emu_kev4b_noul_2026_10_03_13_19_27_noted-oriole.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   },
+   "2026_10_03_00_31_36_proper-bee/kev4b_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_proper-bee/raw_kev4b_noul_2026_10_03_00_31_36_proper-bee.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_13_19_27_noted-oriole/raw_keen_emu_kev4b_noul_2026_10_03_13_19_27_noted-oriole.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-keen-emu-kev4b-noul"
+ },
+ {
+  "config": "fanout_keen_emu_kev4b_score.yaml",
+  "gpu": "L40S",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_13_24_07_trusty-asp",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 1.25,
+   "median_s_per_query": 1.19,
+   "p95_s_per_query": 2.32,
+   "max_s_per_query": 3.78
+  },
+  "latency_all": {
+   "keen_emu_kev4b_score": {
+    "mean_s_per_query": 1.25,
+    "median_s_per_query": 1.19,
+    "p95_s_per_query": 2.32,
+    "max_s_per_query": 3.78
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.036813917160034126,
+   "max": 2.0610511589050295
+  },
+  "recv_per_worker": {
+   "0": 79,
+   "1": 79,
+   "2": 78,
+   "3": 78,
+   "4": 77,
+   "5": 77,
+   "6": 77,
+   "7": 77,
+   "8": 75,
+   "9": 64,
+   "10": 53,
+   "11": 46,
+   "12": 37,
+   "13": 35,
+   "14": 33,
+   "15": 33,
+   "16": 31,
+   "17": 29,
+   "18": 24,
+   "19": 22,
+   "20": 22,
+   "21": 21,
+   "22": 21,
+   "23": 20,
+   "24": 17,
+   "25": 15,
+   "26": 14,
+   "27": 12,
+   "28": 11,
+   "29": 9,
+   "30": 9,
+   "31": 8,
+   "32": 8,
+   "33": 8,
+   "34": 8,
+   "35": 8,
+   "36": 8,
+   "37": 7,
+   "38": 7,
+   "39": 7,
+   "40": 7,
+   "41": 7,
+   "42": 6,
+   "43": 5,
+   "44": 5,
+   "45": 5
+  },
+  "rows": {
+   "2026_10_01_23_53_13_keen-emu/kev4b_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_01_23_53_13_keen-emu/raw_kev4b_score_2026_10_01_23_53_13_keen-emu.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_13_24_07_trusty-asp/raw_keen_emu_kev4b_score_2026_10_03_13_24_07_trusty-asp.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   },
+   "2026_10_03_00_31_36_proper-bee/kev4b_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_proper-bee/raw_kev4b_score_2026_10_03_00_31_36_proper-bee.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_13_24_07_trusty-asp/raw_keen_emu_kev4b_score_2026_10_03_13_24_07_trusty-asp.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-keen-emu-kev4b-score"
+ },
+ {
+  "config": "fanout_proper_bee_kev27b_noul.yaml",
+  "gpu": "H200",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_13_29_45_moving-mayfly",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 2.18,
+   "median_s_per_query": 2.09,
+   "p95_s_per_query": 3.52,
+   "max_s_per_query": 5.53
+  },
+  "latency_all": {
+   "proper_bee_kev27b_noul": {
+    "mean_s_per_query": 2.18,
+    "median_s_per_query": 2.09,
+    "p95_s_per_query": 3.52,
+    "max_s_per_query": 5.53
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.07925871849060062,
+   "max": 3.325219741821289
+  },
+  "recv_per_worker": {
+   "0": 79,
+   "1": 79,
+   "2": 78,
+   "3": 78,
+   "4": 77,
+   "5": 77,
+   "6": 77,
+   "7": 77,
+   "8": 75,
+   "9": 64,
+   "10": 53,
+   "11": 46,
+   "12": 37,
+   "13": 35,
+   "14": 33,
+   "15": 33,
+   "16": 31,
+   "17": 29,
+   "18": 24,
+   "19": 22,
+   "20": 22,
+   "21": 21,
+   "22": 21,
+   "23": 20,
+   "24": 17,
+   "25": 15,
+   "26": 14,
+   "27": 12,
+   "28": 11,
+   "29": 9,
+   "30": 9,
+   "31": 8,
+   "32": 8,
+   "33": 8,
+   "34": 8,
+   "35": 8,
+   "36": 8,
+   "37": 7,
+   "38": 7,
+   "39": 7,
+   "40": 7,
+   "41": 7,
+   "42": 6,
+   "43": 5,
+   "44": 5,
+   "45": 5
+  },
+  "rows": {
+   "2026_10_03_00_31_36_proper-bee/kev27b_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_03_00_31_36_proper-bee/raw_kev27b_noul_2026_10_03_00_31_36_proper-bee.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_13_29_45_moving-mayfly/raw_proper_bee_kev27b_noul_2026_10_03_13_29_45_moving-mayfly.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-proper-bee-kev27b-noul"
+ },
+ {
+  "config": "fanout_cachewarm_above_dog_kev08b_noul.yaml",
+  "experiment": "2026_10_03_13_43_10_moved-fox",
+  "experiment_dir": "data/experiments/2026_10_03_13_43_10_moved-fox",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.41,
+   "median_s_per_query": 0.31,
+   "p95_s_per_query": 0.8,
+   "max_s_per_query": 4.49
+  },
+  "prefix_hits": 2701,
+  "prefix_misses": 3000,
+  "paired_cleared_mean": 0.52,
+  "rows": {
+   "2026_10_02_03_29_11_above-dog/kev08b_noul": {
+    "answer_max": 0.020000000000000018,
+    "kept_mass_delta": 0.002292791666666738
+   }
+  },
+  "note": "recovered via experiment finish on 493c0fd (apply_dispatch prime drop)"
+ },
+ {
+  "config": "fanout_cachewarm_above_dog_kev08b_score.yaml",
+  "experiment": "2026_10_03_13_51_03_ace-kodiak",
+  "experiment_dir": "data/experiments/2026_10_03_13_51_03_ace-kodiak",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.52,
+   "median_s_per_query": 0.36,
+   "p95_s_per_query": 1.0,
+   "max_s_per_query": 7.57
+  },
+  "prefix_hits": 2705,
+  "prefix_misses": 2996,
+  "paired_cleared_mean": 0.93,
+  "rows": {
+   "2026_10_02_03_29_11_above-dog/kev08b_score": {
+    "answer_max": 0.03190000000000004,
+    "kept_mass_delta": 0.00378897261333333
+   }
+  },
+  "note": "recovered via experiment finish on 493c0fd (apply_dispatch prime drop)"
+ },
+ {
+  "config": "fanout_cachewarm_good_midge_kev27b_noul.yaml",
+  "experiment": "2026_10_03_14_02_56_solid-marlin",
+  "experiment_dir": "data/experiments/2026_10_03_14_02_56_solid-marlin",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.44,
+   "median_s_per_query": 0.41,
+   "p95_s_per_query": 0.84,
+   "max_s_per_query": 1.64
+  },
+  "prefix_hits": 2702,
+  "prefix_misses": 2999,
+  "paired_cleared_mean": 0.77,
+  "rows": {
+   "2026_09_29_08_47_55_good-midge/kev27b_noul": {
+    "answer_max": 0.009500000000000064,
+    "kept_mass_delta": 0.00027862849333337714
+   },
+   "2026_09_29_22_00_38_super-orca/kev27b_noul_c12_w4096x16": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.00023810046666672413
+   },
+   "2026_09_29_22_00_38_super-orca/kev27b_noul_c12_w4096x16_rerun": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.00019538830666665508
+   },
+   "2026_10_02_00_08_39_safe-joey/kev27b_noul": {
+    "answer_max": 0.015000000000000013,
+    "kept_mass_delta": 0.00023810046666672413
+   },
+   "2026_10_03_00_31_36_rested-hermit/kev27b_bf16_noul": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.0004428205733333357
+   },
+   "2026_10_03_00_31_36_clear-flea/kev27b_batched_H100_noul": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.0004428205733333357
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_good_midge_kev27b_score.yaml",
+  "experiment": "2026_10_03_14_28_20_funky-pug",
+  "experiment_dir": "data/experiments/2026_10_03_14_28_20_funky-pug",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.51,
+   "median_s_per_query": 0.42,
+   "p95_s_per_query": 0.86,
+   "max_s_per_query": 2.37
+  },
+  "prefix_hits": 2699,
+  "prefix_misses": 3002,
+  "paired_cleared_mean": 0.91,
+  "rows": {
+   "2026_09_29_08_47_55_good-midge/kev27b_score": {
+    "answer_max": 0.03279999999999994,
+    "kept_mass_delta": 0.0001307386933333543
+   },
+   "2026_10_02_00_08_39_safe-joey/kev27b_score": {
+    "answer_max": 0.03279999999999994,
+    "kept_mass_delta": 0.0001307386933333543
+   },
+   "2026_10_03_00_31_36_rested-hermit/kev27b_bf16_score": {
+    "answer_max": 0.03279999999999994,
+    "kept_mass_delta": 0.0001307386933333543
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_holy_hare_kev05b_noul.yaml",
+  "experiment": "2026_10_03_14_34_32_dear-jackal",
+  "experiment_dir": "data/experiments/2026_10_03_14_34_32_dear-jackal",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.42,
+   "median_s_per_query": 0.33,
+   "p95_s_per_query": 0.71,
+   "max_s_per_query": 2.56
+  },
+  "prefix_hits": 2687,
+  "prefix_misses": 2992,
+  "paired_cleared_mean": 0.41,
+  "rows": {
+   "2026_10_02_09_46_36_holy-hare/kev05b_noul": {
+    "answer_max": 0.028299999999999992,
+    "kept_mass_delta": 0.003917821066666716
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_holy_hare_kev05b_score.yaml",
+  "experiment": "2026_10_03_14_38_25_vast-rat",
+  "experiment_dir": "data/experiments/2026_10_03_14_38_25_vast-rat",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.27,
+   "median_s_per_query": 0.16,
+   "p95_s_per_query": 0.73,
+   "max_s_per_query": 1.45
+  },
+  "prefix_hits": 2692,
+  "prefix_misses": 2987,
+  "paired_cleared_mean": 0.55,
+  "rows": {
+   "2026_10_02_09_46_36_holy-hare/kev05b_score": {
+    "answer_max": 0.05489999999999995,
+    "kept_mass_delta": 0.0036879508400000094
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_humble_sawfly_kev9b_noul.yaml",
+  "experiment": "2026_10_03_14_42_22_sunny-liger",
+  "experiment_dir": "data/experiments/2026_10_03_14_42_22_sunny-liger",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.6,
+   "median_s_per_query": 0.49,
+   "p95_s_per_query": 1.38,
+   "max_s_per_query": 2.23
+  },
+  "prefix_hits": 2708,
+  "prefix_misses": 2993,
+  "paired_cleared_mean": 0.61,
+  "rows": {
+   "2026_10_02_03_29_31_humble-sawfly/kev9b_noul": {
+    "answer_max": 0.01749999999999996,
+    "kept_mass_delta": 0.00015032403999992727
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_humble_sawfly_kev9b_score.yaml",
+  "experiment": "2026_10_03_14_47_47_living-lamb",
+  "experiment_dir": "data/experiments/2026_10_03_14_47_47_living-lamb",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.32,
+   "median_s_per_query": 0.3,
+   "p95_s_per_query": 0.82,
+   "max_s_per_query": 1.36
+  },
+  "prefix_hits": 2700,
+  "prefix_misses": 3001,
+  "paired_cleared_mean": 0.62,
+  "rows": {
+   "2026_10_02_03_29_31_humble-sawfly/kev9b_score": {
+    "answer_max": 0.04289999999999994,
+    "kept_mass_delta": 0.00018372586666670632
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_immune_tick_kev2b_noul.yaml",
+  "experiment": "2026_10_03_14_51_52_fit-toucan",
+  "experiment_dir": "data/experiments/2026_10_03_14_51_52_fit-toucan",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.42,
+   "median_s_per_query": 0.32,
+   "p95_s_per_query": 1.18,
+   "max_s_per_query": 4.84
+  },
+  "prefix_hits": 2701,
+  "prefix_misses": 3000,
+  "paired_cleared_mean": 0.56,
+  "rows": {
+   "2026_10_02_03_29_51_immune-tick/kev2b_noul": {
+    "answer_max": 0.020000000000000018,
+    "kept_mass_delta": 0.0026286571600000475
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_immune_tick_kev2b_score.yaml",
+  "experiment": "2026_10_03_14_56_31_vast-lynx",
+  "experiment_dir": "data/experiments/2026_10_03_14_56_31_vast-lynx",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.41,
+   "median_s_per_query": 0.32,
+   "p95_s_per_query": 0.98,
+   "max_s_per_query": 1.53
+  },
+  "prefix_hits": 2702,
+  "prefix_misses": 2999,
+  "paired_cleared_mean": 0.82,
+  "rows": {
+   "2026_10_02_03_29_51_immune-tick/kev2b_score": {
+    "answer_max": 0.037899999999999934,
+    "kept_mass_delta": 0.0019004342399999707
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_keen_emu_kev4b_noul.yaml",
+  "experiment": "2026_10_03_15_00_25_epic-ant",
+  "experiment_dir": "data/experiments/2026_10_03_15_00_25_epic-ant",
+  "status": "ok",
+  "gpu": "L40S",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 1.03,
+   "median_s_per_query": 1.05,
+   "p95_s_per_query": 1.92,
+   "max_s_per_query": 2.32
+  },
+  "prefix_hits": 1382,
+  "prefix_misses": 1443,
+  "paired_cleared_mean": 1.48,
+  "rows": {
+   "2026_10_01_23_53_13_keen-emu/kev4b_noul": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   },
+   "2026_10_03_00_31_36_proper-bee/kev4b_noul": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_keen_emu_kev4b_score.yaml",
+  "experiment": "2026_10_03_15_06_46_usable-hyena",
+  "experiment_dir": "data/experiments/2026_10_03_15_06_46_usable-hyena",
+  "status": "ok",
+  "gpu": "L40S",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.93,
+   "median_s_per_query": 0.93,
+   "p95_s_per_query": 1.78,
+   "max_s_per_query": 2.29
+  },
+  "prefix_hits": 1382,
+  "prefix_misses": 1443,
+  "paired_cleared_mean": 1.25,
+  "rows": {
+   "2026_10_01_23_53_13_keen-emu/kev4b_score": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   },
+   "2026_10_03_00_31_36_proper-bee/kev4b_score": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   }
+  }
  }
 ]
