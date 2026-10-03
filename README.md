@@ -1,12 +1,13 @@
 # jev-tracker
 
 Leaderboard of Jev alternatives on Rox's frozen 75-case reranking benchmark. The data lives in
-this repository; an hourly automation runs new models on Modal and pushes the numbers to `main`.
+this repository; a 6-hourly automation (00:17, 06:17, 12:17, 18:17 Pacific) runs new models on Modal
+and pushes the numbers to `main`.
 
 - `docs/SPEC.md` — requirements R-1..R-9 and their conformance status
 - `docs/PLAN.md` — phases, decisions, next steps
 - `docs/PRIOR_WORK.md` — prior-work survey for the crawler (R-8): sources, rate limits, what to copy
-- `docs/AUTOMATION.md` — the hourly automation's runbook (R-9): two parallel tracks — run the queue on Modal / web-search into the queue — then regenerate, push to `main`
+- `docs/AUTOMATION.md` — the 6-hourly automation's runbook (R-9): two parallel tracks — run the queue on Modal / web-search into the queue — then regenerate, push to `main`
 - `docs/DAILY_RUN.html` — how an automation run works: block diagram, sequence diagram, steps, triage verdicts, guardrails (open in a browser)
 - `docs/GGUF_SPEC.html`, `docs/GGUF_PLAN.html`, `docs/GGUF_SPRINT_TASKS.html` — the GGUF task (its own spec, R-1..R-3), plan with block + sequence diagrams, and the four sprint tickets (bodies in `docs/src/gguf_*_body.html`)
 - `docs/JEV_ALTERNATIVES.html` — every crawler hit triaged as a real Jev alternative, grouped by what stops it running, one row per distinct model, with filters (open in a browser; rebuild with `python3 docs/src/build_jev_alternatives.py` + the artifact kit)
@@ -31,7 +32,7 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 ## How it works
 
 Three parts share one repository: the **benchmark harness** scores a model on the 75 frozen cases,
-the **hourly run** finds and benchmarks new models, and the **site** shows the results.
+the **6-hourly run** finds and benchmarks new models, and the **site** shows the results.
 
 **Figure 1. Block diagram of the system.**
 
@@ -45,7 +46,7 @@ flowchart TB
     CAND[(Today's candidates)]
   end
   subgraph Decide["2. Decide and run"]
-    DEVIN{{Devin hourly session: triage}}
+    DEVIN{{Devin 6-hourly session: triage}}
     TRI[(Triage verdicts)]
     CFG[(Experiment configs)]
     RUN[Runner]
@@ -80,12 +81,12 @@ running, and Marcus's Approve / Skip clicks on the site land there immediately; 
 elapsed < ETA, rate — which the Modal workers publish while they run). Models the harness cannot call yet are *proposed*, not run: the
 site lists them under "Awaiting your approval" and only an approved one is built and benchmarked.
 
-**Figure 2. One hourly run, as a sequence diagram.**
+**Figure 2. One 6-hourly run, as a sequence diagram.**
 
 ```mermaid
 sequenceDiagram
   autonumber
-  participant A as Devin Automation (hourly, at :17)
+  participant A as Devin Automation (6-hourly, at :17 Pacific)
   participant C as Crawler
   participant S as 7 sources (6 public + Rox Slack)
   participant R as Repository
@@ -148,7 +149,7 @@ Legend: diamonds are decisions. The key is the URL, except Hugging Face models, 
 | Web | Tavily (keyless) | any page | whole days back |
 | X / Twitter | Tavily + `site:x.com` | posts on x.com / twitter.com | whole days back |
 | Hacker News | Algolia | stories and comments; quoted phrases only | server-side |
-| Slack | Rox workspace via the Slack MCP search the hourly Devin session runs (results handed to the crawler) | messages in channels and DMs Marcus can see | server-side (`after:`) |
+| Slack | Rox workspace via the Slack MCP search the 6-hourly Devin session runs (results handed to the crawler) | messages in channels and DMs Marcus can see | server-side (`after:`) |
 | Submitted | the site's text box | whatever a person typed | none |
 
 Queries live in `crawler/queries.yaml`: the model names (`jev`, `kev`, `laya`, `systemone`,
@@ -206,8 +207,8 @@ as mean / median / p95 across queries — the same definition as the prod / Jev 
 `data/timing_summary_prod_jev.csv`.
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
-time, headline cards and a TLDR the hourly run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
-free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next hourly run triages it.
+time, headline cards and a TLDR the 6-hourly run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
+free text (ideally one web link); the server files it under `requests/<date>/` on `main` and the next 6-hourly run triages it.
 The Suggestions tab lists every submission (newest first, sortable by date, first five words with an expand toggle).
 
 ## Crawler
@@ -227,13 +228,13 @@ where it is `hf:<id>@<sha>` so new weights under an existing model id surface on
 (source, query) is printed and skipped; the exit code is 1 if any failed. `web` and `twitter` use
 Tavily's keyless mode (no API key; `twitter` appends `site:x.com`); when Tavily rate-limits with
 HTTP 429 the source logs and returns nothing. `slack` is Rox's own workspace: the crawler holds no
-Slack credentials, so the hourly Devin session runs each Slack query through its Slack MCP search
+Slack credentials, so the 6-hourly Devin session runs each Slack query through its Slack MCP search
 tool, saves the results as `<query slug>.md`, and passes the directory with `--slack-results`;
 without that flag the source is skipped (printed, not a failure). Prior-work survey: `docs/PRIOR_WORK.md`.
 
 ## Automation
 
-A Devin Automation runs `docs/AUTOMATION.md` once an hour (at :17) and pushes its commit straight to
+A Devin Automation runs `docs/AUTOMATION.md` every 6 hours (00:17, 06:17, 12:17, 18:17 Pacific) and pushes its commit straight to
 `main`; Render redeploys the site from it. Devin's decisions are data in that commit: `crawler/triage/<date>.yaml` (a verdict
 per candidate) and the `configs/*.yaml` it wrote for runnable ones.
 

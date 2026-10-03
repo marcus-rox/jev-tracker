@@ -333,7 +333,7 @@ def main() -> None:
 
 <section class="a-section" aria-labelledby="models-heading">
   <h2 class="a-section__title" id="models-heading">3. Every Jev alternative, one row per model</h2>
-  <p class="a-section__note">Table 2. One row per distinct Hugging Face model (quantised / MLX / GGUF variants of the same weights collapsed into "variants") or per non-Hugging-Face repo/post. Sorted: runnable first, then by what is missing, then by number of variants. Status: benchmarked = results on the dashboard; ran today = the hourly run launched it; queue: proposed / queued / failed = in data/queue.json; untouched = nothing has happened yet. Filters combine; the search box matches name, reason and titles.</p>
+  <p class="a-section__note">Table 2. One row per distinct Hugging Face model (quantised / MLX / GGUF variants of the same weights collapsed into "variants") or per non-Hugging-Face repo/post. Sorted: runnable first, then by what is missing, then by number of variants. Status: benchmarked = results on the dashboard; ran today = the 6-hourly run launched it; queue: proposed / queued / failed = in data/queue.json; untouched = nothing has happened yet. Filters combine; the search box matches name, reason and titles.</p>
   {filter_bar("models-table")}
   <div class="a-table-scroll">
     <table class="a-table" id="models-table" data-a-sticky-columns="1">
@@ -364,7 +364,7 @@ def main() -> None:
 <section class="a-section" aria-labelledby="method-heading">
   <h2 class="a-section__title" id="method-heading">5. Method, sources and caveats</h2>
   <ul class="a-prose">
-    <li>Hits: <code>crawler/candidates/*.jsonl</code> (deduplicated by <code>key</code> against <code>crawler/seen.jsonl</code>). Verdicts and reasons: <code>crawler/triage/*.yaml</code>, written by the hourly Devin run. Queue: <code>data/queue.json</code>.</li>
+    <li>Hits: <code>crawler/candidates/*.jsonl</code> (deduplicated by <code>key</code> against <code>crawler/seen.jsonl</code>). Verdicts and reasons: <code>crawler/triage/*.yaml</code>, written by the 6-hourly Devin run. Queue: <code>data/queue.json</code>.</li>
     <li>"What is missing" is a keyword grouping of the free-text triage reason; "Other" holds the reasons that fit no group. Read the reason column when it matters.</li>
     <li>"Distinct model" collapses Hugging Face repos whose name differs only by an export/quantisation suffix (gguf, mlx, 4bit, q4_k_m, awq, lora…). Different fine-tunes by the same author stay separate.</li>
     <li>"Benchmarked" is inferred from the triage reason or from a known family in <code>data/registry.yaml</code>; it does not say how the model scored — the dashboard does.</li>

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content="Devin artifact kit" />
-    <title>How the hourly jev-tracker run works</title>
+    <title>How the 6-hourly jev-tracker run works</title>
     <style>
 /* Devin artifact kit — self-contained styles for standalone HTML artifacts.
    Tokens are translated from the Devin product design system. Light is the
@@ -1184,8 +1184,8 @@ details.a-disclosure[open] > summary::before {
     <main class="a-shell">
       <header class="a-header">
         <div>
-          <h1 class="a-header__title">How the hourly jev-tracker run works</h1>
-          <p class="a-header__subtitle">What happens between the hourly trigger (at :17) and the commit that lands on main: components, one run's sequence, and the guardrails.</p>
+          <h1 class="a-header__title">How the 6-hourly jev-tracker run works</h1>
+          <p class="a-header__subtitle">What happens between the 6-hourly trigger (00:17, 06:17, 12:17, 18:17 Pacific) and the commit that lands on main: components, one run's sequence, and the guardrails.</p>
         </div>
         <button
           type="button"
@@ -1246,7 +1246,7 @@ details.a-disclosure[open] > summary::before {
 <section class="a-section" aria-labelledby="summary">
   <h2 class="a-section__title" id="summary">1. In one paragraph</h2>
   <p class="a-prose">
-    Once a day a scheduler starts a fresh Devin session. The session is a fixed nine-step script:
+    Every 6 hours (00:17, 06:17, 12:17, 18:17 Pacific), a scheduler starts a fresh Devin session. The session is a fixed nine-step script:
     eight steps are plain Python commands checked into the repository, one step (triage) is a
     judgment Devin makes and writes down as data. The script searches seven places (six public sources and Rox's Slack) for new Jev-like
     models, decides which of the new hits can be run as-is, runs at most ten of them on Modal
@@ -1259,7 +1259,7 @@ details.a-disclosure[open] > summary::before {
 <section class="a-section" aria-labelledby="block">
   <h2 class="a-section__title" id="block">2. Figure 1: block diagram of the system</h2>
   <p class="a-section__note">
-    Figure 1. Components and the data that flows between them during one hourly run. Boxes are
+    Figure 1. Components and the data that flows between them during one 6-hourly run. Boxes are
     components; dashed frames are ownership boundaries; arrows are labelled with what crosses them.
     Select a box for its responsibility; drag to pan; <kbd>+</kbd>/<kbd>−</kbd>/<kbd>0</kbd> zoom.
   </p>
@@ -1272,7 +1272,7 @@ details.a-disclosure[open] > summary::before {
     </div>
 
     <svg class="a-diagram__canvas" data-a-diagram-canvas viewBox="0 0 1000 620" role="img"
-      aria-label="Diagram: a scheduler starts an hourly Devin session; the session crawls seven discovery sources, triages the hits, reads evaluate issues, site submissions and approved proposals from GitHub, runs up to ten configs on Modal (which pulls weights from Hugging Face), regenerates the static site and pushes one commit to main on GitHub, from which the site redeploys.">
+      aria-label="Diagram: a scheduler starts a 6-hourly Devin session; the session crawls seven discovery sources, triages the hits, reads evaluate issues, site submissions and approved proposals from GitHub, runs up to ten configs on Modal (which pulls weights from Hugging Face), regenerates the static site and pushes one commit to main on GitHub, from which the site redeploys.">
       <defs>
         <marker id="a-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0 L8,4 L0,8 z" fill="rgb(var(--text-tertiary))" />
@@ -1280,7 +1280,7 @@ details.a-disclosure[open] > summary::before {
       </defs>
       <g data-a-diagram-viewport class="a-diagram__viewport">
         <g class="a-group"><rect x="20" y="40" width="260" height="520" /><text x="34" y="62">people &amp; schedule</text></g>
-        <g class="a-group"><rect x="290" y="40" width="310" height="520" /><text x="304" y="62">hourly run · one Devin session</text></g>
+        <g class="a-group"><rect x="290" y="40" width="310" height="520" /><text x="304" y="62">6-hourly run · one Devin session</text></g>
         <g class="a-group"><rect x="660" y="40" width="320" height="520" /><text x="674" y="62">external systems</text></g>
 
         <!-- pipeline inside the session -->
@@ -1292,7 +1292,7 @@ details.a-disclosure[open] > summary::before {
 
         <!-- cross-boundary edges -->
         <path class="a-edge" d="M240,108 H310" marker-end="url(#a-arrow)" />
-        <text class="a-edge__label" x="246" y="100">starts · hourly</text>
+        <text class="a-edge__label" x="246" y="100">starts · every 6 h</text>
 
         <path class="a-edge" d="M580,108 H680" marker-end="url(#a-arrow)" />
         <path class="a-edge a-edge--dim" d="M680,122 H580" marker-end="url(#a-arrow)" />
@@ -1323,8 +1323,8 @@ details.a-disclosure[open] > summary::before {
 
         <!-- column A -->
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Scheduler"
-          data-a-detail="A Devin Automation. Fires once an hour (at :17), runs as Marcus, and starts one fresh session with the runbook as its prompt. At most one run at a time; a failed dispatch emails Marcus. Can also be fired by hand for a test run.">
-          <rect x="40" y="80" width="200" height="56" /><text class="a-node__title" x="54" y="105">Scheduler</text><text class="a-node__sub" x="54" y="123">hourly · runs as Marcus</text>
+          data-a-detail="A Devin Automation. Fires every 6 hours (00:17, 06:17, 12:17, 18:17 Pacific), runs as Marcus, and starts one fresh session with the runbook as its prompt. At most one run at a time; a failed dispatch emails Marcus. Can also be fired by hand for a test run.">
+          <rect x="40" y="80" width="200" height="56" /><text class="a-node__title" x="54" y="105">Scheduler</text><text class="a-node__sub" x="54" y="123">6-hourly · runs as Marcus</text>
         </g>
         <g class="a-node" data-a-node tabindex="0" role="button" data-a-title="Static leaderboard site"
           data-a-detail="Summary (last updated, best-alternative cards, the run's TLDR) plus the quality, cost and latency tables, with filters and sort. It reads data files that each run regenerates and pushes to main, so the push is what updates the site. A small Python server hosts it and files whatever is typed into 'Evaluate a new model' under requests/ for the next run.">
@@ -1414,7 +1414,7 @@ details.a-disclosure[open] > summary::before {
       </defs>
       <!-- participants -->
       <g class="a-node"><rect x="20" y="20" width="140" height="40" /><text class="a-node__title" x="90" y="45" text-anchor="middle">Scheduler</text></g>
-      <g class="a-node"><rect x="200" y="20" width="140" height="40" /><text class="a-node__title" x="270" y="45" text-anchor="middle">Hourly session</text></g>
+      <g class="a-node"><rect x="200" y="20" width="140" height="40" /><text class="a-node__title" x="270" y="45" text-anchor="middle">6-hourly session</text></g>
       <g class="a-node"><rect x="380" y="20" width="140" height="40" /><text class="a-node__title" x="450" y="45" text-anchor="middle">Discovery sources</text></g>
       <g class="a-node"><rect x="560" y="20" width="140" height="40" /><text class="a-node__title" x="630" y="45" text-anchor="middle">GitHub</text></g>
       <g class="a-node"><rect x="740" y="20" width="140" height="40" /><text class="a-node__title" x="810" y="45" text-anchor="middle">Modal GPUs</text></g>
@@ -1433,7 +1433,7 @@ details.a-disclosure[open] > summary::before {
       <g class="a-group"><rect x="190" y="440" width="700" height="130" /><text x="204" y="462">loop · for each new config, at most 3 per day</text></g>
 
       <!-- messages -->
-      <path class="a-edge" d="M90,100 H262" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="100" y="94">1 start the hourly run (at :17)</text>
+      <path class="a-edge" d="M90,100 H262" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="100" y="94">1 start the 6-hourly run</text>
       <path class="a-edge" d="M278,140 H628" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="290" y="134">2 clone main · create today's branch</text>
       <path class="a-edge" d="M278,180 H448" marker-end="url(#seq-arrow)" /><text class="a-edge__label" x="290" y="174">3 search since last run (43 queries)</text>
       <path class="a-edge a-edge--dim" d="M448,210 H278" marker-end="url(#seq-arrow)" style="stroke-dasharray: 6 4" /><text class="a-edge__label" x="290" y="226">hits (title · link · snippet · date)</text>
@@ -1525,7 +1525,7 @@ details.a-disclosure[open] > summary::before {
   <p class="a-section__note">Table 4. What bounds the run, and where each bound is enforced.</p>
   <div class="a-table-scroll">
     <table class="a-table">
-      <caption class="a-visually-hidden">Guardrails on the hourly automation</caption>
+      <caption class="a-visually-hidden">Guardrails on the 6-hourly automation</caption>
       <thead><tr><th scope="col">Bound</th><th scope="col">Value</th><th scope="col">Enforced by</th></tr></thead>
       <tbody>
         <tr><th scope="row">Experiments per day</th><td>At most 3; none larger than the Kev-27B batched config</td><td>Runbook; over-budget candidates become needs_adapter</td></tr>
@@ -1553,7 +1553,7 @@ details.a-disclosure[open] > summary::before {
 </section>
 
 
-      <footer class="a-footnote">Describes the runbook in docs/AUTOMATION.md and the Devin Automation "jev-tracker hourly" as of 2 Oct 2026. Diagram labels are high level on purpose; file and command names live in the runbook.</footer>
+      <footer class="a-footnote">Describes the runbook in docs/AUTOMATION.md and the Devin Automation "jev-tracker every 6 h" as of 2 Oct 2026. Diagram labels are high level on purpose; file and command names live in the runbook.</footer>
     </main>
     <script>
 /* Devin artifact kit — self-contained behavior for standalone HTML artifacts.
