@@ -4089,5 +4089,28 @@
     "kept_mass_delta": 0.00015032403999992727
    }
   }
+ },
+ {
+  "config": "fanout_cachewarm_humble_sawfly_kev9b_score.yaml",
+  "experiment": "2026_10_03_14_47_47_living-lamb",
+  "experiment_dir": "data/experiments/2026_10_03_14_47_47_living-lamb",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.32,
+   "median_s_per_query": 0.3,
+   "p95_s_per_query": 0.82,
+   "max_s_per_query": 1.36
+  },
+  "prefix_hits": 2700,
+  "prefix_misses": 3001,
+  "paired_cleared_mean": 0.62,
+  "rows": {
+   "2026_10_02_03_29_31_humble-sawfly/kev9b_score": {
+    "answer_max": 0.04289999999999994,
+    "kept_mass_delta": 0.00018372586666670632
+   }
+  }
  }
 ]

@@ -1,0 +1,21 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_03_29_31_humble-sawfly/kev9b_score
+name: fanout_cachewarm_humble_sawfly_kev9b_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  humble_sawfly_kev9b_score_cachewarm:
+    source: kev
+    model: jaredpalmer/kev-9b@db029f08b290afd9fee4aa4bbcd9ae48602d1eb0
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    forward_batch: 1
+    gpu: H100!
+    fanout: true
+    cache_warm: true
+    shards: 46
