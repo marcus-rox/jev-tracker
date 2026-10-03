@@ -1878,3 +1878,310 @@
   verdict: not_jev
   reason: this automation's own Slack DM report; not a candidate
   config: null
+- key: https://github.com/c9r-dev/plugins
+  url: https://github.com/c9r-dev/plugins
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/jetenvoieca/Jevca-platform
+  url: https://github.com/jetenvoieca/Jevca-platform
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/emguse/decision-lab
+  url: https://github.com/emguse/decision-lab
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/anilvaranasi/jev-sn-app
+  url: https://github.com/anilvaranasi/jev-sn-app
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/charetterat/awesome-jev-essentials
+  url: https://github.com/charetterat/awesome-jev-essentials
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/Sihaam20/JEV
+  url: https://github.com/Sihaam20/JEV
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/Saml1211/pi-adw
+  url: https://github.com/Saml1211/pi-adw
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/PhilippElhaus/Codex-Jev
+  url: https://github.com/PhilippElhaus/Codex-Jev
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/jhd3197/Prompture
+  url: https://github.com/jhd3197/Prompture
+  verdict: not_jev
+  reason: structured-JSON output library for generative LLMs; not a System One model
+  config: null
+- key: https://github.com/Saml1211/pi-prime
+  url: https://github.com/Saml1211/pi-prime
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/DanielMulec/jevpaste
+  url: https://github.com/DanielMulec/jevpaste
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/marcelocantos/jevons
+  url: https://github.com/marcelocantos/jevons
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/rokbenko/quackd
+  url: https://github.com/rokbenko/quackd
+  verdict: not_jev
+  reason: robot CLI that calls existing decision LLMs (Jev, Laya, Kev); no new model
+  config: null
+- key: https://github.com/greenlittleapple/jev-game-lab
+  url: https://github.com/greenlittleapple/jev-game-lab
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/harmoniqs/arJev
+  url: https://github.com/harmoniqs/arJev
+  verdict: not_jev
+  reason: arXiv digest app using Jev for reranking; no new model
+  config: null
+- key: https://github.com/fontlaborg/ornotto
+  url: https://github.com/fontlaborg/ornotto
+  verdict: not_jev
+  reason: Python library over existing decision-model engines (dohnuts, pcdServer,
+    ollaya, OpenRouter); no new model
+  config: null
+- key: https://github.com/TexasOct/jev-gateway
+  url: https://github.com/TexasOct/jev-gateway
+  verdict: not_jev
+  reason: model-routing gateway powered by Jev; no new model
+  config: null
+- key: https://github.com/Coding-Dev-Tools/jev-decision
+  url: https://github.com/Coding-Dev-Tools/jev-decision
+  verdict: not_jev
+  reason: client library for hosted Jev; no new model
+  config: null
+- key: https://github.com/ILuce/deqio
+  url: https://github.com/ILuce/deqio
+  verdict: not_jev
+  reason: local gateway / UI over existing decision models (Clef Flash, Decider, Kev,
+    Von, Laya); no new model
+  config: null
+- key: https://github.com/breakoutwithai/jevnotjev
+  url: https://github.com/breakoutwithai/jevnotjev
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/yiyinfaith/astrbot_plugin_decision
+  url: https://github.com/yiyinfaith/astrbot_plugin_decision
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/bloudhood/jevpilot
+  url: https://github.com/bloudhood/jevpilot
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/murabcd/jevgraph
+  url: https://github.com/murabcd/jevgraph
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/gongiskhan/jevellan
+  url: https://github.com/gongiskhan/jevellan
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/Okura66/kahn1
+  url: https://github.com/Okura66/kahn1
+  verdict: needs_adapter
+  reason: 'Kahn1 4B (HF Okura66/Kahn1-Qwen3.5-4B @f3f9910, Apache-2.0): new open System
+    One family, Qwen3.5-4B fine-tune that reads typed answers from option-token probabilities
+    with calibrated confidence; served by its own sysone runtime on vLLM (POST /v1/evaluate/jev,
+    not /v1/systemone). Needs a kahn1 source (vLLM in-process or sysone server, batched
+    via server-side concurrency) - no harness source loads it'
+  config: configs/kahn1_4b_vs_jev.yaml
+- key: https://github.com/kevstt/balita-kevin-lavalust_migration
+  url: https://github.com/kevstt/balita-kevin-lavalust_migration
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/Ezaz-Ahmad/ThreatPulse
+  url: https://github.com/Ezaz-Ahmad/ThreatPulse
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/Primerdev1/lucky-kevwoda
+  url: https://github.com/Primerdev1/lucky-kevwoda
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/keval1121/keval_blackrossy
+  url: https://github.com/keval1121/keval_blackrossy
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kevintodev/kevintodev
+  url: https://github.com/kevintodev/kevintodev
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/KevFR8/kevfr8.github.io
+  url: https://github.com/KevFR8/kevfr8.github.io
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/saketoshi/claude-kev-orchestrator
+  url: https://github.com/saketoshi/claude-kev-orchestrator
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/71Kevin/71Kevin
+  url: https://github.com/71Kevin/71Kevin
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/pearlorbit96/kevq
+  url: https://github.com/pearlorbit96/kevq
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/developerkevin72/Portfolio-Kevin
+  url: https://github.com/developerkevin72/Portfolio-Kevin
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/Kevin1077/Kevin1077
+  url: https://github.com/Kevin1077/Kevin1077
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kevintsai1202/kevintsai1202.github.io
+  url: https://github.com/kevintsai1202/kevintsai1202.github.io
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/FMsongX2/laya-graph-harness
+  url: https://github.com/FMsongX2/laya-graph-harness
+  verdict: not_jev
+  reason: graph-selection harness using Laya; no new model
+  config: null
+- key: https://github.com/AkmalDV/Tone-Checker
+  url: https://github.com/AkmalDV/Tone-Checker
+  verdict: not_jev
+  reason: app backend powered by Laya; no new model
+  config: null
+- key: https://github.com/alberdling/laya
+  url: https://github.com/alberdling/laya
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/supermy/laya-test
+  url: https://github.com/supermy/laya-test
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/logixism/laya-api
+  url: https://github.com/logixism/laya-api
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/saviooo02/jev-skills-router
+  url: https://github.com/saviooo02/jev-skills-router
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/Anil-matcha/awesome-jev-by-typesafe
+  url: https://github.com/Anil-matcha/awesome-jev-by-typesafe
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: hf:shgao/rsi-jev-v5.0-vl-3b@66eeaee47dce202c4d802e469ad9b806e0ff6df2
+  url: https://huggingface.co/shgao/rsi-jev-v5.0-vl-3b
+  verdict: needs_adapter
+  reason: 'RSI-Jev v5.0-VL 3B (first 20 of Qwen3.5-4B-Base''s 32 layers + option-scoring
+    head, own-token pooling, calibration.safetensors): the rsi_jev source pins only
+    shgao/rsi-jev-v3.0-qwen3.5-2b (RsiJevSource.model Literal); needs the v5.0-vl-3b
+    id + revision 66eeaee and rsi-jev[fast,vision] in the image (text-only cases,
+    batched via forward_batch like v3.0)'
+  config: configs/rsi_jev_v5_vl_3b_vs_jev.yaml
+- key: hf:Jakevin/taiwan-mainland-wording-kev-4b@9554e5fb40cc5640354f3f821fa2f8694dcc7579
+  url: https://huggingface.co/Jakevin/taiwan-mainland-wording-kev-4b
+  verdict: not_jev
+  reason: Kev-4B LoRA for one narrow task (Taiwan vs mainland Chinese wording classification);
+    not a general System One alternative
+  config: null
+- key: hf:mnjkshrm/sentrygate-laya@ce2fd4b60dae5aa9cad504df552e54a1803ce058
+  url: https://huggingface.co/mnjkshrm/sentrygate-laya
+  verdict: not_jev
+  reason: prompt-injection / jailbreak guardrail classifier quantized from Laya (ONNX
+    int8); single-task, not a general System One alternative
+  config: null
+- key: https://www.browserbase.com/blog/what-is-jev
+  url: https://www.browserbase.com/blog/what-is-jev
+  verdict: not_jev
+  reason: explainer article about Jev; no new model
+  config: null
+- key: https://www.youtube.com/watch?v=YGgNBcIgI4s&xstg=CAMSBhUD_LL2Hw%3D%3D
+  url: https://www.youtube.com/watch?v=YGgNBcIgI4s&xstg=CAMSBhUD_LL2Hw%3D%3D
+  verdict: not_jev
+  reason: explainer video about Jev; no new model
+  config: null
+- key: https://www.youtube.com/watch?v=ZgXej_9isxY&xstg=CAMSBhUD_LL2Hw%3D%3D
+  url: https://www.youtube.com/watch?v=ZgXej_9isxY&xstg=CAMSBhUD_LL2Hw%3D%3D
+  verdict: not_jev
+  reason: explainer video about Jev; no new model
+  config: null
+- key: https://github.com/aayushch/laya
+  url: https://github.com/aayushch/laya
+  verdict: not_jev
+  reason: notification command center app named Laya; name match only
+  config: null
+- key: https://x.com/keepupwithkev
+  url: https://x.com/keepupwithkev
+  verdict: not_jev
+  reason: X profile of a person named Kev
+  config: null
+- key: https://x.com/TeksEdge/status/2106074231494852863
+  url: https://x.com/TeksEdge/status/2106074231494852863
+  verdict: not_jev
+  reason: 'news post: llama.cpp runs decision models (Kev GGUF already benchmarked
+    via gguf source); no new model'
+  config: null
+- key: https://x.com/hkairport/status/2081012459494850871
+  url: https://x.com/hkairport/status/2081012459494850871
+  verdict: not_jev
+  reason: Typhoon Noul airport notice; name match only
+  config: null
+- key: https://x.com/hkairport/status/2081181705864691909
+  url: https://x.com/hkairport/status/2081181705864691909
+  verdict: not_jev
+  reason: Typhoon Noul airport notice; name match only
+  config: null
+- key: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791016040750299
+  url: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791016040750299
+  verdict: not_jev
+  reason: this automation's own hourly Slack DM to Marcus; no new model
+  config: null
