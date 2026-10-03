@@ -2493,5 +2493,5 @@
    "detail": "kev05b_noul \u00b7 Jev 0.21"
   }
  ],
- "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Rune-26B is the latest run.\n  - Rune-26B GGUF: 0.843 / 0.935\n  - Rune-26B costs $1.18.\n  - Rune-26B uses 47.1 s/query.\n- No run finishes this hour.\n  - Search finds 56 candidates.\n  - Two new proposals wait.\n  - Production keeps 0.711 at k=50\n"
+ "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Rune-26B is the latest run.\n  - Rune-26B GGUF: 0.843 / 0.935\n  - Rune-26B costs $1.18.\n  - Rune-26B uses 47.1 s/query.\n- No run finishes this hour.\n  - Search finds 50 candidates.\n  - One new proposal waits.\n  - Production keeps 0.711 at k=50\n"
 }
