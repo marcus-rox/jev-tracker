@@ -2,13 +2,17 @@
   - 0.893 kept-mass at k=50
   - 0.961 kept-mass at k=200
 - Kev-27B is closest.
-  - 0.887 / 0.953 kept-mass
-  - 0.006 behind at k=50
-- Rune-26B is the latest run.
+  - 0.887 / 0.954 kept-mass
+  - 0.007 behind at k=50
+- Recent Rune-26B run trails.
   - Rune-26B GGUF: 0.843 / 0.935
   - Rune-26B costs $1.18.
   - Rune-26B uses 47.1 s/query.
-- No run finishes this hour.
-  - Search finds 50 candidates.
-  - One new proposal waits.
-  - Production keeps 0.711 at k=50
+- No experiments run this hour.
+  - 0 queued or running
+  - 17 proposals await approval.
+- Search adds one proposal.
+  - 43 new candidates
+  - 6 need adapters.
+  - 37 are not alternatives.
+  - Tasksource-JEV-Nano needs approval.
