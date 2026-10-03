@@ -1,6 +1,7 @@
 # Row labels for the site's tables: one entry per (experiment, reranker) shown in the
 # kev_cost_report tables (quality / cost / latency / appendix). Edited by hand; numbers
-# are never stored here, they are read from data/experiments/<id>/*.json.
+# are never stored here, they are read from data/experiments/<id>/*.json. A row with
+# `deprecated: <reason>` is kept for the record but never shown on the site.
 experiments:
   2026_09_29_08_47_55_good-midge: 'kev27b_timed: Kev-27B batched, 3 x H100, R-1 timers (baseline)'
   2026_09_28_17_56_26_actual-clam: 'kev_sizes: Kev 4B / 9B / 27B, first (sequential) run'
@@ -125,6 +126,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev4b_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -139,6 +141,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev4b_score
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev4b_score
   family: kev4b
   serving: first run
@@ -153,6 +156,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev9b_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev9b_noul
   family: kev9b
   serving: first run
@@ -167,6 +171,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev9b_score
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev9b_score
   family: kev9b
   serving: first run
@@ -181,6 +186,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev27b_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_noul
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -195,6 +201,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev27b_score
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_score
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -209,6 +216,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_22_15_35_pretty-sawfly
   reranker: kev27b_noul
+  deprecated: 'no per-request start times saved; superseded by 2026_10_02_00_08_39_safe-joey (same config, pinned, timed)'
   label: kev27b_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -223,6 +231,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_22_15_35_pretty-sawfly
   reranker: kev27b_score
+  deprecated: 'no per-request start times saved; superseded by 2026_10_02_00_08_39_safe-joey (same config, pinned, timed)'
   label: kev27b_score
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -237,6 +246,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_23_53_dear-pony
   reranker: kev27b_FP8_w8a8_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_noul
   family: kev27b
   serving: batched, FP8 W8A8
@@ -251,6 +261,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_23_53_dear-pony
   reranker: kev27b_FP8_w8a8_score
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_score
   family: kev27b
   serving: batched, FP8 W8A8
@@ -265,6 +276,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_bf16_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_bf16_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -279,6 +291,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_bf16_score
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_bf16_score
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -293,6 +306,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_wo_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_wo_noul
   family: kev27b
   serving: batched, FP8 weight-only
@@ -307,6 +321,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_wo_score
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_wo_score
   family: kev27b
   serving: batched, FP8 weight-only
@@ -321,6 +336,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_w8a8_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_noul
   family: kev27b
   serving: batched, FP8 W8A8
@@ -335,6 +351,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_w8a8_score
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_score
   family: kev27b
   serving: batched, FP8 W8A8
@@ -349,6 +366,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_batched_c32_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_batched_c32_noul
   family: kev27b
   serving: 'batched: 12 children, 32 in flight'
@@ -363,6 +381,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c32_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_c32_noul
   family: kev27b
   serving: batched, FP8 W8A8, 32 in flight
@@ -377,6 +396,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c32_score
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_c32_score
   family: kev27b
   serving: batched, FP8 W8A8, 32 in flight
@@ -391,6 +411,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c64_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_c64_noul
   family: kev27b
   serving: batched, FP8 W8A8, 64 in flight
@@ -405,6 +426,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c64_score
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_c64_score
   family: kev27b
   serving: batched, FP8 W8A8, 64 in flight
@@ -419,6 +441,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_H100_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_batched_H100_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -433,6 +456,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_A100_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_batched_A100_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -447,6 +471,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_RTXPRO6000_noul
+  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
   label: kev27b_batched_RTXPRO6000_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -461,6 +486,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_FP8_w8a8_RTXPRO6000_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_RTXPRO6000_noul
   family: kev27b
   serving: batched, FP8 W8A8
@@ -475,6 +501,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_FP8_w8a8_L40S_noul
+  deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
   label: kev27b_FP8_w8a8_L40S_noul
   family: kev27b
   serving: 'batched, FP8 W8A8: could not load'
@@ -896,6 +923,7 @@ rows:
   highlight: false
 - experiment: 2026_09_30_01_11_06_key-kiwi
   reranker: d1_noul
+  deprecated: 'failed run: no cost or latency measured'
   label: d1_noul
   family: d1
   serving: d1:free API, up to 105 children per request, 8 in flight
@@ -911,6 +939,7 @@ rows:
   blank: failed
 - experiment: 2026_09_30_01_11_06_key-kiwi
   reranker: d1_score
+  deprecated: 'failed run: no cost or latency measured'
   label: d1_score
   family: d1
   serving: d1:free API, up to 105 children per request, 8 in flight
@@ -926,6 +955,7 @@ rows:
   blank: failed
 - experiment: 2026_09_30_01_11_06_key-kiwi
   reranker: d1_noul_rerun
+  deprecated: 'failed run: no cost or latency measured'
   label: d1_noul_rerun
   family: d1
   serving: d1:free API, up to 105 children per request, 8 in flight
@@ -941,6 +971,7 @@ rows:
   blank: failed
 - experiment: 2026_09_29_21_56_46_pumped-egret
   reranker: kev27b_vllm_floor_noul
+  deprecated: 'no raw answers: latency not derivable; vLLM/SGLang code dropped'
   label: kev27b_vllm_floor_noul
   family: kev27b
   serving: 'H-2 vLLM: vLLM, no readout (speed floor)'
@@ -954,6 +985,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_57_06_exact-jay
   reranker: kev27b_sglang_floor_noul
+  deprecated: 'no raw answers: latency not derivable; vLLM/SGLang code dropped'
   label: kev27b_sglang_floor_noul
   family: kev27b
   serving: 'H-3 SGLang: SGLang, no readout (speed floor)'
@@ -1363,6 +1395,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_10_47_28_fine-buck
   reranker: jevany_noul
+  deprecated: 'failed run: no cost or latency measured'
   label: jevany_noul
   family: jevany
   serving: 'jevany JevModel: 12 children, 1 in flight'
@@ -1378,6 +1411,7 @@ rows:
   blank: failed
 - experiment: 2026_10_02_10_47_28_fine-buck
   reranker: jevany_score
+  deprecated: 'failed run: no cost or latency measured'
   label: jevany_score
   family: jevany
   serving: 'jevany JevModel: 12 children, 1 in flight'

@@ -38,11 +38,11 @@ const COST: Col[] = [
   { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost },
 ]
 const LATENCY: Col[] = [
-  { head: 'run (s)', value: (r) => r.latency?.run_s ?? null, fmt: f(0), source: (r) => r.sources.latency },
-  { head: 's / query', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency },
-  { head: 'hours / 1k', value: (r) => r.latency?.h_per_1k ?? null, fmt: f(2), source: (r) => r.sources.latency },
+  { head: 's / query (mean)', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency },
+  { head: 'median', value: (r) => r.latency?.p50_s ?? null, fmt: f(2), source: (r) => r.sources.latency },
+  { head: 'p95', value: (r) => r.latency?.p95_s ?? null, fmt: f(2), source: (r) => r.sources.latency },
 ]
-const COST_PER_1K = COST[5], S_PER_QUERY = LATENCY[1]
+const COST_PER_1K = COST[5], S_PER_QUERY = LATENCY[0]
 
 /** Quality is the conglomerate kept-mass: the mean over every k (@50 … @200), so no single k picks the winner. */
 type Metric = 'quality' | 'cost' | 'latency'

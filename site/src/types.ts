@@ -11,9 +11,9 @@ export interface Cost {
 }
 
 export interface Latency {
-  run_s: number
   s_per_query: number
-  h_per_1k: number
+  p50_s: number
+  p95_s: number
 }
 
 export interface Row {

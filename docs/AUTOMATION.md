@@ -18,9 +18,17 @@ un-batched (`concurrency: 1` with `forward_batch: 1`) gets stopped, its adapter 
 path it is missing, and it re-runs batched — the commit message records the kill and the re-run.
 A proposal whose adapter cannot be made batched in the session stays `queued`/`proposed` with
 the gap in its note; it never runs un-batched. Launch every runnable experiment in parallel.
+**Numbers** (like-for-like): a run's cost is its `costs_<id>.json` `warm_usd_per_1k` — warm
+seconds (loaded server to last answer, at the run's full load: `concurrency` requests in flight
+per GPU, 16 by default) summed over every GPU shard, billed at Modal GPU $/s plus reserved host
+RAM $/GiB/s, failed calls $0, scaled x1000/queries. Its latency is `latency_<id>.json` `mean_s` —
+per-query wall clock, first request sent to last answer back. A registry row whose numbers cannot
+be derived (no per-request start times, no raw answers, a failed run) gets `deprecated: <reason>`
+in `data/registry.yaml` and never reaches the site.
 **Kill rule** (Marcus 2026-10-02): a run only exists to beat production — the `prod` baseline is
-$4.73 per 75-query run ($63/1k queries) and 6.21 s/query. Kill an experiment when its projected
-cost AND projected s/query both exceed those numbers (strictly worse buys nothing); cancel its
+$63/1k queries ($4.73 per 75-query run) and a mean of 6.21 s/query (wall clock, same definition
+as the run's `mean_s`). Kill an experiment when its projected $/1k AND projected mean s/query
+both exceed those numbers (strictly worse buys nothing); cancel its
 Modal calls, mark it `failed` ("killed: over production cost+latency line"), and record the kill
 in the commit message. A run that is cheaper OR faster stays — report it.
 

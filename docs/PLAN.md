@@ -66,6 +66,14 @@ three validation reruns (R-4) match rox-research within 0.002 kept-mass at every
   (`configs/kev27b_batched_v1.yaml`, `model: jaredpalmer/kev-27b@01b8199…`). Kev-4B's weights last
   changed 2026-09-24, before its reference run, so it needed no pin.
 
+- **Cost and latency are like-for-like** (Marcus): cost = warm seconds (loaded server to last
+  answer, at the run's full load — `concurrency` requests in flight per GPU, 16 by default)
+  summed over every GPU shard x (Modal GPU $/s + reserved host RAM $/GiB/s), failed calls $0,
+  shown as one $/1k-queries number. Latency = per-query wall clock (first request sent to last
+  answer back) — the prod / Jev API definition, not GPU-seconds / queries. Rows whose numbers
+  cannot be derived get `deprecated: <reason>` in `data/registry.yaml` and are hidden from the
+  site entirely.
+
 ## Out of scope
 
 - Slack reporting of the daily run (deferred by Marcus).

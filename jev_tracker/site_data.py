@@ -32,7 +32,6 @@ BENCHMARK_QUERIES = 75
 PACIFIC = ZoneInfo("America/Los_Angeles")
 EXPERIMENT_STAMP = re.compile(r"^(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_(\d{2})_")
 KS = ("50", "100", "150", "200")
-SECONDS_PER_HOUR = 3600
 
 
 def _rel(path: Path) -> str:
@@ -63,16 +62,12 @@ def _gpu_cost(costs: dict | None, reranker: str, queries: int) -> dict[str, floa
     }
 
 
-def _gpu_latency(cost: dict | None, queries: int) -> dict[str, float] | None:
-    """The report's latency columns: the warm GPU-seconds of the run, spread over its queries."""
-    if cost is None:
+def _modal_latency(latency: dict | None, reranker: str) -> dict[str, float] | None:
+    """Wall clock per query from latency_<id>.json: first request sent to last answer back."""
+    t = (latency or {}).get("rerankers", {}).get(reranker)
+    if t is None:
         return None
-    s = cost["warm_gpu_s"]
-    return {
-        "run_s": s,
-        "s_per_query": s / queries,
-        "h_per_1k": s / queries * 1000 / SECONDS_PER_HOUR,
-    }
+    return {"s_per_query": t["mean_s"], "p50_s": t["p50_s"], "p95_s": t["p95_s"]}
 
 
 def _api_cost(row: dict) -> dict[str, float | None] | None:
@@ -95,9 +90,9 @@ def _api_latency(timing: dict[str, dict[str, str]], reranker: str) -> dict[str, 
     if t is None:
         return None
     return {
-        "run_s": float(t["total_s_75_queries_sequential"]),
         "s_per_query": float(t["mean_s_per_query"]),
-        "h_per_1k": float(t["s_per_1000_queries_extrapolated"]) / SECONDS_PER_HOUR,
+        "p50_s": float(t["median_s_per_query"]),
+        "p95_s": float(t["p95_s_per_query"]),
     }
 
 
@@ -183,19 +178,21 @@ def build(
     """Pure: one site row per registry row, numbers read from that experiment's committed JSONs."""
     rows = []
     for r in registry["rows"]:
+        if "deprecated" in r:
+            continue
         if r["runtime"] not in RUNTIMES:
             raise ValueError(
                 f"{r['experiment']}/{r['reranker']}: runtime {r['runtime']!r} not in {sorted(RUNTIMES)}"
             )
         p = Paths(r["experiment"], experiments_dir)
         report_path = p.report_base.with_suffix(".json")
-        report, costs = _json(report_path), _json(p.costs)
+        report, costs, lat = _json(report_path), _json(p.costs), _json(p.latency)
         queries = r["queries"]
         cost = _api_cost(r) or _gpu_cost(costs, r["reranker"], queries)
         latency = (
             _api_latency(api_timing, API_TIMING_NAMES.get(r["reranker"], r["reranker"]))
             if "api_usd_per_run" in r
-            else _gpu_latency(cost, queries)
+            else _modal_latency(lat, r["reranker"])
         )
         kept = _kept_mass(report, r["reranker"])
         rows.append(
@@ -224,12 +221,13 @@ def build(
                 "sources": {
                     "kept_mass": _rel(report_path) if report_path.exists() else None,
                     "cost": _rel(REGISTRY) if "api_usd_per_run" in r else _rel(p.costs),
-                    "latency": _rel(API_TIMING) if "api_usd_per_run" in r else _rel(p.costs),
+                    "latency": _rel(API_TIMING) if "api_usd_per_run" in r else _rel(p.latency),
                     "config": _rel(p.config),
                 },
             }
         )
-    experiments = registry["experiments"]
+    shown = {r["experiment"] for r in rows}
+    experiments = {k: v for k, v in registry["experiments"].items() if k in shown}
     return {
         "ks": list(KS),
         "experiments": experiments,

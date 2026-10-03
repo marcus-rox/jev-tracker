@@ -16,7 +16,8 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 - `data/benchmark/` — the 75 cases and labels (frozen)
 - `data/jev/` — Jev's committed answers
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
-- `data/registry.yaml` — row labels (model family, serving, runtime, GPU) for every reranker shown
+- `data/registry.yaml` — row labels (model family, serving, runtime, GPU) for every reranker shown;
+  a row with `deprecated: <reason>` never reaches the site
 - `site/` — Vite + React static site: summary / quality / cost / latency tables, filters,
   "Suggest a model to scrape" form in the left panel; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
@@ -191,6 +192,14 @@ GITHUB_TOKEN=<PAT> QUEUE_SKIP_PASSWORD=<pw> uv run python -m jev_tracker.server 
 python3 -m http.server -d site/dist 8000                 # read-only alternative (no submissions)
 docker build -t jev-tracker . && docker run -p 8000:8000 -e GITHUB_TOKEN=<PAT> -e QUEUE_SKIP_PASSWORD=<pw> jev-tracker  # what Render runs
 ```
+
+Cost and latency are like-for-like across rows. Cost = the shards' own warm seconds (loaded server
+to last answer, at the run's full load — `concurrency` requests in flight per GPU, 16 by default)
+summed over every GPU shard, billed at Modal's GPU $/s plus reserved host RAM $/GiB/s; failed calls
+count $0, CPU and egress are ignored, and the site shows one number, $ per 1k queries (run cost
+x 1000 / queries). Latency = per-query wall clock (first request sent to last answer back), shown
+as mean / median / p95 across queries — the same definition as the prod / Jev API timing in
+`data/timing_summary_prod_jev.csv`.
 
 Every number on the page links to the JSON it came from. The summary tab opens with the last-updated
 time, headline cards and a TLDR the hourly run writes to `data/tldr.md`. The left panel's "Suggest a model to scrape" box takes
