@@ -328,6 +328,18 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/kenning_large_v04_vs_jev.yaml",
+   "label": "kenning_large_v04_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/systemonedev/kenning-large-v0.4",
+   "status": "proposed",
+   "note": "Kenning large v0.4 (HF systemonedev/kenning-large-v0.4 @38402b9, Apache-2.0): new open System One family, DeBERTa-v3-large cross-encoder that scores every (state, answer) pair and applies per-type temperatures from kenning.json (noul / choice / score); needs a cross-encoder source (same adapter gap as raz_systemone_nli_xs) with batched forward passes, L4 class GPU",
+   "queued_at": "2026-10-03T15:25:20Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
