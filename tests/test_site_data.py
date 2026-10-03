@@ -87,12 +87,14 @@ def test_R6_rows_show_the_reports_numbers(experiment, reranker, kept, cost, late
         assert f"{lat['s_per_query']:.2f} {lat['p50_s']:.2f} {lat['p95_s']:.2f}" == latency
 
 
-def test_R6_no_deprecated_row_reaches_rows_json() -> None:
+def test_R6_no_deprecated_or_pending_row_reaches_rows_json() -> None:
     registry = yaml.safe_load(REGISTRY.read_text())
-    deprecated = {(r["experiment"], r["reranker"]) for r in registry["rows"] if "deprecated" in r}
-    assert deprecated
+    rows = registry["rows"]
+    deprecated = {(r["experiment"], r["reranker"]) for r in rows if "deprecated" in r}
+    pending = {(r["experiment"], r["reranker"]) for r in rows if "pending_fanout" in r}
+    assert deprecated and pending
     shown = {(r["experiment"], r["reranker"]) for r in DATA["rows"]}
-    assert not deprecated & shown
+    assert not (deprecated | pending) & shown
     assert set(DATA["experiments"]) == {r["experiment"] for r in DATA["rows"]}
 
 

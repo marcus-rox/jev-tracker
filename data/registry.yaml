@@ -615,6 +615,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c12_w8192x16
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev27b_noul_c12_w8192x16
   family: kev27b
   serving: 'H-1, 12 children: widened'
@@ -629,6 +630,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c12_w8192x8
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev27b_noul_c12_w8192x8
   family: kev27b
   serving: 'H-1, 12 children: widened, same memory'
@@ -677,6 +679,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c18_w8192x16
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev27b_noul_c18_w8192x16
   family: kev27b
   serving: 'H-1, 18 children: widened'
@@ -691,6 +694,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c18_w8192x8
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev27b_noul_c18_w8192x8
   family: kev27b
   serving: 'H-1, 18 children: widened, same memory'
@@ -739,6 +743,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c24_w8192x16
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev27b_noul_c24_w8192x16
   family: kev27b
   serving: 'H-1, 24 children: widened'
@@ -753,6 +758,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c24_w8192x8
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev27b_noul_c24_w8192x8
   family: kev27b
   serving: 'H-1, 24 children: widened, same memory'
@@ -899,6 +905,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_noul_reworded
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya421m_noul_reworded
   family: laya421m
   serving: Laya (421M, English), 1 child per request, 64 per GPU pass
@@ -913,6 +920,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya322m_multilingual_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya322m_multilingual_noul
   family: laya322m_multilingual
   serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
@@ -927,6 +935,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya322m_multilingual_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya322m_multilingual_score
   family: laya322m_multilingual
   serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
@@ -941,6 +950,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya322m_multilingual_noul_reworded
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya322m_multilingual_noul_reworded
   family: laya322m_multilingual
   serving: Laya-multilingual (322M), 1 child per request, 64 per GPU pass
@@ -955,6 +965,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_typed_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya421m_typed_noul
   family: laya421m_typed
   serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
@@ -969,6 +980,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_typed_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya421m_typed_score
   family: laya421m_typed
   serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
@@ -983,6 +995,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_typed_noul_reworded
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: laya421m_typed_noul_reworded
   family: laya421m_typed
   serving: Laya-typed-decisions (421M), 1 child per request, 64 per GPU pass
@@ -1133,6 +1146,7 @@ rows:
   highlight: false
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -1147,6 +1161,7 @@ rows:
   highlight: false
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev4b_score
   family: kev4b
   serving: first run
@@ -1467,6 +1482,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_10_46_48_star-hare
   reranker: matilda_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: matilda_noul
   family: matilda
   serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
@@ -1481,6 +1497,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_10_46_48_star-hare
   reranker: matilda_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: matilda_score
   family: matilda
   serving: 'maincode_jev_serve runtime: 1 child, 1 in flight'
@@ -1495,6 +1512,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: autotrust_noul
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
@@ -1509,6 +1527,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: autotrust_score
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
@@ -1555,6 +1574,7 @@ rows:
   blank: failed
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev08b_ba_lora_noul
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
@@ -1569,6 +1589,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev08b_ba_lora_score
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
@@ -1583,6 +1604,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: minicpm5_jev_noul
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
@@ -1597,6 +1619,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: minicpm5_jev_score
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
@@ -1611,6 +1634,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_18_00_38_large-corgi
   reranker: rsi_jev_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: rsi_jev_noul
   family: rsi_jev
   serving: 'rsijev predict: 12 children, 1 in flight'
@@ -1625,6 +1649,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_18_00_38_large-corgi
   reranker: rsi_jev_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: rsi_jev_score
   family: rsi_jev
   serving: 'rsijev predict: 12 children, 1 in flight'
@@ -1639,6 +1664,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_20_58_42_vast-filly
   reranker: kev4b_ba_lora_noul
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev4b_ba_lora_noul
   family: kev4b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
@@ -1653,6 +1679,7 @@ rows:
   highlight: false
 - experiment: 2026_10_02_20_58_42_vast-filly
   reranker: kev4b_ba_lora_score
+  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
   label: kev4b_ba_lora_score
   family: kev4b_ba_lora
   serving: 'batched: 12 children, 16 in flight'
