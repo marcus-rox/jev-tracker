@@ -179,3 +179,8 @@
 {"event": "start", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "13:24:05"}
 {"event": "timed_phase", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "13:26:36"}
 {"event": "ok", "config": "fanout_keen_emu_kev4b_score.yaml", "exp": "2026_10_03_13_24_07_trusty-asp", "t": "13:29:42"}
+{"event": "start", "config": "fanout_proper_bee_kev27b_noul.yaml", "app": "jev-ff-proper-bee-kev27b-noul", "t": "10:03:44"}
+{"event": "stall", "config": "fanout_proper_bee_kev27b_noul.yaml", "app": "jev-ff-proper-bee-kev27b-noul", "ready": 10, "of": 46, "t": "10:26:44"}
+{"event": "partial_pool", "config": "fanout_proper_bee_kev27b_noul.yaml", "exp": "2026_10_03_10_26_47_novel-fly", "t": "10:34:25"}
+{"event": "start", "config": "fanout_proper_bee_kev27b_noul.yaml", "app": "jev-ff-proper-bee-kev27b-noul", "t": "13:29:43"}
+{"event": "adopt_done", "config": "fanout_proper_bee_kev27b_noul.yaml", "stopped": true, "t": "13:36:09"}

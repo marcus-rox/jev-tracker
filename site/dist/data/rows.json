@@ -2163,6 +2163,51 @@
   },
   {
    "experiment": "2026_10_03_00_31_36_proper-bee",
+   "reranker": "kev27b_noul",
+   "label": "kev27b_noul",
+   "family": "kev27b",
+   "serving": "first run: 25 children, 1 in flight",
+   "runtime": "PyTorch",
+   "gpu": "H200",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.87835945004,
+    "100": 0.8951102783866667,
+    "150": 0.9195089765333333,
+    "200": 0.94970948768
+   },
+   "mean_kept_mass": 0.91067204816,
+   "cost": {
+    "warm_gpu_s": 2013.247819185257,
+    "load_s": 436.05391240119934,
+    "warm_usd": 3.1107900002922912,
+    "in_function_usd": 3.7862055586554715,
+    "usd_per_query": 0.041477200003897215,
+    "usd_per_1k": 41.47720000389722,
+    "peak_gb": 70.450491392
+   },
+   "latency": {
+    "s_per_query": 2.17848,
+    "p50_s": 2.094,
+    "p95_s": 3.516
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
+    "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
+    "latency": "data/experiments/2026_10_03_13_29_45_moving-mayfly/latency_2026_10_03_13_29_45_moving-mayfly.json",
+    "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_00_31_36_proper-bee",
    "reranker": "kev27b_score",
    "label": "kev27b_score",
    "family": "kev27b",

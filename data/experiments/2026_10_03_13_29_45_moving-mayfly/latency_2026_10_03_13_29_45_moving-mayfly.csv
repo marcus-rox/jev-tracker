@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+proper_bee_kev27b_noul,75,2.18,2.09,3.52,0.60,5.53,18.4
