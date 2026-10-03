@@ -292,6 +292,30 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/decima_small_vs_jev.yaml",
+   "label": "decima_small_vs_jev",
+   "source": "github",
+   "url": "https://github.com/amyrmahdy/decima",
+   "status": "proposed",
+   "note": "Decima 1.1 (amyrmahdy/decima-small, Apache-2.0): new open 122M Jev-style decision model family, ONNX int8 behind its own TypeSafe-compatible /v1/systemone runtime (python -m decima.serve); the harness has no onnxruntime source. Needs a decima source (onnxruntime-gpu, forward_batch over many request bodies per call)",
+   "queued_at": "2026-10-03T08:24:03Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/startlux_decision_4b_vs_jev.yaml",
+   "label": "startlux_decision_4b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/startlux-models/StartLux-Decision-4B",
+   "status": "proposed",
+   "note": "StartLux-Decision size the startlux source cannot load: StartLuxSource.model and STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; needs the 4B id + revision 9302aed and a GPU entry (L40S/H100). JevBench public 204/231; a 4B is the StartLux size most likely to get under the $63/1k line",
+   "queued_at": "2026-10-03T08:24:03Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }

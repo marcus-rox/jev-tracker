@@ -1601,3 +1601,280 @@
   verdict: not_jev
   reason: trading agent built on TypeSafe Jev; not a new model
   config: null
+- key: https://github.com/Tanishk901/jev-starter-examples
+  url: https://github.com/Tanishk901/jev-starter-examples
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/tomerglick57/Jevstiller
+  url: https://github.com/tomerglick57/Jevstiller
+  verdict: not_jev
+  reason: Jev proxy that distills one repeated classification task into a per-user local model;
+    not a general Jev alternative
+  config: null
+- key: https://github.com/mblode/taste-lint
+  url: https://github.com/mblode/taste-lint
+  verdict: not_jev
+  reason: unrelated repo matching the search term
+  config: null
+- key: https://github.com/danil1online/Jev-like-VE_MoVE-LoRA
+  url: https://github.com/danil1online/Jev-like-VE_MoVE-LoRA
+  verdict: not_jev
+  reason: Russian-only research pipeline (ruwiki base trained from scratch, Cyrillic answer
+    letters); no general English System One checkpoint to benchmark
+  config: null
+- key: https://github.com/cw-jlu/Drug-Repurposing-Agent
+  url: https://github.com/cw-jlu/Drug-Repurposing-Agent
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/Jessie-QingYu/jev-in-the-wild
+  url: https://github.com/Jessie-QingYu/jev-in-the-wild
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/petersaktor/JevSample
+  url: https://github.com/petersaktor/JevSample
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/EthanAlgoX/AIStock
+  url: https://github.com/EthanAlgoX/AIStock
+  verdict: not_jev
+  reason: unrelated repo matching the search term
+  config: null
+- key: https://github.com/coding-hermes/auger
+  url: https://github.com/coding-hermes/auger
+  verdict: not_jev
+  reason: unrelated repo matching the search term
+  config: null
+- key: https://github.com/benmagnifico/DriveJev
+  url: https://github.com/benmagnifico/DriveJev
+  verdict: not_jev
+  reason: autonomous-driving policy model (JevPilot simulator); not a text System One decision
+    model
+  config: null
+- key: https://github.com/artalis-io/jev-bush
+  url: https://github.com/artalis-io/jev-bush
+  verdict: needs_adapter
+  reason: 'Jev Bush: C11 CPU engine reading DiffusionGemma answer-slot logits for OpenJev
+    requests; new runtime (C/OpenMP, no /v1/systemone server) and 5.3 pp below Jev on its
+    own benchmark; not proposed'
+  config: null
+- key: https://github.com/Danu28/pi-browser-laya
+  url: https://github.com/Danu28/pi-browser-laya
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/sierra5285/jevpq
+  url: https://github.com/sierra5285/jevpq
+  verdict: not_jev
+  reason: empty repo (no README); nothing to benchmark
+  config: null
+- key: https://github.com/usekopai/varta
+  url: https://github.com/usekopai/varta
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/alexshpunt/pi-agent-foreman
+  url: https://github.com/alexshpunt/pi-agent-foreman
+  verdict: not_jev
+  reason: unrelated repo matching the search term
+  config: null
+- key: https://github.com/kevinarevaloph/kevinarevaloph.github.io
+  url: https://github.com/kevinarevaloph/kevinarevaloph.github.io
+  verdict: not_jev
+  reason: personal site / repo of a person named Kev*; unrelated
+  config: null
+- key: https://github.com/kevinn1357/kevin_kelompok-8_kh002
+  url: https://github.com/kevinn1357/kevin_kelompok-8_kh002
+  verdict: not_jev
+  reason: personal site / repo of a person named Kev*; unrelated
+  config: null
+- key: https://github.com/kevennlaranjeira/kevennlaranjeira
+  url: https://github.com/kevennlaranjeira/kevennlaranjeira
+  verdict: not_jev
+  reason: personal site / repo of a person named Kev*; unrelated
+  config: null
+- key: https://github.com/JayRamoliya/kevinpipe
+  url: https://github.com/JayRamoliya/kevinpipe
+  verdict: not_jev
+  reason: personal site / repo of a person named Kev*; unrelated
+  config: null
+- key: https://github.com/Kev-Park/kev-park.github.io
+  url: https://github.com/Kev-Park/kev-park.github.io
+  verdict: not_jev
+  reason: personal site / repo of a person named Kev*; unrelated
+  config: null
+- key: https://github.com/KevinZuo-AMZ/kevinzuo-amz.github.io
+  url: https://github.com/KevinZuo-AMZ/kevinzuo-amz.github.io
+  verdict: not_jev
+  reason: personal site / repo of a person named Kev*; unrelated
+  config: null
+- key: https://github.com/firdausjohariepl-bit/cisa-kev-auto
+  url: https://github.com/firdausjohariepl-bit/cisa-kev-auto
+  verdict: not_jev
+  reason: CISA KEV (Known Exploited Vulnerabilities) feed; unrelated
+  config: null
+- key: https://github.com/itsnoha0x/SecurFlow
+  url: https://github.com/itsnoha0x/SecurFlow
+  verdict: not_jev
+  reason: security scanning pipeline using CISA KEV; unrelated
+  config: null
+- key: https://github.com/khoirurizal2024606601032-gif/KLASIFIKASI-PRIORITAS-TIKET-LAYANAN-TI-MENGGUNAKAN-MACHINE-LEARNING-
+  url: https://github.com/khoirurizal2024606601032-gif/KLASIFIKASI-PRIORITAS-TIKET-LAYANAN-TI-MENGGUNAKAN-MACHINE-LEARNING-
+  verdict: not_jev
+  reason: unrelated repo (Indonesian 'layanan' / personal name)
+  config: null
+- key: https://github.com/Rassiiieeee/PAW_JURNAL1_RASSYAD-LAYA_102042500096
+  url: https://github.com/Rassiiieeee/PAW_JURNAL1_RASSYAD-LAYA_102042500096
+  verdict: not_jev
+  reason: unrelated repo (Indonesian 'layanan' / personal name)
+  config: null
+- key: https://github.com/krishna-gogineni-765/deck31b
+  url: https://github.com/krishna-gogineni-765/deck31b
+  verdict: needs_adapter
+  reason: 'deck31b: frozen google/gemma-4-31B-it with TorchAO FP8 + letter readout behind
+    its own /v1/systemone server (1 x 80 GB FP8 GPU, serial); new serving stack. Not proposed:
+    a 31B dense model served serially should land over the $63/1k line (Kev-27B / JEV-27B
+    already did)'
+  config: null
+- key: https://github.com/aktonay/snapdec
+  url: https://github.com/aktonay/snapdec
+  verdict: not_jev
+  reason: MCP / agent-skill layer that forwards to existing backends (Jev, OpenRouter, kev.serve,
+    laya-serve); not a new model
+  config: null
+- key: https://github.com/zchee/decision-model-sdk-rust
+  url: https://github.com/zchee/decision-model-sdk-rust
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/amyrmahdy/decima
+  url: https://github.com/amyrmahdy/decima
+  verdict: needs_adapter
+  reason: 'Decima 1.1 (amyrmahdy/decima-small, Apache-2.0): new open 122M Jev-style decision
+    model family, ONNX int8 behind its own TypeSafe-compatible /v1/systemone runtime (python
+    -m decima.serve); the harness has no onnxruntime source. Needs a decima source (onnxruntime-gpu,
+    forward_batch over many request bodies per call)'
+  config: configs/decima_small_vs_jev.yaml
+- key: https://github.com/Ashadeepa/typesafe-showcase
+  url: https://github.com/Ashadeepa/typesafe-showcase
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: https://github.com/anandi1989/awesome-jev-usecases
+  url: https://github.com/anandi1989/awesome-jev-usecases
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev / Laya
+    / Kev); not a new model
+  config: null
+- key: hf:Jakevin/taiwan-mainland-wording-kev-4b@4e63b915e5c0e60ef483f116b8ff162d6fb8b6de
+  url: https://huggingface.co/Jakevin/taiwan-mainland-wording-kev-4b
+  verdict: not_jev
+  reason: single-task Kev-4B LoRA fine-tune (Taiwan / mainland wording, zh); not a general
+    Jev alternative
+  config: null
+- key: hf:MigoXV/laya-multilingual@8f28538627c1a88e8bc7c9c5f06cdd09237a9604
+  url: https://huggingface.co/MigoXV/laya-multilingual
+  verdict: not_jev
+  reason: repackaged copy of the official convaiinnovations/laya multilingual checkpoint (weights
+    unchanged); nothing new to benchmark
+  config: null
+- key: hf:Harsh1312/laya-pr-triage@56343f095893f7a4b602f350fe9639332d827f8e
+  url: https://huggingface.co/Harsh1312/laya-pr-triage
+  verdict: not_jev
+  reason: single-task Laya fine-tune (PR triage); not a general Jev alternative
+  config: null
+- key: hf:startlux-models/StartLux-Decision-35B-A3B@421fbe7149ca0a54f3d8c82c229cbc0c034d293f
+  url: https://huggingface.co/startlux-models/StartLux-Decision-35B-A3B
+  verdict: needs_adapter
+  reason: 'StartLux-Decision size the startlux source cannot load: StartLuxSource.model and
+    STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; MoE (qwen3_5_moe) also
+    needs its own GPU map. Not proposed until the 9B run succeeds'
+  config: null
+- key: hf:startlux-models/StartLux-Decision-27B@95e31cda814fec2a7dc4ac4f8b9b832aa1c9c2e6
+  url: https://huggingface.co/startlux-models/StartLux-Decision-27B
+  verdict: needs_adapter
+  reason: 'StartLux-Decision size the startlux source cannot load: StartLuxSource.model and
+    STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; 27B would need H200s.
+    Not proposed until the 9B run succeeds'
+  config: null
+- key: hf:startlux-models/StartLux-Decision-9B@342aad64840be8eee314455428a5a775f18ef547
+  url: https://huggingface.co/startlux-models/StartLux-Decision-9B
+  verdict: needs_adapter
+  reason: 'new revision 342aad6 of StartLux-Decision-9B (the source pins 2974b71); already
+    tracked as startlux_decision_9b_vs_jev (failed on Modal: function not found), awaiting
+    Marcus'
+  config: null
+- key: hf:startlux-models/StartLux-Decision-4B@9302aedb7f7bd889994336f2ae919dffbf5dbee1
+  url: https://huggingface.co/startlux-models/StartLux-Decision-4B
+  verdict: needs_adapter
+  reason: 'StartLux-Decision size the startlux source cannot load: StartLuxSource.model and
+    STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; needs the 4B id + revision
+    9302aed and a GPU entry (L40S/H100). JevBench public 204/231; a 4B is the StartLux size
+    most likely to get under the $63/1k line'
+  config: configs/startlux_decision_4b_vs_jev.yaml
+- key: hf:startlux-models/StartLux-Decision-2B@3e2e456409a7fe44be69eee231566f7830872ea2
+  url: https://huggingface.co/startlux-models/StartLux-Decision-2B
+  verdict: needs_adapter
+  reason: 'StartLux-Decision size the startlux source cannot load: StartLuxSource.model and
+    STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; not proposed (the 4B
+    proposal covers the family''s small sizes)'
+  config: null
+- key: hf:startlux-models/StartLux-Decision-0.8B@bd4f76a600e23227547fee7bfc1825e12a32764c
+  url: https://huggingface.co/startlux-models/StartLux-Decision-0.8B
+  verdict: needs_adapter
+  reason: 'StartLux-Decision size the startlux source cannot load: StartLuxSource.model and
+    STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; not proposed (the 4B
+    proposal covers the family''s small sizes)'
+  config: null
+- key: https://zapier.com/blog/jev
+  url: https://zapier.com/blog/jev
+  verdict: not_jev
+  reason: explainer article about Jev; not a new model
+  config: null
+- key: https://dev.to/vishalmysore/what-is-laya-laya-vs-jev-with-live-demo-4j6e
+  url: https://dev.to/vishalmysore/what-is-laya-laya-vs-jev-with-live-demo-4j6e
+  verdict: not_jev
+  reason: explainer article comparing Laya and Jev; not a new model
+  config: null
+- key: https://x.com/hqmank/status/2102035210506207258
+  url: https://x.com/hqmank/status/2102035210506207258
+  verdict: not_jev
+  reason: 'Laya-MLX: Apple-silicon port of the tracked Laya; nothing new to benchmark'
+  config: null
+- key: https://x.com/trycua/status/2101014004927729737
+  url: https://x.com/trycua/status/2101014004927729737
+  verdict: not_jev
+  reason: 'CUA-S1-FORMS: single-task computer-use form-filling specialist; not a general Jev
+    alternative'
+  config: null
+- key: https://x.com/omarsar0/status/2103875089779261682
+  url: https://x.com/omarsar0/status/2103875089779261682
+  verdict: not_jev
+  reason: commentary post about System One models; not a new model
+  config: null
+- key: https://x.com/FAANews/status/1936168036852986072
+  url: https://x.com/FAANews/status/1936168036852986072
+  verdict: not_jev
+  reason: FAA air-traffic system post; unrelated
+  config: null
+- key: https://x.com/jaredpalmer/status/2106088382246068269
+  url: https://x.com/jaredpalmer/status/2106088382246068269
+  verdict: not_jev
+  reason: kev-finetune agent skill for fine-tuning the tracked Kev; not a new model
+  config: null
+- key: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791012374300259
+  url: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791012374300259
+  verdict: not_jev
+  reason: this automation's own Slack DM report; not a candidate
+  config: null
