@@ -9,6 +9,6 @@
   - Rune-26B costs $1.18.
   - Rune-26B uses 47.1 s/query.
 - No run finishes this hour.
-  - Search finds 42 candidates.
+  - Search finds 48 candidates.
   - Two new proposals wait.
   - Production keeps 0.711 at k=50
