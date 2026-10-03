@@ -1,0 +1,126 @@
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-100-noul", "t": "04:54:41"}
+{"event": "start", "config": "fanout_good_midge_kev27b_noul.yaml", "app": "jev-ff-good-midge-kev27b-noul", "t": "04:54:41"}
+{"event": "start", "config": "fanout_alert_jay_clef_noul.yaml", "app": "jev-ff-alert-jay-clef-noul", "t": "04:54:41"}
+{"event": "start", "config": "fanout_top_ram_laya421m_noul.yaml", "app": "jev-ff-top-ram-laya421m-noul", "t": "04:54:41"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "04:54:41"}
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-6000-noul", "t": "04:54:41"}
+{"event": "failed", "config": "fanout_alert_jay_clef_noul.yaml", "code": 1, "t": "04:55:27"}
+{"event": "failed", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "code": 1, "t": "04:55:27"}
+{"event": "failed", "config": "fanout_keen_emu_kev4b_noul.yaml", "code": 1, "t": "04:55:27"}
+{"event": "failed", "config": "fanout_top_ram_laya421m_noul.yaml", "code": 1, "t": "04:55:27"}
+{"event": "failed", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "code": 1, "t": "04:55:27"}
+{"event": "start", "config": "fanout_alert_jay_clef_score.yaml", "app": "jev-ff-alert-jay-clef-score", "t": "04:55:27"}
+{"event": "start", "config": "fanout_top_ram_laya421m_score.yaml", "app": "jev-ff-top-ram-laya421m-score", "t": "04:55:27"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "04:55:29"}
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-100-noul", "t": "04:56:08"}
+{"event": "start", "config": "fanout_good_midge_kev27b_noul.yaml", "app": "jev-ff-good-midge-kev27b-noul", "t": "04:56:08"}
+{"event": "start", "config": "fanout_alert_jay_clef_noul.yaml", "app": "jev-ff-alert-jay-clef-noul", "t": "04:56:08"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "04:56:08"}
+{"event": "start", "config": "fanout_top_ram_laya421m_noul.yaml", "app": "jev-ff-top-ram-laya421m-noul", "t": "04:56:08"}
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-6000-noul", "t": "04:56:08"}
+{"event": "stall", "config": "fanout_top_ram_laya421m_noul.yaml", "app": "jev-ff-top-ram-laya421m-noul", "ready": 8, "of": 46, "t": "05:18:10"}
+{"event": "start", "config": "fanout_top_ram_laya421m_noul_s8.yaml", "app": "jev-ff-top-ram-laya421m-noul-s8", "t": "05:18:15"}
+{"event": "stall", "config": "fanout_alert_jay_clef_noul.yaml", "app": "jev-ff-alert-jay-clef-noul", "ready": 7, "of": 46, "t": "05:18:21"}
+{"event": "stall", "config": "fanout_good_midge_kev27b_noul.yaml", "app": "jev-ff-good-midge-kev27b-noul", "ready": 8, "of": 46, "t": "05:18:21"}
+{"event": "start", "config": "fanout_good_midge_kev27b_noul_s8.yaml", "app": "jev-ff-good-midge-kev27b-noul-s8", "t": "05:18:33"}
+{"event": "start", "config": "fanout_alert_jay_clef_noul_s7.yaml", "app": "jev-ff-alert-jay-clef-noul-s7", "t": "05:18:33"}
+{"event": "stall", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-100-noul", "ready": 9, "of": 46, "t": "05:19:07"}
+{"event": "stall", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "ready": 6, "of": 46, "t": "05:19:07"}
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_A100_noul_s9.yaml", "app": "jev-ff-clear-flea-kev27b-batched-100-noul-s9", "t": "05:19:09"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_noul_s6.yaml", "app": "jev-ff-keen-emu-kev4b-noul-s6", "t": "05:19:12"}
+{"event": "start", "config": "fanout_good_midge_kev27b_noul.yaml", "app": "jev-ff-good-midge-kev27b-noul", "t": "05:22:29"}
+{"event": "ok", "config": "fanout_good_midge_kev27b_noul.yaml", "exp": "2026_10_03_05_22_29_crack-emu", "t": "05:28:04"}
+{"event": "start", "config": "fanout_pumped_egret_kev27b_noul.yaml", "app": "jev-ff-pumped-egret-kev27b-noul", "t": "05:28:06"}
+{"event": "ok", "config": "fanout_pumped_egret_kev27b_noul.yaml", "exp": "2026_10_03_05_28_06_nearby-jackal", "t": "05:33:40"}
+{"event": "start", "config": "fanout_good_midge_kev27b_score.yaml", "app": "jev-ff-good-midge-kev27b-score", "t": "05:33:42"}
+{"event": "ok", "config": "fanout_good_midge_kev27b_score.yaml", "exp": "2026_10_03_05_33_42_wise-chimp", "t": "05:39:53"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "05:39:54"}
+{"event": "failed", "config": "fanout_keen_emu_kev4b_noul.yaml", "code": 143, "t": "06:23:36"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_score.yaml", "app": "jev-ff-keen-emu-kev4b-score", "t": "06:23:37"}
+{"event": "start", "config": "fanout_keen_emu_kev4b_noul.yaml", "app": "jev-ff-keen-emu-kev4b-noul", "t": "06:24:34"}
+{"event": "start", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c18-w4096x16", "t": "06:25:06"}
+{"event": "stall", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c18-w4096x16", "ready": 10, "of": 46, "t": "06:48:10"}
+{"event": "start", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16_s10.yaml", "app": "jev-ff-super-orca-kev27b-noul-c18-w4096x16-s10", "t": "06:48:16"}
+{"event": "timed_phase", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16_s10.yaml", "app": "jev-ff-super-orca-kev27b-noul-c18-w4096x16-s10", "t": "06:51:20"}
+{"event": "overlap_launch", "config": "fanout_super_orca_kev27b_noul_c24_w4096x16.yaml", "t": "06:51:20"}
+{"event": "start", "config": "fanout_super_orca_kev27b_noul_c24_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c24-w4096x16", "t": "06:51:20"}
+{"event": "start", "config": "fanout_super_orca_kev27b_noul_c24_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c24-w4096x16", "t": "06:53:33"}
+{"event": "timed_phase", "config": "fanout_super_orca_kev27b_noul_c24_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c24-w4096x16", "t": "06:56:39"}
+{"event": "overlap_launch", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16.yaml", "t": "06:56:39"}
+{"event": "start", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c18-w4096x16", "t": "06:56:39"}
+{"event": "ok", "config": "fanout_super_orca_kev27b_noul_c24_w4096x16.yaml", "exp": "2026_10_03_06_53_35_mighty-oyster", "t": "07:00:31"}
+{"event": "timed_phase", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16.yaml", "app": "jev-ff-super-orca-kev27b-noul-c18-w4096x16", "t": "07:02:52"}
+{"event": "overlap_launch", "config": "fanout_top_ram_laya421m_noul.yaml", "t": "07:02:52"}
+{"event": "start", "config": "fanout_top_ram_laya421m_noul.yaml", "app": "jev-ff-top-ram-laya421m-noul", "t": "07:02:52"}
+{"event": "ok", "config": "fanout_super_orca_kev27b_noul_c18_w4096x16.yaml", "exp": "2026_10_03_06_56_40_fair-hound", "t": "07:06:44"}
+{"event": "timed_phase", "config": "fanout_top_ram_laya421m_noul.yaml", "app": "jev-ff-top-ram-laya421m-noul", "t": "07:07:32"}
+{"event": "overlap_launch", "config": "fanout_top_ram_laya421m_score.yaml", "t": "07:07:32"}
+{"event": "start", "config": "fanout_top_ram_laya421m_score.yaml", "app": "jev-ff-top-ram-laya421m-score", "t": "07:07:32"}
+{"event": "ok", "config": "fanout_top_ram_laya421m_noul.yaml", "exp": "2026_10_03_07_02_53_tender-jackal", "t": "07:12:12"}
+{"event": "timed_phase", "config": "fanout_top_ram_laya421m_score.yaml", "app": "jev-ff-top-ram-laya421m-score", "t": "07:13:00"}
+{"event": "overlap_launch", "config": "fanout_above_dog_kev08b_noul.yaml", "t": "07:13:00"}
+{"event": "start", "config": "fanout_above_dog_kev08b_noul.yaml", "app": "jev-ff-above-dog-kev08b-noul", "t": "07:13:00"}
+{"event": "ok", "config": "fanout_top_ram_laya421m_score.yaml", "exp": "2026_10_03_07_07_34_next-kit", "t": "07:17:39"}
+{"event": "timed_phase", "config": "fanout_above_dog_kev08b_noul.yaml", "app": "jev-ff-above-dog-kev08b-noul", "t": "07:18:27"}
+{"event": "overlap_launch", "config": "fanout_above_dog_kev08b_score.yaml", "t": "07:18:27"}
+{"event": "start", "config": "fanout_above_dog_kev08b_score.yaml", "app": "jev-ff-above-dog-kev08b-score", "t": "07:18:27"}
+{"event": "ok", "config": "fanout_above_dog_kev08b_noul.yaml", "exp": "2026_10_03_07_13_01_viable-adder", "t": "07:20:02"}
+{"event": "timed_phase", "config": "fanout_above_dog_kev08b_score.yaml", "app": "jev-ff-above-dog-kev08b-score", "t": "07:21:36"}
+{"event": "overlap_launch", "config": "fanout_alert_jay_clef_noul.yaml", "t": "07:21:36"}
+{"event": "start", "config": "fanout_alert_jay_clef_noul.yaml", "app": "jev-ff-alert-jay-clef-noul", "t": "07:21:36"}
+{"event": "ok", "config": "fanout_above_dog_kev08b_score.yaml", "exp": "2026_10_03_07_18_29_happy-hare", "t": "07:24:41"}
+{"event": "timed_phase", "config": "fanout_alert_jay_clef_noul.yaml", "app": "jev-ff-alert-jay-clef-noul", "t": "07:25:29"}
+{"event": "overlap_launch", "config": "fanout_alert_jay_clef_score.yaml", "t": "07:25:29"}
+{"event": "start", "config": "fanout_alert_jay_clef_score.yaml", "app": "jev-ff-alert-jay-clef-score", "t": "07:25:29"}
+{"event": "ok", "config": "fanout_alert_jay_clef_noul.yaml", "exp": "2026_10_03_07_21_37_moral-bear", "t": "07:29:21"}
+{"event": "timed_phase", "config": "fanout_alert_jay_clef_score.yaml", "app": "jev-ff-alert-jay-clef-score", "t": "07:30:55"}
+{"event": "overlap_launch", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "t": "07:30:55"}
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-100-noul", "t": "07:30:55"}
+{"event": "ok", "config": "fanout_alert_jay_clef_score.yaml", "exp": "2026_10_03_07_25_30_happy-ghoul", "t": "07:34:47"}
+{"event": "timed_phase", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-100-noul", "t": "07:36:21"}
+{"event": "overlap_launch", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "t": "07:36:21"}
+{"event": "start", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-6000-noul", "t": "07:36:21"}
+{"event": "ok", "config": "fanout_clear_flea_kev27b_batched_A100_noul.yaml", "exp": "2026_10_03_07_30_56_fluent-pug", "t": "07:40:12"}
+{"event": "timed_phase", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "app": "jev-ff-clear-flea-kev27b-batched-6000-noul", "t": "08:10:19"}
+{"event": "overlap_launch", "config": "fanout_fair_lizard_clef_flash_noul.yaml", "t": "08:10:19"}
+{"event": "start", "config": "fanout_fair_lizard_clef_flash_noul.yaml", "app": "jev-ff-fair-lizard-clef-flash-noul", "t": "08:10:19"}
+{"event": "ok", "config": "fanout_clear_flea_kev27b_batched_RTXPRO6000_noul.yaml", "exp": "2026_10_03_07_36_22_super-ghoul", "t": "08:12:39"}
+{"event": "timed_phase", "config": "fanout_fair_lizard_clef_flash_noul.yaml", "app": "jev-ff-fair-lizard-clef-flash-noul", "t": "08:13:27"}
+{"event": "overlap_launch", "config": "fanout_fair_lizard_clef_flash_score.yaml", "t": "08:13:27"}
+{"event": "start", "config": "fanout_fair_lizard_clef_flash_score.yaml", "app": "jev-ff-fair-lizard-clef-flash-score", "t": "08:13:27"}
+{"event": "ok", "config": "fanout_fair_lizard_clef_flash_noul.yaml", "exp": "2026_10_03_08_10_21_stable-beetle", "t": "08:17:18"}
+{"event": "timed_phase", "config": "fanout_fair_lizard_clef_flash_score.yaml", "app": "jev-ff-fair-lizard-clef-flash-score", "t": "08:18:06"}
+{"event": "overlap_launch", "config": "fanout_fit_macaw_kev27b_noul.yaml", "t": "08:18:06"}
+{"event": "start", "config": "fanout_fit_macaw_kev27b_noul.yaml", "app": "jev-ff-fit-macaw-kev27b-noul", "t": "08:18:06"}
+{"event": "ok", "config": "fanout_fair_lizard_clef_flash_score.yaml", "exp": "2026_10_03_08_13_28_known-asp", "t": "08:21:59"}
+{"event": "timed_phase", "config": "fanout_fit_macaw_kev27b_noul.yaml", "app": "jev-ff-fit-macaw-kev27b-noul", "t": "08:23:34"}
+{"event": "overlap_launch", "config": "fanout_fit_macaw_kev27b_score.yaml", "t": "08:23:34"}
+{"event": "start", "config": "fanout_fit_macaw_kev27b_score.yaml", "app": "jev-ff-fit-macaw-kev27b-score", "t": "08:23:34"}
+{"event": "ok", "config": "fanout_fit_macaw_kev27b_noul.yaml", "exp": "2026_10_03_08_18_08_equal-filly", "t": "08:25:53"}
+{"event": "timed_phase", "config": "fanout_fit_macaw_kev27b_score.yaml", "app": "jev-ff-fit-macaw-kev27b-score", "t": "08:27:27"}
+{"event": "overlap_launch", "config": "fanout_holy_hare_kev05b_noul.yaml", "t": "08:27:27"}
+{"event": "start", "config": "fanout_holy_hare_kev05b_noul.yaml", "app": "jev-ff-holy-hare-kev05b-noul", "t": "08:27:27"}
+{"event": "ok", "config": "fanout_fit_macaw_kev27b_score.yaml", "exp": "2026_10_03_08_23_35_able-hermit", "t": "08:29:46"}
+{"event": "timed_phase", "config": "fanout_holy_hare_kev05b_noul.yaml", "app": "jev-ff-holy-hare-kev05b-noul", "t": "08:30:34"}
+{"event": "overlap_launch", "config": "fanout_holy_hare_kev05b_score.yaml", "t": "08:30:34"}
+{"event": "start", "config": "fanout_holy_hare_kev05b_score.yaml", "app": "jev-ff-holy-hare-kev05b-score", "t": "08:30:34"}
+{"event": "ok", "config": "fanout_holy_hare_kev05b_noul.yaml", "exp": "2026_10_03_08_27_29_hot-clam", "t": "08:32:08"}
+{"event": "timed_phase", "config": "fanout_holy_hare_kev05b_score.yaml", "app": "jev-ff-holy-hare-kev05b-score", "t": "08:32:56"}
+{"event": "overlap_launch", "config": "fanout_humble_sawfly_kev9b_score.yaml", "t": "08:32:56"}
+{"event": "start", "config": "fanout_humble_sawfly_kev9b_score.yaml", "app": "jev-ff-humble-sawfly-kev9b-score", "t": "08:32:56"}
+{"event": "ok", "config": "fanout_holy_hare_kev05b_score.yaml", "exp": "2026_10_03_08_30_35_funky-skunk", "t": "08:34:29"}
+{"event": "timed_phase", "config": "fanout_humble_sawfly_kev9b_score.yaml", "app": "jev-ff-humble-sawfly-kev9b-score", "t": "08:36:03"}
+{"event": "overlap_launch", "config": "fanout_immune_tick_kev2b_noul.yaml", "t": "08:36:03"}
+{"event": "start", "config": "fanout_immune_tick_kev2b_noul.yaml", "app": "jev-ff-immune-tick-kev2b-noul", "t": "08:36:03"}
+{"event": "ok", "config": "fanout_humble_sawfly_kev9b_score.yaml", "exp": "2026_10_03_08_32_57_tender-weevil", "t": "08:38:22"}
+{"event": "timed_phase", "config": "fanout_immune_tick_kev2b_noul.yaml", "app": "jev-ff-immune-tick-kev2b-noul", "t": "08:39:10"}
+{"event": "overlap_launch", "config": "fanout_immune_tick_kev2b_score.yaml", "t": "08:39:10"}
+{"event": "start", "config": "fanout_immune_tick_kev2b_score.yaml", "app": "jev-ff-immune-tick-kev2b-score", "t": "08:39:10"}
+{"event": "ok", "config": "fanout_immune_tick_kev2b_noul.yaml", "exp": "2026_10_03_08_36_04_right-molly", "t": "08:40:43"}
+{"event": "timed_phase", "config": "fanout_immune_tick_kev2b_score.yaml", "app": "jev-ff-immune-tick-kev2b-score", "t": "08:41:31"}
+{"event": "overlap_launch", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "t": "08:41:31"}
+{"event": "start", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "app": "jev-ff-large-corgi-rsi-jev-noul", "t": "08:41:31"}
+{"event": "ok", "config": "fanout_immune_tick_kev2b_score.yaml", "exp": "2026_10_03_08_39_11_key-chimp", "t": "08:43:50"}
+{"event": "timed_phase", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "app": "jev-ff-large-corgi-rsi-jev-noul", "t": "08:46:10"}
+{"event": "overlap_launch", "config": "fanout_large_corgi_rsi_jev_score.yaml", "t": "08:46:10"}
+{"event": "start", "config": "fanout_large_corgi_rsi_jev_score.yaml", "app": "jev-ff-large-corgi-rsi-jev-score", "t": "08:46:10"}

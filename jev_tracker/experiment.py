@@ -807,7 +807,7 @@ def finish(id: str) -> None:
             run_name = scoring.name
             if scoring.sweep:
                 rows = modal_app.pull_json(scoring, "sweep.json")
-                dest = p.dir / f"sweep_{name}.json"
+                dest = p.dir / f"sweep_{name}_{p.id}.json"
                 dest.write_text(json.dumps(rows, indent=1) + "\n")
                 sweeps[name] = sweep_stats(rows)
                 print(f"wrote {dest}: {len(rows)} reps")
@@ -815,7 +815,7 @@ def finish(id: str) -> None:
             records = modal_app.pull(scoring)
             if scoring.fanout:
                 dispatched = modal_app.pull_json(scoring, "dispatch.json")
-                (p.dir / f"dispatch_{name}.json").write_text(
+                (p.dir / f"dispatch_{name}_{p.id}.json").write_text(
                     json.dumps(dispatched, indent=1) + "\n"
                 )
                 records = apply_dispatch(records, dispatched)
@@ -891,7 +891,7 @@ def evidence(id: str, calls: dict[str, str]) -> Evidence:
         if isinstance(src, ProductionSource):
             continue
         if isinstance(src, _Fanoutable) and src.sweep is not None:
-            if not (p.dir / f"sweep_{name}.json").exists():
+            if not (p.dir / f"sweep_{name}_{p.id}.json").exists():
                 problems.append(f"{name}: no sweep results")
             continue
         if not p.raw(name).exists():

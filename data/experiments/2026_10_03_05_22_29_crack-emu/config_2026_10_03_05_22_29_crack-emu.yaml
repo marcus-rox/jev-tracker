@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_09_29_08_47_55_good-midge/kev27b_noul, 2026_09_29_22_00_38_super-orca/kev27b_noul_c12_w4096x16, 2026_09_29_22_00_38_super-orca/kev27b_noul_c12_w4096x16_rerun, 2026_10_02_00_08_39_safe-joey/kev27b_noul, 2026_10_03_00_31_36_rested-hermit/kev27b_bf16_noul, 2026_10_03_00_31_36_clear-flea/kev27b_batched_H100_noul
+name: fanout_good_midge_kev27b_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  good_midge_kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    gpu: H100!
+    forward_batch: 1
+    fanout: true
+    shards: 46

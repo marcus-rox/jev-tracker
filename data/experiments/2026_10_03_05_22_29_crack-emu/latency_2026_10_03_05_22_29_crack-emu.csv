@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+good_midge_kev27b_noul,75,0.77,0.59,2.21,0.30,2.54,37.2

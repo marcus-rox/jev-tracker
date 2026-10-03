@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+clear_flea_kev27b_batched_RTXPRO6000_noul,75,1.15,0.69,2.61,0.45,12.19,37.2

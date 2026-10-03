@@ -1,0 +1,2279 @@
+[
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 1,
+  "wall_s": 1.304,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 1,
+  "wall_s": 0.275,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 1,
+  "wall_s": 0.154,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 1,
+  "wall_s": 0.076,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 1,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 1,
+  "wall_s": 0.072,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 1,
+  "wall_s": 0.077,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 1,
+  "wall_s": 0.074,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 1,
+  "wall_s": 0.071,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 1,
+  "wall_s": 0.063,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 1,
+  "wall_s": 0.075,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 1,
+  "wall_s": 0.068,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 1,
+  "wall_s": 0.064,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 1,
+  "wall_s": 0.068,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 1,
+  "wall_s": 0.066,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 1,
+  "wall_s": 0.065,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 1,
+  "wall_s": 0.065,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 1,
+  "wall_s": 0.069,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 1,
+  "wall_s": 0.068,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 1,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 1,
+  "wall_s": 0.074,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 1,
+  "wall_s": 0.063,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 1,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 1,
+  "wall_s": 0.072,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 2,
+  "wall_s": 0.34,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 2,
+  "wall_s": 0.289,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 2,
+  "wall_s": 0.235,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 2,
+  "wall_s": 0.076,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 2,
+  "wall_s": 0.075,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 2,
+  "wall_s": 0.076,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 2,
+  "wall_s": 0.081,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 2,
+  "wall_s": 0.074,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 2,
+  "wall_s": 0.072,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 2,
+  "wall_s": 0.072,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 2,
+  "wall_s": 0.073,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 2,
+  "wall_s": 0.076,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 2,
+  "wall_s": 0.071,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 2,
+  "wall_s": 0.074,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 2,
+  "wall_s": 0.071,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 2,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 2,
+  "wall_s": 0.075,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 4,
+  "wall_s": 0.394,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 4,
+  "wall_s": 0.295,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 4,
+  "wall_s": 0.282,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 4,
+  "wall_s": 0.137,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 4,
+  "wall_s": 0.133,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 4,
+  "wall_s": 0.132,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 4,
+  "wall_s": 0.14,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 4,
+  "wall_s": 0.136,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 4,
+  "wall_s": 0.134,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 4,
+  "wall_s": 0.135,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 4,
+  "wall_s": 0.138,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 4,
+  "wall_s": 0.135,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 4,
+  "wall_s": 0.137,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 4,
+  "wall_s": 0.133,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 4,
+  "wall_s": 0.133,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 4,
+  "wall_s": 0.134,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 4,
+  "wall_s": 0.138,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 4,
+  "wall_s": 0.134,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 4,
+  "wall_s": 0.135,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 4,
+  "wall_s": 0.133,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 4,
+  "wall_s": 0.133,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 4,
+  "wall_s": 0.133,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 4,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 4,
+  "wall_s": 0.134,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 8,
+  "wall_s": 0.283,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 8,
+  "wall_s": 0.347,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 8,
+  "wall_s": 0.165,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 8,
+  "wall_s": 0.166,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 8,
+  "wall_s": 0.158,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 8,
+  "wall_s": 0.155,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 8,
+  "wall_s": 0.159,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 8,
+  "wall_s": 0.16,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 8,
+  "wall_s": 0.16,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 8,
+  "wall_s": 0.159,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 8,
+  "wall_s": 0.158,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 8,
+  "wall_s": 0.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 8,
+  "wall_s": 0.159,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 8,
+  "wall_s": 0.158,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 8,
+  "wall_s": 0.159,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 8,
+  "wall_s": 0.158,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 8,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 8,
+  "wall_s": 0.158,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 16,
+  "wall_s": 1.041,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 16,
+  "wall_s": 0.598,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 16,
+  "wall_s": 0.597,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 16,
+  "wall_s": 0.582,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 16,
+  "wall_s": 0.597,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 16,
+  "wall_s": 0.595,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 16,
+  "wall_s": 0.593,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 16,
+  "wall_s": 0.586,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 16,
+  "wall_s": 0.601,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 16,
+  "wall_s": 0.591,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 16,
+  "wall_s": 0.593,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 16,
+  "wall_s": 0.587,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 16,
+  "wall_s": 0.59,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 16,
+  "wall_s": 0.592,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 16,
+  "wall_s": 0.597,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 16,
+  "wall_s": 0.588,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 16,
+  "wall_s": 0.603,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 16,
+  "wall_s": 0.596,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 16,
+  "wall_s": 0.597,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 16,
+  "wall_s": 0.589,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 16,
+  "wall_s": 0.597,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 16,
+  "wall_s": 0.592,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 16,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 16,
+  "wall_s": 0.595,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 32,
+  "wall_s": 1.169,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 32,
+  "wall_s": 1.155,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 32,
+  "wall_s": 1.167,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 32,
+  "wall_s": 1.153,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 32,
+  "wall_s": 1.162,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 32,
+  "wall_s": 1.145,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 32,
+  "wall_s": 1.151,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 32,
+  "wall_s": 1.158,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 32,
+  "wall_s": 1.163,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 32,
+  "wall_s": 1.149,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 32,
+  "wall_s": 1.15,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 32,
+  "wall_s": 1.141,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 32,
+  "wall_s": 1.161,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 32,
+  "wall_s": 1.157,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 32,
+  "wall_s": 1.146,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 32,
+  "wall_s": 1.142,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 32,
+  "wall_s": 1.156,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 32,
+  "wall_s": 1.145,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 32,
+  "wall_s": 1.153,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 32,
+  "wall_s": 1.148,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 32,
+  "wall_s": 1.153,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 32,
+  "wall_s": 1.153,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 32,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 32,
+  "wall_s": 1.168,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 64,
+  "wall_s": 3.087,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 64,
+  "wall_s": 2.288,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 64,
+  "wall_s": 1.921,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 64,
+  "wall_s": 1.918,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 64,
+  "wall_s": 2.3,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 64,
+  "wall_s": 2.278,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 64,
+  "wall_s": 1.91,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 64,
+  "wall_s": 1.91,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 64,
+  "wall_s": 2.311,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 64,
+  "wall_s": 2.294,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 64,
+  "wall_s": 1.91,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 64,
+  "wall_s": 1.945,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 64,
+  "wall_s": 2.305,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 64,
+  "wall_s": 2.283,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 64,
+  "wall_s": 1.914,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 64,
+  "wall_s": 1.916,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 64,
+  "wall_s": 2.308,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 64,
+  "wall_s": 2.294,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 64,
+  "wall_s": 1.914,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 64,
+  "wall_s": 1.946,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 64,
+  "wall_s": 2.306,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 64,
+  "wall_s": 2.282,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 64,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 64,
+  "wall_s": 1.925,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 128,
+  "wall_s": 4.646,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 128,
+  "wall_s": 4.57,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 128,
+  "wall_s": 4.188,
+  "warmup": true
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 128,
+  "wall_s": 4.494,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 128,
+  "wall_s": 4.61,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 128,
+  "wall_s": 4.559,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 128,
+  "wall_s": 4.18,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 128,
+  "wall_s": 3.823,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 128,
+  "wall_s": 4.602,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 128,
+  "wall_s": 4.565,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 128,
+  "wall_s": 4.196,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 128,
+  "wall_s": 3.831,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 128,
+  "wall_s": 4.583,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 128,
+  "wall_s": 4.575,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 128,
+  "wall_s": 4.194,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 128,
+  "wall_s": 3.815,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 128,
+  "wall_s": 4.586,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 128,
+  "wall_s": 5.589,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 128,
+  "wall_s": 4.188,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 128,
+  "wall_s": 3.835,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 128,
+  "wall_s": 4.611,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 128,
+  "wall_s": 4.604,
+  "warmup": false
+ },
+ {
+  "requests": 1,
+  "children": 128,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 128,
+  "wall_s": 4.202,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 24,
+  "wall_s": 0.348,
+  "warmup": true
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 24,
+  "wall_s": 0.329,
+  "warmup": true
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 24,
+  "wall_s": 0.327,
+  "warmup": true
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 24,
+  "wall_s": 0.328,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 24,
+  "wall_s": 0.328,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 24,
+  "wall_s": 0.316,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 24,
+  "wall_s": 0.322,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 24,
+  "wall_s": 0.322,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 24,
+  "wall_s": 0.327,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 24,
+  "wall_s": 0.317,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 24,
+  "wall_s": 0.342,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 24,
+  "wall_s": 0.323,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 24,
+  "wall_s": 0.326,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 24,
+  "wall_s": 0.317,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 24,
+  "wall_s": 0.322,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 24,
+  "wall_s": 0.323,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 24,
+  "wall_s": 0.345,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 24,
+  "wall_s": 0.322,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 24,
+  "wall_s": 0.325,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 24,
+  "wall_s": 0.331,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 24,
+  "wall_s": 0.33,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 24,
+  "wall_s": 0.327,
+  "warmup": false
+ },
+ {
+  "requests": 2,
+  "children": 12,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 24,
+  "wall_s": 0.327,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 48,
+  "wall_s": 0.919,
+  "warmup": true
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 48,
+  "wall_s": 0.606,
+  "warmup": true
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 48,
+  "wall_s": 0.613,
+  "warmup": true
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 48,
+  "wall_s": 0.603,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 48,
+  "wall_s": 0.63,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 48,
+  "wall_s": 0.618,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 48,
+  "wall_s": 0.617,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 48,
+  "wall_s": 0.607,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 48,
+  "wall_s": 0.62,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 48,
+  "wall_s": 0.609,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 48,
+  "wall_s": 0.613,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 48,
+  "wall_s": 0.614,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 48,
+  "wall_s": 0.624,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 48,
+  "wall_s": 0.616,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 48,
+  "wall_s": 0.609,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 48,
+  "wall_s": 0.61,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 48,
+  "wall_s": 0.622,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 48,
+  "wall_s": 0.607,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 48,
+  "wall_s": 0.612,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 48,
+  "wall_s": 0.609,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 48,
+  "wall_s": 0.621,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 48,
+  "wall_s": 0.608,
+  "warmup": false
+ },
+ {
+  "requests": 4,
+  "children": 12,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 48,
+  "wall_s": 0.611,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 0,
+  "case_id": "case_000",
+  "children_sent": 96,
+  "wall_s": 1.233,
+  "warmup": true
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 1,
+  "case_id": "case_001",
+  "children_sent": 96,
+  "wall_s": 1.153,
+  "warmup": true
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 2,
+  "case_id": "case_007",
+  "children_sent": 96,
+  "wall_s": 1.422,
+  "warmup": true
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 3,
+  "case_id": "case_015",
+  "children_sent": 96,
+  "wall_s": 1.151,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 4,
+  "case_id": "case_000",
+  "children_sent": 96,
+  "wall_s": 1.185,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 5,
+  "case_id": "case_001",
+  "children_sent": 96,
+  "wall_s": 1.146,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 6,
+  "case_id": "case_007",
+  "children_sent": 96,
+  "wall_s": 1.161,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 7,
+  "case_id": "case_015",
+  "children_sent": 96,
+  "wall_s": 1.151,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 8,
+  "case_id": "case_000",
+  "children_sent": 96,
+  "wall_s": 1.984,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 9,
+  "case_id": "case_001",
+  "children_sent": 96,
+  "wall_s": 1.142,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 10,
+  "case_id": "case_007",
+  "children_sent": 96,
+  "wall_s": 1.152,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 11,
+  "case_id": "case_015",
+  "children_sent": 96,
+  "wall_s": 1.147,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 12,
+  "case_id": "case_000",
+  "children_sent": 96,
+  "wall_s": 1.188,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 13,
+  "case_id": "case_001",
+  "children_sent": 96,
+  "wall_s": 1.145,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 14,
+  "case_id": "case_007",
+  "children_sent": 96,
+  "wall_s": 1.158,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 15,
+  "case_id": "case_015",
+  "children_sent": 96,
+  "wall_s": 1.137,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 16,
+  "case_id": "case_000",
+  "children_sent": 96,
+  "wall_s": 1.187,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 17,
+  "case_id": "case_001",
+  "children_sent": 96,
+  "wall_s": 1.159,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 18,
+  "case_id": "case_007",
+  "children_sent": 96,
+  "wall_s": 1.158,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 19,
+  "case_id": "case_015",
+  "children_sent": 96,
+  "wall_s": 1.156,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 20,
+  "case_id": "case_000",
+  "children_sent": 96,
+  "wall_s": 1.182,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 21,
+  "case_id": "case_001",
+  "children_sent": 96,
+  "wall_s": 1.155,
+  "warmup": false
+ },
+ {
+  "requests": 8,
+  "children": 12,
+  "rep": 22,
+  "case_id": "case_007",
+  "children_sent": 96,
+  "wall_s": 1.163,
+  "warmup": false
+ }
+]

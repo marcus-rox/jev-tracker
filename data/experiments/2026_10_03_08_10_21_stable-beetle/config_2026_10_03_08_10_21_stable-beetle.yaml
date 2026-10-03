@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_09_47_49_fair-lizard/clef_flash_noul
+name: fanout_fair_lizard_clef_flash_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  fair_lizard_clef_flash_noul:
+    source: clef
+    model: Cloudflare/clef-flash
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    forward_batch: 1
+    concurrency: 1
+    gpu: H100!
+    fanout: true
+    shards: 46

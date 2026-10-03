@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_03_29_51_immune-tick/kev2b_score
+name: fanout_immune_tick_kev2b_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  immune_tick_kev2b_score:
+    source: kev
+    model: per2021/kev-2b-qwen3.5@ac97885b54011dd6002cf2c82fbcc0aa6033e8cf
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    gpu: L4
+    forward_batch: 1
+    fanout: true
+    shards: 46

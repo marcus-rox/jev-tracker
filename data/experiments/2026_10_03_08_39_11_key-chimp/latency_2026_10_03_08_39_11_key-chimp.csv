@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+immune_tick_kev2b_score,75,0.82,0.61,2.06,0.46,2.42,37.2

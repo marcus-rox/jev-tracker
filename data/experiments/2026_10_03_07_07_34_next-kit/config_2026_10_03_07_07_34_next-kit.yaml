@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_09_29_21_58_31_top-ram/laya421m_score, 2026_10_01_23_53_20_frank-moray/laya_score
+name: fanout_top_ram_laya421m_score
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  top_ram_laya421m_score:
+    source: laya
+    model: convaiinnovations/laya
+    method: score_query_in_question
+    forward_batch: 64
+    max_items: 1
+    max_chars: null
+    concurrency: 1
+    gpu: L4
+    fanout: true
+    shards: 46

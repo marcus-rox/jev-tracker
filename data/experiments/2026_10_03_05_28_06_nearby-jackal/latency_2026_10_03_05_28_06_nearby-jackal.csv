@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+pumped_egret_kev27b_noul,75,0.89,0.65,1.77,0.43,3.00,35.4

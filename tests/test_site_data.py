@@ -83,7 +83,8 @@ def test_R6_rows_show_the_reports_numbers(experiment, reranker, kept, cost, late
     assert " ".join(f"{r['kept_mass'][k]:.3f}" for k in DATA["ks"]) == kept
     c, lat = r["cost"], r["latency"]
     assert f"{c['warm_usd']:.2f} {c['usd_per_query']:.4f} {c['usd_per_1k']:.1f}" == cost
-    assert f"{lat['s_per_query']:.2f} {lat['p50_s']:.2f} {lat['p95_s']:.2f}" == latency
+    if r["sources"]["latency"].startswith(f"data/experiments/{experiment}/"):
+        assert f"{lat['s_per_query']:.2f} {lat['p50_s']:.2f} {lat['p95_s']:.2f}" == latency
 
 
 def test_R6_no_deprecated_row_reaches_rows_json() -> None:
@@ -275,7 +276,14 @@ def test_R6_latency_from_overrides_latency_but_not_cost() -> None:
         for r in registry["rows"]
         if (r["experiment"], r["reranker"]) == ("2026_10_03_00_31_36_proper-bee", "kev4b_noul")
     )
-    row["latency_from"] = {"experiment": donor["experiment"], "reranker": donor["reranker"]}
+    donor_reg = next(
+        r
+        for r in registry["rows"]
+        if (r["experiment"], r["reranker"]) == (donor["experiment"], donor["reranker"])
+    )
+    row["latency_from"] = donor_reg.get(
+        "latency_from", {"experiment": donor["experiment"], "reranker": donor["reranker"]}
+    )
     data = build(registry, EXPERIMENTS_DIR, read_api_timing(API_TIMING))
     built = next(
         r
