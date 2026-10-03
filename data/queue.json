@@ -340,6 +340,18 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/api_unisound_u2_decision_vs_jev.yaml",
+   "label": "api_unisound_u2_decision_vs_jev",
+   "source": "github",
+   "url": "https://github.com/zerosloney/dsh-system-one",
+   "status": "proposed",
+   "note": "Unisound (云知声) MaaS u2-decision: hosted SystemOne endpoint (POST https://maas-api.unisound.com/v1, body {model: u2-decision, state, questions}) found via the dsh-systemone DeepSeek Harness plugin; the api source needs a UNISOUND_API_KEY as a Modal Secret (not provisioned)",
+   "queued_at": "2026-10-03T10:23:59Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }

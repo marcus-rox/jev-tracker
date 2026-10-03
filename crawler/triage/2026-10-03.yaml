@@ -2185,3 +2185,279 @@
   verdict: not_jev
   reason: this automation's own hourly Slack DM to Marcus; no new model
   config: null
+- key: https://github.com/mogottsch/openfront-agent
+  url: https://github.com/mogottsch/openfront-agent
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/longspeed/Jev
+  url: https://github.com/longspeed/Jev
+  verdict: not_jev
+  reason: empty repository created today; no model or code
+  config: null
+- key: https://github.com/arufian/huygens
+  url: https://github.com/arufian/huygens
+  verdict: not_jev
+  reason: hand-tuned expected-value model for a football match simulation; not a System
+    One model
+  config: null
+- key: https://github.com/dnevado/jev-trader
+  url: https://github.com/dnevado/jev-trader
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/zhuyansen/awesome-typesafe-jev
+  url: https://github.com/zhuyansen/awesome-typesafe-jev
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/maxkulish/jevroute
+  url: https://github.com/maxkulish/jevroute
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/Adityakk9031/jev-build-sentinel
+  url: https://github.com/Adityakk9031/jev-build-sentinel
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/gishi-dev/procurement-navigator
+  url: https://github.com/gishi-dev/procurement-navigator
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/umstek/zero-shot-ie-bench
+  url: https://github.com/umstek/zero-shot-ie-bench
+  verdict: not_jev
+  reason: benchmark of existing extractors / rerankers / decision engines; no new
+    model
+  config: null
+- key: https://github.com/lowlevelcodehustler/jeviathan
+  url: https://github.com/lowlevelcodehustler/jeviathan
+  verdict: needs_adapter
+  reason: 'Jeviathan: System One compatibility layer that prompts general open LLMs
+    (Qwen 27B via vLLM, Llama-3.1-8B via Ollama/llama.cpp); no trained decision model
+    of its own, own serving stack. Not proposed: no own weights, 27B backbone sits
+    at the budget line'
+  config: null
+- key: https://github.com/CodyQin/zh-decision-bench
+  url: https://github.com/CodyQin/zh-decision-bench
+  verdict: not_jev
+  reason: Chinese calibration benchmark for Jev-class models (NeoHorse already triaged);
+    no new model
+  config: null
+- key: https://github.com/haydarsahin0/Jev
+  url: https://github.com/haydarsahin0/Jev
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/SAMKIT-CHOPDA/AI-Research-Paper-Critic
+  url: https://github.com/SAMKIT-CHOPDA/AI-Research-Paper-Critic
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/vankhangfet/jev-automation-testing
+  url: https://github.com/vankhangfet/jev-automation-testing
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/laurentvv/compare-IA-decision
+  url: https://github.com/laurentvv/compare-IA-decision
+  verdict: not_jev
+  reason: benchmark harness over already-triaged models (laya, julia-1, lev, kev,
+    openjev); no new model
+  config: null
+- key: https://github.com/Frank-Funney/mini-jev
+  url: https://github.com/Frank-Funney/mini-jev
+  verdict: not_jev
+  reason: prompt wrapper over any LLM API (no torch, no weights); not a decision model
+  config: null
+- key: https://github.com/zun-tools/jev-demo
+  url: https://github.com/zun-tools/jev-demo
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/SeeYangZhi/clipsieve
+  url: https://github.com/SeeYangZhi/clipsieve
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/andyqiuqiubo/andy-harness
+  url: https://github.com/andyqiuqiubo/andy-harness
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/baidd1011/jev-decision-model-guide
+  url: https://github.com/baidd1011/jev-decision-model-guide
+  verdict: not_jev
+  reason: article about Jev; no model
+  config: null
+- key: https://github.com/icohangar-ops/blast-radius-guard
+  url: https://github.com/icohangar-ops/blast-radius-guard
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/icohangar-ops/stripe-qbo-reconciler
+  url: https://github.com/icohangar-ops/stripe-qbo-reconciler
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/kevinazfer32-collab/kevinazfer-32.github.io
+  url: https://github.com/kevinazfer32-collab/kevinazfer-32.github.io
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/samsaeed22/kevlar-benchmark
+  url: https://github.com/samsaeed22/kevlar-benchmark
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kevinreategui/horoscopo-maestro-kevin
+  url: https://github.com/kevinreategui/horoscopo-maestro-kevin
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/d1450bb1-3cbe-42f2-9be8-555ab16ab6a9/kev-mirror
+  url: https://github.com/d1450bb1-3cbe-42f2-9be8-555ab16ab6a9/kev-mirror
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/KevinSinatria/KevinSinatria
+  url: https://github.com/KevinSinatria/KevinSinatria
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kallioli/kevinallioli.com
+  url: https://github.com/kallioli/kevinallioli.com
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/KevinKrawiec/KevinKrawiec
+  url: https://github.com/KevinKrawiec/KevinKrawiec
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/KevinSJ/KevinSJ.github.io
+  url: https://github.com/KevinSJ/KevinSJ.github.io
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kevstt/balita-kevin-lavalust_migration_Api
+  url: https://github.com/kevstt/balita-kevin-lavalust_migration_Api
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/KevinD003/KevinD003
+  url: https://github.com/KevinD003/KevinD003
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kevin-ki/kevin-ki.github.io
+  url: https://github.com/kevin-ki/kevin-ki.github.io
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/Sanorha/biblio-groupe-Emma-Kevin-nadiath
+  url: https://github.com/Sanorha/biblio-groupe-Emma-Kevin-nadiath
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/kevstt/balita-kevin-lavalust_migration1
+  url: https://github.com/kevstt/balita-kevin-lavalust_migration1
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/ADwiS777/Data-Cleansing-Layanan-ART
+  url: https://github.com/ADwiS777/Data-Cleansing-Layanan-ART
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/debjyotikm/laya-research-harness
+  url: https://github.com/debjyotikm/laya-research-harness
+  verdict: not_jev
+  reason: research orchestration harness; name match only, not the Laya model
+  config: null
+- key: https://github.com/eandualem/entune
+  url: https://github.com/eandualem/entune
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/tsai-danny/systemone-chat
+  url: https://github.com/tsai-danny/systemone-chat
+  verdict: not_jev
+  reason: test UI for existing SystemOne endpoints; no new model
+  config: null
+- key: https://github.com/zerosloney/dsh-system-one
+  url: https://github.com/zerosloney/dsh-system-one
+  verdict: needs_adapter
+  reason: 'Unisound (云知声) MaaS u2-decision: hosted SystemOne endpoint (POST https://maas-api.unisound.com/v1,
+    body {model: u2-decision, state, questions}) found via the dsh-systemone DeepSeek
+    Harness plugin; the api source needs a UNISOUND_API_KEY as a Modal Secret (not
+    provisioned)'
+  config: configs/api_unisound_u2_decision_vs_jev.yaml
+- key: hf:Jakevin/taiwan-mainland-wording-kev-4b@d3bc7a5dca19f6d4720f5541b53b300b87f25730
+  url: https://huggingface.co/Jakevin/taiwan-mainland-wording-kev-4b
+  verdict: not_jev
+  reason: single-task fine-tune (Taiwan / mainland Chinese wording classifier on Kev-4B),
+    not a general Jev alternative
+  config: null
+- key: https://nucleussec.com/resources/knowledge-center/what-is-cisa-kev
+  url: https://nucleussec.com/resources/knowledge-center/what-is-cisa-kev
+  verdict: not_jev
+  reason: CISA Known Exploited Vulnerabilities catalog; name match only
+  config: null
+- key: https://www.runzero.com/resources/kevology
+  url: https://www.runzero.com/resources/kevology
+  verdict: not_jev
+  reason: CISA Known Exploited Vulnerabilities catalog; name match only
+  config: null
+- key: https://www.greynoise.io/blog/unmasking-cisas-hidden-kev-ransomware-updates
+  url: https://www.greynoise.io/blog/unmasking-cisas-hidden-kev-ransomware-updates
+  verdict: not_jev
+  reason: CISA Known Exploited Vulnerabilities catalog; name match only
+  config: null
+- key: https://benchlm.ai/compare/decision-machine-1-vs-qwen3-reranker-4b
+  url: https://benchlm.ai/compare/decision-machine-1-vs-qwen3-reranker-4b
+  verdict: needs_adapter
+  reason: benchlm.ai comparison page listing 'decision-machine-1'; no Hugging Face
+    checkpoint and the page is not reachable from the VM, so no model id or endpoint
+    to call. Not proposed until a source is found
+  config: null
+- key: https://www.youtube.com/watch?v=wLXdM5UDGPg
+  url: https://www.youtube.com/watch?v=wLXdM5UDGPg
+  verdict: not_jev
+  reason: video explaining Kev (already benchmarked); no new model
+  config: null
+- key: https://x.com/omarsar0/status/2100693601021997193
+  url: https://x.com/omarsar0/status/2100693601021997193
+  verdict: not_jev
+  reason: post about uses of Jev; no new model
+  config: null
+- key: https://x.com/jevlee
+  url: https://x.com/jevlee
+  verdict: not_jev
+  reason: a person named Jev Lee (football coaching); name match only
+  config: null
+- key: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791019523950659
+  url: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791019523950659
+  verdict: not_jev
+  reason: this automation's own hourly DM to Marcus; no new model
+  config: null
+- key: https://rox-myy1001.slack.com/archives/C06BBH67BV3/p1791019803151669?thread_ts=1790931408.773909&cid=C06BBH67BV3
+  url: https://rox-myy1001.slack.com/archives/C06BBH67BV3/p1791019803151669?thread_ts=1790931408.773909&cid=C06BBH67BV3
+  verdict: not_jev
+  reason: chat message mentioning Kev; no new model
+  config: null
