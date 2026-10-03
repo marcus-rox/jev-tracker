@@ -44,7 +44,6 @@ import gzip
 import hashlib
 import io
 import json
-import math
 import os
 import queue
 import shutil
@@ -662,8 +661,7 @@ def _serve_fanout(
     """Fan-out worker: take (case_id, bis, m) items off the Queue, answer, signal on "done".
 
     The engine's `answer` closure is unchanged; `run.concurrency` threads queue requests at the
-    model so each GPU batches its share. The protocol is `_fanout_loop` (`reset` e.g. clears
-    Kev's prefix cache)."""
+    model. The protocol is `_fanout_loop` (`reset` e.g. clears Kev's prefix cache)."""
     run = job.run
     out = run.shard_path(job.shard)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -794,12 +792,6 @@ def fanout_plan(requests_count: int, shards: int) -> list[list[int]]:
     return [[j for j in range(requests_count) if j % shards == w] for w in range(shards)]
 
 
-def fanout_max_items(n_children: int, shards: int, cap: int | None) -> int:
-    """One request per worker per query: children per batch so every GPU gets at most one."""
-    m = math.ceil(n_children / shards)
-    return min(m, cap) if cap is not None else m
-
-
 SWEEP_WARMUP = 3
 SWEEP_REPS = 20
 SWEEP_CASES = 4
@@ -854,9 +846,13 @@ def _dispatch_case(
     warmup: bool,
     pool: ThreadPoolExecutor,
 ) -> list[dict]:
-    """Reset the workers, send one case's requests over the pool, collect every answer."""
+    """Reset the workers, send one case's requests over the pool, collect every answer.
+
+    Requests are the original `batches(case.input, run.max_items, run.max_chars)` — fan-out
+    only decides which GPU answers each one, never the request composition (answers depend
+    on which children share a request)."""
     _reset_workers(run, q, pool)
-    m = fanout_max_items(len(items(case.input)), run.shards, run.max_items)
+    m = run.max_items
     n_requests = len(batches(case.input, m, run.max_chars))
     sent: dict[tuple[str, int], float] = {}
 

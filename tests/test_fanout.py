@@ -7,11 +7,10 @@ from pydantic import ValidationError
 
 from jev_tracker.contract import load_cases
 from jev_tracker.experiment import Experiment, apply_dispatch, sweep_stats
-from jev_tracker.methods import batches, items
+from jev_tracker.methods import batches
 from jev_tracker.modal_app import (
     _dispatch_case,
     _fanout_pass_item,
-    fanout_max_items,
     fanout_plan,
 )
 from jev_tracker.systemone import RawRecord, Usage
@@ -20,15 +19,6 @@ from jev_tracker.systemone import RawRecord, Usage
 def test_fanout_assigns_request_j_to_worker_j_mod_shards() -> None:
     assert fanout_plan(7, 3) == [[0, 3, 6], [1, 4], [2, 5]]
     assert fanout_plan(2, 4) == [[0], [1], [], []]
-
-
-def test_fanout_max_items_gives_one_request_per_worker() -> None:
-    # 30 children on a 4-GPU pool: batches of 8 -> 4 requests on 4 distinct workers.
-    m = fanout_max_items(30, 4, 12)
-    assert m == 8
-    assert (30 + m - 1) // m <= 4
-    assert fanout_max_items(30, 4, 5) == 5  # run.max_items caps the request size
-    assert fanout_max_items(30, 4, None) == 8
 
 
 def _record(case_id: str, batch: int, started_at_s: float = 100.0) -> RawRecord:
@@ -194,8 +184,8 @@ def test_dispatch_sends_one_item_per_worker_carrying_all_its_batches() -> None:
             "fanout": True,
         }
     )
-    m = fanout_max_items(len(items(case.input)), run.shards, run.max_items)
-    n_requests = len(batches(case.input, m, run.max_chars))
+    m = run.max_items
+    n_requests = len(batches(case.input, run.max_items, run.max_chars))
     dones = [(case.id, bi, 0.0, 0.1, 1) for bi in range(n_requests)]
     q = _FakeQueue(run.shards, dones)
     with ThreadPoolExecutor(4) as pool:

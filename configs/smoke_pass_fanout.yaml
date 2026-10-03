@@ -30,8 +30,6 @@ rerankers:
     source: rsi_jev
     model: shgao/rsi-jev-v3.0-qwen3.5-2b
     method: noul_query_in_state
-    max_items: 12
-    max_chars: null
     shards: 4
     concurrency: 16
     gpu: L4
