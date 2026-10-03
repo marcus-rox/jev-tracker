@@ -9,13 +9,13 @@
    "load_s": 138.51110816001892,
    "warm_gpu_s": 944.0221292972565,
    "in_function_s": 1082.6639053821564,
-   "warm_usd": 1.0355922758390905,
-   "in_function_usd": 1.1876823042042257,
+   "warm_usd": 1.303845604100199,
+   "in_function_usd": 1.4953320795576193,
    "requests": 2790,
    "forward_passes": 302,
    "resident_gb": 65.515230208,
    "peak_gb": 71.718579712,
-   "warm_usd_per_1k": 13.807897011187874
+   "warm_usd_per_1k": 17.384608054669318
   },
   "kev27b_score": {
    "gpu": "H100",
@@ -25,13 +25,13 @@
    "load_s": 162.47855305671692,
    "warm_gpu_s": 1236.9396941661835,
    "in_function_s": 1399.7961511611938,
-   "warm_usd": 1.3569228445003034,
-   "in_function_usd": 1.5355763778238298,
+   "warm_usd": 1.7084116279945663,
+   "in_function_usd": 1.9333424521377949,
    "requests": 2790,
    "forward_passes": 221,
    "resident_gb": 65.515230208,
    "peak_gb": 70.668013056,
-   "warm_usd_per_1k": 18.09230459333738
+   "warm_usd_per_1k": 22.77882170659422
   }
  },
  "shards": {

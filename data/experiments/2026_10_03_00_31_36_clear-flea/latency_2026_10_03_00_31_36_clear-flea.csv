@@ -1,0 +1,4 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+kev27b_batched_H100_noul,75,17.34,12.49,41.98,4.62,63.39,37.2
+kev27b_batched_A100_noul,75,42.96,31.43,100.76,11.37,170.56,37.2
+kev27b_batched_RTXPRO6000_noul,75,26.81,19.27,65.61,6.95,101.74,37.2

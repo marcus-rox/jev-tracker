@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+kev27b_batched_c32_noul,75,22.21,18.94,49.45,4.60,64.78,37.2

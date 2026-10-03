@@ -63,7 +63,7 @@ def test_R3_registry_rows_point_at_committed_numbers() -> None:
     assert len({(r["experiment"], r["reranker"]) for r in rows}) == len(rows)
     for r in rows:
         assert set(r) >= {"experiment", "reranker", "label", "family", "serving", "gpu", "queries"}
-        if r["experiment"] in FAILED:
+        if r["experiment"] in FAILED or "deprecated" in r:
             continue
         km = _kept_mass(r["experiment"])
         assert km["n_cases"] == r["queries"], r

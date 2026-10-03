@@ -506,7 +506,7 @@ RAM_USD_PER_GIB_S = 0.00000222
 
 
 def _usd_per_s(gpu: str, model: str) -> float:
-    gib = (modal_app.MEMORY_MB_FOR.get(model) or 0) / 1024
+    gib = (modal_app.MEMORY_MB_FOR.get(model.partition("@")[0]) or 0) / 1024
     return GPU_USD_PER_S[gpu] + gib * RAM_USD_PER_GIB_S
 
 
@@ -571,16 +571,18 @@ def costs(id: str) -> str:
 def latency(id: str) -> str:
     """Per-query wall clock of this experiment's Modal-scored rerankers: first request sent to
     last answer, with the shard's other queries in flight. Writes latency_<id>.json and .csv.
-    prod / Jev latency is in data/timing_summary_prod_jev.csv."""
+    prod / Jev latency is in data/timing_summary_prod_jev.csv. Reranker names come from
+    costs_<id>.json (written by finish before latency), so a config that no longer loads
+    still reports."""
     p = Paths(id)
-    exp = load_config(p.config)
+    billed = json.loads(p.costs.read_text())["rerankers"]
     rows = [
         "method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,"
         "max_s_per_query,mean_calls_per_query"
     ]
     out: dict[str, dict] = {}
-    for name, src in exp.rerankers.items():
-        if not isinstance(src, ModelSource) or not p.raw(name).exists():
+    for name in billed:
+        if not p.raw(name).exists():
             continue
         records = read_raw(p.raw(name))
         per = query_wall_s(records)

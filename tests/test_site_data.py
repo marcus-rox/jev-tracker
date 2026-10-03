@@ -51,28 +51,28 @@ REPORT_CELLS = [
         "prod",
         "0.711 0.726 0.766 0.837",
         "4.73 0.0631 63.0",
-        "465.4 6.21 1.72",
+        "6.21 4.07 23.07",
     ),
     (
         "2026_09_29_08_47_55_good-midge",
         "jev_noul",
         "0.878 0.893 0.925 0.951",
         "0.35 0.0047 4.7",
-        "15.5 0.21 0.06",
+        "0.21 0.20 0.32",
     ),
     (
-        "2026_09_28_17_56_26_actual-clam",
-        "kev4b_noul",
-        "0.724 0.780 0.835 0.884",
-        "0.61 0.0081 8.1",
-        "1127 15.03 4.17",
-    ),
-    (
-        "2026_09_28_22_15_35_pretty-sawfly",
+        "2026_09_29_08_47_55_good-midge",
         "kev27b_noul",
-        "0.877 0.893 0.919 0.950",
-        "1.40 0.0187 18.7",
-        "906 12.08 3.36",
+        "0.875 0.893 0.919 0.950",
+        "1.31 0.0175 17.5",
+        "17.34 12.56 41.66",
+    ),
+    (
+        "2026_10_02_00_08_39_safe-joey",
+        "kev27b_noul",
+        "0.875 0.893 0.919 0.950",
+        "1.30 0.0174 17.4",
+        "17.14 12.47 43.11",
     ),
 ]
 
@@ -83,7 +83,16 @@ def test_R6_rows_show_the_reports_numbers(experiment, reranker, kept, cost, late
     assert " ".join(f"{r['kept_mass'][k]:.3f}" for k in DATA["ks"]) == kept
     c, lat = r["cost"], r["latency"]
     assert f"{c['warm_usd']:.2f} {c['usd_per_query']:.4f} {c['usd_per_1k']:.1f}" == cost
-    assert f"{lat['run_s']:g} {lat['s_per_query']:.2f} {lat['h_per_1k']:.2f}" == latency
+    assert f"{lat['s_per_query']:.2f} {lat['p50_s']:.2f} {lat['p95_s']:.2f}" == latency
+
+
+def test_R6_no_deprecated_row_reaches_rows_json() -> None:
+    registry = yaml.safe_load(REGISTRY.read_text())
+    deprecated = {(r["experiment"], r["reranker"]) for r in registry["rows"] if "deprecated" in r}
+    assert deprecated
+    shown = {(r["experiment"], r["reranker"]) for r in DATA["rows"]}
+    assert not deprecated & shown
+    assert set(DATA["experiments"]) == {r["experiment"] for r in DATA["rows"]}
 
 
 def test_R6_committed_rows_json_is_the_generated_one() -> None:

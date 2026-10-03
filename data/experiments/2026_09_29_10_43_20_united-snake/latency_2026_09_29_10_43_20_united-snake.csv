@@ -1,0 +1,4 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+kev27b_noul,6,23.64,26.94,30.72,6.81,30.72,41.8
+kev27b_rerun_noul,6,23.97,27.12,31.12,6.88,31.12,41.8
+kev27b_sglang_noul,6,828.72,1004.38,1077.47,242.07,1077.47,41.8
