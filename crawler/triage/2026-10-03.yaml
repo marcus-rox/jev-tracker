@@ -4377,3 +4377,248 @@
   verdict: not_jev
   reason: this automation's own report DM
   config: null
+- key: https://github.com/onekill0503/typesafe-ai-jev-mcp
+  url: https://github.com/onekill0503/typesafe-ai-jev-mcp
+  verdict: not_jev
+  reason: MCP server wrapping the TypeSafe Jev API; integration, not a new model
+  config: null
+- key: https://github.com/aishwary-dongre/jev-xray
+  url: https://github.com/aishwary-dongre/jev-xray
+  verdict: not_jev
+  reason: ablation / explanation tool for Jev outputs; tooling, not a new model
+  config: null
+- key: https://github.com/Begumcaliphate5/jev-reviewer
+  url: https://github.com/Begumcaliphate5/jev-reviewer
+  verdict: not_jev
+  reason: systematic-review extraction app; unrelated to System One models
+  config: null
+- key: https://github.com/confident-christmasfactor2015/jev-ultrafast-mcp
+  url: https://github.com/confident-christmasfactor2015/jev-ultrafast-mcp
+  verdict: not_jev
+  reason: browser-automation MCP server; unrelated
+  config: null
+- key: https://github.com/Merriban/jevons-jev
+  url: https://github.com/Merriban/jevons-jev
+  verdict: not_jev
+  reason: interactive energy-use scenario study about Jev (Jevons paradox); not a
+    model
+  config: null
+- key: https://github.com/Cleobury/jev-harness
+  url: https://github.com/Cleobury/jev-harness
+  verdict: not_jev
+  reason: Windows voice-control app that calls Jev; app / SDK / integration built
+    on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/rafaelleaomed/smartvitae
+  url: https://github.com/rafaelleaomed/smartvitae
+  verdict: not_jev
+  reason: CV-alignment app using Jev + Claude; app / SDK / integration built on an
+    existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/takasek/jev-form-fill
+  url: https://github.com/takasek/jev-form-fill
+  verdict: not_jev
+  reason: Chrome form-fill app using Jev; app / SDK / integration built on an existing
+    System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/caio-moliveira/workshop-jev
+  url: https://github.com/caio-moliveira/workshop-jev
+  verdict: not_jev
+  reason: LangGraph workshop comparing Jev with LLMs; app / SDK / integration built
+    on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/rossterolf/jevpk
+  url: https://github.com/rossterolf/jevpk
+  verdict: not_jev
+  reason: empty repo (no README, size 0); name match only
+  config: null
+- key: https://github.com/AliAltameme20/trading-alert-bot
+  url: https://github.com/AliAltameme20/trading-alert-bot
+  verdict: not_jev
+  reason: trading alert bot; unrelated
+  config: null
+- key: https://github.com/stewpsch6/jevv
+  url: https://github.com/stewpsch6/jevv
+  verdict: not_jev
+  reason: empty repo (no README, size 0); name match only
+  config: null
+- key: https://github.com/spring-ai-community/spring-ai-typesafe
+  url: https://github.com/spring-ai-community/spring-ai-typesafe
+  verdict: not_jev
+  reason: Java SDK / Spring AI integration for the Jev API; app / SDK / integration
+    built on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/netcode001/jev
+  url: https://github.com/netcode001/jev
+  verdict: not_jev
+  reason: no description or README; no model weights; name match only
+  config: null
+- key: https://github.com/sutro-sh/jev-align
+  url: https://github.com/sutro-sh/jev-align
+  verdict: not_jev
+  reason: tooling that builds calibrated functions on Jev + GEPA; app / SDK / integration
+    built on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/kwilson21/tally
+  url: https://github.com/kwilson21/tally
+  verdict: not_jev
+  reason: budgeting app using Jev for categorization; app / SDK / integration built
+    on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/jander99/jevkit
+  url: https://github.com/jander99/jevkit
+  verdict: not_jev
+  reason: Claude mod that routes decision questions to Ollama; integration, no new
+    model
+  config: null
+- key: https://github.com/kevinswoodworking/kevinswoodworking.net
+  url: https://github.com/kevinswoodworking/kevinswoodworking.net
+  verdict: not_jev
+  reason: personal / unrelated repo of someone named Kev* (Kevin / Keven / Kevan /
+    ...); name match only
+  config: null
+- key: https://github.com/liory28/KevoWebsite
+  url: https://github.com/liory28/KevoWebsite
+  verdict: not_jev
+  reason: personal / unrelated repo of someone named Kev* (Kevin / Keven / Kevan /
+    ...); name match only
+  config: null
+- key: https://github.com/KevinhoMorales/KevinhoMorales
+  url: https://github.com/KevinhoMorales/KevinhoMorales
+  verdict: not_jev
+  reason: personal / unrelated repo of someone named Kev* (Kevin / Keven / Kevan /
+    ...); name match only
+  config: null
+- key: https://github.com/mike-efnet/kevcj
+  url: https://github.com/mike-efnet/kevcj
+  verdict: not_jev
+  reason: empty repo (no README, size 0); name match only
+  config: null
+- key: https://github.com/kevenzheng/kevenzheng
+  url: https://github.com/kevenzheng/kevenzheng
+  verdict: not_jev
+  reason: personal / unrelated repo of someone named Kev* (Kevin / Keven / Kevan /
+    ...); name match only
+  config: null
+- key: https://github.com/Zenn1337xd/Kevan-Hub
+  url: https://github.com/Zenn1337xd/Kevan-Hub
+  verdict: not_jev
+  reason: personal / unrelated repo of someone named Kev* (Kevin / Keven / Kevan /
+    ...); name match only
+  config: null
+- key: https://github.com/zhangzhicrm/kevin-web
+  url: https://github.com/zhangzhicrm/kevin-web
+  verdict: not_jev
+  reason: personal / unrelated repo of someone named Kev* (Kevin / Keven / Kevan /
+    ...); name match only
+  config: null
+- key: https://github.com/flarchive/kevid-flarum-pipetables
+  url: https://github.com/flarchive/kevid-flarum-pipetables
+  verdict: not_jev
+  reason: Flarum extension archive (author kevid); unrelated
+  config: null
+- key: https://github.com/flarchive/keven1024-flarum-ext-csdn
+  url: https://github.com/flarchive/keven1024-flarum-ext-csdn
+  verdict: not_jev
+  reason: Flarum extension archive (author keven1024); unrelated
+  config: null
+- key: https://github.com/skdwriting/edge-decision-laya-system1-demo
+  url: https://github.com/skdwriting/edge-decision-laya-system1-demo
+  verdict: not_jev
+  reason: edge demo app using Laya; app / SDK / integration built on an existing System
+    One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/mukhesh88/SparkX_EA
+  url: https://github.com/mukhesh88/SparkX_EA
+  verdict: not_jev
+  reason: trading expert advisor using Laya; app / SDK / integration built on an existing
+    System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/artmdv/laya-ha
+  url: https://github.com/artmdv/laya-ha
+  verdict: not_jev
+  reason: Home Assistant integration using Clef / Laya / Jev; app / SDK / integration
+    built on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/nogara/judgekit
+  url: https://github.com/nogara/judgekit
+  verdict: not_jev
+  reason: Jev + policy code + LLM fallback toolkit; app / SDK / integration built
+    on an existing System One model (Jev / Laya / Kev); not a new model
+  config: null
+- key: hf:mindchain/jevk5-9b-v0.3.3-GGUF@b289f9746e8da996abd05a1b22e763b4b5ef1049
+  url: https://huggingface.co/mindchain/jevk5-9b-v0.3.3-GGUF
+  verdict: needs_adapter
+  reason: JevK5-9B v0.3.3 new revision, still GGUF quants only; the harness has no
+    JevK5 source and only serves bf16 Hugging Face weights; not proposed (same as
+    earlier revisions)
+  config: null
+- key: hf:mindchain/jevk5-4b-v0.3-GGUF@d53366c0c8b68ca249c9beb0f19775e9f0f51e6d
+  url: https://huggingface.co/mindchain/jevk5-4b-v0.3-GGUF
+  verdict: needs_adapter
+  reason: JevK5-4B v0.3 new revision, still GGUF quants only; the harness has no JevK5
+    source and only serves bf16 Hugging Face weights; not proposed (same as earlier
+    revisions)
+  config: null
+- key: hf:Jakevin/taiwan-mainland-wording-kev-4b@daa8f448daa9be0eae1abcfefc31d2c1db02a5b2
+  url: https://huggingface.co/Jakevin/taiwan-mainland-wording-kev-4b
+  verdict: not_jev
+  reason: single-task Kev-4B LoRA (Taiwan / mainland wording classifier); not a general
+    Jev alternative (same as earlier revisions)
+  config: null
+- key: hf:litert-community/Kev-4B-LiteRT@9f1eee58ebbf3aacfaa2716732800a0ac93f65d7
+  url: https://huggingface.co/litert-community/Kev-4B-LiteRT
+  verdict: needs_adapter
+  reason: LiteRT/TFLite on-device export of jaredpalmer/kev-4b (already benchmarked
+    in bf16); the harness only serves bf16 Hugging Face weights; not proposed
+  config: null
+- key: hf:mlboydaisuke/Kev-0.8B-CoreAI@1f96d98e2804f9627971c136a1aa58ab60394d42
+  url: https://huggingface.co/mlboydaisuke/Kev-0.8B-CoreAI
+  verdict: needs_adapter
+  reason: Apple Core AI (.aimodel, fp16) on-device export of jaredpalmer/kev-0.8b
+    (already benchmarked in bf16); no Linux / Modal runtime; not proposed
+  config: null
+- key: hf:convaiinnovations/laya-typed-decisions@e929ae5cf69bc34259cd2f95c9e91145b818b1f0
+  url: https://huggingface.co/convaiinnovations/laya-typed-decisions
+  verdict: not_jev
+  reason: official Laya bundle checkpoint, new revision; already served by the laya
+    source (LAYA_SUBFOLDER) and benchmarked (laya_sizes, laya_vs_jev)
+  config: null
+- key: hf:convaiinnovations/laya-multilingual@1720e3e3357cfe1e281542e223f8273b0890ca34
+  url: https://huggingface.co/convaiinnovations/laya-multilingual
+  verdict: not_jev
+  reason: official Laya bundle checkpoint, new revision; already served by the laya
+    source (LAYA_SUBFOLDER) and benchmarked (laya_sizes)
+  config: null
+- key: hf:convaiinnovations/laya@7b928d828b7b0e022f929d9bd2e44165aa270148
+  url: https://huggingface.co/convaiinnovations/laya
+  verdict: not_jev
+  reason: official Laya model, new revision; already benchmarked (laya_sizes, laya_vs_jev)
+  config: null
+- key: https://openrouter.ai/typesafe/jev-1.13
+  url: https://openrouter.ai/typesafe/jev-1.13
+  verdict: not_jev
+  reason: 'OpenRouter listing of Jev itself (the baseline every run compares against);
+    closed: API-key product, not open source'
+  config: null
+- key: https://x.com/NielsRogge/status/2100239244501430438
+  url: https://x.com/NielsRogge/status/2100239244501430438
+  verdict: not_jev
+  reason: tweet explaining how Jev works; commentary, not a model
+  config: null
+- key: https://x.com/dr_cintas/status/2102153763083432049
+  url: https://x.com/dr_cintas/status/2102153763083432049
+  verdict: not_jev
+  reason: tweet about a Claude Code plugin that calls Jev; integration, not a model
+  config: null
+- key: https://news.ycombinator.com/item?id=49946352
+  url: https://news.ycombinator.com/item?id=49946352
+  verdict: not_jev
+  reason: HN post of a jaredpalmer.com blog on software engineers; unrelated to Kev
+    models
+  config: null
+- key: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791048501526559
+  url: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791048501526559
+  verdict: not_jev
+  reason: this automation's own report DM
+  config: null
