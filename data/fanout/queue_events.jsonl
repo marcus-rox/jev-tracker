@@ -124,3 +124,7 @@
 {"event": "timed_phase", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "app": "jev-ff-large-corgi-rsi-jev-noul", "t": "08:46:10"}
 {"event": "overlap_launch", "config": "fanout_large_corgi_rsi_jev_score.yaml", "t": "08:46:10"}
 {"event": "start", "config": "fanout_large_corgi_rsi_jev_score.yaml", "app": "jev-ff-large-corgi-rsi-jev-score", "t": "08:46:10"}
+{"event": "overlap_launch", "config": "fanout_loving_loon_autotrust_noul.yaml", "t": "09:05:25"}
+{"event": "start", "config": "fanout_loving_loon_autotrust_noul.yaml", "app": "jev-ff-loving-loon-autotrust-noul", "t": "09:05:25"}
+{"event": "ok", "config": "fanout_loving_loon_autotrust_noul.yaml", "exp": "2026_10_03_09_05_26_safe-bunny", "t": "09:28:50"}
+{"event": "adopt_done", "config": "fanout_loving_loon_autotrust_noul.yaml", "stopped": false, "t": "09:28:51"}

@@ -68,6 +68,7 @@ experiments:
   2026_10_03_08_36_04_right-molly: 'fanout_immune_tick_kev2b_noul: fan-out latency, 46 x L4, original requests, one query at a time (0.56 s/query mean)'
   2026_10_03_08_39_11_key-chimp: 'fanout_immune_tick_kev2b_score: fan-out latency, 46 x L4, original requests, one query at a time (0.82 s/query mean)'
   2026_10_03_02_10_36_simple-jay: 'fanout_sweep_v1: batch-size sweep, one warm GPU per model, 1-128 children per request and 1-8 requests per GPU'
+  2026_10_03_09_05_26_safe-bunny: 'fanout_loving_loon_autotrust_noul: fan-out latency, 46 x H200, original requests, one query at a time (2.89 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1512,7 +1513,9 @@ rows:
   highlight: false
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_09_05_26_safe-bunny
+    reranker: loving_loon_autotrust_noul
   label: autotrust_noul
   family: autotrust
   serving: 'bare prompt + 24-slot head: 1 child, 1 in flight'
