@@ -4020,5 +4020,51 @@
     "kept_mass_delta": 0.0001307386933333543
    }
   }
+ },
+ {
+  "config": "fanout_cachewarm_holy_hare_kev05b_noul.yaml",
+  "experiment": "2026_10_03_14_34_32_dear-jackal",
+  "experiment_dir": "data/experiments/2026_10_03_14_34_32_dear-jackal",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.42,
+   "median_s_per_query": 0.33,
+   "p95_s_per_query": 0.71,
+   "max_s_per_query": 2.56
+  },
+  "prefix_hits": 2687,
+  "prefix_misses": 2992,
+  "paired_cleared_mean": 0.41,
+  "rows": {
+   "2026_10_02_09_46_36_holy-hare/kev05b_noul": {
+    "answer_max": 0.028299999999999992,
+    "kept_mass_delta": 0.003917821066666716
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_holy_hare_kev05b_score.yaml",
+  "experiment": "2026_10_03_14_38_25_vast-rat",
+  "experiment_dir": "data/experiments/2026_10_03_14_38_25_vast-rat",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.27,
+   "median_s_per_query": 0.16,
+   "p95_s_per_query": 0.73,
+   "max_s_per_query": 1.45
+  },
+  "prefix_hits": 2692,
+  "prefix_misses": 2987,
+  "paired_cleared_mean": 0.55,
+  "rows": {
+   "2026_10_02_09_46_36_holy-hare/kev05b_score": {
+    "answer_max": 0.05489999999999995,
+    "kept_mass_delta": 0.0036879508400000094
+   }
+  }
  }
 ]

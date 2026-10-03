@@ -188,3 +188,5 @@
 {"event": "result_committed", "config": "fanout_cachewarm_above_dog_kev08b_score.yaml", "note": "cachewarm rows added hidden (paired row hidden)"}
 {"event": "result_committed", "config": "fanout_cachewarm_good_midge_kev27b_noul.yaml", "note": "cachewarm row public (paired row public, gate pass, 2702 hits)"}
 {"event": "result_committed", "config": "fanout_cachewarm_good_midge_kev27b_score.yaml", "note": "cachewarm row public"}
+{"event": "result_committed", "config": "fanout_cachewarm_holy_hare_kev05b_noul.yaml", "note": "cachewarm row hidden: kept-mass gate fail"}
+{"event": "result_committed", "config": "fanout_cachewarm_holy_hare_kev05b_score.yaml", "note": "cachewarm row hidden: gate fail 0.0549/0.0037"}

@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+holy_hare_kev05b_noul_cachewarm,75,0.42,0.33,0.71,0.31,2.56,37.2
