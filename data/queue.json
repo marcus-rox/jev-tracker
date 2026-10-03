@@ -364,6 +364,30 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/qev_4b_vs_jev.yaml",
+   "label": "qev_4b_vs_jev",
+   "source": "github",
+   "url": "https://github.com/QiqianFu/Qev",
+   "status": "proposed",
+   "note": "Qev (AustinFu/Qev-4B @c37759e, also 2B / 9B, Apache-2.0): new open System One family, Qwen3.5 + LoRA adapter with its own decision head (head.safetensors / joint.safetensors) returning per-option probabilities for Choice, Noul and Score; needs a qev source that loads base + adapter + head and maps typed questions to its option readout, batched (forward_batch > 1), L40S, all 75 cases",
+   "queued_at": "2026-10-03T22:24:00Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/ajev_gemma4_12b_vs_jev.yaml",
+   "label": "ajev_gemma4_12b_vs_jev",
+   "source": "github",
+   "url": "https://github.com/cmzy/ajev-infer",
+   "status": "proposed",
+   "note": "AJev (andyzhang232/ajev-gemma4-12b-lora5 @3c1e436, Apache-2.0): new open Jev-style typed decision family, google/gemma-4-12B-it + LoRA with its own ajev_lm_config.json readout (calibrated Noul / Choice / Score); needs an ajev source (transformers >= 5.17 LMPredictor or its vLLM server) batched over many requests per forward, one H100 (24 GB bf16), all 75 cases",
+   "queued_at": "2026-10-03T22:24:00Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
