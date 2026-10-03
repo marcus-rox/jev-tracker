@@ -1372,3 +1372,232 @@
   verdict: not_jev
   reason: this automation's own previous DM to Marcus; not a model
   config: null
+- key: https://github.com/fuji-soho/jev-mcp-server
+  url: https://github.com/fuji-soho/jev-mcp-server
+  verdict: not_jev
+  reason: MCP server wrapping the Jev API; not a new model
+  config: null
+- key: https://github.com/Shashank200345/Sweep
+  url: https://github.com/Shashank200345/Sweep
+  verdict: not_jev
+  reason: trading tool that calls TypeSafe Jev for gating; not a new model
+  config: null
+- key: https://github.com/GabrielCoelhoCruz/jev-skill-router-2
+  url: https://github.com/GabrielCoelhoCruz/jev-skill-router-2
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/bbbirkan/jev-subagent-router
+  url: https://github.com/bbbirkan/jev-subagent-router
+  verdict: not_jev
+  reason: subagent model router (agy / codex / claude); not a System One model
+  config: null
+- key: https://github.com/humayunkabir/jev-router-mcp
+  url: https://github.com/humayunkabir/jev-router-mcp
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/SuperInstance/madlibs-jev
+  url: https://github.com/SuperInstance/madlibs-jev
+  verdict: not_jev
+  reason: unrelated project; name match only
+  config: null
+- key: https://github.com/SuperInstance/substrate-walker
+  url: https://github.com/SuperInstance/substrate-walker
+  verdict: not_jev
+  reason: ASCII city generator that calls Jev; not a new model
+  config: null
+- key: https://github.com/warsang/jev-web
+  url: https://github.com/warsang/jev-web
+  verdict: not_jev
+  reason: browser runtime for open-jev / Laya-shaped models; no new weights
+  config: null
+- key: https://github.com/Danncode10/find-skill
+  url: https://github.com/Danncode10/find-skill
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/anilvaranasi/jevintegration
+  url: https://github.com/anilvaranasi/jevintegration
+  verdict: not_jev
+  reason: empty integration repo, no description; not a model
+  config: null
+- key: https://github.com/iamaamir/fake-jev
+  url: https://github.com/iamaamir/fake-jev
+  verdict: not_jev
+  reason: deterministic fake jev/v1 server for client tests; no model
+  config: null
+- key: https://github.com/kzarzycki/claude-mods
+  url: https://github.com/kzarzycki/claude-mods
+  verdict: not_jev
+  reason: Claude Code harness mods that call Jev; not a new model
+  config: null
+- key: https://github.com/damiensmith1/llm-cassette
+  url: https://github.com/damiensmith1/llm-cassette
+  verdict: not_jev
+  reason: LLM call record/replay test tool; unrelated
+  config: null
+- key: https://github.com/Copsychus123/jev-Trade-d2r
+  url: https://github.com/Copsychus123/jev-Trade-d2r
+  verdict: not_jev
+  reason: empty repo, no description; name match only
+  config: null
+- key: https://github.com/HermannPR/hivemind-chat-releases
+  url: https://github.com/HermannPR/hivemind-chat-releases
+  verdict: not_jev
+  reason: chat app installers coordinated by TypeSafe Jev; not a new model
+  config: null
+- key: https://github.com/GabrielCoelhoCruz/jev-skill-router
+  url: https://github.com/GabrielCoelhoCruz/jev-skill-router
+  verdict: not_jev
+  reason: app / SDK / integration / list built on an existing System One model (Jev
+    / Laya / Kev); not a new model
+  config: null
+- key: https://github.com/LimePencil/jev-observer-web
+  url: https://github.com/LimePencil/jev-observer-web
+  verdict: not_jev
+  reason: landing page / docs site for a Jev tool; not a model
+  config: null
+- key: https://github.com/sapsonic/jev-routing
+  url: https://github.com/sapsonic/jev-routing
+  verdict: not_jev
+  reason: agent skill routing via the TypeSafe API; not a new model
+  config: null
+- key: https://github.com/9ian9-218/jevlike_broswer
+  url: https://github.com/9ian9-218/jevlike_broswer
+  verdict: not_jev
+  reason: browser-automation agent that calls Jev / local Laya; not a new model
+  config: null
+- key: https://github.com/bladedevoff/stuntd
+  url: https://github.com/bladedevoff/stuntd
+  verdict: not_jev
+  reason: local proxy that trains per-app Laya heads on the user's own traffic; no
+    released model to benchmark
+  config: null
+- key: https://github.com/Phala-Network/chatwoot-workers
+  url: https://github.com/Phala-Network/chatwoot-workers
+  verdict: not_jev
+  reason: Cloudflare Workers for Chatwoot that call TypeSafe Jev; not a new model
+  config: null
+- key: https://github.com/centraleyezer/kev-mirror
+  url: https://github.com/centraleyezer/kev-mirror
+  verdict: not_jev
+  reason: runtime / mirror for an already-tracked model (Laya / Kev / Jev); nothing
+    new to benchmark
+  config: null
+- key: https://github.com/MRFrazer25/AI-OSINT-Security-Analyzer
+  url: https://github.com/MRFrazer25/AI-OSINT-Security-Analyzer
+  verdict: not_jev
+  reason: OSINT agent; 'KEV' is CISA Known Exploited Vulnerabilities; unrelated
+  config: null
+- key: https://github.com/aaa89550/kevinwang
+  url: https://github.com/aaa89550/kevinwang
+  verdict: not_jev
+  reason: personal repo of a person named Kevin; unrelated
+  config: null
+- key: https://github.com/udiram/RadKev
+  url: https://github.com/udiram/RadKev
+  verdict: needs_adapter
+  reason: 'RadKev-9B / -27B: radiology Kev fine-tunes (LoRA + head.pt on Kev, HF ramu9703/radkev-*),
+    gated on the Hub and licensed for non-commercial research use only (Eurorad /
+    CT-RATE data), so it cannot replace production; the kev source also only loads
+    jaredpalmer checkpoints. Not proposed'
+  config: null
+- key: https://github.com/kvivjo/kevin-ai-app
+  url: https://github.com/kvivjo/kevin-ai-app
+  verdict: not_jev
+  reason: course project of a person named Kevin; unrelated
+  config: null
+- key: https://github.com/mukhesh88/Spark_Ai_Algo
+  url: https://github.com/mukhesh88/Spark_Ai_Algo
+  verdict: not_jev
+  reason: trading terminal that calls Laya; not a new model
+  config: null
+- key: https://github.com/lowaa/laya-playground
+  url: https://github.com/lowaa/laya-playground
+  verdict: not_jev
+  reason: eval scripts / playground UI for a local Laya server; no new weights
+  config: null
+- key: https://github.com/PawnsApprentice/agent-failure-triage
+  url: https://github.com/PawnsApprentice/agent-failure-triage
+  verdict: not_jev
+  reason: study comparing TF-IDF vs Laya vs an LLM judge on tau2-bench failures; no
+    released System One model
+  config: null
+- key: https://github.com/MigoXV/laya
+  url: https://github.com/MigoXV/laya
+  verdict: not_jev
+  reason: local CLI / HTTP service for the existing Laya weights; nothing new to benchmark
+  config: null
+- key: https://github.com/ToufiqQureshi/anarkali
+  url: https://github.com/ToufiqQureshi/anarkali
+  verdict: needs_adapter
+  reason: 'Anarkali 150M (HF toufiqqureshi651/anarkali, Apache-2.0): open typed-decision
+    model, a new family, shipped as ONNX (model.onnx + tokenizer.json + anarkali.json)
+    behind its own Jev-compatible /v1/systemone runtime; the harness has no onnxruntime
+    source. Needs an anarkali source (onnxruntime-gpu, batched forward over many request
+    bodies per call)'
+  config: configs/anarkali_150m_vs_jev.yaml
+- key: https://github.com/realizer-1966/decision-lab
+  url: https://github.com/realizer-1966/decision-lab
+  verdict: not_jev
+  reason: web app around ollama.com decision models; not a new model
+  config: null
+- key: hf:autotrust/JEV-9B@b63f651ce8ed64481d3f5e73ecdb05f740042f01
+  url: https://huggingface.co/autotrust/JEV-9B
+  verdict: needs_adapter
+  reason: 'AutoTrust JEV-9B (Qwen3.5-9B + LoRA + the same 24-slot decision head /
+    calibration.json layout as the benchmarked JEV-27B): the autotrust source pins
+    model autotrust/JEV-27B and its revision (AutoTrustSource.model Literal, AUTOTRUST_REVISION,
+    H200 GPU map); needs the 9B id + revision b63f651 and an L40S/H100 entry. 27B
+    ran at $79.85/1k, so a 9B is the one that could get under the $63/1k line'
+  config: configs/autotrust_jev9b_vs_jev.yaml
+- key: hf:app2610/laya@6495adafec72d8b109f5104d4f221556cf70719e
+  url: https://huggingface.co/app2610/laya
+  verdict: not_jev
+  reason: re-upload of convaiinnovations/laya (identical model.safetensors sha256
+    891102d3…); Laya is already benchmarked
+  config: null
+- key: https://www.ziprecruiter.com/co/system-one/Jobs
+  url: https://www.ziprecruiter.com/co/system-one/Jobs
+  verdict: not_jev
+  reason: staffing company named System One; unrelated
+  config: null
+- key: https://www.bloomberg.com/profile/company/2668098Z:US
+  url: https://www.bloomberg.com/profile/company/2668098Z:US
+  verdict: not_jev
+  reason: staffing company named System One; unrelated
+  config: null
+- key: https://noulstore.com/pages/about-noul
+  url: https://noulstore.com/pages/about-noul
+  verdict: not_jev
+  reason: carpet retailer named Noul; unrelated
+  config: null
+- key: https://x.com/JevJournalist_
+  url: https://x.com/JevJournalist_
+  verdict: not_jev
+  reason: X profile of a person named Jev; unrelated
+  config: null
+- key: https://x.com/Jev/status/2006823734066426034
+  url: https://x.com/Jev/status/2006823734066426034
+  verdict: not_jev
+  reason: YouTuber named Jev; unrelated
+  config: null
+- key: https://x.com/teslaownersSV/status/2105501710882161086
+  url: https://x.com/teslaownersSV/status/2105501710882161086
+  verdict: not_jev
+  reason: Starship 'one system' post; unrelated
+  config: null
+- key: https://x.com/hotchpotch/status/2105529252028539371
+  url: https://x.com/hotchpotch/status/2105529252028539371
+  verdict: not_jev
+  reason: bekko 17M post; already tracked as hotchpotch_jev_reranker_vs_jev
+  config: null
+- key: https://x.com/noulagent
+  url: https://x.com/noulagent
+  verdict: not_jev
+  reason: trading agent built on TypeSafe Jev; not a new model
+  config: null

@@ -268,6 +268,30 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/anarkali_150m_vs_jev.yaml",
+   "label": "anarkali_150m_vs_jev",
+   "source": "github",
+   "url": "https://github.com/ToufiqQureshi/anarkali",
+   "status": "proposed",
+   "note": "Anarkali 150M (HF toufiqqureshi651/anarkali, Apache-2.0): open typed-decision model, a new family, shipped as ONNX (model.onnx + tokenizer.json + anarkali.json) behind its own Jev-compatible /v1/systemone runtime; the harness has no onnxruntime source. Needs an anarkali source (onnxruntime-gpu, batched forward over many request bodies per call)",
+   "queued_at": "2026-10-03T07:24:17Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/autotrust_jev9b_vs_jev.yaml",
+   "label": "autotrust_jev9b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/autotrust/JEV-9B",
+   "status": "proposed",
+   "note": "AutoTrust JEV-9B (Qwen3.5-9B + LoRA + the same 24-slot decision head / calibration.json layout as the benchmarked JEV-27B): the autotrust source pins model autotrust/JEV-27B and its revision (AutoTrustSource.model Literal, AUTOTRUST_REVISION, H200 GPU map); needs the 9B id + revision b63f651 and an L40S/H100 entry. 27B ran at $79.85/1k, so a 9B is the one that could get under the $63/1k line",
+   "queued_at": "2026-10-03T07:24:17Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
