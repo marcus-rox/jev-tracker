@@ -6,8 +6,13 @@ const GAP_PX = 6
 /** Below this fraction of the viewport height the tip opens upwards, so it stays on screen. */
 const FLIP_AT = 0.6
 
-/** A circled "i"; hover or focus shows `text`. Rendered in a portal so table scroll boxes can't clip it. */
-export default function Info({ text }: { text: string }) {
+/** One tooltip line, or a line with its nested sub-lines. */
+export type Bullet = string | [string, string[]]
+
+const flat = (points: Bullet[]): string => points.map((b) => (typeof b === 'string' ? b : `${b[0]} ${b[1].join(' ')}`)).join(' ')
+
+/** A circled "i"; hover or focus shows `points` as a nested list. Rendered in a portal so table scroll boxes can't clip it. */
+export default function Info({ points }: { points: Bullet[] }) {
   const [at, setAt] = useState<CSSProperties | null>(null)
   const shownAt = useRef<DOMRect | null>(null)
   const show = (el: Element) => {
@@ -34,7 +39,7 @@ export default function Info({ text }: { text: string }) {
       className="info"
       tabIndex={0}
       role="img"
-      aria-label={text}
+      aria-label={flat(points)}
       onMouseEnter={(e) => show(e.currentTarget)}
       onMouseLeave={hide}
       onFocus={(e) => show(e.currentTarget)}
@@ -46,7 +51,11 @@ export default function Info({ text }: { text: string }) {
         <circle cx="8" cy="4.6" r="1.1" fill="currentColor" />
         <path d="M6.6 6.9h2.3v4.6h1v1.2H6.4v-1.2h1V8.1h-.8z" fill="currentColor" />
       </svg>
-      {at && createPortal(<span className="info-tip" role="tooltip" style={{ ...at, width: TIP_WIDTH_PX }}>{text}</span>, document.body)}
+      {at && createPortal(<span className="info-tip" role="tooltip" style={{ ...at, width: TIP_WIDTH_PX }}>
+          <ul>{points.map((b) => (typeof b === 'string'
+            ? <li key={b}>{b}</li>
+            : <li key={b[0]}>{b[0]}<ul>{b[1].map((sub) => <li key={sub}>{sub}</li>)}</ul></li>))}</ul>
+        </span>, document.body)}
     </span>
   )
 }
