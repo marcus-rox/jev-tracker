@@ -352,6 +352,18 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/tasksource_jev_nano_vs_jev.yaml",
+   "label": "tasksource_jev_nano_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/tasksource/tasksource-jev-nano-v0",
+   "status": "proposed",
+   "note": "Tasksource-JEV-Nano (tasksource/tasksource-jev-nano-v0 @5a61da2, Apache-2.0): distinct open 149M ModernBERT/ColBERT decision model with NOUL, Choice and Score via PyLate late interaction. Needs a tasksource source mapping typed questions to context/option encodings, MaxSim length normalization and temperature 0.3600; batch many contexts/options per forward pass (forward_batch > 1), L4 GPU, all 75 cases",
+   "queued_at": "2026-10-03T20:23:25Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }

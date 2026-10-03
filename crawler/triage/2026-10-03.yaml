@@ -4902,3 +4902,218 @@
   verdict: not_jev
   reason: 2023 tweet explaining reranking; unrelated to System One models
   config: null
+- key: "https://github.com/Nagwa-Ahmed/Jev-OpenSource-Alternative-Laya"
+  url: "https://github.com/Nagwa-Ahmed/Jev-OpenSource-Alternative-Laya"
+  verdict: not_jev
+  reason: "Empty repository (GitHub size 0, no contents); no Laya code or weights to evaluate"
+  config: null
+- key: "https://github.com/zlaval/System-One-Model-Game"
+  url: "https://github.com/zlaval/System-One-Model-Game"
+  verdict: not_jev
+  reason: "Game using Jev and other System One models; not a new model"
+  config: null
+- key: "https://github.com/montaguegabe/retrace-announcer"
+  url: "https://github.com/montaguegabe/retrace-announcer"
+  verdict: not_jev
+  reason: "Retrace application using Jev plus GPT and ElevenLabs; no alternative weights"
+  config: null
+- key: "https://github.com/sarikainnovate-code/jev-decision-desk"
+  url: "https://github.com/sarikainnovate-code/jev-decision-desk"
+  verdict: not_jev
+  reason: "Streamlit decision-routing application using the Jev API; not a model"
+  config: null
+- key: "https://github.com/kjitin/jev-examples"
+  url: "https://github.com/kjitin/jev-examples"
+  verdict: not_jev
+  reason: "Java Jev client examples and mock-server tests; no alternative weights"
+  config: null
+- key: "https://github.com/lucasamonrc/pi-auto-router"
+  url: "https://github.com/lucasamonrc/pi-auto-router"
+  verdict: not_jev
+  reason: "Prompt router using already benchmarked Cloudflare Clef or Jev; not a new model"
+  config: null
+- key: "https://github.com/liu-x27/spire-jev"
+  url: "https://github.com/liu-x27/spire-jev"
+  verdict: not_jev
+  reason: "Slay the Spire bot using Jev; application, not a Jev alternative"
+  config: null
+- key: "https://github.com/JiayiCheung/Jev-for-llm"
+  url: "https://github.com/JiayiCheung/Jev-for-llm"
+  verdict: not_jev
+  reason: "Uses Jev to control local Qwen generation; Jev remains the evaluator, no alternative decision model"
+  config: null
+- key: "https://github.com/JordanDalton/jev-scriptc"
+  url: "https://github.com/JordanDalton/jev-scriptc"
+  verdict: not_jev
+  reason: "TypeScript Jev CLI and native compilation benchmarks; no alternative model"
+  config: null
+- key: "https://github.com/gdamiani1/sieve"
+  url: "https://github.com/gdamiani1/sieve"
+  verdict: not_jev
+  reason: "Chrome extension using TypeSafe Jev for feed scoring; no model weights"
+  config: null
+- key: "https://github.com/mc9max/jev-lite"
+  url: "https://github.com/mc9max/jev-lite"
+  verdict: not_jev
+  reason: "Jev Lite is a stateless proxy for the TypeSafe API; explicitly ships no model weights"
+  config: null
+- key: "https://github.com/mcwhittemore/ai-stereotypes-survey"
+  url: "https://github.com/mcwhittemore/ai-stereotypes-survey"
+  verdict: not_jev
+  reason: "Toy survey application using Jev; not a new model"
+  config: null
+- key: "https://github.com/nielsenalmeidati/jev"
+  url: "https://github.com/nielsenalmeidati/jev"
+  verdict: not_jev
+  reason: "Empty repository; no code or weights to evaluate"
+  config: null
+- key: "https://github.com/photuris/overseer-judge"
+  url: "https://github.com/photuris/overseer-judge"
+  verdict: not_jev
+  reason: "Overseer verdict wrapper using TypeSafe Jev; not an alternative model"
+  config: null
+- key: "https://github.com/nadiaenh/betterfeed"
+  url: "https://github.com/nadiaenh/betterfeed"
+  verdict: not_jev
+  reason: "LinkedIn feed application using TypeSafe Jev and Cloudflare Workers; no alternative weights"
+  config: null
+- key: "https://github.com/dillera/prMonster"
+  url: "https://github.com/dillera/prMonster"
+  verdict: not_jev
+  reason: "Firmware PR triage harness using Jev; not a new decision model"
+  config: null
+- key: "https://github.com/HazEOskA/Osa-jev"
+  url: "https://github.com/HazEOskA/Osa-jev"
+  verdict: not_jev
+  reason: "Chat and agent UI with Jev routing plus NVIDIA/OpenRouter generation; no decision-model weights"
+  config: null
+- key: "https://github.com/PaulArthurMiller/upwork_decision_agent"
+  url: "https://github.com/PaulArthurMiller/upwork_decision_agent"
+  verdict: not_jev
+  reason: "Upwork decision application using Jev; not an alternative model"
+  config: null
+- key: "https://github.com/shashwatc12/watermelon"
+  url: "https://github.com/shashwatc12/watermelon"
+  verdict: not_jev
+  reason: "Status-update checking application using Jev; not a new model"
+  config: null
+- key: "https://github.com/BrionesBenjamin22/comment-moderator"
+  url: "https://github.com/BrionesBenjamin22/comment-moderator"
+  verdict: not_jev
+  reason: "Comment moderation application using Jev; not an alternative model"
+  config: null
+- key: "https://github.com/cwsecur1ty/inspectyn"
+  url: "https://github.com/cwsecur1ty/inspectyn"
+  verdict: not_jev
+  reason: "Security evidence tool referencing CISA KEV vulnerabilities; unrelated to Kev decision models"
+  config: null
+- key: "https://github.com/braiden-goodey/KevinCookieCompany.com"
+  url: "https://github.com/braiden-goodey/KevinCookieCompany.com"
+  verdict: not_jev
+  reason: "Kevin Cookie Company website; name match, not a decision model"
+  config: null
+- key: "https://github.com/KevinMColes/KevinMColes.github.io"
+  url: "https://github.com/KevinMColes/KevinMColes.github.io"
+  verdict: not_jev
+  reason: "Kevin personal website; name match, not a decision model"
+  config: null
+- key: "https://github.com/KevinArangoDev/KevinArangoDev"
+  url: "https://github.com/KevinArangoDev/KevinArangoDev"
+  verdict: not_jev
+  reason: "Kevin GitHub profile; name match, not a decision model"
+  config: null
+- key: "https://github.com/CrowBe/weave"
+  url: "https://github.com/CrowBe/weave"
+  verdict: not_jev
+  reason: "Composable agent harness whose initial decision layer is Jev; no new open decision model"
+  config: null
+- key: "hf:mindchain/jevk5-9b-v0.3.3-GGUF@e39f7275fe31549b6e1fbc2a5f0ab1907c95a2d0"
+  url: "https://huggingface.co/mindchain/jevk5-9b-v0.3.3-GGUF"
+  verdict: needs_adapter
+  reason: "JevK5-9B v0.3.3 GGUF needs its own prompt, option-logit readout and jevk5_config.json calibration; the generic gguf source's native /v1/systemone path does not implement JevK5. Existing jevstyle_cascade_9b_vs_jev proposal already covers JevK5; no duplicate proposal"
+  config: null
+- key: "hf:tasksource/tasksource-jev-nano-v0@5a61da27ffed25ff9b9223ec8ea567d66deb2fc6"
+  url: "https://huggingface.co/tasksource/tasksource-jev-nano-v0"
+  verdict: needs_adapter
+  reason: "Tasksource-JEV-Nano (tasksource/tasksource-jev-nano-v0 @5a61da2, Apache-2.0): distinct open 149M ModernBERT/ColBERT decision model with NOUL, Choice and Score via PyLate late interaction. Needs a tasksource source mapping typed questions to context/option encodings, MaxSim length normalization and temperature 0.3600; batch many contexts/options per forward pass (forward_batch > 1), L4 GPU, all 75 cases"
+  config: configs/tasksource_jev_nano_vs_jev.yaml
+- key: "hf:KevinLXu/ppo-LunarLander-v3@cbb8fbefb767ecbd1059165434d20fc42bfa22bd"
+  url: "https://huggingface.co/KevinLXu/ppo-LunarLander-v3"
+  verdict: not_jev
+  reason: "LunarLander reinforcement-learning policy; Kevin username match, not a System One model"
+  config: null
+- key: "hf:ai-ecoverse/kev-4b-vision-intent@f51a4bbe348d5df82cef011b18a13da931c706e0"
+  url: "https://huggingface.co/ai-ecoverse/kev-4b-vision-intent"
+  verdict: needs_adapter
+  reason: "Kev-4B vision-intent open browser-decision fine-tune, with root adapter/head and kev.js ONNX export. Pinned Kev runtime has no vision-input path; needs compatible vision checkpoint loading and batched server/forward inference. Browser-specific ACT/RETRIEVE/VERIFY training is not a distinct general family; not proposed"
+  config: null
+- key: "hf:ai-ecoverse/kev-0.8b-vision-intent@8c319760331b1c7dbb33538b1ad94569f00f7d02"
+  url: "https://huggingface.co/ai-ecoverse/kev-0.8b-vision-intent"
+  verdict: needs_adapter
+  reason: "Kev-0.8B vision-intent now has weights (earlier revision was empty); root adapter/head and kev.js vision ONNX export need compatible vision checkpoint loading and batched inference absent from pinned Kev runtime. Browser-specific sibling of vision-intent 4B; not proposed"
+  config: null
+- key: "hf:Prasanna85/laya-issue-triage@da82718ac473b1b4148ec47b3dd7c5bd897d6bbf"
+  url: "https://huggingface.co/Prasanna85/laya-issue-triage"
+  verdict: needs_adapter
+  reason: "Laya issue-triage is an open Laya fine-tune; LayaSource only loads the pinned convaiinnovations/laya bundle, so an external-repo/revision loader and forward_batch are missing. Narrow bug/feature/question training; not proposed for general reranking"
+  config: null
+- key: "hf:systemonedev/kenning-large-v0.4@33a5990dfe1c152f60a4df26f3d62166ebd77c55"
+  url: "https://huggingface.co/systemonedev/kenning-large-v0.4"
+  verdict: needs_adapter
+  reason: "Kenning large v0.4 @33a5990 still needs a batched DeBERTa cross-encoder source scoring (state, answer) pairs with per-type calibration; same adapter gap as existing kenning_large_v04_vs_jev proposal, awaiting approval, not runnable"
+  config: configs/kenning_large_v04_vs_jev.yaml
+- key: "https://www.datacamp.com/tutorial/jev-api-tutorial"
+  url: "https://www.datacamp.com/tutorial/jev-api-tutorial"
+  verdict: not_jev
+  reason: "Tutorial for the existing TypeSafe Jev API; no new open alternative model"
+  config: null
+- key: "https://www.linkedin.com/pulse/jev-ai-decides-saket-khopkar-vydrf"
+  url: "https://www.linkedin.com/pulse/jev-ai-decides-saket-khopkar-vydrf"
+  verdict: not_jev
+  reason: "Article describing TypeSafe Jev; no new open alternative weights"
+  config: null
+- key: "https://medium.com/ai-software-engineer/jev-ai-is-here-i-tested-it-and-debunked-the-new-model-hype-fec4028e04e9"
+  url: "https://medium.com/ai-software-engineer/jev-ai-is-here-i-tested-it-and-debunked-the-new-model-hype-fec4028e04e9"
+  verdict: not_jev
+  reason: "Review and tutorial of TypeSafe Jev; not an alternative decision model"
+  config: null
+- key: "https://github.com/topics/jev-alternative"
+  url: "https://github.com/topics/jev-alternative"
+  verdict: not_jev
+  reason: "GitHub topic listing, not a model or weight repository"
+  config: null
+- key: "https://www.uniprot.org/taxonomy/11076"
+  url: "https://www.uniprot.org/taxonomy/11076"
+  verdict: not_jev
+  reason: "Japanese encephalitis virus taxonomy; unrelated acronym"
+  config: null
+- key: "https://www.youtube.com/playlist?list=PLNBUWlrS3mcc"
+  url: "https://www.youtube.com/playlist?list=PLNBUWlrS3mcc"
+  verdict: not_jev
+  reason: "Jev tutorial video playlist; no alternative model weights"
+  config: null
+- key: "https://open.spotify.com/episode/53FaKpN4Ov2mOAZneFIJJI"
+  url: "https://open.spotify.com/episode/53FaKpN4Ov2mOAZneFIJJI"
+  verdict: not_jev
+  reason: "Podcast tutorial about Jev; no new decision model"
+  config: null
+- key: "https://x.com/airesearch12/status/2101932736588009879"
+  url: "https://x.com/airesearch12/status/2101932736588009879"
+  verdict: not_jev
+  reason: "Application uses already benchmarked Laya instead of Jev; no new checkpoint or alternative family"
+  config: null
+- key: "https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1791057091295389?thread_ts=1791056462.085079&cid=C0BER5TPUF6"
+  url: "https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1791057091295389?thread_ts=1791056462.085079&cid=C0BER5TPUF6"
+  verdict: not_jev
+  reason: "Internal latency question about existing production, Jev and Kev systems; no new model"
+  config: null
+- key: "https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1791057018097829?thread_ts=1791056462.085079&cid=C0BER5TPUF6"
+  url: "https://rox-myy1001.slack.com/archives/C0BER5TPUF6/p1791057018097829?thread_ts=1791056462.085079&cid=C0BER5TPUF6"
+  verdict: not_jev
+  reason: "Internal cost question about already benchmarked Kev versus production; no new model"
+  config: null
+- key: "https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791055481213829"
+  url: "https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791055481213829"
+  verdict: not_jev
+  reason: "Previous automation status DM; no new model or approval"
+  config: null
