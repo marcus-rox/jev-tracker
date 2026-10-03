@@ -5,12 +5,15 @@ from concurrent.futures import ThreadPoolExecutor
 import pytest
 from pydantic import ValidationError
 
+import jev_tracker.modal_app as modal_app
 from jev_tracker.contract import load_cases
 from jev_tracker.experiment import Experiment, apply_dispatch, sweep_stats
 from jev_tracker.methods import batches
 from jev_tracker.modal_app import (
+    _collect_done,
     _dispatch_case,
     _fanout_pass_item,
+    _reset_workers,
     fanout_plan,
 )
 from jev_tracker.systemone import RawRecord, Usage
@@ -172,6 +175,35 @@ def _exp_run(src: dict):
         {"name": "x", "rerankers": {"prod": {"source": "production"}, "m": src}}
     )
     return exp.scoring_run("e", "m", exp.rerankers["m"])
+
+
+def test_collect_done_times_out_naming_missing_batch_and_worker(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(modal_app, "DISPATCH_STUCK_S", 0)
+    q = _FakeQueue(4, [("case_000", 0, 0.0, 0.1, 1)])
+    expected = {("case_000", bi) for bi in range(4)}
+    with pytest.raises(TimeoutError, match=r"case_000 batch 2 \(worker 2\)"):
+        _collect_done(q, expected, 4)
+
+
+def test_reset_workers_times_out_naming_the_shard_that_never_acked(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(modal_app, "DISPATCH_STUCK_S", 0)
+    run = _exp_run(
+        {
+            "source": "kev",
+            "method": "noul_query_in_state",
+            "shards": 4,
+            "fanout": True,
+        }
+    )
+    q = _FakeQueue(4, [])
+    q._acks = [("reset_ok", w) for w in range(3)]
+    with ThreadPoolExecutor(4) as pool:
+        with pytest.raises(TimeoutError, match=r"shards \[3\]"):
+            _reset_workers(run, q, pool)
 
 
 def test_dispatch_sends_one_item_per_worker_carrying_all_its_batches() -> None:

@@ -39,6 +39,7 @@ validated into the same `SystemOneResponse`:
 Modal credentials come from MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the environment.
 """
 
+import faulthandler
 import functools
 import gzip
 import hashlib
@@ -687,18 +688,57 @@ def _serve_fanout(
             n += 1
             q.put((case.id, bi, t0, time.time() - t0, written), partition="done")
 
-    futs: set = set()
+    pending: dict = {}  # Future -> (case_id, bi, submit time)
+    dumped: set = set()  # futures already covered by a stack dump
+
+    def stuck_watcher() -> None:
+        dump_path = out.parent / (out.name + ".stacks.txt")
+        while True:
+            time.sleep(30)
+            now = time.time()
+            stuck_futs = [
+                f
+                for f, (cid, bi, t0) in pending.items()
+                if now - t0 > STUCK_DUMP_S and f not in dumped and not f.done()
+            ]
+            if not stuck_futs:
+                continue
+            try:
+                with dump_path.open("a") as f:
+                    f.write(
+                        f"# {time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())} stuck: "
+                        + ", ".join(
+                            f"{pending[sf][0]} batch {pending[sf][1]} "
+                            f"age {now - pending[sf][2]:.0f}s"
+                            for sf in stuck_futs
+                        )
+                        + "\n"
+                    )
+                    faulthandler.dump_traceback(file=f, all_threads=True)
+                print(
+                    f"stuck requests on shard {job.shard}; stack dump at {dump_path}",
+                    flush=True,
+                )
+                runs_volume.commit()
+                dumped.update(stuck_futs)
+            except Exception as e:  # noqa: BLE001 - diagnostics must never kill the worker
+                print(f"stuck-request dump failed: {e}", flush=True)
+
     with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
+        watcher = threading.Thread(target=stuck_watcher, daemon=True)
+        watcher.start()
 
         def on_item(item: tuple) -> None:
             case = cases[item[0]]
             for bi in item[1]:
-                futs.add(pool.submit(work, case, bi, item[2]))
+                f = pool.submit(work, case, bi, item[2])
+                pending[f] = (case.id, bi, time.time())
 
         def wait_idle() -> None:
-            nonlocal futs
-            while futs:
-                _, futs = wait(futs, timeout=1)
+            while pending:
+                done_futs, _ = wait(pending, timeout=1)
+                for f in done_futs:
+                    del pending[f]
 
         _fanout_loop(job, q, on_item, wait_idle, reset)
     return n
@@ -797,30 +837,59 @@ SWEEP_REPS = 20
 SWEEP_CASES = 4
 DISPATCH_READY_TIMEOUT_S = 2 * HOUR
 DISPATCH_WARMUP_CASES = 3
+DISPATCH_STUCK_S = 600
+STUCK_DUMP_S = 300
 
 
 def _collect_done(
-    q: modal.Queue, pending: int
+    q: modal.Queue, expected: set[tuple[str, int]], shards: int
 ) -> dict[tuple[str, int], tuple[float, float, float, int]]:
-    """Wait for `pending` fan-out answers; (case_id, batch) -> (recv, worker_start, worker_s,
-    records)."""
+    """Wait for every (case_id, batch) in `expected`; values -> (recv, worker_start,
+    worker_s, records). Raises TimeoutError naming the missing batches and their workers
+    after DISPATCH_STUCK_S with no new answer."""
     got: dict[tuple[str, int], tuple[float, float, float, int]] = {}
-    while len(got) < pending:
-        items = q.get_many(1000, partition="done", block=True)
+    last_progress = time.time()
+    while len(got) < len(expected):
+        try:
+            items = q.get_many(1000, partition="done", block=True, timeout=60)
+        except queue.Empty:
+            items = []
+        if items:
+            last_progress = time.time()
         now = time.time()
         for item in items:
             if item[0] == "error":
                 raise RuntimeError(f"fan-out worker: {item[1]}")
             got[(item[0], item[1])] = (now, item[2], item[3], item[4])
+        if len(got) < len(expected) and time.time() - last_progress > DISPATCH_STUCK_S:
+            missing = ", ".join(
+                f"{cid} batch {bi} (worker {bi % shards})"
+                for cid, bi in sorted(expected - got.keys())
+            )
+            raise TimeoutError(f"fan-out: no answer for {DISPATCH_STUCK_S}s; missing: {missing}")
     return got
 
 
 def _reset_workers(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> None:
     """Send every worker the reset control item and wait for all "ack"s (untimed handshake)."""
     list(pool.map(lambda w: q.put(("reset",), partition=f"w{w}"), range(run.shards)))
-    got = 0
-    while got < run.shards:
-        got += len(q.get_many(1000, partition="ack", block=True))
+    acked: set[int] = set()
+    last_progress = time.time()
+    while len(acked) < run.shards:
+        try:
+            items = q.get_many(1000, partition="ack", block=True, timeout=60)
+        except queue.Empty:
+            items = []
+        if items:
+            last_progress = time.time()
+        for item in items:
+            if item[0] == "reset_ok":
+                acked.add(item[1])
+        if len(acked) < run.shards and time.time() - last_progress > DISPATCH_STUCK_S:
+            missing = sorted(set(range(run.shards)) - acked)
+            raise TimeoutError(
+                f"fan-out reset: no ack for {DISPATCH_STUCK_S}s from shards {missing}"
+            )
 
 
 def _await_workers(run: ScoringRun, q: modal.Queue) -> None:
@@ -864,7 +933,7 @@ def _dispatch_case(
 
     targets = [(w, b) for w, b in enumerate(fanout_plan(n_requests, run.shards)) if b]
     list(pool.map(lambda t: send(*t), targets))
-    recv = _collect_done(q, n_requests)
+    recv = _collect_done(q, {(case.id, bi) for bi in range(n_requests)}, run.shards)
     return [
         {
             "case_id": case.id,
@@ -909,8 +978,14 @@ def _collect_done_sweep(
     got: dict[tuple[str, int], tuple[float, float, float, int]] = {}
     covered = 0
     error = None
+    last_progress = time.time()
     while len(got) + covered < pending:
-        items_ = q.get_many(1000, partition="done", block=True)
+        try:
+            items_ = q.get_many(1000, partition="done", block=True, timeout=60)
+        except queue.Empty:
+            items_ = []
+        if items_:
+            last_progress = time.time()
         now = time.time()
         for item in items_:
             if item[0] == "error":
@@ -918,6 +993,11 @@ def _collect_done_sweep(
                 covered += item[2]
             else:
                 got[(item[0], item[1])] = (now, item[2], item[3], item[4])
+        if len(got) + covered < pending and time.time() - last_progress > DISPATCH_STUCK_S:
+            raise TimeoutError(
+                f"fan-out sweep: no answer for {DISPATCH_STUCK_S}s; "
+                f"{pending - len(got) - covered} requests still pending"
+            )
     return got, error
 
 
