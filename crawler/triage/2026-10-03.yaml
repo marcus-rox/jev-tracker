@@ -4054,3 +4054,326 @@
   verdict: not_jev
   reason: this automation's own hourly Slack DM to Marcus; not a model
   config: null
+- key: https://github.com/GabrielMorais99/JevApplicationTeste
+  url: https://github.com/GabrielMorais99/JevApplicationTeste
+  verdict: not_jev
+  reason: test app using TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/srirsatt/jev-uicheck-fast
+  url: https://github.com/srirsatt/jev-uicheck-fast
+  verdict: not_jev
+  reason: UI-check tool calling Jev, not a model
+  config: null
+- key: https://github.com/Sahilll15/pitchpanel
+  url: https://github.com/Sahilll15/pitchpanel
+  verdict: not_jev
+  reason: app scored by TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/Sahilll15/fallacy-finder
+  url: https://github.com/Sahilll15/fallacy-finder
+  verdict: not_jev
+  reason: app scored by TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/Sahilll15/fineprint
+  url: https://github.com/Sahilll15/fineprint
+  verdict: not_jev
+  reason: app scored by TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/Sahilll15/headline-arena
+  url: https://github.com/Sahilll15/headline-arena
+  verdict: not_jev
+  reason: app scored by TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/Sahilll15/toneradar
+  url: https://github.com/Sahilll15/toneradar
+  verdict: not_jev
+  reason: app scored by TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/bunkerlab-net/laya-shim
+  url: https://github.com/bunkerlab-net/laya-shim
+  verdict: not_jev
+  reason: shim library for Laya/Laya-MLX; tooling, not a model
+  config: null
+- key: https://github.com/intrqu/jevansportfolio
+  url: https://github.com/intrqu/jevansportfolio
+  verdict: not_jev
+  reason: personal portfolio (jevans), unrelated
+  config: null
+- key: https://github.com/joaoh82/coffee-under-fire
+  url: https://github.com/joaoh82/coffee-under-fire
+  verdict: not_jev
+  reason: browser game powered by TypeSafe Jev, not a model
+  config: null
+- key: https://github.com/wami22wakeup/flip
+  url: https://github.com/wami22wakeup/flip
+  verdict: not_jev
+  reason: JEV vs LAYA vs CLM comparison page, not a model
+  config: null
+- key: https://github.com/Zakariakhchiche/copilot-studio-jev
+  url: https://github.com/Zakariakhchiche/copilot-studio-jev
+  verdict: not_jev
+  reason: MCP server / connector calling Jev, not a model
+  config: null
+- key: https://github.com/anupdarvatkar/jev-exception-poc
+  url: https://github.com/anupdarvatkar/jev-exception-poc
+  verdict: not_jev
+  reason: POC routing exceptions through Jev, not a model
+  config: null
+- key: https://github.com/idrisfab/judge-jev
+  url: https://github.com/idrisfab/judge-jev
+  verdict: not_jev
+  reason: judge app using Jev, not a model
+  config: null
+- key: https://github.com/boto-coder/scelestine-adept
+  url: https://github.com/boto-coder/scelestine-adept
+  verdict: not_jev
+  reason: agent plugin that re-ranks with Jev, not a model
+  config: null
+- key: https://github.com/anteloc/ldraw-nova
+  url: https://github.com/anteloc/ldraw-nova
+  verdict: not_jev
+  reason: LEGO agent tooling powered by Jev, not a model
+  config: null
+- key: https://github.com/FerryCorleone/crush-monitor
+  url: https://github.com/FerryCorleone/crush-monitor
+  verdict: not_jev
+  reason: chat-analysis app using own Jev API key, not a model
+  config: null
+- key: https://github.com/chandana-koganti14/drift-guard
+  url: https://github.com/chandana-koganti14/drift-guard
+  verdict: not_jev
+  reason: Claude Code hook powered by Jev, not a model
+  config: null
+- key: https://github.com/nibzard/conjevture
+  url: https://github.com/nibzard/conjevture
+  verdict: not_jev
+  reason: TypeScript probability library with Jev converters, not a model
+  config: null
+- key: https://github.com/serejkaaa512/jev-page-safety
+  url: https://github.com/serejkaaa512/jev-page-safety
+  verdict: not_jev
+  reason: page-safety tool named jev, not a model
+  config: null
+- key: https://github.com/pulseaiclub/phi
+  url: https://github.com/pulseaiclub/phi
+  verdict: not_jev
+  reason: coding agent, unrelated to Jev
+  config: null
+- key: https://github.com/j-ameswong/tag-matching-jev
+  url: https://github.com/j-ameswong/tag-matching-jev
+  verdict: not_jev
+  reason: tag matcher using the Jev decision model, not a new model
+  config: null
+- key: https://github.com/Lewlies/sca-gate
+  url: https://github.com/Lewlies/sca-gate
+  verdict: not_jev
+  reason: dependency gate using CISA KEV, unrelated
+  config: null
+- key: https://github.com/kev-encode/kev-encode
+  url: https://github.com/kev-encode/kev-encode
+  verdict: not_jev
+  reason: profile README of user kev-encode, unrelated
+  config: null
+- key: https://github.com/AAH20/vuln-triage
+  url: https://github.com/AAH20/vuln-triage
+  verdict: not_jev
+  reason: vulnerability triage using CISA KEV, unrelated
+  config: null
+- key: https://github.com/AAH20/VulnTruth
+  url: https://github.com/AAH20/VulnTruth
+  verdict: not_jev
+  reason: scanner-diff tool using CISA KEV, unrelated
+  config: null
+- key: https://github.com/kevenex/kevenex.github.io
+  url: https://github.com/kevenex/kevenex.github.io
+  verdict: not_jev
+  reason: personal site of user kevenex, unrelated
+  config: null
+- key: https://github.com/kevinle3212/kevinle3212
+  url: https://github.com/kevinle3212/kevinle3212
+  verdict: not_jev
+  reason: profile README of user kevinle, unrelated
+  config: null
+- key: https://github.com/sitenexs/06.-layanan.sitenexs
+  url: https://github.com/sitenexs/06.-layanan.sitenexs
+  verdict: not_jev
+  reason: Indonesian service page (layanan), unrelated
+  config: null
+- key: https://github.com/xaviercallens/GWAYA-GwenLayaOpenModel
+  url: https://github.com/xaviercallens/GWAYA-GwenLayaOpenModel
+  verdict: not_jev
+  reason: code-gen gate for Qwen models, not a decision model
+  config: null
+- key: https://github.com/jorgematute/CasaMatuteLayana
+  url: https://github.com/jorgematute/CasaMatuteLayana
+  verdict: not_jev
+  reason: personal site (Layana), unrelated
+  config: null
+- key: https://github.com/plurp911/jev-cli
+  url: https://github.com/plurp911/jev-cli
+  verdict: not_jev
+  reason: CLI for the System One API, not a model
+  config: null
+- key: https://github.com/iamaamir/system-one
+  url: https://github.com/iamaamir/system-one
+  verdict: not_jev
+  reason: System One client runtime for TypeScript, not a model
+  config: null
+- key: hf:mindchain/jevk5-9b-v0.3.3-GGUF@61b5e7d40f0ff03c8f2031b6f8a9b60f213400a4
+  url: https://huggingface.co/mindchain/jevk5-9b-v0.3.3-GGUF
+  verdict: needs_adapter
+  reason: GGUF export; the harness only serves bf16 Hugging Face weights (kev / laya
+    sources)
+  config: null
+- key: hf:OVRLab/granite-jev-1b-research@75dd65d44ea939021dd62db4980aa697016da16f
+  url: https://huggingface.co/OVRLab/granite-jev-1b-research
+  verdict: not_jev
+  reason: Granite-1B residual experts that call the hosted Jev API on disagreement;
+    Jev itself not included, not a decision model
+  config: null
+- key: hf:mindchain/jevk5-4b-v0.3-GGUF@8203dc76a9251fc1afd2d64fd15cd890c2aba834
+  url: https://huggingface.co/mindchain/jevk5-4b-v0.3-GGUF
+  verdict: needs_adapter
+  reason: GGUF export; the harness only serves bf16 Hugging Face weights (kev / laya
+    sources)
+  config: null
+- key: hf:kevinzhou21/Qwen3.5-9B-Distill-Deepseek-V4.1-Flash-20261003@a0f29ed8b08bd4e29a5b97ec8ba7ec7517b1e8a8
+  url: https://huggingface.co/kevinzhou21/Qwen3.5-9B-Distill-Deepseek-V4.1-Flash-20261003
+  verdict: not_jev
+  reason: kevin* account; generic DeepSeek distill of Qwen3.5-9B, not a decision model
+  config: null
+- key: hf:mlboydaisuke/Kev-0.8B-CoreAI@7e209d730ddafe97d0bfeac74a75a1ea802e0f84
+  url: https://huggingface.co/mlboydaisuke/Kev-0.8B-CoreAI
+  verdict: not_jev
+  reason: empty HF repo (only .gitattributes), no weights
+  config: null
+- key: hf:kevinzhou21/Qwen3.5-9B-Distill-Deepseek-V4.1-Flash-Lora-20261003@c7046a2505ea874b87b6d4218f2579b2f3a1162c
+  url: https://huggingface.co/kevinzhou21/Qwen3.5-9B-Distill-Deepseek-V4.1-Flash-Lora-20261003
+  verdict: not_jev
+  reason: kevin* account; LoRA of the same generic distill, not a decision model
+  config: null
+- key: hf:litert-community/Kev-0.8B-LiteRT@98fec4a5828c7f31b1ffd062f738f5c8a1e4ab8d
+  url: https://huggingface.co/litert-community/Kev-0.8B-LiteRT
+  verdict: needs_adapter
+  reason: LiteRT export; the harness only serves bf16 Hugging Face weights (kev /
+    laya sources)
+  config: null
+- key: hf:kevinlu4588/llmfold-aicr@3b2a81cddde9d8c75dce5553dc431c2086b5ff06
+  url: https://huggingface.co/kevinlu4588/llmfold-aicr
+  verdict: not_jev
+  reason: kevin* account; protein-folding model, unrelated
+  config: null
+- key: hf:philipsubhan/laya-typed-decisions@aebac0f5a2770b48a5c3cd2b5fdf9ded9c6a4631
+  url: https://huggingface.co/philipsubhan/laya-typed-decisions
+  verdict: needs_adapter
+  reason: 'Laya-format checkpoint on an external repo (convaiinnovations/laya fine-tune,
+    apache-2.0): the laya source only loads the three checkpoints of the pinned convaiinnovations/laya
+    bundle (LAYA_SUBFOLDER), so it needs a laya-source entry for an external repo
+    + revision, batched via forward_batch like Laya (same gap as openjevx)'
+  config: configs/laya_typed_decisions_vs_jev.yaml
+- key: https://laya-courtyard.com
+  url: https://laya-courtyard.com
+  verdict: not_jev
+  reason: Dubai real-estate developer, unrelated
+  config: null
+- key: https://nandhakishorm.github.io/laya
+  url: https://nandhakishorm.github.io/laya
+  verdict: not_jev
+  reason: docs of the already-tracked Laya model, not a new model
+  config: null
+- key: http://www.laya.org.in
+  url: http://www.laya.org.in
+  verdict: not_jev
+  reason: Indian NGO LAYA, unrelated
+  config: null
+- key: https://www.babynamespedia.com/meaning/Laya/f
+  url: https://www.babynamespedia.com/meaning/Laya/f
+  verdict: not_jev
+  reason: baby-name page, unrelated
+  config: null
+- key: https://www.babynamespedia.com/meaning/Laya/m
+  url: https://www.babynamespedia.com/meaning/Laya/m
+  verdict: not_jev
+  reason: baby-name page, unrelated
+  config: null
+- key: https://layagroup.de/laya-presse
+  url: https://layagroup.de/laya-presse
+  verdict: not_jev
+  reason: German media group LAYA, unrelated
+  config: null
+- key: https://www.jiosaavn.com/song/aw-laya-laya/Ayw6c0RaYV8
+  url: https://www.jiosaavn.com/song/aw-laya-laya/Ayw6c0RaYV8
+  verdict: not_jev
+  reason: song page, unrelated
+  config: null
+- key: https://www.linkedin.com/in/laya-addateegala-laya-878977128
+  url: https://www.linkedin.com/in/laya-addateegala-laya-878977128
+  verdict: not_jev
+  reason: LinkedIn profile, unrelated
+  config: null
+- key: https://x.com/laya
+  url: https://x.com/laya
+  verdict: not_jev
+  reason: dormant X handle @laya, unrelated
+  config: null
+- key: https://www.linkedin.com/in/witney-laya-11b67123a
+  url: https://www.linkedin.com/in/witney-laya-11b67123a
+  verdict: not_jev
+  reason: LinkedIn profile, unrelated
+  config: null
+- key: https://www.systemone.com/technology
+  url: https://www.systemone.com/technology
+  verdict: not_jev
+  reason: System One staffing company, unrelated
+  config: null
+- key: https://www.one-line.com/en/local-information/us
+  url: https://www.one-line.com/en/local-information/us
+  verdict: not_jev
+  reason: ONE shipping line, unrelated
+  config: null
+- key: https://www.one.org/us
+  url: https://www.one.org/us
+  verdict: not_jev
+  reason: ONE campaign org, unrelated
+  config: null
+- key: https://about.fb.com/news/2026/09/introducing-meta-one-subscription-service-more-features-ai
+  url: https://about.fb.com/news/2026/09/introducing-meta-one-subscription-service-more-features-ai
+  verdict: not_jev
+  reason: Meta One subscription news, unrelated
+  config: null
+- key: https://www.one-line.com
+  url: https://www.one-line.com
+  verdict: not_jev
+  reason: ONE shipping line, unrelated
+  config: null
+- key: https://www.legion.org/advocacy/be-the-one
+  url: https://www.legion.org/advocacy/be-the-one
+  verdict: not_jev
+  reason: American Legion campaign, unrelated
+  config: null
+- key: https://onlinenetworkofeducators.org
+  url: https://onlinenetworkofeducators.org
+  verdict: not_jev
+  reason: educator network (ONE), unrelated
+  config: null
+- key: https://www.onepay.com
+  url: https://www.onepay.com
+  verdict: not_jev
+  reason: OnePay banking, unrelated
+  config: null
+- key: https://x.com/marouane53/status/2102009737034575968
+  url: https://x.com/marouane53/status/2102009737034575968
+  verdict: not_jev
+  reason: commentary tweet; mentions GLiClass/GLiNER2 (general classifiers, not System
+    One decision models) and the already-tracked Laya
+  config: null
+- key: https://x.com/TDataScience/status/2096972257377558826
+  url: https://x.com/TDataScience/status/2096972257377558826
+  verdict: not_jev
+  reason: generic RAG-reranker explainer article, unrelated
+  config: null
+- key: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791044650139239
+  url: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791044650139239
+  verdict: not_jev
+  reason: this automation's own report DM
+  config: null

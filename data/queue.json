@@ -340,6 +340,18 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/laya_typed_decisions_vs_jev.yaml",
+   "label": "laya_typed_decisions_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/philipsubhan/laya-typed-decisions",
+   "status": "proposed",
+   "note": "Laya-format checkpoint on an external repo (convaiinnovations/laya fine-tune, apache-2.0): the laya source only loads the three checkpoints of the pinned convaiinnovations/laya bundle (LAYA_SUBFOLDER), so it needs a laya-source entry for an external repo + revision, batched via forward_batch like Laya (same gap as openjevx)",
+   "queued_at": "2026-10-03T17:27:51Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
