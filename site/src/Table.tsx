@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import Info from './Info'
+import Info, { type Bullet } from './Info'
 import { blob, type Row } from './types'
 
 export interface Col {
@@ -8,7 +8,7 @@ export interface Col {
   fmt: (v: number) => string
   source: (r: Row) => string | null
   /** How the number is calculated; shown on the header's info icon. */
-  help: string
+  help: Bullet[]
 }
 
 export type Sort = { key: string; dir: 1 | -1 } | null
@@ -50,7 +50,7 @@ export default function Table({ rows, cols, sort, setSort }: Props) {
           <thead>
             <tr>
               {LABELS.map(([h]) => <th key={h} onClick={() => click(h)}>{h}{arrow(h)}</th>)}
-              {cols.map((c) => <th key={c.head} className="n" onClick={() => click(c.head)}>{c.head}<Info text={c.help} />{arrow(c.head)}</th>)}
+              {cols.map((c) => <th key={c.head} className="n" onClick={() => click(c.head)}>{c.head}<Info points={c.help} />{arrow(c.head)}</th>)}
             </tr>
           </thead>
           <tbody>
