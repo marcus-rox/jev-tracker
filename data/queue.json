@@ -316,6 +316,18 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/rizzo_flow_4b_vs_jev.yaml",
+   "label": "rizzo_flow_4b_vs_jev",
+   "source": "github",
+   "url": "https://github.com/7hemas7er/jev-hooks",
+   "status": "proposed",
+   "note": "points at Rizzo Flow (HF rizzoaiacademy/rizzo-flow @55633c8, Apache-2.0): new open typed-decision family, Spark-X2.5-4B (and 1.7B) + LoRA, answer = softmax over answer-letter logits at the last prompt position; served by its own `rizzo serve` llama.cpp runtime (Q8_0 GGUF) or the merged BF16 checkpoint with trust_remote_code (modeling_spark.py). Needs a rizzo source (its prompt + letter-logit readout, batched forward or llama-server slots); 4B is within the budget line",
+   "queued_at": "2026-10-03T11:24:49Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
