@@ -1,0 +1,62 @@
+# Timed rerun of 2026_09_28_17_56_26_actual-clam (no per-request start times were saved, so its latency could not be
+# derived): same bf16 arms, serving and GPUs, weights pinned to the Hub revisions that run used.
+# FP8 / vLLM / SGLang arms are not rerun (that code was dropped, docs/PLAN.md).
+name: rerun_kev_sizes_v1
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev4b_noul:
+    source: kev
+    model: jaredpalmer/kev-4b@139fdd94f1b6a6ad80cc15e08fcb99cac885a101
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev4b_score:
+    source: kev
+    model: jaredpalmer/kev-4b@139fdd94f1b6a6ad80cc15e08fcb99cac885a101
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev9b_noul:
+    source: kev
+    model: jaredpalmer/kev-9b@2629c06a5aeb0feb3b9783bafed17ed8f39ecf5c
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev9b_score:
+    source: kev
+    model: jaredpalmer/kev-9b@2629c06a5aeb0feb3b9783bafed17ed8f39ecf5c
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev27b_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 25
+    max_chars: 24000
+    shards: 10
+  kev27b_score:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: score_query_in_question
+    max_items: 25
+    max_chars: 24000
+    shards: 10

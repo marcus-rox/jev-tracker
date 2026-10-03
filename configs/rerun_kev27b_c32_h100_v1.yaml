@@ -1,0 +1,29 @@
+# Timed rerun of 2026_09_29_00_07_02_cuddly-horse (no per-request start times were saved, so its latency could not be
+# derived): same bf16 arms, serving and GPUs, weights pinned to the Hub revisions that run used.
+# FP8 / vLLM / SGLang arms are not rerun (that code was dropped, docs/PLAN.md).
+name: rerun_kev27b_c32_h100_v1
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev27b_batched_c32_noul:
+    source: kev
+    model: jaredpalmer/kev-27b@01b81998019be550f0ae858727df49bac9511195
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    concurrency: 32
+    gpu: H100

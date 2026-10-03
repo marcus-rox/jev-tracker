@@ -1,0 +1,88 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "kev27b_batched_c32_noul": {
+   "gpu": "H100",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 159.93322110176086,
+   "warm_gpu_s": 958.261233329773,
+   "in_function_s": 1118.2830502986908,
+   "warm_usd": 1.3235120850257494,
+   "in_function_usd": 1.54452781775054,
+   "requests": 2790,
+   "forward_passes": 124,
+   "resident_gb": 65.515230208,
+   "peak_gb": 70.666049536,
+   "warm_usd_per_1k": 17.646827800343324
+  }
+ },
+ "shards": {
+  "kev27b_batched_c32_noul": [
+   {
+    "reranker": "kev27b_batched_c32_noul",
+    "shard": 0,
+    "gpu": "H100",
+    "load_s": 33.34947490692139,
+    "warm_s": 350.4812092781067,
+    "total_s": 383.84540462493896,
+    "requests": 1078,
+    "device": "NVIDIA H100 80GB HBM3",
+    "resident_gb": 65.515230208,
+    "peak_gb": 70.603400192,
+    "forward_passes": 47,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_c32_noul",
+    "shard": 1,
+    "gpu": "H100",
+    "load_s": 59.896867752075195,
+    "warm_s": 267.41107177734375,
+    "total_s": 327.3292808532715,
+    "requests": 759,
+    "device": "NVIDIA H100 80GB HBM3",
+    "resident_gb": 65.515230208,
+    "peak_gb": 70.599318016,
+    "forward_passes": 31,
+    "graphs": {
+     "captured": 23,
+     "kept": 23,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_c32_noul",
+    "shard": 2,
+    "gpu": "H100",
+    "load_s": 66.68687844276428,
+    "warm_s": 340.3689522743225,
+    "total_s": 407.10836482048035,
+    "requests": 953,
+    "device": "NVIDIA H100 80GB HBM3",
+    "resident_gb": 65.515230208,
+    "peak_gb": 70.666049536,
+    "forward_passes": 46,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ]
+ }
+}

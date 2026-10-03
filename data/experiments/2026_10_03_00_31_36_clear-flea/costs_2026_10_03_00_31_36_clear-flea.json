@@ -1,0 +1,250 @@
+{
+ "cases": 75,
+ "rerankers": {
+  "kev27b_batched_H100_noul": {
+   "gpu": "H100",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 145.47297883033752,
+   "warm_gpu_s": 947.8150153160095,
+   "in_function_s": 1093.3927612304688,
+   "warm_usd": 1.3090841865538598,
+   "in_function_usd": 1.5101503461010743,
+   "requests": 2790,
+   "forward_passes": 300,
+   "resident_gb": 65.515230208,
+   "peak_gb": 70.669076992,
+   "warm_usd_per_1k": 17.45445582071813
+  },
+  "kev27b_batched_A100_noul": {
+   "gpu": "A100-80GB",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 206.13102102279663,
+   "warm_gpu_s": 2341.441356420517,
+   "in_function_s": 2548.2243773937225,
+   "warm_usd": 2.290304277196293,
+   "in_function_usd": 2.4925711569914437,
+   "requests": 2790,
+   "forward_passes": 299,
+   "resident_gb": 65.488884736,
+   "peak_gb": 70.5888896,
+   "warm_usd_per_1k": 30.53739036261724
+  },
+  "kev27b_batched_RTXPRO6000_noul": {
+   "gpu": "RTX-PRO-6000",
+   "shards": 3,
+   "unmeasured": 0,
+   "resumed": 0,
+   "load_s": 139.1984486579895,
+   "warm_gpu_s": 1461.7037234306335,
+   "in_function_s": 1601.0433104038239,
+   "warm_usd": 1.6461122651786422,
+   "in_function_usd": 1.8030309344443702,
+   "requests": 2790,
+   "forward_passes": 299,
+   "resident_gb": 65.488884736,
+   "peak_gb": 70.59828736,
+   "warm_usd_per_1k": 21.94816353571523
+  }
+ },
+ "shards": {
+  "kev27b_batched_H100_noul": [
+   {
+    "reranker": "kev27b_batched_H100_noul",
+    "shard": 0,
+    "gpu": "H100",
+    "load_s": 34.02447509765625,
+    "warm_s": 347.86747193336487,
+    "total_s": 381.9017107486725,
+    "requests": 1078,
+    "device": "NVIDIA H100 80GB HBM3",
+    "resident_gb": 65.515230208,
+    "peak_gb": 70.514397184,
+    "forward_passes": 116,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_H100_noul",
+    "shard": 1,
+    "gpu": "H100",
+    "load_s": 57.69177603721619,
+    "warm_s": 273.20265650749207,
+    "total_s": 330.98703598976135,
+    "requests": 759,
+    "device": "NVIDIA H100 80GB HBM3",
+    "resident_gb": 65.515230208,
+    "peak_gb": 70.669076992,
+    "forward_passes": 78,
+    "graphs": {
+     "captured": 22,
+     "kept": 22,
+     "pending": 1,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_H100_noul",
+    "shard": 2,
+    "gpu": "H100",
+    "load_s": 53.75672769546509,
+    "warm_s": 326.7448868751526,
+    "total_s": 380.5040144920349,
+    "requests": 953,
+    "device": "NVIDIA H100 80GB HBM3",
+    "resident_gb": 65.515230208,
+    "peak_gb": 70.638419968,
+    "forward_passes": 106,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ],
+  "kev27b_batched_A100_noul": [
+   {
+    "reranker": "kev27b_batched_A100_noul",
+    "shard": 0,
+    "gpu": "A100-80GB",
+    "load_s": 53.73396635055542,
+    "warm_s": 917.2997789382935,
+    "total_s": 971.0764882564545,
+    "requests": 1078,
+    "device": "NVIDIA A100 80GB PCIe",
+    "resident_gb": 65.488884736,
+    "peak_gb": 70.439719936,
+    "forward_passes": 115,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_A100_noul",
+    "shard": 1,
+    "gpu": "A100-80GB",
+    "load_s": 77.6032350063324,
+    "warm_s": 650.1034135818481,
+    "total_s": 728.2388846874237,
+    "requests": 759,
+    "device": "NVIDIA A100-SXM4-80GB",
+    "resident_gb": 65.488884736,
+    "peak_gb": 70.516793344,
+    "forward_passes": 78,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 2,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_A100_noul",
+    "shard": 2,
+    "gpu": "A100-80GB",
+    "load_s": 74.79381966590881,
+    "warm_s": 774.0381639003754,
+    "total_s": 848.9090044498444,
+    "requests": 953,
+    "device": "NVIDIA A100-SXM4-80GB",
+    "resident_gb": 65.488884736,
+    "peak_gb": 70.5888896,
+    "forward_passes": 106,
+    "graphs": {
+     "captured": 16,
+     "kept": 16,
+     "pending": 5,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ],
+  "kev27b_batched_RTXPRO6000_noul": [
+   {
+    "reranker": "kev27b_batched_RTXPRO6000_noul",
+    "shard": 0,
+    "gpu": "RTX-PRO-6000",
+    "load_s": 46.046568870544434,
+    "warm_s": 548.648024559021,
+    "total_s": 594.7139103412628,
+    "requests": 1078,
+    "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "resident_gb": 65.488884736,
+    "peak_gb": 70.435931648,
+    "forward_passes": 115,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_RTXPRO6000_noul",
+    "shard": 1,
+    "gpu": "RTX-PRO-6000",
+    "load_s": 46.3971643447876,
+    "warm_s": 409.7680974006653,
+    "total_s": 456.2704405784607,
+    "requests": 759,
+    "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "resident_gb": 65.488884736,
+    "peak_gb": 70.59828736,
+    "forward_passes": 78,
+    "graphs": {
+     "captured": 22,
+     "kept": 22,
+     "pending": 1,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   },
+   {
+    "reranker": "kev27b_batched_RTXPRO6000_noul",
+    "shard": 2,
+    "gpu": "RTX-PRO-6000",
+    "load_s": 46.75471544265747,
+    "warm_s": 503.28760147094727,
+    "total_s": 550.0589594841003,
+    "requests": 953,
+    "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "resident_gb": 65.488884736,
+    "peak_gb": 70.568311296,
+    "forward_passes": 106,
+    "graphs": {
+     "captured": 21,
+     "kept": 21,
+     "pending": 0,
+     "failed": 0
+    },
+    "option_isolation": null,
+    "resumed": 0
+   }
+  ]
+ }
+}

@@ -5,12 +5,16 @@
 experiments:
   2026_09_29_08_47_55_good-midge: 'kev27b_timed: Kev-27B batched, 3 x H100, R-1 timers (baseline)'
   2026_09_28_17_56_26_actual-clam: 'kev_sizes: Kev 4B / 9B / 27B, first (sequential) run'
+  2026_10_03_00_31_36_proper-bee: 'rerun_kev_sizes_v1: timed rerun of actual-clam, weights pinned (kev-4b@139fdd9, kev-9b@2629c06, kev-27b@01b8199)'
   2026_09_28_04_15_00_super-pigeon: 'clm_kev4b_jev: CLM-8B cosine'
   2026_09_28_22_15_35_pretty-sawfly: 'kev27b_batched: batched serving on H200'
   2026_09_28_23_23_53_dear-pony: 'kev27b_fp8: FP8 W8A8 on H200'
   2026_09_28_23_33_26_busy-sawfly: 'kev27b_fp8_h100: bf16 vs FP8 on H100'
+  2026_10_03_00_31_36_rested-hermit: 'rerun_kev27b_bf16_h100_v1: timed rerun of busy-sawfly bf16 arms, kev-27b@01b8199'
   2026_09_29_00_07_02_cuddly-horse: 'kev27b_fp8_bigbatch_h100: 32 / 64 requests in flight'
+  2026_10_03_00_31_36_quick-moray: 'rerun_kev27b_c32_h100_v1: timed rerun of cuddly-horse c32 arm, kev-27b@01b8199'
   2026_09_29_00_31_07_real-koi: 'kev27b_cheap_gpu: batched on H100 / A100 / RTX PRO 6000 / L40S'
+  2026_10_03_00_31_36_clear-flea: 'rerun_kev27b_cheap_gpu_v1: timed rerun of real-koi non-FP8 arms, kev-27b@01b8199'
   2026_09_29_22_00_38_super-orca: 'kev27b_bank_width_full: H-1 wider CUDA-graph buffer, 75 cases'
   2026_09_29_21_56_46_pumped-egret: 'kev27b_vllm_full: H-2 vLLM, 75 cases (readout arm killed)'
   2026_09_29_21_57_06_exact-jay: 'kev27b_sglang_full: H-3 SGLang, 75 cases (readout arm killed)'
@@ -126,7 +130,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev4b_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -141,7 +145,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev4b_score
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
   label: kev4b_score
   family: kev4b
   serving: first run
@@ -156,7 +160,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev9b_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
   label: kev9b_noul
   family: kev9b
   serving: first run
@@ -171,7 +175,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev9b_score
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
   label: kev9b_score
   family: kev9b
   serving: first run
@@ -186,7 +190,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev27b_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
   label: kev27b_noul
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -201,7 +205,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev27b_score
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
   label: kev27b_score
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -276,7 +280,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_bf16_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_rested-hermit (same config, timed, weights pinned)'
   label: kev27b_bf16_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -291,7 +295,7 @@ rows:
   highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_bf16_score
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_rested-hermit (same config, timed, weights pinned)'
   label: kev27b_bf16_score
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -366,7 +370,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_batched_c32_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_quick-moray (same config, timed, weights pinned)'
   label: kev27b_batched_c32_noul
   family: kev27b
   serving: 'batched: 12 children, 32 in flight'
@@ -441,7 +445,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_H100_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_clear-flea (same config, timed, weights pinned)'
   label: kev27b_batched_H100_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -456,7 +460,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_A100_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_clear-flea (same config, timed, weights pinned)'
   label: kev27b_batched_A100_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -471,7 +475,7 @@ rows:
   highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_RTXPRO6000_noul
-  deprecated: 'no per-request start times saved: latency not derivable; timed rerun replaces it'
+  deprecated: 'superseded by 2026_10_03_00_31_36_clear-flea (same config, timed, weights pinned)'
   label: kev27b_batched_RTXPRO6000_noul
   family: kev27b
   serving: 'batched: 12 children, 16 in flight'
@@ -1530,6 +1534,174 @@ rows:
   serving: 'batched: 12 children, 16 in flight'
   runtime: PyTorch
   gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_proper-bee
+  reranker: kev4b_noul
+  label: kev4b_noul
+  family: kev4b
+  serving: first run
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_proper-bee
+  reranker: kev4b_score
+  label: kev4b_score
+  family: kev4b
+  serving: first run
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_proper-bee
+  reranker: kev9b_noul
+  label: kev9b_noul
+  family: kev9b
+  serving: first run
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_proper-bee
+  reranker: kev9b_score
+  label: kev9b_score
+  family: kev9b
+  serving: first run
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_proper-bee
+  reranker: kev27b_noul
+  label: kev27b_noul
+  family: kev27b
+  serving: 'first run: 25 children, 1 in flight'
+  runtime: PyTorch
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_proper-bee
+  reranker: kev27b_score
+  label: kev27b_score
+  family: kev27b
+  serving: 'first run: 25 children, 1 in flight'
+  runtime: PyTorch
+  gpu: H200
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_rested-hermit
+  reranker: kev27b_bf16_noul
+  label: kev27b_bf16_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_rested-hermit
+  reranker: kev27b_bf16_score
+  label: kev27b_bf16_score
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_quick-moray
+  reranker: kev27b_batched_c32_noul
+  label: kev27b_batched_c32_noul
+  family: kev27b
+  serving: 'batched: 12 children, 32 in flight'
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_clear-flea
+  reranker: kev27b_batched_H100_noul
+  label: kev27b_batched_H100_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_clear-flea
+  reranker: kev27b_batched_A100_noul
+  label: kev27b_batched_A100_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: A100-80GB
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+  highlight: false
+- experiment: 2026_10_03_00_31_36_clear-flea
+  reranker: kev27b_batched_RTXPRO6000_noul
+  label: kev27b_batched_RTXPRO6000_noul
+  family: kev27b
+  serving: 'batched: 12 children, 16 in flight'
+  runtime: PyTorch
+  gpu: RTX-PRO-6000
   buffer: 4,096 x 16 (default)
   queries: 75
   tables:
