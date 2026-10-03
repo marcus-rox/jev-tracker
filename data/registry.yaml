@@ -83,6 +83,7 @@ experiments:
   2026_10_03_12_01_09_first-bird: 'fanout_star_hare_matilda_noul: fan-out latency, 46 x H200, original requests, one query at a time (3.43 s/query mean)'
   2026_10_03_12_10_25_holy-ox: 'fanout_star_hare_matilda_score: fan-out latency, 46 x H200, original requests, one query at a time (2.98 s/query mean)'
   2026_10_03_13_09_47_mint-llama: 'fanout_vast_filly_kev4b_ba_lora_noul: fan-out latency, 46 x L40S, original requests, one query at a time (0.45 s/query mean)'
+  2026_10_03_13_19_27_noted-oriole: 'fanout_keen_emu_kev4b_noul: fan-out latency, 46 x L40S, original requests, one query at a time (1.48 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1086,7 +1087,9 @@ rows:
   - appendix
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_13_19_27_noted-oriole
+    reranker: keen_emu_kev4b_noul
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -1606,7 +1609,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_noul
-  pending_fanout: 'hidden until its fan-out latency run lands (Marcus, 2026-10-03)'
+  latency_from:
+    experiment: 2026_10_03_13_19_27_noted-oriole
+    reranker: keen_emu_kev4b_noul
   label: kev4b_noul
   family: kev4b
   serving: first run

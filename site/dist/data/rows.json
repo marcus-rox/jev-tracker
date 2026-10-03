@@ -15,6 +15,7 @@
   "2026_09_29_21_56_46_pumped-egret": "kev27b_vllm_full: H-2 vLLM, 75 cases (readout arm killed)",
   "2026_09_29_21_57_06_exact-jay": "kev27b_sglang_full: H-3 SGLang, 75 cases (readout arm killed)",
   "2026_09_30_01_06_44_true-coyote": "liquid_d1_smoke: LiquidAI d1, first 2 cases",
+  "2026_10_01_23_53_13_keen-emu": "kev4b_vs_jev: Kev-4B rerun (R-4 validation), 10 x L40S",
   "2026_10_02_00_08_39_safe-joey": "kev27b_batched_v1: Kev-27B @01b8199 (2026-09-24 weights) rerun (R-4 validation), 3 x H200",
   "2026_10_01_23_53_25_fit-macaw": "kev27b_batched: Kev-27B v2 (Hub main since 2026-09-30, round 23), 3 x H200",
   "2026_10_02_03_29_31_humble-sawfly": "kev9b_v2_vs_jev: Kev-9B v2 @db029f0, 3 x H100, batched (daily 2026-10-02)",
@@ -943,6 +944,51 @@
     "cost": "data/experiments/2026_09_30_01_06_44_true-coyote/costs_2026_09_30_01_06_44_true-coyote.json",
     "latency": "data/experiments/2026_09_30_01_06_44_true-coyote/latency_2026_09_30_01_06_44_true-coyote.json",
     "config": "data/experiments/2026_09_30_01_06_44_true-coyote/config_2026_09_30_01_06_44_true-coyote.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_01_23_53_13_keen-emu",
+   "reranker": "kev4b_noul",
+   "label": "kev4b_noul",
+   "family": "kev4b",
+   "serving": "first run",
+   "runtime": "PyTorch",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7237242390666667,
+    "100": 0.7801725590533334,
+    "150": 0.83504770196,
+    "200": 0.8836481286533333
+   },
+   "mean_kept_mass": 0.8056481571833334,
+   "cost": {
+    "warm_gpu_s": 1016.7349450588226,
+    "load_s": 124.21205496788025,
+    "warm_usd": 0.5510703402218818,
+    "in_function_usd": 0.6186081799173354,
+    "usd_per_query": 0.007347604536291758,
+    "usd_per_1k": 7.347604536291758,
+    "peak_gb": 16.832966144
+   },
+   "latency": {
+    "s_per_query": 1.4760266666666666,
+    "p50_s": 1.262,
+    "p95_s": 4.03
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_01_23_53_13_keen-emu/kept_mass_2026_10_01_23_53_13_keen-emu.json",
+    "cost": "data/experiments/2026_10_01_23_53_13_keen-emu/costs_2026_10_01_23_53_13_keen-emu.json",
+    "latency": "data/experiments/2026_10_03_13_19_27_noted-oriole/latency_2026_10_03_13_19_27_noted-oriole.json",
+    "config": "data/experiments/2026_10_01_23_53_13_keen-emu/config_2026_10_01_23_53_13_keen-emu.yaml"
    }
   },
   {
@@ -1888,6 +1934,51 @@
     "cost": "data/experiments/2026_10_02_20_58_42_vast-filly/costs_2026_10_02_20_58_42_vast-filly.json",
     "latency": "data/experiments/2026_10_03_13_09_47_mint-llama/latency_2026_10_03_13_09_47_mint-llama.json",
     "config": "data/experiments/2026_10_02_20_58_42_vast-filly/config_2026_10_02_20_58_42_vast-filly.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_00_31_36_proper-bee",
+   "reranker": "kev4b_noul",
+   "label": "kev4b_noul",
+   "family": "kev4b",
+   "serving": "first run",
+   "runtime": "PyTorch",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7237242390666667,
+    "100": 0.7801725590533334,
+    "150": 0.83504770196,
+    "200": 0.8836481286533333
+   },
+   "mean_kept_mass": 0.8056481571833334,
+   "cost": {
+    "warm_gpu_s": 1152.6645958423615,
+    "load_s": 169.3755760192871,
+    "warm_usd": 0.6247442109465599,
+    "in_function_usd": 0.717029710858345,
+    "usd_per_query": 0.008329922812620799,
+    "usd_per_1k": 8.329922812620799,
+    "peak_gb": 16.832966144
+   },
+   "latency": {
+    "s_per_query": 1.4760266666666666,
+    "p50_s": 1.262,
+    "p95_s": 4.03
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
+    "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
+    "latency": "data/experiments/2026_10_03_13_19_27_noted-oriole/latency_2026_10_03_13_19_27_noted-oriole.json",
+    "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
    }
   },
   {
