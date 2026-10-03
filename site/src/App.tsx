@@ -31,10 +31,10 @@ const keptCol = (k: K): Col => ({
   head: `@${k}`, value: (r) => r.kept_mass?.[k] ?? null, fmt: f(3), source: (r) => r.sources.kept_mass,
   math: String.raw`\text{kept@}${k} = \frac{1}{|Q|} \sum_{q \in Q} \dfrac{\sum_{i \in \text{top}_{${k}}(q)} r_i}{\sum_{i \in \text{best}_{${k}}(q)} r_i}`,
   help: [
-    'Q: the queries. r_i: the rating of child i.',
-    `top_${k}(q): the ${k} children that this ranker puts first.`,
-    `best_${k}(q): the ${k} children of the query with the highest ratings.`,
-    `If the query has fewer than ${k} labeled children, k is the number of labeled children.`,
+    String.raw`\(Q\): the queries. \(r_i\): the rating of child \(i\).`,
+    String.raw`\(\text{top}_{${k}}(q)\): the ${k} children that this ranker puts first.`,
+    String.raw`\(\text{best}_{${k}}(q)\): the ${k} children of the query with the highest ratings.`,
+    String.raw`If the query has fewer than ${k} labeled children, \(k\) is the number of labeled children.`,
     'If all ratings are 0, the value is 1.0.',
     'A value of 1.0 is equal to the ideal order.',
     'A rating is the mean of 3 grader votes. Each vote is 0 to 3.',
@@ -47,20 +47,20 @@ const MEAN: Col = {
   help: [usedBy('best-quality', 'quality > prod', 'quality')],
 }
 const API_ROWS: Bullet = 'For production and Jev rows: the hosted-API bill for the run.'
-const GPUS: Bullet = 'G: the GPUs in the run.'
+const GPUS: Bullet = String.raw`\(G\): the GPUs in the run.`
 const RATE = String.raw`\left(p_{\text{GPU}} + m \cdot p_{\text{RAM}}\right)`
 const RATE_KEYS: Bullet[] = [
-  'p_GPU: the Modal price per second for the GPU type.',
-  'm: the reserved host RAM, in GiB. p_RAM: the Modal price per GiB-second.',
+  String.raw`\(p_{\text{GPU}}\): the Modal price per second for the GPU type.`,
+  String.raw`\(m\): the reserved host RAM, in GiB. \(p_{\text{RAM}}\): the Modal price per GiB-second.`,
 ]
-const PER_QUERY: Bullet = 'C: $ / run. N: the number of queries in the run.'
+const PER_QUERY: Bullet = String.raw`\(C\): $ / run. \(N\): the number of queries in the run.`
 const COST: Col[] = [
   { head: 'warm GPU-s', value: (r) => r.cost?.warm_gpu_s ?? null, fmt: f(0), source: (r) => r.sources.cost,
     math: String.raw`W = \sum_{g \in G} \left(t^{\text{last}}_g - t^{\text{loaded}}_g\right)`,
     help: [
       GPUS,
-      't loaded: the time when GPU g has the model loaded.',
-      't last: the time of the last answer of GPU g.',
+      String.raw`\(t^{\text{loaded}}_g\): the time when GPU \(g\) has the model loaded.`,
+      String.raw`\(t^{\text{last}}_g\): the time of the last answer of GPU \(g\).`,
       'Each GPU has 16 requests in progress at the same time (the default).',
       'Hosted-API rows show no value.',
     ] },
@@ -68,14 +68,14 @@ const COST: Col[] = [
     math: String.raw`L = \sum_{g \in G} \left(t^{\text{loaded}}_g - t^{\text{start}}_g\right)`,
     help: [
       GPUS,
-      't start: the time when the container of GPU g starts.',
-      't loaded: the time when GPU g has the model loaded.',
+      String.raw`\(t^{\text{start}}_g\): the time when the container of GPU \(g\) starts.`,
+      String.raw`\(t^{\text{loaded}}_g\): the time when GPU \(g\) has the model loaded.`,
       '$ / run does not include this time.',
     ] },
   { head: '$ / run', value: (r) => r.cost?.warm_usd ?? null, fmt: f(2), source: (r) => r.sources.cost,
     math: String.raw`C = W \cdot ${RATE}`,
     help: [
-      'W: warm GPU-s. One run sends each query one time.',
+      String.raw`\(W\): warm GPU-s. One run sends each query one time.`,
       ...RATE_KEYS,
       'Load time, failed calls, CPU and network are not included.',
       API_ROWS,
@@ -84,7 +84,7 @@ const COST: Col[] = [
     math: String.raw`C_{\text{+load}} = \sum_{g \in G} \left(t^{\text{end}}_g - t^{\text{start}}_g\right) \cdot ${RATE}`,
     help: [
       GPUS,
-      'The time includes start-up, answers and the time after the last answer.',
+      String.raw`\(t^{\text{end}}_g - t^{\text{start}}_g\) includes start-up, answers and the time after the last answer.`,
       ...RATE_KEYS,
       API_ROWS,
     ] },
@@ -96,17 +96,17 @@ const COST: Col[] = [
     help: [PER_QUERY, 'This is a linear estimate.', usedBy('cheapest', 'cost < prod', 'cost')] },
   { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost,
     math: String.raw`\max_{g \in G} \text{peak}_g`,
-    help: [GPUS, 'peak_g: the maximum memory that GPU g allocates at one time, in GB.'] },
+    help: [GPUS, String.raw`\(\text{peak}_g\): the maximum memory that GPU \(g\) allocates at one time, in GB.`] },
 ]
 const T_Q = String.raw`T_q = \max_{j \in q} \left(s_j + \ell_j\right) - \min_{j \in q} s_j`
 const wall = (stat: string) => String.raw`\begin{gathered} ${stat} \\ ${T_Q} \end{gathered}`
 const WALL: Bullet[] = [
-  'T_q: the time for query q, in seconds.',
-  's_j: the time when request j of the query is sent.',
-  'ℓ_j: the time until the answer to request j is received.',
-  'N: the number of queries.',
+  String.raw`\(T_q\): the time for query \(q\), in seconds.`,
+  String.raw`\(s_j\): the time when request \(j\) of the query is sent.`,
+  String.raw`\(\ell_j\): the time until the answer to request \(j\) is received.`,
+  String.raw`\(N\): the number of queries.`,
 ]
-const SORTED: Bullet = 'T_(i): position i in the sorted list of all T_q. The first position is 0.'
+const SORTED: Bullet = String.raw`\(T_{(i)}\): position \(i\) in the sorted list of all \(T_q\). The first position is 0.`
 const LATENCY: Col[] = [
   { head: 's / query (mean)', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency,
     math: wall(String.raw`\bar{T} = \frac{1}{N} \sum_{q} T_q`),
