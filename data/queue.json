@@ -220,6 +220,42 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/jevstyle_cascade_9b_vs_jev.yaml",
+   "label": "jevstyle_cascade_9b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/chaoliangUNSW/Jev-Style-Cascade-9B",
+   "status": "proposed",
+   "note": "Jev-Style cascade: Jev-Style-2B-Decision-v3 answers first, JevK5-9B takes the unsure questions; claims 87.9% on JevBench public items (Jev 86.6%). Needs a jev-style source (jev-style[torch] >= 0.4.0 + jevk5 runtime, both tiers resident on one >= 32 GB GPU); same missing jev-style adapter as the proposed jevstyle_2b",
+   "queued_at": "2026-10-03T04:25:32Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/rune_26b_a4b_gguf_vs_jev.yaml",
+   "label": "rune_26b_a4b_gguf_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/owao/surogate-rune-26b-a4b-systemone",
+   "status": "queued",
+   "note": "",
+   "queued_at": "2026-10-03T04:25:32Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/gutsy_0p8b_vs_jev.yaml",
+   "label": "gutsy_0p8b_vs_jev",
+   "source": "hackernews",
+   "url": "https://news.ycombinator.com/item?id=49939547",
+   "status": "proposed",
+   "note": "gutsy-0.8b v0.4 (kouhxp/gutsy): Qwen3.5-0.8B decision fine-tune, calibrated, shipped as Q8_0 / Q4_K_M GGUF behind its own gutsy-inference runtime (llama-cpp-python, /v1/systemone), not llama-server's decision endpoint; needs a gutsy source adapter",
+   "queued_at": "2026-10-03T04:25:32Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }
