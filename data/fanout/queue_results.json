@@ -2575,5 +2575,91 @@
    }
   },
   "app": "jev-ff-merry-corgi-minicpm5-jev-noul"
+ },
+ {
+  "config": "fanout_merry_corgi_minicpm5_jev_score.yaml",
+  "gpu": "L4",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_09_56_01_subtle-grub",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 3.25,
+   "median_s_per_query": 2.65,
+   "p95_s_per_query": 8.19,
+   "max_s_per_query": 14.01
+  },
+  "queue_overhead": {
+   "p50": 0.1050887737274171,
+   "max": 12.641322839736938
+  },
+  "recv_per_worker": {
+   "0": 124,
+   "1": 124,
+   "2": 124,
+   "3": 122,
+   "4": 121,
+   "5": 121,
+   "6": 120,
+   "7": 118,
+   "8": 116,
+   "9": 116,
+   "10": 115,
+   "11": 112,
+   "12": 109,
+   "13": 108,
+   "14": 108,
+   "15": 107,
+   "16": 107,
+   "17": 107,
+   "18": 107,
+   "19": 106,
+   "20": 106,
+   "21": 106,
+   "22": 106,
+   "23": 106,
+   "24": 104,
+   "25": 104,
+   "26": 98,
+   "27": 96,
+   "28": 93,
+   "29": 84,
+   "30": 81,
+   "31": 77,
+   "32": 75,
+   "33": 70,
+   "34": 69,
+   "35": 65,
+   "36": 63,
+   "37": 62,
+   "38": 57,
+   "39": 55,
+   "40": 55,
+   "41": 54,
+   "42": 54,
+   "43": 54,
+   "44": 50,
+   "45": 49
+  },
+  "rows": {
+   "2026_10_02_17_22_11_merry-corgi/minicpm5_jev_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000000 p50=0.0 p90=0.0 p99=0.0 max=0.0",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_17_22_11_merry-corgi/raw_minicpm5_jev_score_2026_10_02_17_22_11_merry-corgi.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_09_56_01_subtle-grub/raw_merry_corgi_minicpm5_jev_score_2026_10_03_09_56_01_subtle-grub.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0,
+     "p50": 0.0,
+     "p90": 0.0,
+     "p99": 0.0,
+     "max": 0.0
+    },
+    "kept_mass_max_delta": 0.0
+   }
+  },
+  "app": "jev-ff-merry-corgi-minicpm5-jev-score"
  }
 ]

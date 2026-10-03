@@ -1938,6 +1938,51 @@
    }
   },
   {
+   "experiment": "2026_10_02_17_22_11_merry-corgi",
+   "reranker": "minicpm5_jev_score",
+   "label": "minicpm5_jev_score",
+   "family": "minicpm5_jev",
+   "serving": "MiniCPMSystemOne: 8 children, 1 in flight",
+   "runtime": "PyTorch",
+   "gpu": "L4",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.70024374612,
+    "100": 0.7673927166133333,
+    "150": 0.83354271332,
+    "200": 0.88564047772
+   },
+   "mean_kept_mass": 0.7967049134433333,
+   "cost": {
+    "warm_gpu_s": 4976.039284229279,
+    "load_s": 88.82610011100769,
+    "warm_usd": 1.1046807210988998,
+    "in_function_usd": 1.1244001159057617,
+    "usd_per_query": 0.014729076281318663,
+    "usd_per_1k": 14.729076281318665,
+    "peak_gb": 4.98081024
+   },
+   "latency": {
+    "s_per_query": 3.24812,
+    "p50_s": 2.647,
+    "p95_s": 8.19
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_22_11_merry-corgi/kept_mass_2026_10_02_17_22_11_merry-corgi.json",
+    "cost": "data/experiments/2026_10_02_17_22_11_merry-corgi/costs_2026_10_02_17_22_11_merry-corgi.json",
+    "latency": "data/experiments/2026_10_03_09_56_01_subtle-grub/latency_2026_10_03_09_56_01_subtle-grub.json",
+    "config": "data/experiments/2026_10_02_17_22_11_merry-corgi/config_2026_10_02_17_22_11_merry-corgi.yaml"
+   }
+  },
+  {
    "experiment": "2026_10_02_18_00_38_large-corgi",
    "reranker": "rsi_jev_noul",
    "label": "rsi_jev_noul",

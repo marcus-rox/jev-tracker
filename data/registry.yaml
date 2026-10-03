@@ -72,6 +72,7 @@ experiments:
   2026_10_03_08_41_32_prime-tiger: 'fanout_large_corgi_rsi_jev_noul: fan-out latency, 46 x L40S, original requests, one query at a time (12.25 s/query mean)'
   2026_10_03_08_46_11_free-calf: 'fanout_large_corgi_rsi_jev_score: fan-out latency, 46 x L40S, original requests, one query at a time (11.9 s/query mean)'
   2026_10_03_09_48_55_proper-mule: 'fanout_merry_corgi_minicpm5_jev_noul: fan-out latency, 46 x L4, original requests, one query at a time (2.67 s/query mean)'
+  2026_10_03_09_56_01_subtle-grub: 'fanout_merry_corgi_minicpm5_jev_score: fan-out latency, 46 x L4, original requests, one query at a time (3.25 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1627,7 +1628,9 @@ rows:
   highlight: false
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_score
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_09_56_01_subtle-grub
+    reranker: merry_corgi_minicpm5_jev_score
   label: minicpm5_jev_score
   family: minicpm5_jev
   serving: 'MiniCPMSystemOne: 8 children, 1 in flight'
