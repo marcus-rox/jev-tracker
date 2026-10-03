@@ -625,16 +625,45 @@ def _answer_shard(
     return n
 
 
+def _fanout_loop(
+    job: ShardJob,
+    q: modal.Queue,
+    on_item: Callable[[tuple], None],
+    wait_idle: Callable[[], None],
+    reset: Callable[[], None] | None,
+) -> None:
+    """The worker protocol loop: get_many on the shard's partition.
+
+    A work item is (case_id, bis, m). Control items: ("reset",) waits for in-flight work
+    (`wait_idle`), calls `reset` if any, acks on "ack"; None stops the worker."""
+    last_commit = time.time()
+    while True:
+        for item in q.get_many(1000, partition=f"w{job.shard}", block=True):
+            if item is None:
+                runs_volume.commit()
+                return
+            if item[0] == "reset":
+                wait_idle()
+                if reset is not None:
+                    reset()
+                q.put(("reset_ok", job.shard), partition="ack")
+                continue
+            on_item(item)
+        if time.time() - last_commit > COMMIT_EVERY_S:
+            runs_volume.commit()
+            last_commit = time.time()
+
+
 def _serve_fanout(
     job: ShardJob,
     answer: Callable[[DataPoint, int, list[Item]], int],
     reset: Callable[[], None] | None = None,
 ) -> int:
-    """Fan-out worker: take (case_id, batch, m) items off the Queue, answer, signal on "done".
+    """Fan-out worker: take (case_id, bis, m) items off the Queue, answer, signal on "done".
 
     The engine's `answer` closure is unchanged; `run.concurrency` threads queue requests at the
-    model so each GPU batches its share. Control items: ("reset",) drains the pool, calls
-    `reset` (e.g. clears Kev's prefix cache) and acks on "ack"; None stops the worker."""
+    model so each GPU batches its share. The protocol is `_fanout_loop` (`reset` e.g. clears
+    Kev's prefix cache)."""
     run = job.run
     out = run.shard_path(job.shard)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -644,7 +673,6 @@ def _serve_fanout(
     q.put(job.shard, partition="ready")
     cases = {c.id: c for c in load_cases()}
     n = 0
-    last_commit = time.time()
 
     def work(case: DataPoint, bi: int, m: int | None) -> None:
         nonlocal n
@@ -653,31 +681,112 @@ def _serve_fanout(
             t0 = time.time()
             written = answer(case, bi, batch)
         except Exception as e:  # noqa: BLE001 - relayed to the dispatcher, which fails the run
-            q.put(["error", f"{case.id} batch {bi}: {type(e).__name__}: {e}"], partition="done")
+            q.put(
+                ["error", f"{case.id} batch {bi}: {type(e).__name__}: {e}", 1],
+                partition="done",
+            )
         else:
             n += 1
             q.put((case.id, bi, t0, time.time() - t0, written), partition="done")
 
     futs: set = set()
     with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
-        while True:
-            for item in q.get_many(1000, partition=f"w{job.shard}", block=True):
-                if item is None:
-                    runs_volume.commit()
-                    return n
-                if item[0] == "reset":
-                    while futs:
-                        _, futs = wait(futs, timeout=1)
-                    if reset is not None:
-                        reset()
-                    q.put(("reset_ok", job.shard), partition="ack")
-                    continue
-                futs = {f for f in futs if not f.done()}
-                futs.add(pool.submit(work, cases[item[0]], item[1], item[2]))
-            futs = {f for f in futs if not f.done()}
-            if time.time() - last_commit > COMMIT_EVERY_S:
-                runs_volume.commit()
-                last_commit = time.time()
+
+        def on_item(item: tuple) -> None:
+            case = cases[item[0]]
+            for bi in item[1]:
+                futs.add(pool.submit(work, case, bi, item[2]))
+
+        def wait_idle() -> None:
+            nonlocal futs
+            while futs:
+                _, futs = wait(futs, timeout=1)
+
+        _fanout_loop(job, q, on_item, wait_idle, reset)
+    return n
+
+
+def _fanout_pass_item(
+    run: ScoringRun,
+    case: DataPoint,
+    bis: list[int],
+    m: int | None,
+    predict: Callable[[list[dict]], list[dict]],
+) -> tuple[list[RawRecord], list[tuple]]:
+    """One fan-out work item through a pass engine: `predict` in `run.forward_batch` chunks.
+
+    Every request records its chunk's start and duration, exactly as `_answer_laya_shard` /
+    `_answer_forward_shard` do; each done tuple is (case_id, batch, t0, worker_s, records=1)."""
+    method: Method = METHODS[run.method]
+    all_batches = batches(case.input, m, run.max_chars)
+    todo = [(bi, all_batches[bi]) for bi in bis]
+    records: list[RawRecord] = []
+    dones: list[tuple] = []
+    for lo in range(0, len(todo), run.forward_batch):
+        chunk = todo[lo : lo + run.forward_batch]
+        bodies = [request(method, case.input.query, batch, run.model).body() for _, batch in chunk]
+        t = time.time()
+        resps = predict(bodies)
+        dt = time.time() - t
+        for (bi, batch), resp in zip(chunk, resps, strict=True):
+            resp_obj = SystemOneResponse.model_validate(resp)
+            records.append(
+                record(
+                    method,
+                    case.id,
+                    bi,
+                    batch,
+                    resp_obj,
+                    dt,
+                    t,
+                    resp_obj.usage.input_tokens or None,
+                )
+            )
+            dones.append((case.id, bi, t, dt, 1))
+    return records, dones
+
+
+def _serve_fanout_passes(
+    job: ShardJob,
+    predict: Callable[[list[dict]], list[dict]],
+) -> tuple[int, int]:
+    """Fan-out worker for pass engines (Laya, RSI-Jev): same protocol as `_serve_fanout`, but a
+    work item's requests run through `predict` in `run.forward_batch` chunks, in-line — pass
+    engines batch inside one predict call, so no client pool is needed."""
+    run = job.run
+    out = run.shard_path(job.shard)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(out, "wt"):
+        pass
+    q = modal.Queue.from_name(run.queue_name, create_if_missing=True)
+    q.put(job.shard, partition="ready")
+    cases = {c.id: c for c in load_cases()}
+    n = passes = 0
+
+    def on_item(item: tuple) -> None:
+        nonlocal n, passes
+        case = cases[item[0]]
+        try:
+            records, dones = _fanout_pass_item(run, case, item[1], item[2], predict)
+        except Exception as e:  # noqa: BLE001 - relayed to the dispatcher, which fails the run
+            q.put(
+                [
+                    "error",
+                    f"{case.id} batches {item[1]}: {type(e).__name__}: {e}",
+                    len(item[1]),
+                ],
+                partition="done",
+            )
+            return
+        for rec in records:
+            append_jsonl_gz(out, rec)
+        for done_msg in dones:
+            q.put(done_msg, partition="done")
+        n += len(records)
+        passes += (len(item[1]) + run.forward_batch - 1) // run.forward_batch
+
+    _fanout_loop(job, q, on_item, lambda: None, None)
+    return n, passes
 
 
 def fanout_plan(requests_count: int, shards: int) -> list[list[int]]:
@@ -752,9 +861,10 @@ def _dispatch_case(
     sent: dict[tuple[str, int], float] = {}
 
     def send(w: int, bis: list[int]) -> None:
+        now = time.time()
         for bi in bis:
-            sent[(case.id, bi)] = time.time()
-        q.put_many([(case.id, bi, m) for bi in bis], partition=f"w{w}")
+            sent[(case.id, bi)] = now
+        q.put((case.id, bis, m), partition=f"w{w}")
 
     targets = [(w, b) for w, b in enumerate(fanout_plan(n_requests, run.shards)) if b]
     list(pool.map(lambda t: send(*t), targets))
@@ -794,8 +904,30 @@ def _dispatch_run(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> 
     return {"timed_from": timed_from, "rows": rows}
 
 
+def _collect_done_sweep(
+    q: modal.Queue, pending: int
+) -> tuple[dict[tuple[str, int], tuple[float, float, float, int]], str | None]:
+    """Like `_collect_done` but tolerant: an ["error", msg, covered] item counts `covered`
+    requests toward `pending` so the rep drains fully and no stale items leak into the next
+    point. Returns the answers plus the first error message."""
+    got: dict[tuple[str, int], tuple[float, float, float, int]] = {}
+    covered = 0
+    error = None
+    while len(got) + covered < pending:
+        items_ = q.get_many(1000, partition="done", block=True)
+        now = time.time()
+        for item in items_:
+            if item[0] == "error":
+                error = error or item[1]
+                covered += item[2]
+            else:
+                got[(item[0], item[1])] = (now, item[2], item[3], item[4])
+    return got, error
+
+
 def _dispatch_sweep(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> list[dict]:
-    """Per sweep point: 3 warm-up + 20 timed reps, each rep one put_many to worker 0."""
+    """Per sweep point: 3 warm-up + 20 timed reps, each rep one put to worker 0. A failing rep
+    records `error` and ends that point; the sweep moves on to the next point."""
     cases = load_cases()[: run.cases]
     children_of = {c.id: len(items(c.input)) for c in cases}
     rows = []
@@ -812,22 +944,22 @@ def _dispatch_sweep(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -
             sent_batches = batches(case.input, pt.children, run.max_chars)[: pt.requests]
             _reset_workers(run, q, pool)
             t_send = time.time()
-            q.put_many(
-                [(case.id, bi, pt.children) for bi in range(len(sent_batches))], partition="w0"
-            )
-            recv = _collect_done(q, len(sent_batches))
-            rows.append(
-                {
-                    "requests": pt.requests,
-                    "children": pt.children,
-                    "rep": rep,
-                    "case_id": case.id,
-                    "children_sent": sum(len(b) for b in sent_batches),
-                    "records": sum(r[3] for r in recv.values()),
-                    "wall_s": round(max(r[0] for r in recv.values()) - t_send, 3),
-                    "warmup": rep < SWEEP_WARMUP,
-                }
-            )
+            q.put((case.id, list(range(len(sent_batches))), pt.children), partition="w0")
+            recv, error = _collect_done_sweep(q, len(sent_batches))
+            row = {
+                "requests": pt.requests,
+                "children": pt.children,
+                "rep": rep,
+                "case_id": case.id,
+                "children_sent": sum(len(b) for b in sent_batches),
+                "warmup": rep < SWEEP_WARMUP,
+            }
+            rows.append(row)
+            if error is not None:
+                row["error"] = error
+                break
+            row["records"] = sum(r[3] for r in recv.values())
+            row["wall_s"] = round(max(r[0] for r in recv.values()) - t_send, 3)
     return rows
 
 
@@ -1007,7 +1139,11 @@ def score_cases_laya(job_json: str) -> str:
     load_s = time.time() - t0
     print(f"loaded {run.model}@{LAYA_REVISION[:12]} on {agent.device} {agent.dtype}", flush=True)
 
-    n, passes = _answer_laya_shard(job, done, functools.partial(laya_batch.predict_batch, agent))
+    predict = functools.partial(laya_batch.predict_batch, agent)
+    if run.fanout:
+        n, passes = _serve_fanout_passes(job, predict)
+    else:
+        n, passes = _answer_laya_shard(job, done, predict)
     return ShardSummary(
         reranker=run.reranker,
         shard=job.shard,
@@ -1427,7 +1563,10 @@ def score_cases_rsi_jev(job_json: str) -> str:
             for i, (body, asked, rsi_case, input_tokens) in enumerate(requests_)
         ]
 
-    n, _forward_passes = _answer_forward_shard(job, done, predict)
+    if run.fanout:
+        n, _forward_passes = _serve_fanout_passes(job, predict)
+    else:
+        n, _forward_passes = _answer_forward_shard(job, done, predict)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
 
 

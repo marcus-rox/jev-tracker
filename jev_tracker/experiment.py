@@ -399,9 +399,9 @@ class KGrid(BaseModel):
         return list(range(self.start, self.stop + 1, self.step))
 
 
-# Engines scored through modal_app._answer_shard; laya / rsi_jev / bekko take whole lists in
-# _answer_laya_shard / _answer_forward_shard, where request fan-out is not wired (phase 2).
-NO_FANOUT_ENGINES = frozenset({"laya", "rsi_jev", "bekko"})
+# Bekko's release input objects are not request bodies; the fan-out pass worker sends
+# System One bodies, so bekko stays unsupported.
+NO_FANOUT_ENGINES = frozenset({"bekko"})
 
 
 class Experiment(BaseModel):
@@ -418,7 +418,7 @@ class Experiment(BaseModel):
             if not isinstance(src, ModelSource):
                 continue
             if src.fanout and src.source in NO_FANOUT_ENGINES:
-                raise ValueError(f"{name}: {src.source} cannot fan out (pass-based scorer)")
+                raise ValueError(f"{name}: {src.source} cannot fan out")
             if src.sweep is not None:
                 if not src.fanout:
                     raise ValueError(f"{name}: sweep needs fanout: true")
@@ -704,11 +704,30 @@ def sweep_stats(rows: list[dict]) -> list[dict]:
     """Per sweep point, the timed reps: n, mean, p50, p95; p50_ratio vs the 1x1 point,
     children_per_s = requests x children / p50 (throughput per latency second)."""
     groups: dict[tuple[int, int], list[float]] = {}
+    errors: dict[tuple[int, int], str] = {}
     for r in rows:
+        key = (r["requests"], r["children"])
+        if "error" in r:
+            errors.setdefault(key, r["error"])
+            continue
         if r["warmup"]:
             continue
-        groups.setdefault((r["requests"], r["children"]), []).append(r["wall_s"])
+        groups.setdefault(key, []).append(r["wall_s"])
     out = []
+    for key, error in sorted(errors.items()):
+        groups.pop(key, None)  # a point with any failed rep counts failed
+        out.append(
+            {
+                "requests": key[0],
+                "children": key[1],
+                "failed": True,
+                "error": error,
+                "n": 0,
+                "mean_s": None,
+                "p50_s": None,
+                "p95_s": None,
+            }
+        )
     for (requests_n, children_n), walls in sorted(groups.items()):
         walls = sorted(walls)
         n = len(walls)
@@ -721,6 +740,7 @@ def sweep_stats(rows: list[dict]) -> list[dict]:
             {
                 "requests": requests_n,
                 "children": children_n,
+                "failed": False,
                 "n": n,
                 "mean_s": sum(walls) / n,
                 "p50_s": walls[n // 2],
@@ -737,10 +757,20 @@ def sweep_stats(rows: list[dict]) -> list[dict]:
                 ),
             }
         )
-    base = next((pt["p50_s"] for pt in out if (pt["requests"], pt["children"]) == (1, 1)), None)
+    out.sort(key=lambda pt: (pt["requests"], pt["children"]))
+    base = next(
+        (
+            pt["p50_s"]
+            for pt in out
+            if (pt["requests"], pt["children"]) == (1, 1) and not pt["failed"]
+        ),
+        None,
+    )
     for pt in out:
-        pt["p50_ratio"] = None if base is None else pt["p50_s"] / base
-        pt["children_per_s"] = pt["requests"] * pt["children"] / pt["p50_s"]
+        pt["p50_ratio"] = None if base is None or pt["failed"] else pt["p50_s"] / base
+        pt["children_per_s"] = (
+            None if pt["failed"] else pt["requests"] * pt["children"] / pt["p50_s"]
+        )
     return out
 
 
