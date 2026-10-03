@@ -4112,5 +4112,51 @@
     "kept_mass_delta": 0.00018372586666670632
    }
   }
+ },
+ {
+  "config": "fanout_cachewarm_immune_tick_kev2b_noul.yaml",
+  "experiment": "2026_10_03_14_51_52_fit-toucan",
+  "experiment_dir": "data/experiments/2026_10_03_14_51_52_fit-toucan",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.42,
+   "median_s_per_query": 0.32,
+   "p95_s_per_query": 1.18,
+   "max_s_per_query": 4.84
+  },
+  "prefix_hits": 2701,
+  "prefix_misses": 3000,
+  "paired_cleared_mean": 0.56,
+  "rows": {
+   "2026_10_02_03_29_51_immune-tick/kev2b_noul": {
+    "answer_max": 0.020000000000000018,
+    "kept_mass_delta": 0.0026286571600000475
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_immune_tick_kev2b_score.yaml",
+  "experiment": "2026_10_03_14_56_31_vast-lynx",
+  "experiment_dir": "data/experiments/2026_10_03_14_56_31_vast-lynx",
+  "status": "ok",
+  "gpu": "L4",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.41,
+   "median_s_per_query": 0.32,
+   "p95_s_per_query": 0.98,
+   "max_s_per_query": 1.53
+  },
+  "prefix_hits": 2702,
+  "prefix_misses": 2999,
+  "paired_cleared_mean": 0.82,
+  "rows": {
+   "2026_10_02_03_29_51_immune-tick/kev2b_score": {
+    "answer_max": 0.037899999999999934,
+    "kept_mass_delta": 0.0019004342399999707
+   }
+  }
  }
 ]
