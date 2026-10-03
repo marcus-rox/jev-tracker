@@ -41,9 +41,11 @@ Modal credentials come from MODAL_TOKEN_ID / MODAL_TOKEN_SECRET in the environme
 
 import functools
 import gzip
+import hashlib
 import io
 import json
 import os
+import queue
 import shutil
 import subprocess
 import threading
@@ -59,7 +61,7 @@ from pydantic import BaseModel
 from tqdm import tqdm
 
 from jev_tracker.contract import DataPoint, load_cases
-from jev_tracker.methods import METHODS, Item, Method, batches, record, request
+from jev_tracker.methods import METHODS, Item, Method, batches, items, record, request
 from jev_tracker.metrics import ShardSummary
 from jev_tracker.rerankers import append_jsonl_gz, read_jsonl_gz
 from jev_tracker.systemone import RawRecord, SystemOneResponse
@@ -303,6 +305,15 @@ class ApiEndpoint(BaseModel):
     key_env: str = "API_KEY"  # the variable inside that Secret
 
 
+class SweepPoint(BaseModel):
+    """One batch-size probe: `requests` System One requests of `children` items each."""
+
+    model_config = {"frozen": True}
+
+    requests: int
+    children: int
+
+
 class ScoringRun(BaseModel):
     """One model's scoring run: a reranker of one experiment."""
 
@@ -340,6 +351,14 @@ class ScoringRun(BaseModel):
     gpu: str | None = None  # Modal GPU type; None = GPU_FOR[model]
     api: ApiEndpoint | None = None  # api only
     config: str | None = None  # configs/<name>.yaml this run came from: the site's queue item key
+    # Latency runs: `shards` is the GPU pool; dispatch_cases deals one case's requests over it.
+    fanout: bool = False
+    sweep: list[SweepPoint] | None = None  # batch-size probes instead of the case pass
+
+    @property
+    def queue_name(self) -> str:
+        """The Modal Queue the dispatcher and this run's workers share."""
+        return "fanout-" + hashlib.sha1((self.experiment + self.reranker).encode()).hexdigest()[:16]
 
     @property
     def repo(self) -> str:
@@ -381,9 +400,12 @@ class ShardJob(BaseModel):
 
     run: ScoringRun
     shard: int
+    role: Literal["worker", "dispatch"] = "worker"
 
     @property
     def desc(self) -> str:
+        if self.role == "dispatch":
+            return f"{self.run.reranker} ({self.run.name}) dispatch"
         return f"{self.run.reranker} ({self.run.name}) shard {self.shard}/{self.run.shards}"
 
 
@@ -578,6 +600,8 @@ def _answer_shard(
     `run.concurrency` client threads each drive one request at a time through `answer`, so that
     many requests are queued at the model together (Kev's Server batches whatever is queued)."""
     run = job.run
+    if run.fanout:
+        return _serve_fanout(job, answer)
     todo = [
         (case, bi, batch)
         for case in run.shard_cases(job.shard)
@@ -597,6 +621,149 @@ def _answer_shard(
                 last_commit = time.time()
     runs_volume.commit()
     return n
+
+
+def _serve_fanout(job: ShardJob, answer: Callable[[DataPoint, int, list[Item]], None]) -> int:
+    """Fan-out worker: take (case_id, batch) items off the Queue, answer, and signal on "done".
+
+    The engine's `answer` closure is unchanged; `run.concurrency` threads queue requests at the
+    model so each GPU batches its share. None is the dispatcher's stop sentinel."""
+    run = job.run
+    out = run.shard_path(job.shard)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with gzip.open(out, "wt"):
+        pass
+    q = modal.Queue.from_name(run.queue_name, create_if_missing=True)
+    q.put(job.shard, partition="ready")
+    cases = {c.id: c for c in load_cases()}
+    n = 0
+    last_commit = time.time()
+
+    def work(case: DataPoint, bi: int, batch: list[Item]) -> None:
+        nonlocal n
+        try:
+            answer(case, bi, batch)
+        except Exception as e:  # noqa: BLE001 - relayed to the dispatcher, which fails the run
+            q.put(["error", f"{case.id} batch {bi}: {type(e).__name__}: {e}"], partition="done")
+        else:
+            n += 1
+            q.put((case.id, bi), partition="done")
+
+    with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
+        while True:
+            for item in q.get_many(1000, partition=f"w{job.shard}", block=True):
+                if item is None:
+                    runs_volume.commit()
+                    return n
+                case = cases[item[0]]
+                pool.submit(
+                    work, case, item[1], batches(case.input, run.max_items, run.max_chars)[item[1]]
+                )
+            if time.time() - last_commit > COMMIT_EVERY_S:
+                runs_volume.commit()
+                last_commit = time.time()
+
+
+def fanout_plan(requests_count: int, shards: int) -> list[list[int]]:
+    """Per-worker request indices; request j goes to worker j % shards."""
+    return [[j for j in range(requests_count) if j % shards == w] for w in range(shards)]
+
+
+SWEEP_WARMUP = 3
+SWEEP_REPS = 20
+SWEEP_CASES = 4
+DISPATCH_READY_TIMEOUT_S = 2 * HOUR
+
+
+def _collect_done(q: modal.Queue, pending: int) -> dict[tuple[str, int], float]:
+    """Wait for `pending` fan-out answers; (case_id, batch) -> arrival time."""
+    got: dict[tuple[str, int], float] = {}
+    while len(got) < pending:
+        items = q.get_many(1000, partition="done", block=True)
+        now = time.time()
+        for item in items:
+            if item[0] == "error":
+                raise RuntimeError(f"fan-out worker: {item[1]}")
+            got[tuple(item)] = now
+    return got
+
+
+def _await_workers(run: ScoringRun, q: modal.Queue) -> None:
+    """Block until every worker has put its shard number on partition "ready" (2 h limit)."""
+    deadline = time.time() + DISPATCH_READY_TIMEOUT_S
+    got = 0
+    with tqdm(total=run.shards, desc=f"{run.reranker} workers ready", unit="worker") as bar:
+        while got < run.shards:
+            try:
+                items = q.get_many(1000, partition="ready", block=True, timeout=60)
+            except queue.Empty:
+                items = []
+            got += len(items)
+            bar.update(len(items))
+            if got < run.shards and time.time() > deadline:
+                raise TimeoutError(f"{run.reranker}: {got} of {run.shards} workers ready after 2h")
+
+
+def _dispatch_run(run: ScoringRun, q: modal.Queue) -> list[dict]:
+    """Send one case at a time over the pool; return per-request sent/recv/worker rows."""
+    rows = []
+    cases = load_cases()[: run.cases]
+    with tqdm(cases, desc=f"{run.reranker} dispatch", unit="case", mininterval=5) as bar:
+        for case in bar:
+            n_requests = len(batches(case.input, run.max_items, run.max_chars))
+            sent: dict[tuple[str, int], float] = {}
+            for w, bis in enumerate(fanout_plan(n_requests, run.shards)):
+                if not bis:
+                    continue
+                for bi in bis:
+                    sent[(case.id, bi)] = time.time()
+                q.put_many([(case.id, bi) for bi in bis], partition=f"w{w}")
+            recv = _collect_done(q, n_requests)
+            wall = max(recv.values()) - min(sent.values())
+            for bi in range(n_requests):
+                rows.append(
+                    {
+                        "case_id": case.id,
+                        "batch": bi,
+                        "sent": sent[(case.id, bi)],
+                        "recv": recv[(case.id, bi)],
+                        "worker": bi % run.shards,
+                    }
+                )
+            bar.set_postfix_str(f"{wall:.2f}s")
+    return rows
+
+
+def _dispatch_sweep(run: ScoringRun, q: modal.Queue) -> list[dict]:
+    """Per sweep point: 3 warm-up + 20 timed reps, each rep one put_many to worker 0."""
+    cases = load_cases()[: run.cases]
+    children_of = {c.id: len(items(c.input)) for c in cases}
+    rows = []
+    for pt in run.sweep or []:
+        pool_cases = [c for c in cases if children_of[c.id] >= pt.requests * pt.children]
+        if not pool_cases:
+            raise ValueError(
+                f"{run.reranker} sweep {pt.requests}x{pt.children}: "
+                f"no case with >= {pt.requests * pt.children} children"
+            )
+        pool_cases = pool_cases[:SWEEP_CASES]
+        for rep in range(SWEEP_WARMUP + SWEEP_REPS):
+            case = pool_cases[rep % len(pool_cases)]
+            n_requests = len(batches(case.input, pt.children, run.max_chars)[: pt.requests])
+            t_send = time.time()
+            q.put_many([(case.id, bi) for bi in range(n_requests)], partition="w0")
+            recv = _collect_done(q, n_requests)
+            rows.append(
+                {
+                    "requests": pt.requests,
+                    "children": pt.children,
+                    "rep": rep,
+                    "case_id": case.id,
+                    "wall_s": round(max(recv.values()) - t_send, 3),
+                    "warmup": rep < SWEEP_WARMUP,
+                }
+            )
+    return rows
 
 
 def _answer_forward_shard(
@@ -1707,6 +1874,33 @@ def score_cases_ollaya(job_json: str) -> str:
     ).model_dump_json()
 
 
+@app.function(image=api_image, timeout=4 * HOUR, single_use_containers=True, volumes=VOLUMES)
+def dispatch_cases(job_json: str) -> str:
+    """Fan-out dispatcher: wait for the workers, then drive the case pass or the sweep.
+
+    Runs on CPU on the light api image; timing (sent / recv) is client-side, so a query's
+    wall clock is the same shape as the prod/Jev API timing."""
+    job = ShardJob.model_validate_json(job_json)
+    run = job.run
+    q = modal.Queue.from_name(run.queue_name, create_if_missing=True)
+    _await_workers(run, q)
+    try:
+        if run.sweep:
+            _write_remote_json(run.remote_dir / "sweep.json", _dispatch_sweep(run, q))
+        else:
+            _write_remote_json(run.remote_dir / "dispatch.json", _dispatch_run(run, q))
+    finally:
+        for w in range(run.shards):
+            q.put(None, partition=f"w{w}")
+    runs_volume.commit()
+    return f"{run.reranker}: dispatched"
+
+
+def _write_remote_json(path: Path, rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(rows, indent=1) + "\n")
+
+
 SCORERS = {
     "kev": score_cases,
     "laya": score_cases_laya,
@@ -1745,6 +1939,24 @@ def spawn(run: ScoringRun, calls_file: Path) -> None:
     """One call per shard, appended to the experiment's calls file. Call deploy() first."""
     for shard in range(run.shards):
         spawn_shard(ShardJob(run=run, shard=shard), calls_file)
+    if run.fanout:
+        _record_call(
+            ShardJob(run=run, shard=0, role="dispatch"),
+            dispatch_cases.spawn(ShardJob(run=run, shard=0, role="dispatch").model_dump_json()),
+            calls_file,
+        )
+
+
+def _record_call(job: ShardJob, call: modal.FunctionCall, calls_file: Path) -> None:
+    rec = CallRecord(
+        job=job,
+        call_id=call.object_id,
+        spawned_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    )
+    calls_file.parent.mkdir(parents=True, exist_ok=True)
+    with calls_file.open("a") as f:
+        f.write(rec.model_dump_json() + "\n")
+    print(f"spawned {call.object_id}: {job.desc}")
 
 
 def spawn_shard(job: ShardJob, calls_file: Path) -> None:
@@ -1758,15 +1970,8 @@ def spawn_shard(job: ShardJob, calls_file: Path) -> None:
         options["gpu"] = run.gpu_type
     fn = SCORERS[run.engine].with_options(**options)
     call = fn.spawn(job.model_dump_json())
-    rec = CallRecord(
-        job=job,
-        call_id=call.object_id,
-        spawned_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-    )
-    calls_file.parent.mkdir(parents=True, exist_ok=True)
-    with calls_file.open("a") as f:
-        f.write(rec.model_dump_json() + "\n")
-    print(f"spawned {call.object_id}: {job.desc} ({len(run.shard_cases(job.shard))} cases)")
+    _record_call(job, call, calls_file)
+    print(f"  ({len(run.shard_cases(job.shard))} cases)")
 
 
 def calls(calls_file: Path) -> list[CallRecord]:
@@ -1802,6 +2007,7 @@ def pull(run: ScoringRun) -> list[RawRecord]:
     vol = modal.Volume.from_name(RUNS_VOLUME_NAME)
     remote = run.remote_dir.relative_to(RUNS_ROOT)
     entries = sorted(vol.listdir(str(remote)), key=lambda e: e.path)
+    entries = [e for e in entries if e.path.endswith(".jsonl.gz")]
     if len(entries) != run.shards:
         raise FileNotFoundError(f"{remote}: {len(entries)} of {run.shards} shard files")
     records: list[RawRecord] = []
@@ -1810,3 +2016,10 @@ def pull(run: ScoringRun) -> list[RawRecord]:
             records += [RawRecord.model_validate_json(line) for line in f if line.strip()]
     records.sort(key=lambda r: (r.case_id, r.batch))
     return records
+
+
+def pull_json(run: ScoringRun, name: str) -> list[dict]:
+    """A JSON file the dispatcher wrote next to the shard files (dispatch.json / sweep.json)."""
+    vol = modal.Volume.from_name(RUNS_VOLUME_NAME)
+    remote = run.remote_dir.relative_to(RUNS_ROOT) / name
+    return json.loads(b"".join(vol.read_file(str(remote))))

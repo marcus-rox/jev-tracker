@@ -1,0 +1,38 @@
+# Fan-out smoke: 2 cases, one query at a time spread over a 4x L4 pool, plus a batch-size
+# sweep reranker (one GPU, requests x children grid). Kev-0.5B, weights pinned.
+#   uv run python -m jev_tracker.experiment run configs/smoke_fanout.yaml --wait
+name: smoke_fanout
+cases: 2
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  kev05b_fanout_noul:
+    source: kev
+    model: jaredpalmer/kev-0.5b@9ce2fd39db3a397c89733f94af948e3d1fdfffcd
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 4
+    concurrency: 16
+    gpu: L4
+    fanout: true
+  kev05b_sweep_noul:
+    source: kev
+    model: jaredpalmer/kev-0.5b@9ce2fd39db3a397c89733f94af948e3d1fdfffcd
+    method: noul_query_in_state
+    max_items: 8
+    max_chars: 12000
+    shards: 1
+    concurrency: 16
+    gpu: L4
+    fanout: true
+    sweep: default

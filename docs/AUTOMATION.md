@@ -24,7 +24,8 @@ per GPU, 16 by default) summed over every GPU shard, billed at Modal GPU $/s plu
 RAM $/GiB/s, failed calls $0, scaled x1000/queries. Its latency is `latency_<id>.json` `mean_s` —
 per-query wall clock, first request sent to last answer back. A registry row whose numbers cannot
 be derived (no per-request start times, no raw answers, a failed run) gets `deprecated: <reason>`
-in `data/registry.yaml` and never reaches the site.
+in `data/registry.yaml` and never reaches the site. Fan-out runs measure the same wall clock with
+one query at a time over a pool of GPUs; a row points at one with `latency_from`.
 **Kill rule** (Marcus 2026-10-02): a run only exists to beat production — the `prod` baseline is
 $63/1k queries ($4.73 per 75-query run) and a mean of 6.21 s/query (wall clock, same definition
 as the run's `mean_s`). Kill an experiment when its projected $/1k AND projected mean s/query

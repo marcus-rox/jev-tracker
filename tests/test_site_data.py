@@ -265,3 +265,24 @@ def test_R7_suggestions_lists_every_submission_newest_first() -> None:
     assert [s.text for s in got] == ["try the new Kev 30B", "b", "a"]
     assert got[0].path == "requests/2026-10-02/120000_c.json"
     assert suggestions({"data": {"repository": {"object": None}}}) == []
+
+
+def test_R6_latency_from_overrides_latency_but_not_cost() -> None:
+    registry = yaml.safe_load(REGISTRY.read_text())
+    donor = _row("2026_10_02_00_08_39_safe-joey", "kev27b_noul")
+    row = next(
+        r
+        for r in registry["rows"]
+        if (r["experiment"], r["reranker"]) == ("2026_10_03_00_31_36_proper-bee", "kev4b_noul")
+    )
+    row["latency_from"] = {"experiment": donor["experiment"], "reranker": donor["reranker"]}
+    data = build(registry, EXPERIMENTS_DIR, read_api_timing(API_TIMING))
+    built = next(
+        r
+        for r in data["rows"]
+        if (r["experiment"], r["reranker"]) == (row["experiment"], row["reranker"])
+    )
+    assert built["latency"] == donor["latency"]
+    assert built["sources"]["latency"] == donor["sources"]["latency"]
+    own = _row("2026_10_03_00_31_36_proper-bee", "kev4b_noul")
+    assert built["cost"] == own["cost"] and built["kept_mass"] == own["kept_mass"]

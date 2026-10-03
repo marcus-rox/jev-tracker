@@ -35,7 +35,7 @@ from typing import Annotated, Literal
 
 import petname
 import yaml
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from tqdm import tqdm
 
 from jev_tracker import modal_app
@@ -75,7 +75,21 @@ class AnswersSource(BaseModel):
     path: Path
 
 
-class KevSource(BaseModel):
+class _Fanoutable(BaseModel):
+    """A source whose scorer goes through modal_app._answer_shard and can run fan-out.
+
+    fanout: a GPU pool of `shards`; dispatch_cases deals one case's requests over it, so the
+    measured latency is one query's wall clock, not the whole load's. sweep: batch-size probes
+    (list of {requests, children}, or `default` for the standard grid) run by the dispatcher
+    instead of the case pass; sweeps need fanout and a pool of 1."""
+
+    model_config = {"frozen": True}
+
+    fanout: bool = False
+    sweep: list[modal_app.SweepPoint] | Literal["default"] | None = None
+
+
+class KevSource(_Fanoutable):
     model_config = {"frozen": True}
 
     source: Literal["kev"]
@@ -88,7 +102,7 @@ class KevSource(BaseModel):
     gpu: str | None = None  # Modal GPU type override (e.g. H100); None = modal_app.GPU_FOR[model]
 
 
-class LayaSource(BaseModel):
+class LayaSource(_Fanoutable):
     """Laya: a ModernBERT-large encoder whose head scores one [MASK] per option (laya package).
 
     Laya reads 512 tokens per question, state included, and cuts the rest off silently, so each
@@ -117,7 +131,7 @@ class LayaSource(BaseModel):
     gpu: str | None = None
 
 
-class ClefSource(BaseModel):
+class ClefSource(_Fanoutable):
     """Cloudflare Clef / Clef-Flash: a Qwen3.5 backbone plus a joint schema head that answers the
     System One request body in-process (the release's `joint_schema_model.systemone`).
 
@@ -136,7 +150,7 @@ class ClefSource(BaseModel):
     gpu: str | None = None
 
 
-class MatildaSource(BaseModel):
+class MatildaSource(_Fanoutable):
     """Maincode MATILDA-jev v1: a 26.1B Qwen3.5 backbone plus a decision readout, answered by the
     release's own runtime (`maincode_jev_serve.decide`, as its /v1/systemone server does).
 
@@ -155,7 +169,7 @@ class MatildaSource(BaseModel):
     gpu: str | None = None
 
 
-class AutoTrustSource(BaseModel):
+class AutoTrustSource(_Fanoutable):
     """AutoTrust JEV-27B: Qwen3.8-27B + LoRA + a 24-slot decision head, asked through the release's
     bare prompt one question at a time (jev_tracker.autotrust, the README's transformers path).
 
@@ -173,7 +187,7 @@ class AutoTrustSource(BaseModel):
     gpu: str | None = None
 
 
-class JevAnySource(BaseModel):
+class JevAnySource(_Fanoutable):
     """JevAny: a pointer LoRA + head on a Qwen3.5 base, loaded by the JevAny release's own runtime
     (`jevany.JevModel`), which answers the System One request body in-process.
 
@@ -193,7 +207,7 @@ class JevAnySource(BaseModel):
     gpu: str | None = None
 
 
-class RsiJevSource(BaseModel):
+class RsiJevSource(_Fanoutable):
     """RSI-Jev: a fine-tuned Qwen3.5 tower + option scorer, loaded by the release's `load_release`
     and scored with its `rsijev.evaluate.predict`, one encoded row (state + question) per question.
 
@@ -214,7 +228,7 @@ class RsiJevSource(BaseModel):
     gpu: str | None = None
 
 
-class MiniCpmJevSource(BaseModel):
+class MiniCpmJevSource(_Fanoutable):
     """MiniCPM5-2B-Jev: a LoRA + letter readout on MiniCPM5-2B through the release's
     `MiniCPMSystemOne`, which takes the request body (state once, one branch per question).
 
@@ -233,7 +247,7 @@ class MiniCpmJevSource(BaseModel):
     gpu: str | None = None
 
 
-class StartLuxSource(BaseModel):
+class StartLuxSource(_Fanoutable):
     """StartLux-Decision: a Qwen3.5 decoder read out at the option letters, answered by the
     release's own `startlux_decision.StartLuxDecision.decide` on the request body.
 
@@ -252,7 +266,7 @@ class StartLuxSource(BaseModel):
     gpu: str | None = None
 
 
-class VonSource(BaseModel):
+class VonSource(_Fanoutable):
     """Von: a 395M encoder + option-marker head behind von-sdk's `VonEngine`, asked in-process
     with the request's raw question dicts (as its /v1/systemone server does).
 
@@ -271,7 +285,7 @@ class VonSource(BaseModel):
     gpu: str | None = None
 
 
-class BekkoSource(BaseModel):
+class BekkoSource(_Fanoutable):
     """Bekko System One v0: hotchpotch's Ettin-based shared-prefix decision encoders (17M / 68M /
     400M), asked through the release's `BekkoSentenceTransformer.predict` (jev_tracker.bekko maps
     the request body to one input object).
@@ -297,7 +311,7 @@ class BekkoSource(BaseModel):
     gpu: str | None = None
 
 
-class ApiSource(BaseModel):
+class ApiSource(_Fanoutable):
     """Any hosted model that answers the System One request body at `url` (Jev, Liquid d1, ...).
 
     The bearer key is read inside the Modal container from the Modal Secret `secret` (variable
@@ -319,7 +333,7 @@ class ApiSource(BaseModel):
     concurrency: int = 8  # requests in flight per container
 
 
-class GgufSource(BaseModel):
+class GgufSource(_Fanoutable):
     """A quantized decision model: one `.gguf` file of a Hub repo, served by llama.cpp's
     /v1/systemone on a Modal GPU. `model` is `repo@revision` (e.g. ggml-org/Kev-9B-GGUF@<sha>),
     `file` the file inside it (Kev-9B-Q4_K_M.gguf, Kev-9B-Q8_0.gguf, ...)."""
@@ -337,7 +351,7 @@ class GgufSource(BaseModel):
     gpu: str | None = None  # None = modal_app.DEFAULT_GGUF_GPU
 
 
-class OllayaSource(BaseModel):
+class OllayaSource(_Fanoutable):
     """An ONNX decision model served by the Ollaya daemon (ONNX Runtime CUDA) on a Modal GPU.
     `model` is an Ollaya registry name (kev:9b, kev:4b, laya:en, ...); the registry manifest pins
     the graph and the upstream weight files, the Modal image pins the daemon."""
@@ -385,6 +399,11 @@ class KGrid(BaseModel):
         return list(range(self.start, self.stop + 1, self.step))
 
 
+# Engines scored through modal_app._answer_shard; laya / rsi_jev / bekko take whole lists in
+# _answer_laya_shard / _answer_forward_shard, where request fan-out is not wired (phase 2).
+NO_FANOUT_ENGINES = frozenset({"laya", "rsi_jev", "bekko"})
+
+
 class Experiment(BaseModel):
     model_config = {"frozen": True}
 
@@ -392,6 +411,35 @@ class Experiment(BaseModel):
     cases: int | None = None  # first N cases only (smoke); None = all 75
     k: KGrid = KGrid()
     rerankers: dict[str, Source] = Field(min_length=1)  # table rows, in order; PROD for win-rates
+
+    @model_validator(mode="after")
+    def _check_fanout(self) -> "Experiment":
+        for name, src in self.rerankers.items():
+            if not isinstance(src, ModelSource):
+                continue
+            if src.fanout and src.source in NO_FANOUT_ENGINES:
+                raise ValueError(f"{name}: {src.source} cannot fan out (pass-based scorer)")
+            if src.sweep is not None:
+                if not src.fanout:
+                    raise ValueError(f"{name}: sweep needs fanout: true")
+                if src.shards != 1:
+                    raise ValueError(f"{name}: a sweep runs on a pool of 1 (shards: 1)")
+        return self
+
+    def _sweep_points(self, src: ModelSource) -> list[modal_app.SweepPoint] | None:
+        if src.sweep is None:
+            return None
+        if src.sweep == "default":
+            if src.max_items is None:
+                raise ValueError("sweep: default needs a numeric max_items")
+            return [
+                *(
+                    modal_app.SweepPoint(requests=1, children=c)
+                    for c in (1, 2, 4, 8, src.max_items)
+                ),
+                *(modal_app.SweepPoint(requests=r, children=src.max_items) for r in (2, 4, 8)),
+            ]
+        return src.sweep
 
     def scoring_run(
         self, id: str, name: str, src: ModelSource, config: str | None = None
@@ -416,6 +464,8 @@ class Experiment(BaseModel):
                 if isinstance(src, ApiSource)
                 else None
             ),
+            fanout=src.fanout,
+            sweep=self._sweep_points(src),
         )
 
 
@@ -521,6 +571,8 @@ def costs(id: str) -> str:
     shards: dict[str, list] = {}
     models: dict[str, str] = {}
     for rec, state in modal_app.states(p.calls):
+        if rec.job.role == "dispatch":
+            continue
         shards.setdefault(rec.job.run.reranker, []).append(parse_summary(state))
         models[rec.job.run.reranker] = rec.job.run.model
     rows: dict[str, CostRow] = {}
@@ -622,10 +674,54 @@ def _slice(records: list[RawRecord], cases: int | None) -> list[RawRecord]:
     return [r for r in records if r.case_id in keep]
 
 
+def apply_dispatch(records: list[RawRecord], dispatched: list[dict]) -> list[RawRecord]:
+    """Fan-out timing: each pulled record gets the dispatcher's sent / recv (client-side wall
+    clock). The two records of a 422-split request share the parent's times (same case, batch)."""
+    times = {(d["case_id"], d["batch"]): (d["sent"], d["recv"]) for d in dispatched}
+    out = []
+    for r in records:
+        key = (r.case_id, r.batch)
+        if key not in times:
+            raise ValueError(f"{r.case_id} batch {r.batch}: no dispatch record")
+        sent, recv = times[key]
+        out.append(r.model_copy(update={"started_at_s": sent, "latency_s": round(recv - sent, 3)}))
+    return out
+
+
+def sweep_stats(rows: list[dict]) -> list[dict]:
+    """Per sweep point, the timed reps: n, mean, p50, p95; p50_ratio vs the 1x1 point,
+    children_per_s = requests x children / p50 (throughput per latency second)."""
+    groups: dict[tuple[int, int], list[float]] = {}
+    for r in rows:
+        if r["warmup"]:
+            continue
+        groups.setdefault((r["requests"], r["children"]), []).append(r["wall_s"])
+    out = []
+    for (requests_n, children_n), walls in sorted(groups.items()):
+        walls = sorted(walls)
+        n = len(walls)
+        out.append(
+            {
+                "requests": requests_n,
+                "children": children_n,
+                "n": n,
+                "mean_s": sum(walls) / n,
+                "p50_s": walls[n // 2],
+                "p95_s": walls[min(n - 1, int(0.95 * n))],
+            }
+        )
+    base = next((pt["p50_s"] for pt in out if (pt["requests"], pt["children"]) == (1, 1)), None)
+    for pt in out:
+        pt["p50_ratio"] = None if base is None else pt["p50_s"] / base
+        pt["children_per_s"] = pt["requests"] * pt["children"] / pt["p50_s"]
+    return out
+
+
 def finish(id: str) -> None:
     """Pull every reranker's answers into the experiment dir and write its table + graph."""
     p = Paths(id)
     exp = load_config(p.config)
+    sweeps: dict[str, list[dict]] = {}
     unfinished: set[str] = set()
     if p.calls.exists():
         _wait(p.calls)
@@ -645,13 +741,26 @@ def finish(id: str) -> None:
         else:
             scoring = exp.scoring_run(id, name, src)
             run_name = scoring.name
+            if scoring.sweep:
+                rows = modal_app.pull_json(scoring, "sweep.json")
+                dest = p.dir / f"sweep_{name}.json"
+                dest.write_text(json.dumps(rows, indent=1) + "\n")
+                sweeps[name] = sweep_stats(rows)
+                print(f"wrote {dest}: {len(rows)} reps")
+                continue
             records = modal_app.pull(scoring)
+            if scoring.fanout:
+                records = apply_dispatch(records, modal_app.pull_json(scoring, "dispatch.json"))
         dest = write_raw(p.raw(name), run_name, records)
         cases = {r.case_id for r in records}
         print(f"wrote {dest}: {len(records)} requests over {len(cases)} cases")
         rerankers.append(ScoredReranker(name, METHODS[src.method], dest))
     if not any(isinstance(s, ProductionSource) and n == PROD for n, s in exp.rerankers.items()):
         print(f"no reranker named {PROD!r} with source production: no win-rates")
+    if sweeps:
+        dest = p.dir / f"sweep_{p.id}.json"
+        dest.write_text(json.dumps({"rerankers": sweeps}, indent=1) + "\n")
+        print(f"wrote {dest}")
     per_case, n_cases = evaluate(rerankers, exp.k.ks, exp.cases)
     means, wins = tables(per_case, exp.k.ks)
     print(write_report(means, wins, n_cases, p.report_base))
@@ -712,6 +821,10 @@ def evidence(id: str, calls: dict[str, str]) -> Evidence:
     rerankers: list[RerankerEvidence] = []
     for name, src in exp.rerankers.items():
         if isinstance(src, ProductionSource):
+            continue
+        if getattr(src, "sweep", None) is not None:
+            if not (p.dir / f"sweep_{name}.json").exists():
+                problems.append(f"{name}: no sweep results")
             continue
         if not p.raw(name).exists():
             problems.append(f"{name}: no raw answers")

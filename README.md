@@ -17,7 +17,10 @@ this repository; an hourly automation runs new models on Modal and pushes the nu
 - `data/jev/` — Jev's committed answers
 - `data/experiments/<id>/` — config, calls, raw answers (gzipped), kept-mass, costs, latency
 - `data/registry.yaml` — row labels (model family, serving, runtime, GPU) for every reranker shown;
-  a row with `deprecated: <reason>` never reaches the site
+  a row with `deprecated: <reason>` never reaches the site; `latency_from: {experiment, reranker}`
+  takes the row's latency (and its `sources.latency` link) from another experiment's
+  `latency_<id>.json` — used for fan-out latency runs, whose quality and cost come from the
+  row's own experiment
 - `site/` — Vite + React static site: summary / quality / cost / latency tables, filters,
   "Suggest a model to scrape" form in the left panel; `site/public/data/rows.json` is generated, `site/dist/` is the build
 - `crawler/` — R-8: finds new Jev / Kev / Laya / decision-model mentions (GitHub, Hugging Face,
