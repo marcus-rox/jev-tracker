@@ -3946,5 +3946,48 @@
    }
   },
   "note": "recovered via experiment finish on 493c0fd (apply_dispatch prime drop)"
+ },
+ {
+  "config": "fanout_cachewarm_good_midge_kev27b_noul.yaml",
+  "experiment": "2026_10_03_14_02_56_solid-marlin",
+  "experiment_dir": "data/experiments/2026_10_03_14_02_56_solid-marlin",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.44,
+   "median_s_per_query": 0.41,
+   "p95_s_per_query": 0.84,
+   "max_s_per_query": 1.64
+  },
+  "prefix_hits": 2702,
+  "prefix_misses": 2999,
+  "paired_cleared_mean": 0.77,
+  "rows": {
+   "2026_09_29_08_47_55_good-midge/kev27b_noul": {
+    "answer_max": 0.009500000000000064,
+    "kept_mass_delta": 0.00027862849333337714
+   },
+   "2026_09_29_22_00_38_super-orca/kev27b_noul_c12_w4096x16": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.00023810046666672413
+   },
+   "2026_09_29_22_00_38_super-orca/kev27b_noul_c12_w4096x16_rerun": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.00019538830666665508
+   },
+   "2026_10_02_00_08_39_safe-joey/kev27b_noul": {
+    "answer_max": 0.015000000000000013,
+    "kept_mass_delta": 0.00023810046666672413
+   },
+   "2026_10_03_00_31_36_rested-hermit/kev27b_bf16_noul": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.0004428205733333357
+   },
+   "2026_10_03_00_31_36_clear-flea/kev27b_batched_H100_noul": {
+    "answer_max": 0.014100000000000001,
+    "kept_mass_delta": 0.0004428205733333357
+   }
+  }
  }
 ]

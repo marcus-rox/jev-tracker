@@ -186,3 +186,4 @@
 {"event": "adopt_done", "config": "fanout_proper_bee_kev27b_noul.yaml", "stopped": true, "t": "13:36:09"}
 {"event": "result_committed", "config": "fanout_cachewarm_above_dog_kev08b_noul.yaml", "note": "cachewarm rows added hidden (paired row hidden)"}
 {"event": "result_committed", "config": "fanout_cachewarm_above_dog_kev08b_score.yaml", "note": "cachewarm rows added hidden (paired row hidden)"}
+{"event": "result_committed", "config": "fanout_cachewarm_good_midge_kev27b_noul.yaml", "note": "cachewarm row public (paired row public, gate pass, 2702 hits)"}
