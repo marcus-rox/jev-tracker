@@ -1922,14 +1922,14 @@
     "peak_gb": 70.514409984
    },
    "latency": {
-    "s_per_query": 28.016253333333335,
-    "p50_s": 18.105,
-    "p95_s": 86.169
+    "s_per_query": 2.322706666666667,
+    "p50_s": 2.212,
+    "p95_s": 4.248
    },
    "sources": {
     "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
     "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
-    "latency": "data/experiments/2026_10_03_00_31_36_proper-bee/latency_2026_10_03_00_31_36_proper-bee.json",
+    "latency": "data/experiments/2026_10_03_10_44_32_poetic-walrus/latency_2026_10_03_10_44_32_poetic-walrus.json",
     "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
    }
   },
