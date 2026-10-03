@@ -190,3 +190,4 @@
 {"event": "result_committed", "config": "fanout_cachewarm_good_midge_kev27b_score.yaml", "note": "cachewarm row public"}
 {"event": "result_committed", "config": "fanout_cachewarm_holy_hare_kev05b_noul.yaml", "note": "cachewarm row hidden: kept-mass gate fail"}
 {"event": "result_committed", "config": "fanout_cachewarm_holy_hare_kev05b_score.yaml", "note": "cachewarm row hidden: gate fail 0.0549/0.0037"}
+{"event": "result_committed", "config": "fanout_cachewarm_humble_sawfly_kev9b_noul.yaml", "note": "cachewarm row public, 2708 hits"}

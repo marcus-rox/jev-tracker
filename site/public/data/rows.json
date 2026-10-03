@@ -28,6 +28,7 @@
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
   "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
   "2026_10_02_20_58_42_vast-filly": "kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)",
+  "2026_10_03_14_42_22_sunny-liger": "fanout_cachewarm_humble_sawfly_kev9b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.6 s/query mean)",
   "2026_10_03_14_28_20_funky-pug": "fanout_cachewarm_good_midge_kev27b_score: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.51 s/query mean)",
   "2026_10_03_14_02_56_solid-marlin": "fanout_cachewarm_good_midge_kev27b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.44 s/query mean)"
  },
@@ -1306,6 +1307,51 @@
     "cost": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
     "latency": "data/experiments/2026_10_03_04_44_11_moving-robin/latency_2026_10_03_04_44_11_moving-robin.json",
     "config": "data/experiments/2026_10_02_03_29_31_humble-sawfly/config_2026_10_02_03_29_31_humble-sawfly.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_14_42_22_sunny-liger",
+   "reranker": "humble_sawfly_kev9b_noul_cachewarm",
+   "label": "kev9b_noul cache warm",
+   "family": "kev9b",
+   "serving": "cache warm: each query sent once untimed first, then timed on the same 46 GPUs",
+   "runtime": "PyTorch",
+   "gpu": "H100",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7525566961866667,
+    "100": 0.788502916,
+    "150": 0.8309858862266667,
+    "200": 0.8891866246
+   },
+   "mean_kept_mass": 0.8153080307533334,
+   "cost": {
+    "warm_gpu_s": 384.59060192108154,
+    "load_s": 120.92920804023743,
+    "warm_usd": 0.42189589030742647,
+    "in_function_usd": 0.5548143893244267,
+    "usd_per_query": 0.005625278537432353,
+    "usd_per_1k": 5.6252785374323535,
+    "peak_gb": 24.340451328
+   },
+   "latency": {
+    "s_per_query": 0.60328,
+    "p50_s": 0.494,
+    "p95_s": 1.378
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_14_42_22_sunny-liger/kept_mass_2026_10_03_14_42_22_sunny-liger.json",
+    "cost": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
+    "latency": "data/experiments/2026_10_03_14_42_22_sunny-liger/latency_2026_10_03_14_42_22_sunny-liger.json",
+    "config": "data/experiments/2026_10_03_14_42_22_sunny-liger/config_2026_10_03_14_42_22_sunny-liger.yaml"
    }
   },
   {
@@ -2614,7 +2660,7 @@
    }
   }
  ],
- "updated": "2026-10-03 07:28 PDT",
+ "updated": "2026-10-03 07:42 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",

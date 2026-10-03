@@ -4066,5 +4066,28 @@
     "kept_mass_delta": 0.0036879508400000094
    }
   }
+ },
+ {
+  "config": "fanout_cachewarm_humble_sawfly_kev9b_noul.yaml",
+  "experiment": "2026_10_03_14_42_22_sunny-liger",
+  "experiment_dir": "data/experiments/2026_10_03_14_42_22_sunny-liger",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.6,
+   "median_s_per_query": 0.49,
+   "p95_s_per_query": 1.38,
+   "max_s_per_query": 2.23
+  },
+  "prefix_hits": 2708,
+  "prefix_misses": 2993,
+  "paired_cleared_mean": 0.61,
+  "rows": {
+   "2026_10_02_03_29_31_humble-sawfly/kev9b_noul": {
+    "answer_max": 0.01749999999999996,
+    "kept_mass_delta": 0.00015032403999992727
+   }
+  }
  }
 ]
