@@ -1440,6 +1440,51 @@
    }
   },
   {
+   "experiment": "2026_10_02_10_46_48_star-hare",
+   "reranker": "matilda_score",
+   "label": "matilda_score",
+   "family": "matilda",
+   "serving": "maincode_jev_serve runtime: 1 child, 1 in flight",
+   "runtime": "PyTorch",
+   "gpu": "H200",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.8760758584133334,
+    "100": 0.90058758212,
+    "150": 0.9243111936133334,
+    "200": 0.9519769835466667
+   },
+   "mean_kept_mass": 0.9132379044233334,
+   "cost": {
+    "warm_gpu_s": 3627.5383110046387,
+    "load_s": 754.0362088680267,
+    "warm_usd": 5.605127096631927,
+    "in_function_usd": 6.770233686600027,
+    "usd_per_query": 0.07473502795509236,
+    "usd_per_1k": 74.73502795509236,
+    "peak_gb": 52.91243264
+   },
+   "latency": {
+    "s_per_query": 2.982613333333333,
+    "p50_s": 1.981,
+    "p95_s": 10.805
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_10_46_48_star-hare/kept_mass_2026_10_02_10_46_48_star-hare.json",
+    "cost": "data/experiments/2026_10_02_10_46_48_star-hare/costs_2026_10_02_10_46_48_star-hare.json",
+    "latency": "data/experiments/2026_10_03_12_10_25_holy-ox/latency_2026_10_03_12_10_25_holy-ox.json",
+    "config": "data/experiments/2026_10_02_10_46_48_star-hare/config_2026_10_02_10_46_48_star-hare.yaml"
+   }
+  },
+  {
    "experiment": "2026_10_02_10_47_08_loving-loon",
    "reranker": "autotrust_noul",
    "label": "autotrust_noul",

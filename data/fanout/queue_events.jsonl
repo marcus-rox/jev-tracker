@@ -167,3 +167,6 @@
 {"event": "start", "config": "fanout_star_hare_matilda_noul.yaml", "app": "jev-ff-star-hare-matilda-noul", "t": "12:01:08"}
 {"event": "timed_phase", "config": "fanout_star_hare_matilda_noul.yaml", "app": "jev-ff-star-hare-matilda-noul", "t": "12:04:13"}
 {"event": "ok", "config": "fanout_star_hare_matilda_noul.yaml", "exp": "2026_10_03_12_01_09_first-bird", "t": "12:10:23"}
+{"event": "start", "config": "fanout_star_hare_matilda_score.yaml", "app": "jev-ff-star-hare-matilda-score", "t": "12:10:24"}
+{"event": "timed_phase", "config": "fanout_star_hare_matilda_score.yaml", "app": "jev-ff-star-hare-matilda-score", "t": "12:13:30"}
+{"event": "ok", "config": "fanout_star_hare_matilda_score.yaml", "exp": "2026_10_03_12_10_25_holy-ox", "t": "12:18:53"}
