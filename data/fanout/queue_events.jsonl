@@ -170,3 +170,6 @@
 {"event": "start", "config": "fanout_star_hare_matilda_score.yaml", "app": "jev-ff-star-hare-matilda-score", "t": "12:10:24"}
 {"event": "timed_phase", "config": "fanout_star_hare_matilda_score.yaml", "app": "jev-ff-star-hare-matilda-score", "t": "12:13:30"}
 {"event": "ok", "config": "fanout_star_hare_matilda_score.yaml", "exp": "2026_10_03_12_10_25_holy-ox", "t": "12:18:53"}
+{"event": "start", "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml", "app": "jev-ff-vast-filly-kev4b-ba-lora-noul", "t": "13:09:46"}
+{"event": "timed_phase", "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml", "app": "jev-ff-vast-filly-kev4b-ba-lora-noul", "t": "13:12:18"}
+{"event": "ok", "config": "fanout_vast_filly_kev4b_ba_lora_noul.yaml", "exp": "2026_10_03_13_09_47_mint-llama", "t": "13:13:51"}

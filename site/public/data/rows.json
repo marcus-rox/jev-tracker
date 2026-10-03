@@ -25,7 +25,8 @@
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
   "2026_10_02_17_18_05_proven-shiner": "kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)",
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
-  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)"
+  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
+  "2026_10_02_20_58_42_vast-filly": "kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)"
  },
  "rows": [
   {
@@ -1842,6 +1843,51 @@
     "cost": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
     "latency": "data/experiments/2026_10_03_08_46_11_free-calf/latency_2026_10_03_08_46_11_free-calf.json",
     "config": "data/experiments/2026_10_02_18_00_38_large-corgi/config_2026_10_02_18_00_38_large-corgi.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_20_58_42_vast-filly",
+   "reranker": "kev4b_ba_lora_noul",
+   "label": "kev4b_ba_lora_noul",
+   "family": "kev4b_ba_lora",
+   "serving": "batched: 12 children, 16 in flight",
+   "runtime": "PyTorch",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7437283586533333,
+    "100": 0.7906679674933333,
+    "150": 0.83604008904,
+    "200": 0.89143245104
+   },
+   "mean_kept_mass": 0.8154672165566667,
+   "cost": {
+    "warm_gpu_s": 521.0075976848602,
+    "load_s": 66.7207384109497,
+    "warm_usd": 0.2823861179451942,
+    "in_function_usd": 0.318686865881443,
+    "usd_per_query": 0.0037651482392692557,
+    "usd_per_1k": 3.765148239269256,
+    "peak_gb": 16.698039808
+   },
+   "latency": {
+    "s_per_query": 0.44889333333333337,
+    "p50_s": 0.29,
+    "p95_s": 1.111
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_20_58_42_vast-filly/kept_mass_2026_10_02_20_58_42_vast-filly.json",
+    "cost": "data/experiments/2026_10_02_20_58_42_vast-filly/costs_2026_10_02_20_58_42_vast-filly.json",
+    "latency": "data/experiments/2026_10_03_13_09_47_mint-llama/latency_2026_10_03_13_09_47_mint-llama.json",
+    "config": "data/experiments/2026_10_02_20_58_42_vast-filly/config_2026_10_02_20_58_42_vast-filly.yaml"
    }
   },
   {
