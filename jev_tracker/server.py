@@ -28,6 +28,7 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
 import httpx
 from pydantic import BaseModel
@@ -279,6 +280,7 @@ class SiteHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802  (http.server's name)
         cache = {QUEUE_PATH: self.queue, API_PATH: self.suggestions}.get(self.path)
         if cache is None:
+            self._static = True
             super().do_GET()
             return
         try:
@@ -292,6 +294,19 @@ class SiteHandler(SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", f"max-age={int(QUEUE_CACHE_SECONDS)}")
         self.end_headers()
         self.wfile.write(body)
+
+    def do_HEAD(self) -> None:  # noqa: N802  (http.server's name)
+        self._static = True
+        super().do_HEAD()
+
+    def end_headers(self) -> None:
+        if getattr(self, "_static", False):
+            path = urlsplit(self.path).path
+            cache_control = (
+                "public, max-age=31536000, immutable" if path.startswith("/assets/") else "no-cache"
+            )
+            self.send_header("Cache-Control", cache_control)
+        super().end_headers()
 
     def do_POST(self) -> None:  # noqa: N802  (http.server's name)
         if self.path not in (API_PATH, DECIDE_PATH):

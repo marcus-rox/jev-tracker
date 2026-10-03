@@ -123,7 +123,7 @@ export default function App() {
   const toggleSide = () => { localStorage.setItem('side', side ? 'closed' : 'open'); setSide(!side) }
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/rows.json`).then((r) => r.json()).then(setData)
+    fetch(`${import.meta.env.BASE_URL}data/rows.json`, { cache: 'no-cache' }).then((r) => r.json()).then(setData)
   }, [])
   const all = useMemo(() => (data?.rows ?? []).filter((r) => r.queries === FROZEN_QUERIES), [data])
   const MODELS = useMemo(() => uniq(all.map((r) => r.label)).sort((a, b) => a.localeCompare(b)), [all])
