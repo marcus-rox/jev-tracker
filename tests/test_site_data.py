@@ -385,3 +385,26 @@ def test_R6_latency_from_overrides_latency_but_not_cost() -> None:
         if (r["experiment"], r["reranker"]) == (row["experiment"], row["reranker"])
     )
     assert built["cost"] == own["cost"] and built["kept_mass"] == own["kept_mass"]
+
+
+def test_R6_cost_from_overrides_cost_only() -> None:
+    donor = _row("2026_10_02_00_08_39_safe-joey", "kev27b_noul")
+    key = ("2026_10_03_00_31_36_proper-bee", "kev4b_noul")
+
+    def built_row(cost_from: dict | None) -> dict:
+        registry = yaml.safe_load(REGISTRY.read_text())
+        row = next(r for r in registry["rows"] if (r["experiment"], r["reranker"]) == key)
+        row.pop("pending_fanout", None)
+        if cost_from is not None:
+            row["cost_from"] = cost_from
+        return next(
+            r
+            for r in build(registry, EXPERIMENTS_DIR, read_api_timing(API_TIMING))["rows"]
+            if (r["experiment"], r["reranker"]) == key
+        )
+
+    built = built_row({"experiment": donor["experiment"], "reranker": donor["reranker"]})
+    own = built_row(None)
+    assert built["cost"] == donor["cost"]
+    assert built["sources"]["cost"] == donor["sources"]["cost"]
+    assert built["kept_mass"] == own["kept_mass"] and built["latency"] == own["latency"]
