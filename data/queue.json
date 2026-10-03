@@ -133,18 +133,6 @@
    }
   },
   {
-   "config": "configs/api_openrouter_kev4b_vs_jev.yaml",
-   "label": "api_openrouter_kev4b_vs_jev",
-   "source": "twitter",
-   "url": "https://x.com/OpenRouter/status/2103560670205886744",
-   "status": "queued",
-   "note": "Kev-4B on OpenRouter; api source needs an OpenRouter key as a Modal Secret (in-process Kev-4B already benchmarked)",
-   "queued_at": "2026-10-02T08:13:17Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/von_395m_vs_jev.yaml",
    "label": "von_395m_vs_jev",
    "source": "github",
