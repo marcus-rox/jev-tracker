@@ -258,18 +258,6 @@
    "evidence": null
   },
   {
-   "config": "configs/api_bailian_decision_vs_jev.yaml",
-   "label": "api_bailian_decision_vs_jev",
-   "source": "github",
-   "url": "https://github.com/Acclerate/decision-model",
-   "status": "proposed",
-   "note": "Alibaba Bailian (Model Studio) Decision Model decision-model-preview: hosted System One endpoint at https://<workspace>.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone; the api source needs a DASHSCOPE_API_KEY + workspace id as a Modal Secret (not provisioned; preview access must be enabled on the Aliyun account)",
-   "queued_at": "2026-10-03T05:25:36Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/anarkali_150m_vs_jev.yaml",
    "label": "anarkali_150m_vs_jev",
    "source": "github",
@@ -337,18 +325,6 @@
    "status": "proposed",
    "note": "RSI-Jev v5.0-VL 3B (first 20 of Qwen3.5-4B-Base's 32 layers + option-scoring head, own-token pooling, calibration.safetensors): the rsi_jev source pins only shgao/rsi-jev-v3.0-qwen3.5-2b (RsiJevSource.model Literal); needs the v5.0-vl-3b id + revision 66eeaee and rsi-jev[fast,vision] in the image (text-only cases, batched via forward_batch like v3.0)",
    "queued_at": "2026-10-03T09:23:27Z",
-   "started_at": null,
-   "finished_at": null,
-   "evidence": null
-  },
-  {
-   "config": "configs/api_unisound_u2_decision_vs_jev.yaml",
-   "label": "api_unisound_u2_decision_vs_jev",
-   "source": "github",
-   "url": "https://github.com/zerosloney/dsh-system-one",
-   "status": "proposed",
-   "note": "Unisound (云知声) MaaS u2-decision: hosted SystemOne endpoint (POST https://maas-api.unisound.com/v1, body {model: u2-decision, state, questions}) found via the dsh-systemone DeepSeek Harness plugin; the api source needs a UNISOUND_API_KEY as a Modal Secret (not provisioned)",
-   "queued_at": "2026-10-03T10:23:59Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null
