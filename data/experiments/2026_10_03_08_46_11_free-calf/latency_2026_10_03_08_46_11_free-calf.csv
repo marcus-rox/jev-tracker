@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+large_corgi_rsi_jev_score,75,11.90,13.09,29.32,2.74,50.44,37.2

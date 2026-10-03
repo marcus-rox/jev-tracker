@@ -2403,5 +2403,91 @@
   },
   "app": "jev-ff-large-corgi-rsi-jev-noul",
   "note": "pull crashed on corrupt shard03of46.jsonl.gz member boundary; repaired by rezip of recovered records and re-ran finish()"
+ },
+ {
+  "config": "fanout_large_corgi_rsi_jev_score.yaml",
+  "gpu": "L40S",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_08_46_11_free-calf",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 11.9,
+   "median_s_per_query": 13.09,
+   "p95_s_per_query": 29.32,
+   "max_s_per_query": 50.44
+  },
+  "queue_overhead": {
+   "p50": 0.12274746322631858,
+   "max": 35.148575832366944
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_02_18_00_38_large-corgi/rsi_jev_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000152 p50=2.8956973401328412e-05 p90=0.0004654716996903563 p99=0.0011048701315941045 max=0.0029297173023223877",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_18_00_38_large-corgi/raw_rsi_jev_score_2026_10_02_18_00_38_large-corgi.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_08_46_11_free-calf/raw_large_corgi_rsi_jev_score_2026_10_03_08_46_11_free-calf.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.00015177803683783192,
+     "p50": 2.8956973401328412e-05,
+     "p90": 0.0004654716996903563,
+     "p99": 0.0011048701315941045,
+     "max": 0.0029297173023223877
+    },
+    "kept_mass_max_delta": 8.602150666670028e-05
+   }
+  },
+  "app": "jev-ff-large-corgi-rsi-jev-score"
  }
 ]
