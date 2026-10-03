@@ -128,3 +128,5 @@
 {"event": "start", "config": "fanout_loving_loon_autotrust_noul.yaml", "app": "jev-ff-loving-loon-autotrust-noul", "t": "09:05:25"}
 {"event": "ok", "config": "fanout_loving_loon_autotrust_noul.yaml", "exp": "2026_10_03_09_05_26_safe-bunny", "t": "09:28:50"}
 {"event": "adopt_done", "config": "fanout_loving_loon_autotrust_noul.yaml", "stopped": false, "t": "09:28:51"}
+{"event": "failed", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "code": 1, "t": "09:02:19"}
+{"event": "ok", "config": "fanout_large_corgi_rsi_jev_noul.yaml", "exp": "2026_10_03_08_41_32_prime-tiger", "note": "repaired shard03", "t": "09:07:41"}

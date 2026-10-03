@@ -2316,5 +2316,92 @@
    }
   },
   "app": "jev-ff-loving-loon-autotrust-noul"
+ },
+ {
+  "config": "fanout_large_corgi_rsi_jev_noul.yaml",
+  "gpu": "L40S",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_08_41_32_prime-tiger",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 12.25,
+   "median_s_per_query": 13.15,
+   "p95_s_per_query": 27.83,
+   "max_s_per_query": 59.46
+  },
+  "queue_overhead": {
+   "p50": 0.09804570960998538,
+   "max": 41.80178624916077
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_02_18_00_38_large-corgi/rsi_jev_noul": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.000039 p50=0.0 p90=0.00013446808262074228 p99=0.00035649538040161133 max=0.001184563443097475",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_18_00_38_large-corgi/raw_rsi_jev_noul_2026_10_02_18_00_38_large-corgi.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_08_41_32_prime-tiger/raw_large_corgi_rsi_jev_noul_2026_10_03_08_41_32_prime-tiger.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 3.9083108922109144e-05,
+     "p50": 0.0,
+     "p90": 0.00013446808262074228,
+     "p99": 0.00035649538040161133,
+     "max": 0.001184563443097475
+    },
+    "kept_mass_max_delta": 0.00041024223999996945
+   }
+  },
+  "app": "jev-ff-large-corgi-rsi-jev-noul",
+  "note": "pull crashed on corrupt shard03of46.jsonl.gz member boundary; repaired by rezip of recovered records and re-ran finish()"
  }
 ]

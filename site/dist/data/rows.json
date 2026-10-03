@@ -26,6 +26,7 @@
   "2026_10_02_09_47_49_fair-lizard": "clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
+  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
   "2026_10_03_04_25_56_helped-shad": "rune_26b_a4b_gguf_vs_jev: owao Rune-26B-A4B System One GGUF Q4_K_M @da27a15, 3 x L40S, llama-server, 8 in flight (hourly 2026-10-03)"
  },
  "rows": [
@@ -1888,6 +1889,51 @@
     "cost": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
     "latency": "data/experiments/2026_10_03_09_05_26_safe-bunny/latency_2026_10_03_09_05_26_safe-bunny.json",
     "config": "data/experiments/2026_10_02_10_47_08_loving-loon/config_2026_10_02_10_47_08_loving-loon.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_18_00_38_large-corgi",
+   "reranker": "rsi_jev_noul",
+   "label": "rsi_jev_noul",
+   "family": "rsi_jev",
+   "serving": "rsijev predict: 12 children, 1 in flight",
+   "runtime": "PyTorch",
+   "gpu": "L40S",
+   "buffer": "-",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7345692525066667,
+    "100": 0.78595763024,
+    "150": 0.8351366962533333,
+    "200": 0.88971751188
+   },
+   "mean_kept_mass": 0.81134527272,
+   "cost": {
+    "warm_gpu_s": 9589.416823148727,
+    "load_s": 169.59343075752258,
+    "warm_usd": 5.197463918146609,
+    "in_function_usd": 5.289383558392524,
+    "usd_per_query": 0.06929951890862146,
+    "usd_per_1k": 69.29951890862147,
+    "peak_gb": 17.552602624
+   },
+   "latency": {
+    "s_per_query": 12.24892,
+    "p50_s": 13.154,
+    "p95_s": 27.83
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_18_00_38_large-corgi/kept_mass_2026_10_02_18_00_38_large-corgi.json",
+    "cost": "data/experiments/2026_10_02_18_00_38_large-corgi/costs_2026_10_02_18_00_38_large-corgi.json",
+    "latency": "data/experiments/2026_10_03_08_41_32_prime-tiger/latency_2026_10_03_08_41_32_prime-tiger.json",
+    "config": "data/experiments/2026_10_02_18_00_38_large-corgi/config_2026_10_02_18_00_38_large-corgi.yaml"
    }
   },
   {
