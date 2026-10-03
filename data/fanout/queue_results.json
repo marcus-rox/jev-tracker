@@ -3989,5 +3989,36 @@
     "kept_mass_delta": 0.0004428205733333357
    }
   }
+ },
+ {
+  "config": "fanout_cachewarm_good_midge_kev27b_score.yaml",
+  "experiment": "2026_10_03_14_28_20_funky-pug",
+  "experiment_dir": "data/experiments/2026_10_03_14_28_20_funky-pug",
+  "status": "ok",
+  "gpu": "H100!",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.51,
+   "median_s_per_query": 0.42,
+   "p95_s_per_query": 0.86,
+   "max_s_per_query": 2.37
+  },
+  "prefix_hits": 2699,
+  "prefix_misses": 3002,
+  "paired_cleared_mean": 0.91,
+  "rows": {
+   "2026_09_29_08_47_55_good-midge/kev27b_score": {
+    "answer_max": 0.03279999999999994,
+    "kept_mass_delta": 0.0001307386933333543
+   },
+   "2026_10_02_00_08_39_safe-joey/kev27b_score": {
+    "answer_max": 0.03279999999999994,
+    "kept_mass_delta": 0.0001307386933333543
+   },
+   "2026_10_03_00_31_36_rested-hermit/kev27b_bf16_score": {
+    "answer_max": 0.03279999999999994,
+    "kept_mass_delta": 0.0001307386933333543
+   }
+  }
  }
 ]

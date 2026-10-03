@@ -87,6 +87,7 @@ experiments:
   2026_10_03_13_24_07_trusty-asp: 'fanout_keen_emu_kev4b_score: fan-out latency, 46 x L40S, original requests, one query at a time (1.25 s/query mean)'
   2026_10_03_13_29_45_moving-mayfly: 'fanout_proper_bee_kev27b_noul: fan-out latency, 46 x H200, original requests, one query at a time (2.18 s/query mean)'
   2026_10_03_13_43_10_moved-fox: 'fanout_cachewarm_above_dog_kev08b_noul: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.41 s/query mean)'
+  2026_10_03_14_28_20_funky-pug: 'fanout_cachewarm_good_midge_kev27b_score: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.51 s/query mean)'
   2026_10_03_14_02_56_solid-marlin: 'fanout_cachewarm_good_midge_kev27b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.44 s/query mean)'
   2026_10_03_13_51_03_ace-kodiak: 'fanout_cachewarm_above_dog_kev08b_score: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.52 s/query mean)'
 rows:
@@ -577,6 +578,25 @@ rows:
   label: kev27b_score
   family: kev27b
   serving: batched, R-1 timers (baseline)
+  runtime: PyTorch
+  gpu: 3 x H100
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_14_28_20_funky-pug
+  reranker: good_midge_kev27b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_14_28_20_funky-pug
+    reranker: good_midge_kev27b_score_cachewarm
+  cost_from:
+    experiment: 2026_09_29_08_47_55_good-midge
+    reranker: kev27b_score
+  label: kev27b_score cache warm
+  family: kev27b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: 3 x H100
   buffer: 4,096 x 16 (default)
