@@ -161,3 +161,6 @@
 {"event": "start", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-score", "t": "11:38:41"}
 {"event": "timed_phase", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-score", "t": "11:41:00"}
 {"event": "ok", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "exp": "2026_10_03_11_38_43_strong-newt", "t": "11:42:33"}
+{"event": "start", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "app": "jev-ff-quick-moray-kev27b-batched-c32-noul", "t": "11:42:34"}
+{"event": "timed_phase", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "app": "jev-ff-quick-moray-kev27b-batched-c32-noul", "t": "11:45:40"}
+{"event": "adopt_done", "config": "fanout_quick_moray_kev27b_batched_c32_noul.yaml", "stopped": true, "t": "11:48:25"}

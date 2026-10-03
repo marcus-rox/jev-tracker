@@ -9,6 +9,7 @@
   "2026_09_29_08_47_55_good-midge": "kev27b_timed: Kev-27B batched, 3 x H100, R-1 timers (baseline)",
   "2026_10_03_00_31_36_proper-bee": "rerun_kev_sizes_v1: timed rerun of actual-clam, weights pinned (kev-4b@139fdd9, kev-9b@2629c06, kev-27b@01b8199)",
   "2026_10_03_00_31_36_rested-hermit": "rerun_kev27b_bf16_h100_v1: timed rerun of busy-sawfly bf16 arms, kev-27b@01b8199",
+  "2026_10_03_00_31_36_quick-moray": "rerun_kev27b_c32_h100_v1: timed rerun of cuddly-horse c32 arm, kev-27b@01b8199",
   "2026_10_03_00_31_36_clear-flea": "rerun_kev27b_cheap_gpu_v1: timed rerun of real-koi non-FP8 arms, kev-27b@01b8199",
   "2026_09_29_22_00_38_super-orca": "kev27b_bank_width_full: H-1 wider CUDA-graph buffer, 75 cases",
   "2026_09_29_21_56_46_pumped-egret": "kev27b_vllm_full: H-2 vLLM, 75 cases (readout arm killed)",
@@ -1975,6 +1976,51 @@
     "cost": "data/experiments/2026_10_03_00_31_36_rested-hermit/costs_2026_10_03_00_31_36_rested-hermit.json",
     "latency": "data/experiments/2026_10_03_05_33_42_wise-chimp/latency_2026_10_03_05_33_42_wise-chimp.json",
     "config": "data/experiments/2026_10_03_00_31_36_rested-hermit/config_2026_10_03_00_31_36_rested-hermit.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_00_31_36_quick-moray",
+   "reranker": "kev27b_batched_c32_noul",
+   "label": "kev27b_batched_c32_noul",
+   "family": "kev27b",
+   "serving": "batched: 12 children, 32 in flight",
+   "runtime": "PyTorch",
+   "gpu": "H100",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.8752001079866667,
+    "100": 0.8926893800933333,
+    "150": 0.9190597416533334,
+    "200": 0.9504117352666667
+   },
+   "mean_kept_mass": 0.90934024125,
+   "cost": {
+    "warm_gpu_s": 958.261233329773,
+    "load_s": 159.93322110176086,
+    "warm_usd": 1.3235120850257494,
+    "in_function_usd": 1.54452781775054,
+    "usd_per_query": 0.017646827800343323,
+    "usd_per_1k": 17.646827800343324,
+    "peak_gb": 70.666049536
+   },
+   "latency": {
+    "s_per_query": 1.2291866666666666,
+    "p50_s": 0.959,
+    "p95_s": 2.612
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_00_31_36_quick-moray/kept_mass_2026_10_03_00_31_36_quick-moray.json",
+    "cost": "data/experiments/2026_10_03_00_31_36_quick-moray/costs_2026_10_03_00_31_36_quick-moray.json",
+    "latency": "data/experiments/2026_10_03_11_42_35_select-raptor/latency_2026_10_03_11_42_35_select-raptor.json",
+    "config": "data/experiments/2026_10_03_00_31_36_quick-moray/config_2026_10_03_00_31_36_quick-moray.yaml"
    }
   },
   {
