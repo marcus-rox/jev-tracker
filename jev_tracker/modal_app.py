@@ -698,7 +698,7 @@ def _serve_fanout(
             now = time.time()
             stuck_futs = [
                 f
-                for f, (cid, bi, t0) in pending.items()
+                for f, (cid, bi, t0) in list(pending.items())
                 if now - t0 > STUCK_DUMP_S and f not in dumped and not f.done()
             ]
             if not stuck_futs:
