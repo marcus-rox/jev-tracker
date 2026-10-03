@@ -75,6 +75,7 @@ experiments:
   2026_10_03_09_56_01_subtle-grub: 'fanout_merry_corgi_minicpm5_jev_score: fan-out latency, 46 x L4, original requests, one query at a time (3.25 s/query mean)'
   2026_10_03_10_34_30_robust-alpaca: 'fanout_loving_loon_autotrust_score: fan-out latency, 46 x H200, original requests, one query at a time (4.09 s/query mean)'
   2026_10_03_10_44_32_poetic-walrus: 'fanout_proper_bee_kev27b_score: fan-out latency, 46 x H200, original requests, one query at a time (2.32 s/query mean)'
+  2026_10_03_10_51_36_fun-falcon: 'fanout_proper_bee_kev9b_noul: fan-out latency, 46 x H100!, original requests, one query at a time (1.28 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1614,6 +1615,9 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev9b_noul
+  latency_from:
+    experiment: 2026_10_03_10_51_36_fun-falcon
+    reranker: proper_bee_kev9b_noul
   label: kev9b_noul
   family: kev9b
   serving: first run

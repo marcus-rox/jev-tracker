@@ -150,3 +150,6 @@
 {"event": "start", "config": "fanout_proper_bee_kev27b_score.yaml", "app": "jev-ff-proper-bee-kev27b-score", "t": "10:44:30"}
 {"event": "timed_phase", "config": "fanout_proper_bee_kev27b_score.yaml", "app": "jev-ff-proper-bee-kev27b-score", "t": "10:46:57"}
 {"event": "ok", "config": "fanout_proper_bee_kev27b_score.yaml", "exp": "2026_10_03_10_44_32_poetic-walrus", "t": "10:51:34"}
+{"event": "start", "config": "fanout_proper_bee_kev9b_noul.yaml", "app": "jev-ff-proper-bee-kev9b-noul", "t": "10:51:34"}
+{"event": "timed_phase", "config": "fanout_proper_bee_kev9b_noul.yaml", "app": "jev-ff-proper-bee-kev9b-noul", "t": "10:53:58"}
+{"event": "ok", "config": "fanout_proper_bee_kev9b_noul.yaml", "exp": "2026_10_03_10_51_36_fun-falcon", "t": "10:56:16"}

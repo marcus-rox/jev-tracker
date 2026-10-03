@@ -1787,14 +1787,14 @@
     "peak_gb": 24.483272704
    },
    "latency": {
-    "s_per_query": 10.832173333333333,
-    "p50_s": 7.054,
-    "p95_s": 33.102
+    "s_per_query": 1.2820666666666667,
+    "p50_s": 1.112,
+    "p95_s": 2.689
    },
    "sources": {
     "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
     "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
-    "latency": "data/experiments/2026_10_03_00_31_36_proper-bee/latency_2026_10_03_00_31_36_proper-bee.json",
+    "latency": "data/experiments/2026_10_03_10_51_36_fun-falcon/latency_2026_10_03_10_51_36_fun-falcon.json",
     "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
    }
   },
