@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 
-const TIP_WIDTH_PX = 320
+const TIP_WIDTH_PX = 360
 const GAP_PX = 6
 /** Below this fraction of the viewport height the tip opens upwards, so it stays on screen. */
 const FLIP_AT = 0.6
@@ -11,8 +13,8 @@ export type Bullet = string | [string, string[]]
 
 const flat = (points: Bullet[]): string => points.map((b) => (typeof b === 'string' ? b : `${b[0]} ${b[1].join(' ')}`)).join(' ')
 
-/** A circled "i"; hover or focus shows `points` as a nested list. Rendered in a portal so table scroll boxes can't clip it. */
-export default function Info({ points }: { points: Bullet[] }) {
+/** A circled "i"; hover or focus shows the `math` formula and `points` as a nested list. Rendered in a portal so table scroll boxes can't clip it. */
+export default function Info({ math, points }: { math?: string; points: Bullet[] }) {
   const [at, setAt] = useState<CSSProperties | null>(null)
   const shownAt = useRef<DOMRect | null>(null)
   const show = (el: Element) => {
@@ -52,6 +54,7 @@ export default function Info({ points }: { points: Bullet[] }) {
         <path d="M6.6 6.9h2.3v4.6h1v1.2H6.4v-1.2h1V8.1h-.8z" fill="currentColor" />
       </svg>
       {at && createPortal(<span className="info-tip" role="tooltip" style={{ ...at, width: TIP_WIDTH_PX }}>
+          {math && <div className="info-math" dangerouslySetInnerHTML={{ __html: katex.renderToString(math, { displayMode: true, throwOnError: true }) }} />}
           <ul>{points.map((b) => (typeof b === 'string'
             ? <li key={b}>{b}</li>
             : <li key={b[0]}>{b[0]}<ul>{b[1].map((sub) => <li key={sub}>{sub}</li>)}</ul></li>))}</ul>
