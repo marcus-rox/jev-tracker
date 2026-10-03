@@ -316,6 +316,42 @@
    "started_at": null,
    "finished_at": null,
    "evidence": null
+  },
+  {
+   "config": "configs/kahn1_4b_vs_jev.yaml",
+   "label": "kahn1_4b_vs_jev",
+   "source": "github",
+   "url": "https://github.com/Okura66/kahn1",
+   "status": "proposed",
+   "note": "Kahn1 4B (HF Okura66/Kahn1-Qwen3.5-4B @f3f9910, Apache-2.0): new open System One family, Qwen3.5-4B fine-tune that reads typed answers from option-token probabilities with calibrated confidence; served by its own sysone runtime on vLLM (POST /v1/evaluate/jev, not /v1/systemone). Needs a kahn1 source (vLLM in-process or sysone server, batched via server-side concurrency) - no harness source loads it",
+   "queued_at": "2026-10-03T09:23:27Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/rsi_jev_v5_vl_3b_vs_jev.yaml",
+   "label": "rsi_jev_v5_vl_3b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/shgao/rsi-jev-v5.0-vl-3b",
+   "status": "proposed",
+   "note": "RSI-Jev v5.0-VL 3B (first 20 of Qwen3.5-4B-Base's 32 layers + option-scoring head, own-token pooling, calibration.safetensors): the rsi_jev source pins only shgao/rsi-jev-v3.0-qwen3.5-2b (RsiJevSource.model Literal); needs the v5.0-vl-3b id + revision 66eeaee and rsi-jev[fast,vision] in the image (text-only cases, batched via forward_batch like v3.0)",
+   "queued_at": "2026-10-03T09:23:27Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/api_unisound_u2_decision_vs_jev.yaml",
+   "label": "api_unisound_u2_decision_vs_jev",
+   "source": "github",
+   "url": "https://github.com/zerosloney/dsh-system-one",
+   "status": "proposed",
+   "note": "Unisound (云知声) MaaS u2-decision: hosted SystemOne endpoint (POST https://maas-api.unisound.com/v1, body {model: u2-decision, state, questions}) found via the dsh-systemone DeepSeek Harness plugin; the api source needs a UNISOUND_API_KEY as a Modal Secret (not provisioned)",
+   "queued_at": "2026-10-03T10:23:59Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
   }
  ]
 }

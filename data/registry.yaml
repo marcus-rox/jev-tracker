@@ -85,7 +85,6 @@ rows:
   queries: 75
   tables:
   - quality
-  highlight: false
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: random
   label: random (seed 0)
@@ -97,7 +96,6 @@ rows:
   queries: 75
   tables:
   - quality
-  highlight: false
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: prod
   label: production
@@ -111,7 +109,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: true
   api_usd_per_run: 4.73
   api_usd_per_1k: 63.0
 - experiment: 2026_09_29_08_47_55_good-midge
@@ -127,7 +124,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: true
   api_usd_per_run: 0.35
   api_usd_per_1k: 4.7
 - experiment: 2026_09_29_08_47_55_good-midge
@@ -143,7 +139,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: true
   api_usd_per_run: 0.46
   api_usd_per_1k: 6.1
 - experiment: 2026_09_28_04_15_00_super-pigeon
@@ -158,7 +153,6 @@ rows:
   queries: 75
   tables:
   - quality
-  highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev4b_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
@@ -173,7 +167,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev4b_score
   deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
@@ -188,7 +181,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev9b_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
@@ -203,7 +195,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev9b_score
   deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
@@ -218,7 +209,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev27b_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
@@ -233,7 +223,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_17_56_26_actual-clam
   reranker: kev27b_score
   deprecated: 'superseded by 2026_10_03_00_31_36_proper-bee (same config, timed, weights pinned)'
@@ -248,7 +237,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_22_15_35_pretty-sawfly
   reranker: kev27b_noul
   deprecated: 'no per-request start times saved; superseded by 2026_10_02_00_08_39_safe-joey (same config, pinned, timed)'
@@ -263,7 +251,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_22_15_35_pretty-sawfly
   reranker: kev27b_score
   deprecated: 'no per-request start times saved; superseded by 2026_10_02_00_08_39_safe-joey (same config, pinned, timed)'
@@ -278,7 +265,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_23_53_dear-pony
   reranker: kev27b_FP8_w8a8_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -293,7 +279,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_23_53_dear-pony
   reranker: kev27b_FP8_w8a8_score
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -308,7 +293,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_bf16_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_rested-hermit (same config, timed, weights pinned)'
@@ -323,7 +307,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_bf16_score
   deprecated: 'superseded by 2026_10_03_00_31_36_rested-hermit (same config, timed, weights pinned)'
@@ -338,7 +321,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_wo_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -353,7 +335,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_wo_score
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -368,7 +349,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_w8a8_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -383,7 +363,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_28_23_33_26_busy-sawfly
   reranker: kev27b_FP8_w8a8_score
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -398,7 +377,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_batched_c32_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_quick-moray (same config, timed, weights pinned)'
@@ -413,7 +391,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c32_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -428,7 +405,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c32_score
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -443,7 +419,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c64_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -458,7 +433,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_07_02_cuddly-horse
   reranker: kev27b_FP8_w8a8_c64_score
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -473,7 +447,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_H100_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_clear-flea (same config, timed, weights pinned)'
@@ -488,7 +461,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_A100_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_clear-flea (same config, timed, weights pinned)'
@@ -503,7 +475,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_batched_RTXPRO6000_noul
   deprecated: 'superseded by 2026_10_03_00_31_36_clear-flea (same config, timed, weights pinned)'
@@ -518,7 +489,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_FP8_w8a8_RTXPRO6000_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -533,7 +503,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_00_31_07_real-koi
   reranker: kev27b_FP8_w8a8_L40S_noul
   deprecated: 'no per-request start times saved; FP8 code dropped, not rerun'
@@ -548,7 +517,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
   blank: failed
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: kev27b_noul
@@ -566,7 +534,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: true
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: kev27b_score
   latency_from:
@@ -583,7 +550,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: true
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c12_w4096x16
   latency_from:
@@ -600,7 +566,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c12_w4096x16_rerun
   latency_from:
@@ -617,7 +582,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c12_w8192x16
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -632,7 +596,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c12_w8192x8
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -647,7 +610,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c18_w4096x16
   latency_from:
@@ -664,7 +626,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c18_w4096x16_rerun
   latency_from:
@@ -681,7 +642,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c18_w8192x16
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -696,7 +656,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c18_w8192x8
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -711,7 +670,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c24_w4096x16
   latency_from:
@@ -728,7 +686,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c24_w4096x16_rerun
   latency_from:
@@ -745,7 +702,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c24_w8192x16
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -760,7 +716,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_22_00_38_super-orca
   reranker: kev27b_noul_c24_w8192x8
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -775,7 +730,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_56_46_pumped-egret
   reranker: kev27b_noul
   latency_from:
@@ -792,7 +746,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_56_46_pumped-egret
   reranker: kev27b_rerun_noul
   latency_from:
@@ -809,7 +762,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_09_45_47_causal-urchin
   reranker: kev27b_vllm_noul
   deprecated: 'vLLM: not rerun (Marcus: skip vLLM/SGLang)'
@@ -824,7 +776,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_57_06_exact-jay
   reranker: kev27b_noul
   latency_from:
@@ -841,7 +792,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_57_06_exact-jay
   reranker: kev27b_rerun_noul
   latency_from:
@@ -858,7 +808,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_10_43_20_united-snake
   reranker: kev27b_sglang_noul
   deprecated: 'SGLang: not rerun (Marcus: skip vLLM/SGLang)'
@@ -873,7 +822,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_noul
   pending_fanout: 'fan-out run 2026_10_03_07_02_53_tender-jackal failed the answer check vs this run (answer max 0.199, kept-mass 0.0035; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -888,7 +836,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_score
   pending_fanout: 'fan-out run 2026_10_03_07_07_34_next-kit failed the answer check vs this run (answer max 0.094, kept-mass 0.0025; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -903,7 +850,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_noul_reworded
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -918,7 +864,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya322m_multilingual_noul
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -933,7 +878,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya322m_multilingual_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -948,7 +892,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya322m_multilingual_noul_reworded
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -963,7 +906,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_typed_noul
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -978,7 +920,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_typed_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -993,7 +934,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_58_31_top-ram
   reranker: laya421m_typed_noul_reworded
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1008,7 +948,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_30_01_11_06_key-kiwi
   reranker: d1_noul
   deprecated: 'failed run: no cost or latency measured'
@@ -1023,7 +962,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
   blank: failed
 - experiment: 2026_09_30_01_11_06_key-kiwi
   reranker: d1_score
@@ -1039,7 +977,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
   blank: failed
 - experiment: 2026_09_30_01_11_06_key-kiwi
   reranker: d1_noul_rerun
@@ -1055,7 +992,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
   blank: failed
 - experiment: 2026_09_29_21_56_46_pumped-egret
   reranker: kev27b_vllm_floor_noul
@@ -1070,7 +1006,6 @@ rows:
   tables:
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_29_21_57_06_exact-jay
   reranker: kev27b_sglang_floor_noul
   deprecated: 'no raw answers: latency not derivable; vLLM/SGLang code dropped'
@@ -1084,7 +1019,6 @@ rows:
   tables:
   - cost
   - latency
-  highlight: false
 - experiment: 2026_09_30_01_06_44_true-coyote
   reranker: prod
   label: production
@@ -1096,7 +1030,6 @@ rows:
   queries: 2
   tables:
   - appendix
-  highlight: false
 - experiment: 2026_09_30_01_06_44_true-coyote
   reranker: jev_noul
   label: jev_noul
@@ -1108,7 +1041,6 @@ rows:
   queries: 2
   tables:
   - appendix
-  highlight: false
 - experiment: 2026_09_30_01_06_44_true-coyote
   reranker: jev_score
   label: jev_score
@@ -1120,7 +1052,6 @@ rows:
   queries: 2
   tables:
   - appendix
-  highlight: false
 - experiment: 2026_09_30_01_06_44_true-coyote
   reranker: d1_noul
   label: d1_noul
@@ -1132,7 +1063,6 @@ rows:
   queries: 2
   tables:
   - appendix
-  highlight: false
 - experiment: 2026_09_30_01_06_44_true-coyote
   reranker: d1_score
   label: d1_score
@@ -1144,7 +1074,6 @@ rows:
   queries: 2
   tables:
   - appendix
-  highlight: false
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_noul
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1159,7 +1088,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1174,7 +1102,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_01_23_53_20_frank-moray
   reranker: laya_noul
   pending_fanout: 'fan-out run 2026_10_03_07_02_53_tender-jackal failed the answer check vs this run (answer max 0.199, kept-mass 0.0035; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1189,7 +1116,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_01_23_53_20_frank-moray
   reranker: laya_score
   pending_fanout: 'fan-out run 2026_10_03_07_07_34_next-kit failed the answer check vs this run (answer max 0.094, kept-mass 0.0025; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1204,7 +1130,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_00_08_39_safe-joey
   reranker: kev27b_noul
   latency_from:
@@ -1221,7 +1146,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_00_08_39_safe-joey
   reranker: kev27b_score
   latency_from:
@@ -1238,7 +1162,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_01_23_53_25_fit-macaw
   reranker: kev27b_noul
   latency_from:
@@ -1255,7 +1178,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_01_23_53_25_fit-macaw
   reranker: kev27b_score
   pending_fanout: 'fan-out run 2026_10_03_08_23_35_able-hermit failed the answer check vs this run (answer max 0.085; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1270,7 +1192,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_noul
   pending_fanout: 'fan-out run 2026_10_03_07_13_01_viable-adder failed the answer check vs this run (kept-mass 0.0023; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1285,7 +1206,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_03_29_11_above-dog
   reranker: kev08b_score
   pending_fanout: 'fan-out run 2026_10_03_07_18_29_happy-hare failed the answer check vs this run (kept-mass 0.0038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1300,7 +1220,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_03_29_31_humble-sawfly
   reranker: kev9b_noul
   latency_from:
@@ -1317,7 +1236,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_03_29_31_humble-sawfly
   reranker: kev9b_score
   pending_fanout: 'fan-out run 2026_10_03_08_32_57_tender-weevil failed the answer check vs this run (answer max 0.043; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1332,7 +1250,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_noul
   pending_fanout: 'fan-out run 2026_10_03_08_36_04_right-molly failed the answer check vs this run (kept-mass 0.0028; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1347,7 +1264,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_03_29_51_immune-tick
   reranker: kev2b_score
   pending_fanout: 'fan-out run 2026_10_03_08_39_11_key-chimp failed the answer check vs this run (answer max 0.038; gate: answer max <= 0.035, kept-mass <= 0.002); hidden until resolved'
@@ -1362,7 +1278,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_09_46_36_holy-hare
   reranker: kev05b_noul
   latency_from:
@@ -1379,7 +1294,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_09_46_36_holy-hare
   reranker: kev05b_score
   latency_from:
@@ -1396,7 +1310,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_09_47_49_fair-lizard
   reranker: clef_flash_noul
   latency_from:
@@ -1413,7 +1326,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_09_47_49_fair-lizard
   reranker: clef_flash_score
   latency_from:
@@ -1430,7 +1342,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_09_49_26_alert-jay
   reranker: clef_noul
   latency_from:
@@ -1447,7 +1358,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_09_49_26_alert-jay
   reranker: clef_score
   latency_from:
@@ -1464,7 +1374,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_10_46_48_star-hare
   reranker: matilda_noul
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1479,7 +1388,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_10_46_48_star-hare
   reranker: matilda_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1494,7 +1402,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_noul
   latency_from:
@@ -1511,7 +1418,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_10_47_08_loving-loon
   reranker: autotrust_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1526,7 +1432,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_10_47_28_fine-buck
   reranker: jevany_noul
   deprecated: 'failed run: no cost or latency measured'
@@ -1541,7 +1446,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
   blank: failed
 - experiment: 2026_10_02_10_47_28_fine-buck
   reranker: jevany_score
@@ -1557,7 +1461,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
   blank: failed
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_noul
@@ -1573,7 +1476,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1588,7 +1490,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_noul
   latency_from:
@@ -1605,7 +1506,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_17_22_11_merry-corgi
   reranker: minicpm5_jev_score
   latency_from:
@@ -1622,7 +1522,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_18_00_38_large-corgi
   reranker: rsi_jev_noul
   latency_from:
@@ -1639,7 +1538,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_18_00_38_large-corgi
   reranker: rsi_jev_score
   latency_from:
@@ -1656,7 +1554,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_20_58_42_vast-filly
   reranker: kev4b_ba_lora_noul
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1671,7 +1568,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_02_20_58_42_vast-filly
   reranker: kev4b_ba_lora_score
   pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
@@ -1686,7 +1582,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_noul
   label: kev4b_noul
@@ -1700,7 +1595,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_score
   label: kev4b_score
@@ -1714,7 +1608,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev9b_noul
   label: kev9b_noul
@@ -1728,7 +1621,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev9b_score
   label: kev9b_score
@@ -1742,7 +1634,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev27b_noul
   label: kev27b_noul
@@ -1756,7 +1647,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev27b_score
   label: kev27b_score
@@ -1770,7 +1660,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_rested-hermit
   reranker: kev27b_bf16_noul
   latency_from:
@@ -1787,7 +1676,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_rested-hermit
   reranker: kev27b_bf16_score
   latency_from:
@@ -1804,7 +1692,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_quick-moray
   reranker: kev27b_batched_c32_noul
   label: kev27b_batched_c32_noul
@@ -1818,7 +1705,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_clear-flea
   reranker: kev27b_batched_H100_noul
   latency_from:
@@ -1835,7 +1721,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_clear-flea
   reranker: kev27b_batched_A100_noul
   latency_from:
@@ -1852,7 +1737,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_00_31_36_clear-flea
   reranker: kev27b_batched_RTXPRO6000_noul
   latency_from:
@@ -1869,7 +1753,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_04_25_56_helped-shad
   reranker: rune26b_q4_noul
   label: rune26b_q4_noul
@@ -1883,7 +1766,6 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false
 - experiment: 2026_10_03_04_25_56_helped-shad
   reranker: rune26b_q4_score
   label: rune26b_q4_score
@@ -1897,4 +1779,3 @@ rows:
   - quality
   - cost
   - latency
-  highlight: false

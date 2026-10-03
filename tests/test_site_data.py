@@ -4,7 +4,11 @@ attached kev_cost_report's numbers unchanged."""
 import json
 import re
 from datetime import UTC, datetime
+from functools import partial
+from http.server import ThreadingHTTPServer
 from pathlib import Path
+from threading import Thread
+from urllib.request import Request, urlopen
 
 import pytest
 import yaml
@@ -12,6 +16,10 @@ import yaml
 from jev_tracker.evaluation_queue import Queue, QueueItem
 from jev_tracker.experiment import EXPERIMENTS_DIR
 from jev_tracker.server import (
+    QUEUE_CACHE_SECONDS,
+    QUEUE_PATH,
+    GitHubCache,
+    SiteHandler,
     check_skip,
     decided,
     parse_decision,
@@ -96,6 +104,18 @@ def test_R6_no_deprecated_or_pending_row_reaches_rows_json() -> None:
     shown = {(r["experiment"], r["reranker"]) for r in DATA["rows"]}
     assert not (deprecated | pending) & shown
     assert set(DATA["experiments"]) == {r["experiment"] for r in DATA["rows"]}
+
+
+def test_R6_highlights_only_jev_and_production_rows() -> None:
+    assert all(r["highlight"] == (r["family"] in ("jev", "production")) for r in DATA["rows"])
+    baseline_rows = [
+        r
+        for r in DATA["rows"]
+        if r["experiment"] == "2026_09_29_08_47_55_good-midge"
+        and r["reranker"] in {"kev27b_noul", "kev27b_score"}
+    ]
+    assert {r["reranker"] for r in baseline_rows} == {"kev27b_noul", "kev27b_score"}
+    assert all(r["gpu"] == "3 x H100" and not r["highlight"] for r in baseline_rows)
 
 
 def test_R6_committed_rows_json_is_the_generated_one() -> None:
@@ -268,6 +288,51 @@ def test_R7_suggestions_lists_every_submission_newest_first() -> None:
     assert [s.text for s in got] == ["try the new Kev 30B", "b", "a"]
     assert got[0].path == "requests/2026-10-02/120000_c.json"
     assert suggestions({"data": {"repository": {"object": None}}}) == []
+
+
+@pytest.fixture
+def site_server(tmp_path):
+    (tmp_path / "index.html").write_text("index")
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "rows.json").write_text("{}")
+    (tmp_path / "assets").mkdir()
+    (tmp_path / "assets" / "app-abc.js").write_text("app")
+    handler = partial(
+        SiteHandler,
+        directory=str(tmp_path),
+        commit=lambda _text, _now: "",
+        decide=lambda _config, _decision, _now: Queue(),
+        queue=GitHubCache(lambda: b'{"items": []}'),
+        suggestions=GitHubCache(lambda: b'{"items": []}'),
+        skip_password=None,
+    )
+    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    yield f"http://127.0.0.1:{server.server_port}"
+    server.shutdown()
+    server.server_close()
+    thread.join()
+
+
+@pytest.mark.parametrize(
+    "path, cache_control",
+    [
+        ("/data/rows.json?version=1", "no-cache"),
+        ("/", "no-cache"),
+        ("/assets/app-abc.js", "public, max-age=31536000, immutable"),
+    ],
+)
+@pytest.mark.parametrize("method", ["GET", "HEAD"])
+def test_R7_static_files_set_cache_control(site_server, path, cache_control, method) -> None:
+    request = Request(f"{site_server}{path}", method=method)
+    with urlopen(request) as response:
+        assert response.headers.get_all("Cache-Control") == [cache_control]
+
+
+def test_R7_queue_api_keeps_its_cache_control(site_server) -> None:
+    with urlopen(f"{site_server}{QUEUE_PATH}") as response:
+        assert response.headers.get_all("Cache-Control") == [f"max-age={int(QUEUE_CACHE_SECONDS)}"]
 
 
 def test_R6_latency_from_overrides_latency_but_not_cost() -> None:
