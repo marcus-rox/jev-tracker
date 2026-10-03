@@ -430,15 +430,15 @@ class Experiment(BaseModel):
         if src.sweep is None:
             return None
         if src.sweep == "default":
-            if src.max_items is None:
-                raise ValueError("sweep: default needs a numeric max_items")
-            return [
+            children = src.max_items or 12
+            points = [
                 *(
                     modal_app.SweepPoint(requests=1, children=c)
-                    for c in (1, 2, 4, 8, src.max_items)
+                    for c in (1, 2, 4, 8, 16, 32, 64, 128)
                 ),
-                *(modal_app.SweepPoint(requests=r, children=src.max_items) for r in (2, 4, 8)),
+                *(modal_app.SweepPoint(requests=r, children=children) for r in (2, 4, 8)),
             ]
+            return list(dict.fromkeys(points))
         return src.sweep
 
     def scoring_run(
@@ -674,12 +674,19 @@ def _slice(records: list[RawRecord], cases: int | None) -> list[RawRecord]:
     return [r for r in records if r.case_id in keep]
 
 
-def apply_dispatch(records: list[RawRecord], dispatched: list[dict]) -> list[RawRecord]:
+def apply_dispatch(records: list[RawRecord], dispatched: dict) -> list[RawRecord]:
     """Fan-out timing: each pulled record gets the dispatcher's sent / recv (client-side wall
-    clock). The two records of a 422-split request share the parent's times (same case, batch)."""
-    times = {(d["case_id"], d["batch"]): (d["sent"], d["recv"]) for d in dispatched}
+    clock). Warm-up answers (worker-side started_at_s before timed_from) are dropped; the two
+    records of a 422-split request share the parent's times (same case, batch)."""
+    times = {
+        (d["case_id"], d["batch"]): (d["sent"], d["recv"])
+        for d in dispatched["rows"]
+        if not d["warmup"]
+    }
     out = []
     for r in records:
+        if r.started_at_s is not None and r.started_at_s < dispatched["timed_from"]:
+            continue
         key = (r.case_id, r.batch)
         if key not in times:
             raise ValueError(f"{r.case_id} batch {r.batch}: no dispatch record")
@@ -700,6 +707,11 @@ def sweep_stats(rows: list[dict]) -> list[dict]:
     for (requests_n, children_n), walls in sorted(groups.items()):
         walls = sorted(walls)
         n = len(walls)
+        sent_n = [
+            r["children_sent"]
+            for r in rows
+            if not r["warmup"] and (r["requests"], r["children"]) == (requests_n, children_n)
+        ]
         out.append(
             {
                 "requests": requests_n,
@@ -708,6 +720,9 @@ def sweep_stats(rows: list[dict]) -> list[dict]:
                 "mean_s": sum(walls) / n,
                 "p50_s": walls[n // 2],
                 "p95_s": walls[min(n - 1, int(0.95 * n))],
+                "children_sent_min": min(sent_n),
+                "children_sent_max": max(sent_n),
+                "short": any(s != requests_n * children_n for s in sent_n),
             }
         )
     base = next((pt["p50_s"] for pt in out if (pt["requests"], pt["children"]) == (1, 1)), None)
@@ -750,7 +765,11 @@ def finish(id: str) -> None:
                 continue
             records = modal_app.pull(scoring)
             if scoring.fanout:
-                records = apply_dispatch(records, modal_app.pull_json(scoring, "dispatch.json"))
+                dispatched = modal_app.pull_json(scoring, "dispatch.json")
+                (p.dir / f"dispatch_{name}.json").write_text(
+                    json.dumps(dispatched, indent=1) + "\n"
+                )
+                records = apply_dispatch(records, dispatched)
         dest = write_raw(p.raw(name), run_name, records)
         cases = {r.case_id for r in records}
         print(f"wrote {dest}: {len(records)} requests over {len(cases)} cases")
@@ -822,7 +841,7 @@ def evidence(id: str, calls: dict[str, str]) -> Evidence:
     for name, src in exp.rerankers.items():
         if isinstance(src, ProductionSource):
             continue
-        if getattr(src, "sweep", None) is not None:
+        if isinstance(src, _Fanoutable) and src.sweep is not None:
             if not (p.dir / f"sweep_{name}.json").exists():
                 problems.append(f"{name}: no sweep results")
             continue

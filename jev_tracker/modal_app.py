@@ -44,6 +44,7 @@ import gzip
 import hashlib
 import io
 import json
+import math
 import os
 import queue
 import shutil
@@ -51,7 +52,7 @@ import subprocess
 import threading
 import time
 from collections.abc import Callable, Iterable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait
 from pathlib import Path
 from typing import Literal
 
@@ -594,6 +595,7 @@ def _answer_shard(
     job: ShardJob,
     done: set[tuple[str, int]],
     answer: Callable[[DataPoint, int, list[Item]], None],
+    reset: Callable[[], None] | None = None,
 ) -> int:
     """Every not-yet-answered batch of the shard's cases, committed to the Volume as it goes.
 
@@ -601,7 +603,7 @@ def _answer_shard(
     many requests are queued at the model together (Kev's Server batches whatever is queued)."""
     run = job.run
     if run.fanout:
-        return _serve_fanout(job, answer)
+        return _serve_fanout(job, answer, reset)
     todo = [
         (case, bi, batch)
         for case in run.shard_cases(job.shard)
@@ -623,11 +625,16 @@ def _answer_shard(
     return n
 
 
-def _serve_fanout(job: ShardJob, answer: Callable[[DataPoint, int, list[Item]], None]) -> int:
-    """Fan-out worker: take (case_id, batch) items off the Queue, answer, and signal on "done".
+def _serve_fanout(
+    job: ShardJob,
+    answer: Callable[[DataPoint, int, list[Item]], None],
+    reset: Callable[[], None] | None = None,
+) -> int:
+    """Fan-out worker: take (case_id, batch, m) items off the Queue, answer, signal on "done".
 
     The engine's `answer` closure is unchanged; `run.concurrency` threads queue requests at the
-    model so each GPU batches its share. None is the dispatcher's stop sentinel."""
+    model so each GPU batches its share. Control items: ("reset",) drains the pool, calls
+    `reset` (e.g. clears Kev's prefix cache) and acks on "ack"; None stops the worker."""
     run = job.run
     out = run.shard_path(job.shard)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -639,26 +646,35 @@ def _serve_fanout(job: ShardJob, answer: Callable[[DataPoint, int, list[Item]], 
     n = 0
     last_commit = time.time()
 
-    def work(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def work(case: DataPoint, bi: int, m: int | None) -> None:
         nonlocal n
         try:
+            batch = batches(case.input, m, run.max_chars)[bi]
+            t0 = time.time()
             answer(case, bi, batch)
         except Exception as e:  # noqa: BLE001 - relayed to the dispatcher, which fails the run
             q.put(["error", f"{case.id} batch {bi}: {type(e).__name__}: {e}"], partition="done")
         else:
             n += 1
-            q.put((case.id, bi), partition="done")
+            q.put((case.id, bi, t0, time.time() - t0), partition="done")
 
+    futs: set = set()
     with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
         while True:
             for item in q.get_many(1000, partition=f"w{job.shard}", block=True):
                 if item is None:
                     runs_volume.commit()
                     return n
-                case = cases[item[0]]
-                pool.submit(
-                    work, case, item[1], batches(case.input, run.max_items, run.max_chars)[item[1]]
-                )
+                if item[0] == "reset":
+                    while futs:
+                        _, futs = wait(futs, timeout=1)
+                    if reset is not None:
+                        reset()
+                    q.put(("reset_ok", job.shard), partition="ack")
+                    continue
+                futs = {f for f in futs if not f.done()}
+                futs.add(pool.submit(work, cases[item[0]], item[1], item[2]))
+            futs = {f for f in futs if not f.done()}
             if time.time() - last_commit > COMMIT_EVERY_S:
                 runs_volume.commit()
                 last_commit = time.time()
@@ -669,23 +685,41 @@ def fanout_plan(requests_count: int, shards: int) -> list[list[int]]:
     return [[j for j in range(requests_count) if j % shards == w] for w in range(shards)]
 
 
+def fanout_max_items(n_children: int, shards: int, cap: int | None) -> int:
+    """One request per worker per query: children per batch so every GPU gets at most one."""
+    m = math.ceil(n_children / shards)
+    return min(m, cap) if cap is not None else m
+
+
 SWEEP_WARMUP = 3
 SWEEP_REPS = 20
 SWEEP_CASES = 4
 DISPATCH_READY_TIMEOUT_S = 2 * HOUR
+DISPATCH_WARMUP_CASES = 3
 
 
-def _collect_done(q: modal.Queue, pending: int) -> dict[tuple[str, int], float]:
-    """Wait for `pending` fan-out answers; (case_id, batch) -> arrival time."""
-    got: dict[tuple[str, int], float] = {}
+def _collect_done(
+    q: modal.Queue, pending: int
+) -> dict[tuple[str, int], tuple[float, float, float]]:
+    """Wait for `pending` fan-out answers; (case_id, batch) -> (recv, worker_start, worker_s)."""
+    got: dict[tuple[str, int], tuple[float, float, float]] = {}
     while len(got) < pending:
         items = q.get_many(1000, partition="done", block=True)
         now = time.time()
         for item in items:
             if item[0] == "error":
                 raise RuntimeError(f"fan-out worker: {item[1]}")
-            got[tuple(item)] = now
+            got[(item[0], item[1])] = (now, item[2], item[3])
     return got
+
+
+def _reset_workers(run: ScoringRun, q: modal.Queue) -> None:
+    """Send every worker the reset control item and wait for all "ack"s (untimed handshake)."""
+    for w in range(run.shards):
+        q.put(("reset",), partition=f"w{w}")
+    got = 0
+    while got < run.shards:
+        got += len(q.get_many(1000, partition="ack", block=True))
 
 
 def _await_workers(run: ScoringRun, q: modal.Queue) -> None:
@@ -704,34 +738,51 @@ def _await_workers(run: ScoringRun, q: modal.Queue) -> None:
                 raise TimeoutError(f"{run.reranker}: {got} of {run.shards} workers ready after 2h")
 
 
-def _dispatch_run(run: ScoringRun, q: modal.Queue) -> list[dict]:
-    """Send one case at a time over the pool; return per-request sent/recv/worker rows."""
-    rows = []
+def _dispatch_case(run: ScoringRun, q: modal.Queue, case: DataPoint, warmup: bool) -> list[dict]:
+    """Reset the workers, send one case's requests over the pool, collect every answer."""
+    _reset_workers(run, q)
+    m = fanout_max_items(len(items(case.input)), run.shards, run.max_items)
+    n_requests = len(batches(case.input, m, run.max_chars))
+    sent: dict[tuple[str, int], float] = {}
+    for w, bis in enumerate(fanout_plan(n_requests, run.shards)):
+        if not bis:
+            continue
+        for bi in bis:
+            sent[(case.id, bi)] = time.time()
+        q.put_many([(case.id, bi, m) for bi in bis], partition=f"w{w}")
+    recv = _collect_done(q, n_requests)
+    return [
+        {
+            "case_id": case.id,
+            "batch": bi,
+            "sent": sent[(case.id, bi)],
+            "recv": recv[(case.id, bi)][0],
+            "worker": bi % run.shards,
+            "worker_start": recv[(case.id, bi)][1],
+            "worker_s": round(recv[(case.id, bi)][2], 3),
+            "warmup": warmup,
+        }
+        for bi in range(n_requests)
+    ]
+
+
+def _dispatch_run(run: ScoringRun, q: modal.Queue) -> dict:
+    """3 untimed warm-up cases, a 2 s gap, then every case timed over the pool."""
     cases = load_cases()[: run.cases]
+    rows = []
+    for case in cases[:DISPATCH_WARMUP_CASES]:
+        rows += _dispatch_case(run, q, case, warmup=True)
+    t_gap = time.time()
+    time.sleep(2)
+    timed_from = t_gap + 1.0
     with tqdm(cases, desc=f"{run.reranker} dispatch", unit="case", mininterval=5) as bar:
         for case in bar:
-            n_requests = len(batches(case.input, run.max_items, run.max_chars))
-            sent: dict[tuple[str, int], float] = {}
-            for w, bis in enumerate(fanout_plan(n_requests, run.shards)):
-                if not bis:
-                    continue
-                for bi in bis:
-                    sent[(case.id, bi)] = time.time()
-                q.put_many([(case.id, bi) for bi in bis], partition=f"w{w}")
-            recv = _collect_done(q, n_requests)
-            wall = max(recv.values()) - min(sent.values())
-            for bi in range(n_requests):
-                rows.append(
-                    {
-                        "case_id": case.id,
-                        "batch": bi,
-                        "sent": sent[(case.id, bi)],
-                        "recv": recv[(case.id, bi)],
-                        "worker": bi % run.shards,
-                    }
-                )
+            rows += _dispatch_case(run, q, case, warmup=False)
+            wall = max(r["recv"] for r in rows if r["case_id"] == case.id) - min(
+                r["sent"] for r in rows if r["case_id"] == case.id
+            )
             bar.set_postfix_str(f"{wall:.2f}s")
-    return rows
+    return {"timed_from": timed_from, "rows": rows}
 
 
 def _dispatch_sweep(run: ScoringRun, q: modal.Queue) -> list[dict]:
@@ -749,17 +800,21 @@ def _dispatch_sweep(run: ScoringRun, q: modal.Queue) -> list[dict]:
         pool_cases = pool_cases[:SWEEP_CASES]
         for rep in range(SWEEP_WARMUP + SWEEP_REPS):
             case = pool_cases[rep % len(pool_cases)]
-            n_requests = len(batches(case.input, pt.children, run.max_chars)[: pt.requests])
+            sent_batches = batches(case.input, pt.children, run.max_chars)[: pt.requests]
+            _reset_workers(run, q)
             t_send = time.time()
-            q.put_many([(case.id, bi) for bi in range(n_requests)], partition="w0")
-            recv = _collect_done(q, n_requests)
+            q.put_many(
+                [(case.id, bi, pt.children) for bi in range(len(sent_batches))], partition="w0"
+            )
+            recv = _collect_done(q, len(sent_batches))
             rows.append(
                 {
                     "requests": pt.requests,
                     "children": pt.children,
                     "rep": rep,
                     "case_id": case.id,
-                    "wall_s": round(max(recv.values()) - t_send, 3),
+                    "children_sent": sum(len(b) for b in sent_batches),
+                    "wall_s": round(max(r[0] for r in recv.values()) - t_send, 3),
                     "warmup": rep < SWEEP_WARMUP,
                 }
             )
@@ -886,7 +941,12 @@ def score_cases(job_json: str) -> str:
         with write:
             append_jsonl_gz(out, rec)
 
-    n = _answer_shard(job, done, answer)
+    def reset() -> None:
+        # Fan-out queries are new states: a prefix-cache hit is only legitimate inside a query.
+        with server.lock:
+            server.prefix_cache.clear()
+
+    n = _answer_shard(job, done, answer, reset)
     scored = time.time()
     server.close()
     return ShardSummary(
@@ -2018,7 +2078,7 @@ def pull(run: ScoringRun) -> list[RawRecord]:
     return records
 
 
-def pull_json(run: ScoringRun, name: str) -> list[dict]:
+def pull_json(run: ScoringRun, name: str) -> dict | list:
     """A JSON file the dispatcher wrote next to the shard files (dispatch.json / sweep.json)."""
     vol = modal.Volume.from_name(RUNS_VOLUME_NAME)
     remote = run.remote_dir.relative_to(RUNS_ROOT) / name

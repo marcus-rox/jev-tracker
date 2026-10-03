@@ -8,15 +8,12 @@
  "experiments": {
   "2026_09_29_08_47_55_good-midge": "kev27b_timed: Kev-27B batched, 3 x H100, R-1 timers (baseline)",
   "2026_10_03_00_31_36_proper-bee": "rerun_kev_sizes_v1: timed rerun of actual-clam, weights pinned (kev-4b@139fdd9, kev-9b@2629c06, kev-27b@01b8199)",
-  "2026_09_28_04_15_00_super-pigeon": "clm_kev4b_jev: CLM-8B cosine",
   "2026_10_03_00_31_36_rested-hermit": "rerun_kev27b_bf16_h100_v1: timed rerun of busy-sawfly bf16 arms, kev-27b@01b8199",
   "2026_10_03_00_31_36_quick-moray": "rerun_kev27b_c32_h100_v1: timed rerun of cuddly-horse c32 arm, kev-27b@01b8199",
   "2026_10_03_00_31_36_clear-flea": "rerun_kev27b_cheap_gpu_v1: timed rerun of real-koi non-FP8 arms, kev-27b@01b8199",
   "2026_09_29_22_00_38_super-orca": "kev27b_bank_width_full: H-1 wider CUDA-graph buffer, 75 cases",
   "2026_09_29_21_56_46_pumped-egret": "kev27b_vllm_full: H-2 vLLM, 75 cases (readout arm killed)",
   "2026_09_29_21_57_06_exact-jay": "kev27b_sglang_full: H-3 SGLang, 75 cases (readout arm killed)",
-  "2026_09_29_09_45_47_causal-urchin": "kev27b_vllm: H-2 vLLM, first 6 cases",
-  "2026_09_29_10_43_20_united-snake": "kev27b_sglang: H-3 SGLang, first 6 cases",
   "2026_09_29_21_58_31_top-ram": "laya_sizes: the 3 Laya checkpoints, 75 cases, L4, batched",
   "2026_09_30_01_06_44_true-coyote": "liquid_d1_smoke: LiquidAI d1, first 2 cases",
   "2026_10_01_23_53_13_keen-emu": "kev4b_vs_jev: Kev-4B rerun (R-4 validation), 10 x L40S",
@@ -232,45 +229,6 @@
     "cost": "data/registry.yaml",
     "latency": "data/timing_summary_prod_jev.csv",
     "config": "data/experiments/2026_09_29_08_47_55_good-midge/config_2026_09_29_08_47_55_good-midge.yaml"
-   }
-  },
-  {
-   "experiment": "2026_09_28_04_15_00_super-pigeon",
-   "reranker": "clm8b_cosine",
-   "label": "clm8b_cosine",
-   "family": "clm8b",
-   "serving": "earlier experiment",
-   "runtime": "PyTorch",
-   "gpu": "L40S",
-   "buffer": "-",
-   "queries": 75,
-   "tables": [
-    "quality"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.5355357425333334,
-    "100": 0.6007243139466667,
-    "150": 0.6898652664,
-    "200": 0.7835976313866667
-   },
-   "mean_kept_mass": 0.6524307385666667,
-   "cost": {
-    "warm_gpu_s": 0.0,
-    "load_s": 0.0,
-    "warm_usd": 0.0,
-    "in_function_usd": 0.0,
-    "usd_per_query": 0.0,
-    "usd_per_1k": 0.0,
-    "peak_gb": null
-   },
-   "latency": null,
-   "sources": {
-    "kept_mass": "data/experiments/2026_09_28_04_15_00_super-pigeon/kept_mass_2026_09_28_04_15_00_super-pigeon.json",
-    "cost": "data/experiments/2026_09_28_04_15_00_super-pigeon/costs_2026_09_28_04_15_00_super-pigeon.json",
-    "latency": "data/experiments/2026_09_28_04_15_00_super-pigeon/latency_2026_09_28_04_15_00_super-pigeon.json",
-    "config": "data/experiments/2026_09_28_04_15_00_super-pigeon/config_2026_09_28_04_15_00_super-pigeon.yaml"
    }
   },
   {
@@ -994,51 +952,6 @@
    }
   },
   {
-   "experiment": "2026_09_29_09_45_47_causal-urchin",
-   "reranker": "kev27b_vllm_noul",
-   "label": "kev27b_vllm_noul",
-   "family": "kev27b",
-   "serving": "H-2 vLLM: vLLM + Kev's readout, 6 queries only (too slow for 75: killed)",
-   "runtime": "vLLM",
-   "gpu": "H100",
-   "buffer": "-",
-   "queries": 6,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.9319370488333334,
-    "100": 0.9532145356666667,
-    "150": 0.9620444081666666,
-    "200": 0.9532385728333334
-   },
-   "mean_kept_mass": 0.950108641375,
-   "cost": {
-    "warm_gpu_s": 877.8439605236053,
-    "load_s": 184.92518615722656,
-    "warm_usd": 1.212442964516783,
-    "in_function_usd": 1.467854253728762,
-    "usd_per_query": 0.2020738274194638,
-    "usd_per_1k": 202.0738274194638,
-    "peak_gb": null
-   },
-   "latency": {
-    "s_per_query": 184.4226666666667,
-    "p50_s": 214.674,
-    "p95_s": 241.282
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_09_29_09_45_47_causal-urchin/kept_mass_2026_09_29_09_45_47_causal-urchin.json",
-    "cost": "data/experiments/2026_09_29_09_45_47_causal-urchin/costs_2026_09_29_09_45_47_causal-urchin.json",
-    "latency": "data/experiments/2026_09_29_09_45_47_causal-urchin/latency_2026_09_29_09_45_47_causal-urchin.json",
-    "config": "data/experiments/2026_09_29_09_45_47_causal-urchin/config_2026_09_29_09_45_47_causal-urchin.yaml"
-   }
-  },
-  {
    "experiment": "2026_09_29_21_57_06_exact-jay",
    "reranker": "kev27b_noul",
    "label": "kev27b_noul",
@@ -1126,51 +1039,6 @@
     "cost": "data/experiments/2026_09_29_21_57_06_exact-jay/costs_2026_09_29_21_57_06_exact-jay.json",
     "latency": "data/experiments/2026_09_29_21_57_06_exact-jay/latency_2026_09_29_21_57_06_exact-jay.json",
     "config": "data/experiments/2026_09_29_21_57_06_exact-jay/config_2026_09_29_21_57_06_exact-jay.yaml"
-   }
-  },
-  {
-   "experiment": "2026_09_29_10_43_20_united-snake",
-   "reranker": "kev27b_sglang_noul",
-   "label": "kev27b_sglang_noul",
-   "family": "kev27b",
-   "serving": "H-3 SGLang: SGLang + Kev's readout, 6 queries only (too slow for 75: killed)",
-   "runtime": "SGLang",
-   "gpu": "H100",
-   "buffer": "-",
-   "queries": 6,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.9288266398333334,
-    "100": 0.9551613775,
-    "150": 0.9623029911666666,
-    "200": 0.9538294971666667
-   },
-   "mean_kept_mass": 0.9500301264166666,
-   "cost": {
-    "warm_gpu_s": 3925.9330220222473,
-    "load_s": 68.21397423744202,
-    "warm_usd": 5.422341652696248,
-    "in_function_usd": 5.516700386771603,
-    "usd_per_query": 0.903723608782708,
-    "usd_per_1k": 903.7236087827079,
-    "peak_gb": null
-   },
-   "latency": {
-    "s_per_query": 828.7178333333333,
-    "p50_s": 1004.384,
-    "p95_s": 1077.474
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_09_29_10_43_20_united-snake/kept_mass_2026_09_29_10_43_20_united-snake.json",
-    "cost": "data/experiments/2026_09_29_10_43_20_united-snake/costs_2026_09_29_10_43_20_united-snake.json",
-    "latency": "data/experiments/2026_09_29_10_43_20_united-snake/latency_2026_09_29_10_43_20_united-snake.json",
-    "config": "data/experiments/2026_09_29_10_43_20_united-snake/config_2026_09_29_10_43_20_united-snake.yaml"
    }
   },
   {
