@@ -8,6 +8,7 @@ import { REFRESH_SECONDS, useQueue } from './queue'
 import { SuggestionsBody, SuggestionsSub } from './Suggestions'
 import { useSuggestions } from './suggestions'
 import Table, { type Col, type Sort } from './Table'
+import { type Bullet } from './Info'
 import Tldr from './Tldr'
 import ThemeSelect from './Theme'
 import { REPO, blob, type Card, type K, type Row, type SiteData } from './types'
@@ -26,21 +27,109 @@ const CHART_SUB = 'Top 10 shown (best run per model, Jev / production / random a
 
 const f = (digits: number) => (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
 
-const keptCol = (k: K): Col => ({ head: `@${k}`, value: (r) => r.kept_mass?.[k] ?? null, fmt: f(3), source: (r) => r.sources.kept_mass })
-const MEAN: Col = { head: 'mean', value: (r) => r.mean_kept_mass, fmt: f(3), source: (r) => r.sources.kept_mass }
-const COST: Col[] = [
-  { head: 'warm GPU-s', value: (r) => r.cost?.warm_gpu_s ?? null, fmt: f(0), source: (r) => r.sources.cost },
-  { head: 'load s', value: (r) => r.cost?.load_s ?? null, fmt: f(0), source: (r) => r.sources.cost },
-  { head: '$ / run', value: (r) => r.cost?.warm_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
-  { head: '$ / run + load', value: (r) => r.cost?.in_function_usd ?? null, fmt: f(2), source: (r) => r.sources.cost },
-  { head: '$ / query', value: (r) => r.cost?.usd_per_query ?? null, fmt: f(4), source: (r) => r.sources.cost },
-  { head: '$ / 1k queries', value: (r) => r.cost?.usd_per_1k ?? null, fmt: f(1), source: (r) => r.sources.cost },
-  { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost },
+const keptCol = (k: K): Col => ({
+  head: `@${k}`, value: (r) => r.kept_mass?.[k] ?? null, fmt: f(3), source: (r) => r.sources.kept_mass,
+  math: String.raw`\text{kept@}${k} = \frac{1}{|Q|} \sum_{q \in Q} \dfrac{\sum_{i \in \text{top}_{${k}}(q)} r_i}{\sum_{i \in \text{best}_{${k}}(q)} r_i}`,
+  help: [
+    String.raw`\(Q\): the queries. \(r_i\): the rating of child \(i\).`,
+    String.raw`\(\text{top}_{${k}}(q)\): the ${k} children that this ranker puts first.`,
+    String.raw`\(\text{best}_{${k}}(q)\): the ${k} children of the query with the highest ratings.`,
+    String.raw`If the query has fewer than ${k} labeled children, \(k\) is the number of labeled children.`,
+    'If all ratings are 0, the value is 1.0.',
+    'A value of 1.0 is equal to the ideal order.',
+    'A rating is the mean of 3 grader votes. Each vote is 0 to 3.',
+  ],
+})
+const usedBy = (card: string, chip: string, sort: string): Bullet => ['These items use this number:', [`The ${card} card.`, `The "${chip}" filter.`, `The ${sort} sort.`]]
+const MEAN: Col = {
+  head: 'mean', value: (r) => r.mean_kept_mass, fmt: f(3), source: (r) => r.sources.kept_mass,
+  math: String.raw`\overline{\text{kept}} = \tfrac{1}{4} \left(\text{kept@}50 + \text{kept@}100 + \text{kept@}150 + \text{kept@}200\right)`,
+  help: [usedBy('best-quality', 'quality > prod', 'quality')],
+}
+const API_ROWS: Bullet = 'For production and Jev rows: the hosted-API bill for the run.'
+const GPUS: Bullet = String.raw`\(G\): the GPUs in the run.`
+const RATE = String.raw`\left(p_{\text{GPU}} + m \cdot p_{\text{RAM}}\right)`
+const RATE_KEYS: Bullet[] = [
+  String.raw`\(p_{\text{GPU}}\): the Modal price per second for the GPU type.`,
+  String.raw`\(m\): the reserved host RAM, in GiB. \(p_{\text{RAM}}\): the Modal price per GiB-second.`,
 ]
+const PER_QUERY: Bullet = String.raw`\(C\): $ / run. \(N\): the number of queries in the run.`
+const COST: Col[] = [
+  { head: 'warm GPU-s', value: (r) => r.cost?.warm_gpu_s ?? null, fmt: f(0), source: (r) => r.sources.cost,
+    math: String.raw`W = \sum_{g \in G} \left(t^{\text{last}}_g - t^{\text{loaded}}_g\right)`,
+    help: [
+      GPUS,
+      String.raw`\(t^{\text{loaded}}_g\): the time when GPU \(g\) has the model loaded.`,
+      String.raw`\(t^{\text{last}}_g\): the time of the last answer of GPU \(g\).`,
+      'Each GPU has 16 requests in progress at the same time (the default).',
+      'Hosted-API rows show no value.',
+    ] },
+  { head: 'load s', value: (r) => r.cost?.load_s ?? null, fmt: f(0), source: (r) => r.sources.cost,
+    math: String.raw`L = \sum_{g \in G} \left(t^{\text{loaded}}_g - t^{\text{start}}_g\right)`,
+    help: [
+      GPUS,
+      String.raw`\(t^{\text{start}}_g\): the time when the container of GPU \(g\) starts.`,
+      String.raw`\(t^{\text{loaded}}_g\): the time when GPU \(g\) has the model loaded.`,
+      '$ / run does not include this time.',
+    ] },
+  { head: '$ / run', value: (r) => r.cost?.warm_usd ?? null, fmt: f(2), source: (r) => r.sources.cost,
+    math: String.raw`C = W \cdot ${RATE}`,
+    help: [
+      String.raw`\(W\): warm GPU-s. One run sends each query one time.`,
+      ...RATE_KEYS,
+      'Load time, failed calls, CPU and network are not included.',
+      API_ROWS,
+    ] },
+  { head: '$ / run + load', value: (r) => r.cost?.in_function_usd ?? null, fmt: f(2), source: (r) => r.sources.cost,
+    math: String.raw`C_{\text{+load}} = \sum_{g \in G} \left(t^{\text{end}}_g - t^{\text{start}}_g\right) \cdot ${RATE}`,
+    help: [
+      GPUS,
+      String.raw`\(t^{\text{end}}_g - t^{\text{start}}_g\) includes start-up, answers and the time after the last answer.`,
+      ...RATE_KEYS,
+      API_ROWS,
+    ] },
+  { head: '$ / query', value: (r) => r.cost?.usd_per_query ?? null, fmt: f(4), source: (r) => r.sources.cost,
+    math: String.raw`\frac{C}{N}`,
+    help: [PER_QUERY] },
+  { head: '$ / 1k queries', value: (r) => r.cost?.usd_per_1k ?? null, fmt: f(1), source: (r) => r.sources.cost,
+    math: String.raw`\frac{1000 \cdot C}{N}`,
+    help: [PER_QUERY, 'This is a linear estimate.', usedBy('cheapest', 'cost < prod', 'cost')] },
+  { head: 'peak GB', value: (r) => r.cost?.peak_gb ?? null, fmt: f(1), source: (r) => r.sources.cost,
+    math: String.raw`\max_{g \in G} \text{peak}_g`,
+    help: [GPUS, String.raw`\(\text{peak}_g\): the maximum memory that GPU \(g\) allocates at one time, in GB.`] },
+]
+const T_Q = String.raw`T_q = \max_{j \in q} \left(s_j + \ell_j\right) - \min_{j \in q} s_j`
+const wall = (stat: string) => String.raw`\begin{gathered} ${stat} \\ ${T_Q} \end{gathered}`
+const WALL: Bullet[] = [
+  String.raw`\(T_q\): the time for query \(q\), in seconds.`,
+  String.raw`\(s_j\): the time when request \(j\) of the query is sent.`,
+  String.raw`\(\ell_j\): the time until the answer to request \(j\) is received.`,
+  String.raw`\(N\): the number of queries.`,
+]
+const SORTED: Bullet = String.raw`\(T_{(i)}\): position \(i\) in the sorted list of all \(T_q\). The first position is 0.`
 const LATENCY: Col[] = [
-  { head: 's / query (mean)', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency },
-  { head: 'median', value: (r) => r.latency?.p50_s ?? null, fmt: f(2), source: (r) => r.sources.latency },
-  { head: 'p95', value: (r) => r.latency?.p95_s ?? null, fmt: f(2), source: (r) => r.sources.latency },
+  { head: 's / query (mean)', value: (r) => r.latency?.s_per_query ?? null, fmt: f(2), source: (r) => r.sources.latency,
+    math: wall(String.raw`\bar{T} = \frac{1}{N} \sum_{q} T_q`),
+    help: [
+      ...WALL,
+      ['Fan-out GPU rows:', [
+        'The run sends one query at a time.',
+        'The requests of the query go to a pool of GPUs.',
+        'The first 3 queries are not timed. They warm up the GPUs.',
+      ]],
+      ['Other GPU rows:', [
+        'The run timed each query while other queries used the same GPU.',
+        'Thus, the values are higher.',
+      ]],
+      'Production and Jev rows: the same measurement, on the hosted API.',
+      usedBy('fastest', 'latency < prod', 'latency'),
+    ] },
+  { head: 'median', value: (r) => r.latency?.p50_s ?? null, fmt: f(2), source: (r) => r.sources.latency,
+    math: wall(String.raw`T_{\left(\lfloor N/2 \rfloor\right)}`),
+    help: [...WALL, SORTED] },
+  { head: 'p95', value: (r) => r.latency?.p95_s ?? null, fmt: f(2), source: (r) => r.sources.latency,
+    math: wall(String.raw`T_{\left(\min\left(N - 1,\ \lfloor 0.95 N \rfloor\right)\right)}`),
+    help: [...WALL, SORTED, '95% of queries take this time or less.'] },
 ]
 const COST_PER_1K = COST[5], S_PER_QUERY = LATENCY[0]
 
@@ -205,7 +294,7 @@ export default function App() {
         </>}
         {tab === 'quality' && <>
           <Widget span={12} title="Quality · kept-mass@k" sub={CHART_SUB}>{chart(360)}</Widget>
-          <Widget span={12} title="Quality · all runs"><Table rows={forTable('quality')} cols={kept} sort={sort} setSort={sortTable} /></Widget>
+          <Widget span={12} title="Quality · all runs"><Table rows={forTable('quality')} cols={[...kept, MEAN]} sort={sort} setSort={sortTable} /></Widget>
         </>}
         {tab === 'cost' && <>
           <Widget span={12} title="Cost · $ per 1k queries" sub="cheapest run per family">{costBars}</Widget>

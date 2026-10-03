@@ -91,10 +91,14 @@ B2. **Triage** (the decision): read today's candidates and write `crawler/triage
      `RUNTIMES` in `jev_tracker/site_data.py`).
    - `needs_adapter`: a real Jev alternative the harness cannot call yet (new serving stack, new
      request format, key not provisioned, over budget). Say what is missing in `reason`. When it
-     looks worth the adapter work (a distinct open model family, a hosted endpoint that only needs
-     a key, a Kev/Laya variant the source almost loads), also set `config: configs/<slug>.yaml`
+     looks worth the adapter work (a distinct open model family, a hosted endpoint for open weights
+     that only needs a key, a Kev/Laya variant the source almost loads), also set `config: configs/<slug>.yaml`
      (the file does not exist yet): that makes it a *proposal* Marcus approves or skips on the site.
    - `not_jev`: unrelated hit (a person named Kev, a repo about something else). One-line reason.
+   - **Closed products** (Marcus 2026-10-03): an external product reachable only through a vendor
+     API key, with no open weights (e.g. a proprietary hosted decision API), is `not_jev` with the
+     reason `closed: API-key product, not open source` — never `runnable`, never proposed, never
+     run. A hosted endpoint that serves open weights is judged on the open model.
    A `submitted` candidate is whatever a human typed into the site (usually a link): open or
    search for it, work out what it is (model, repo, paper, endpoint) and give it one of the three
    verdicts like any other candidate.
@@ -155,6 +159,7 @@ J7. **Nothing new** (nothing queued to run, and Track B found no candidates, iss
 - Force-push, amend, rewrite history on `main`, open PRs, or edit `docs/SPEC.md`.
 - Run more than 10 experiments or a config over the Kev-27B budget line.
 - Run an experiment un-batched (see **Batching** above).
+- Propose or run a closed, API-key-only product (no open weights).
 - Run a `needs_adapter` model Marcus has not approved on the site (or via
   `jev_tracker.evaluation_queue approve`).
 - Print or commit a token.
