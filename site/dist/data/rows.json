@@ -28,6 +28,9 @@
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
   "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
   "2026_10_02_20_58_42_vast-filly": "kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)",
+  "2026_10_03_15_06_46_usable-hyena": "fanout_cachewarm_keen_emu_kev4b_score: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (0.93 s/query mean)",
+  "2026_10_03_15_00_25_epic-ant": "fanout_cachewarm_keen_emu_kev4b_noul: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (1.03 s/query mean)",
+  "2026_10_03_14_42_22_sunny-liger": "fanout_cachewarm_humble_sawfly_kev9b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.6 s/query mean)",
   "2026_10_03_14_28_20_funky-pug": "fanout_cachewarm_good_midge_kev27b_score: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.51 s/query mean)",
   "2026_10_03_14_02_56_solid-marlin": "fanout_cachewarm_good_midge_kev27b_noul: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.44 s/query mean)"
  },
@@ -1084,6 +1087,51 @@
    }
   },
   {
+   "experiment": "2026_10_03_15_00_25_epic-ant",
+   "reranker": "keen_emu_kev4b_noul_cachewarm",
+   "label": "kev4b_noul cache warm",
+   "family": "kev4b",
+   "serving": "cache warm: each query sent once untimed first, then timed on the same 46 GPUs",
+   "runtime": "PyTorch",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7237242390666667,
+    "100": 0.7801725590533334,
+    "150": 0.83504770196,
+    "200": 0.8836481286533333
+   },
+   "mean_kept_mass": 0.8056481571833334,
+   "cost": {
+    "warm_gpu_s": 1016.7349450588226,
+    "load_s": 124.21205496788025,
+    "warm_usd": 0.5510703402218818,
+    "in_function_usd": 0.6186081799173354,
+    "usd_per_query": 0.007347604536291758,
+    "usd_per_1k": 7.347604536291758,
+    "peak_gb": 16.832966144
+   },
+   "latency": {
+    "s_per_query": 1.0275866666666666,
+    "p50_s": 1.048,
+    "p95_s": 1.924
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_15_00_25_epic-ant/kept_mass_2026_10_03_15_00_25_epic-ant.json",
+    "cost": "data/experiments/2026_10_01_23_53_13_keen-emu/costs_2026_10_01_23_53_13_keen-emu.json",
+    "latency": "data/experiments/2026_10_03_15_00_25_epic-ant/latency_2026_10_03_15_00_25_epic-ant.json",
+    "config": "data/experiments/2026_10_03_15_00_25_epic-ant/config_2026_10_03_15_00_25_epic-ant.yaml"
+   }
+  },
+  {
    "experiment": "2026_10_01_23_53_13_keen-emu",
    "reranker": "kev4b_score",
    "label": "kev4b_score",
@@ -1126,6 +1174,51 @@
     "cost": "data/experiments/2026_10_01_23_53_13_keen-emu/costs_2026_10_01_23_53_13_keen-emu.json",
     "latency": "data/experiments/2026_10_03_13_24_07_trusty-asp/latency_2026_10_03_13_24_07_trusty-asp.json",
     "config": "data/experiments/2026_10_01_23_53_13_keen-emu/config_2026_10_01_23_53_13_keen-emu.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_15_06_46_usable-hyena",
+   "reranker": "keen_emu_kev4b_score_cachewarm",
+   "label": "kev4b_score cache warm",
+   "family": "kev4b",
+   "serving": "cache warm: each query sent once untimed first, then timed on the same 46 GPUs",
+   "runtime": "PyTorch",
+   "gpu": "L40S",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7258811613866667,
+    "100": 0.77685993224,
+    "150": 0.82694467864,
+    "200": 0.88125233976
+   },
+   "mean_kept_mass": 0.8027345280066667,
+   "cost": {
+    "warm_gpu_s": 1163.8290493488312,
+    "load_s": 117.96547627449036,
+    "warm_usd": 0.6307953447470664,
+    "in_function_usd": 0.6950108968930244,
+    "usd_per_query": 0.008410604596627553,
+    "usd_per_1k": 8.410604596627554,
+    "peak_gb": 16.822918656
+   },
+   "latency": {
+    "s_per_query": 0.9324799999999999,
+    "p50_s": 0.926,
+    "p95_s": 1.785
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_15_06_46_usable-hyena/kept_mass_2026_10_03_15_06_46_usable-hyena.json",
+    "cost": "data/experiments/2026_10_01_23_53_13_keen-emu/costs_2026_10_01_23_53_13_keen-emu.json",
+    "latency": "data/experiments/2026_10_03_15_06_46_usable-hyena/latency_2026_10_03_15_06_46_usable-hyena.json",
+    "config": "data/experiments/2026_10_03_15_06_46_usable-hyena/config_2026_10_03_15_06_46_usable-hyena.yaml"
    }
   },
   {
@@ -1306,6 +1399,51 @@
     "cost": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
     "latency": "data/experiments/2026_10_03_04_44_11_moving-robin/latency_2026_10_03_04_44_11_moving-robin.json",
     "config": "data/experiments/2026_10_02_03_29_31_humble-sawfly/config_2026_10_02_03_29_31_humble-sawfly.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_14_42_22_sunny-liger",
+   "reranker": "humble_sawfly_kev9b_noul_cachewarm",
+   "label": "kev9b_noul cache warm",
+   "family": "kev9b",
+   "serving": "cache warm: each query sent once untimed first, then timed on the same 46 GPUs",
+   "runtime": "PyTorch",
+   "gpu": "H100",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.7525566961866667,
+    "100": 0.788502916,
+    "150": 0.8309858862266667,
+    "200": 0.8891866246
+   },
+   "mean_kept_mass": 0.8153080307533334,
+   "cost": {
+    "warm_gpu_s": 384.59060192108154,
+    "load_s": 120.92920804023743,
+    "warm_usd": 0.42189589030742647,
+    "in_function_usd": 0.5548143893244267,
+    "usd_per_query": 0.005625278537432353,
+    "usd_per_1k": 5.6252785374323535,
+    "peak_gb": 24.340451328
+   },
+   "latency": {
+    "s_per_query": 0.60328,
+    "p50_s": 0.494,
+    "p95_s": 1.378
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_14_42_22_sunny-liger/kept_mass_2026_10_03_14_42_22_sunny-liger.json",
+    "cost": "data/experiments/2026_10_02_03_29_31_humble-sawfly/costs_2026_10_02_03_29_31_humble-sawfly.json",
+    "latency": "data/experiments/2026_10_03_14_42_22_sunny-liger/latency_2026_10_03_14_42_22_sunny-liger.json",
+    "config": "data/experiments/2026_10_03_14_42_22_sunny-liger/config_2026_10_03_14_42_22_sunny-liger.yaml"
    }
   },
   {
@@ -2614,7 +2752,7 @@
    }
   }
  ],
- "updated": "2026-10-03 07:28 PDT",
+ "updated": "2026-10-03 08:06 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",
