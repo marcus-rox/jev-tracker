@@ -1,9 +1,9 @@
-# Hourly automation runbook (R-9)
+# 6-hourly automation runbook (R-9)
 
-What each hourly Devin session does. Every step but triage is one command; triage is
+What each 6-hourly Devin session does. Every step but triage is one command; triage is
 the one decision Devin makes, and it is written down as data so the commit shows it.
 
-**Schedule**: once an hour (at :17). **Identity**: Marcus (his fine-grained PAT `MARCUS_SITE_GITHUB_TOKEN`
+**Schedule**: every 6 hours (00:17, 06:17, 12:17, 18:17 Pacific). **Identity**: Marcus (his fine-grained PAT `MARCUS_SITE_GITHUB_TOKEN`
 for GitHub, `MODAL_TOKEN_ID_ROX_RESEARCH` / `MODAL_TOKEN_SECRET_ROX_RESEARCH` for Modal).
 **Output**: commits pushed straight to `main` (no branch, no PR — the site redeploys from each):
 the queue as runs start (A1), the search results (B4), and the results (J5); nothing when nothing
@@ -147,7 +147,7 @@ J5. **Push**: commit `data/` (the new experiments, `data/queue.json` with the fi
    origin main` once and push again. Never force-push.
 J6. **Slack DM** to Marcus Dominguez-Kuhne (Slack user `U0BQQC4046P`), with the session's Slack
    tools, whenever a step pushed something or a step failed (a run that found nothing new sends
-   no DM — the automation fires every hour). First line: `Pushed to main: <commit URL>` (or
+   no DM — the automation fires every 6 hours). First line: `Pushed to main: <commit URL>` (or
    `Nothing pushed: <what failed>`). Then one line per model run (kept-mass@50/200, $/run,
    verified or failed with the problems), and the list of `proposed` items awaiting his approval
    on the site (label + note). No channel posts.
