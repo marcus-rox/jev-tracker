@@ -3131,5 +3131,100 @@
    }
   },
   "app": "jev-ff-proven-shiner-kev08b-ba-lora-noul"
+ },
+ {
+  "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml",
+  "gpu": "L4",
+  "shards_requested": 46,
+  "shards_ready": 46,
+  "experiment_dir": "data/experiments/2026_10_03_11_38_43_strong-newt",
+  "stalls": [],
+  "status": "ok",
+  "latency": {
+   "mean_s_per_query": 0.59,
+   "median_s_per_query": 0.42,
+   "p95_s_per_query": 1.52,
+   "max_s_per_query": 1.85
+  },
+  "latency_all": {
+   "proven_shiner_kev08b_ba_lora_score": {
+    "mean_s_per_query": 0.59,
+    "median_s_per_query": 0.42,
+    "p95_s_per_query": 1.52,
+    "max_s_per_query": 1.85
+   }
+  },
+  "queue_overhead": {
+   "p50": 0.09562275505065918,
+   "max": 1.369352294921875
+  },
+  "recv_per_worker": {
+   "0": 100,
+   "1": 99,
+   "2": 97,
+   "3": 97,
+   "4": 96,
+   "5": 93,
+   "6": 92,
+   "7": 92,
+   "8": 90,
+   "9": 90,
+   "10": 90,
+   "11": 89,
+   "12": 87,
+   "13": 87,
+   "14": 87,
+   "15": 86,
+   "16": 85,
+   "17": 81,
+   "18": 75,
+   "19": 69,
+   "20": 65,
+   "21": 59,
+   "22": 55,
+   "23": 54,
+   "24": 50,
+   "25": 45,
+   "26": 43,
+   "27": 43,
+   "28": 42,
+   "29": 41,
+   "30": 40,
+   "31": 40,
+   "32": 40,
+   "33": 38,
+   "34": 36,
+   "35": 36,
+   "36": 35,
+   "37": 29,
+   "38": 29,
+   "39": 28,
+   "40": 28,
+   "41": 27,
+   "42": 27,
+   "43": 26,
+   "44": 26,
+   "45": 26
+  },
+  "rows": {
+   "2026_10_02_17_18_05_proven-shiner/kev08b_ba_lora_score": {
+    "answer_diff_line": "n=31473 (a=31473, b=31473) |a-b| mean=0.001236 p50=0.0 p90=0.005199999999999982 p99=0.01529999999999987 max=0.03259999999999996",
+    "answer_diff": {
+     "a": "/home/ubuntu/jev-tracker-pr/data/experiments/2026_10_02_17_18_05_proven-shiner/raw_kev08b_ba_lora_score_2026_10_02_17_18_05_proven-shiner.json.gz",
+     "b": "/home/ubuntu/jev-run-sweep/data/experiments/2026_10_03_11_38_43_strong-newt/raw_proven_shiner_kev08b_ba_lora_score_2026_10_03_11_38_43_strong-newt.json.gz",
+     "n": 31473,
+     "n_a": 31473,
+     "n_b": 31473,
+     "mean": 0.0012360372382677217,
+     "p50": 0.0,
+     "p90": 0.005199999999999982,
+     "p99": 0.01529999999999987,
+     "max": 0.03259999999999996
+    },
+    "kept_mass_max_delta": 0.0017320090266667032,
+    "flagged": true
+   }
+  },
+  "app": "jev-ff-proven-shiner-kev08b-ba-lora-score"
  }
 ]

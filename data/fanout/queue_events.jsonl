@@ -158,3 +158,6 @@
 {"event": "ok", "config": "fanout_proper_bee_kev9b_score.yaml", "exp": "2026_10_03_10_56_19_sought-ibex", "t": "11:01:52"}
 {"event": "start", "config": "fanout_proven_shiner_kev08b_ba_lora_noul.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-noul", "t": "11:01:52"}
 {"event": "ok", "config": "fanout_proven_shiner_kev08b_ba_lora_noul.yaml", "exp": "2026_10_03_11_01_54_epic-osprey", "t": "11:07:13"}
+{"event": "start", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-score", "t": "11:38:41"}
+{"event": "timed_phase", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "app": "jev-ff-proven-shiner-kev08b-ba-lora-score", "t": "11:41:00"}
+{"event": "ok", "config": "fanout_proven_shiner_kev08b_ba_lora_score.yaml", "exp": "2026_10_03_11_38_43_strong-newt", "t": "11:42:33"}

@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+proven_shiner_kev08b_ba_lora_score,75,0.59,0.42,1.52,0.28,1.85,37.2
