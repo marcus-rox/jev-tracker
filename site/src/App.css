@@ -117,6 +117,9 @@ th, td { padding:5px 8px; border-bottom:1px solid var(--grid); text-align:left; 
 th { color:var(--muted); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--panel); }
 th.n, td.n { text-align:right; font-variant-numeric: tabular-nums; }
 th .dir { margin-left:4px; }
+.info { display:inline-flex; vertical-align:-2px; margin-left:4px; color:var(--muted); cursor:help; outline-offset:2px; }
+.info:hover, .info:focus { color:var(--accent); }
+.info-tip { display:block; position:fixed; z-index:20; box-sizing:border-box; padding:8px 10px; background:var(--panel); color:var(--text); border:1px solid var(--border); border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,.18); font-size:12px; font-weight:400; line-height:1.45; white-space:normal; text-align:left; pointer-events:none; }
 tr.hl td { background: var(--hl); }
 td.dim { color: var(--muted); }
 td.n a { color: inherit; border-bottom: 1px dotted var(--muted); }
