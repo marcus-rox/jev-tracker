@@ -21,6 +21,7 @@
   "2026_10_02_09_47_49_fair-lizard": "clef_flash_vs_jev: Cloudflare Clef-Flash 9.4B @17f0b0a, 3 x H100, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
+  "2026_10_02_17_18_05_proven-shiner": "kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)",
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
   "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)"
  },
@@ -1479,6 +1480,51 @@
     "cost": "data/experiments/2026_10_02_10_47_08_loving-loon/costs_2026_10_02_10_47_08_loving-loon.json",
     "latency": "data/experiments/2026_10_03_10_34_30_robust-alpaca/latency_2026_10_03_10_34_30_robust-alpaca.json",
     "config": "data/experiments/2026_10_02_10_47_08_loving-loon/config_2026_10_02_10_47_08_loving-loon.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_02_17_18_05_proven-shiner",
+   "reranker": "kev08b_ba_lora_noul",
+   "label": "kev08b_ba_lora_noul",
+   "family": "kev08b_ba_lora",
+   "serving": "batched: 12 children, 16 in flight",
+   "runtime": "PyTorch",
+   "gpu": "L4",
+   "buffer": "4,096 x 16 (default)",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.6484054313733333,
+    "100": 0.7155802298666667,
+    "150": 0.78567178368,
+    "200": 0.8513649359333333
+   },
+   "mean_kept_mass": 0.7502555952133333,
+   "cost": {
+    "warm_gpu_s": 491.01359701156616,
+    "load_s": 66.15329909324646,
+    "warm_usd": 0.10900501853656769,
+    "in_function_usd": 0.12371753122329712,
+    "usd_per_query": 0.0014534002471542358,
+    "usd_per_1k": 1.453400247154236,
+    "peak_gb": 4.757344768
+   },
+   "latency": {
+    "s_per_query": 0.5090933333333334,
+    "p50_s": 0.335,
+    "p95_s": 1.29
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_02_17_18_05_proven-shiner/kept_mass_2026_10_02_17_18_05_proven-shiner.json",
+    "cost": "data/experiments/2026_10_02_17_18_05_proven-shiner/costs_2026_10_02_17_18_05_proven-shiner.json",
+    "latency": "data/experiments/2026_10_03_11_01_54_epic-osprey/latency_2026_10_03_11_01_54_epic-osprey.json",
+    "config": "data/experiments/2026_10_02_17_18_05_proven-shiner/config_2026_10_02_17_18_05_proven-shiner.yaml"
    }
   },
   {

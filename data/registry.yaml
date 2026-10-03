@@ -77,6 +77,7 @@ experiments:
   2026_10_03_10_44_32_poetic-walrus: 'fanout_proper_bee_kev27b_score: fan-out latency, 46 x H200, original requests, one query at a time (2.32 s/query mean)'
   2026_10_03_10_51_36_fun-falcon: 'fanout_proper_bee_kev9b_noul: fan-out latency, 46 x H100!, original requests, one query at a time (1.28 s/query mean)'
   2026_10_03_10_56_19_sought-ibex: 'fanout_proper_bee_kev9b_score: fan-out latency, 46 x H100!, original requests, one query at a time (1.48 s/query mean)'
+  2026_10_03_11_01_54_epic-osprey: 'fanout_proven_shiner_kev08b_ba_lora_noul: fan-out latency, 46 x L4, original requests, one query at a time (0.51 s/query mean)'
 rows:
 - experiment: 2026_09_29_08_47_55_good-midge
   reranker: oracle
@@ -1470,7 +1471,9 @@ rows:
   blank: failed
 - experiment: 2026_10_02_17_18_05_proven-shiner
   reranker: kev08b_ba_lora_noul
-  pending_fanout: hidden until its fan-out latency run lands (Marcus, 2026-10-03)
+  latency_from:
+    experiment: 2026_10_03_11_01_54_epic-osprey
+    reranker: proven_shiner_kev08b_ba_lora_noul
   label: kev08b_ba_lora_noul
   family: kev08b_ba_lora
   serving: 'batched: 12 children, 16 in flight'

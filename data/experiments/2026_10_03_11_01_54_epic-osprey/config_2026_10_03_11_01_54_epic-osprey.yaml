@@ -1,0 +1,20 @@
+# Fan-out latency run. Original request shape, one query at a time over a warm pool.
+# Rows served: 2026_10_02_17_18_05_proven-shiner/kev08b_ba_lora_noul
+name: fanout_proven_shiner_kev08b_ba_lora_noul
+cases: null
+k:
+  start: 50
+  stop: 200
+  step: 10
+rerankers:
+  proven_shiner_kev08b_ba_lora_noul:
+    source: kev
+    model: Glax147/kev-0.8b-ba-lora@6f3864febcef263cd5d520d5520c0c5aa92472f0
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    concurrency: 16
+    forward_batch: 1
+    gpu: L4
+    fanout: true
+    shards: 46
