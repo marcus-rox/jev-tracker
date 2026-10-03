@@ -1590,6 +1590,7 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_noul
+  pending_fanout: 'hidden until its fan-out latency run lands (Marcus, 2026-10-03)'
   label: kev4b_noul
   family: kev4b
   serving: first run
@@ -1603,6 +1604,7 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev4b_score
+  pending_fanout: 'hidden until its fan-out latency run lands (Marcus, 2026-10-03)'
   label: kev4b_score
   family: kev4b
   serving: first run
@@ -1648,6 +1650,7 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_proper-bee
   reranker: kev27b_noul
+  pending_fanout: 'hidden until its fan-out latency run lands (Marcus, 2026-10-03)'
   label: kev27b_noul
   family: kev27b
   serving: 'first run: 25 children, 1 in flight'
@@ -1709,6 +1712,7 @@ rows:
   - latency
 - experiment: 2026_10_03_00_31_36_quick-moray
   reranker: kev27b_batched_c32_noul
+  pending_fanout: 'hidden until its fan-out latency run lands (Marcus, 2026-10-03)'
   label: kev27b_batched_c32_noul
   family: kev27b
   serving: 'batched: 12 children, 32 in flight'
@@ -1770,6 +1774,7 @@ rows:
   - latency
 - experiment: 2026_10_03_04_25_56_helped-shad
   reranker: rune26b_q4_noul
+  pending_fanout: 'fan-out not implemented for the gguf (llama.cpp) source; hidden until it is (Marcus, 2026-10-03)'
   label: rune26b_q4_noul
   family: rune26b_q4
   serving: 'batched: 12 children, 8 in flight'
@@ -1783,6 +1788,7 @@ rows:
   - latency
 - experiment: 2026_10_03_04_25_56_helped-shad
   reranker: rune26b_q4_score
+  pending_fanout: 'fan-out not implemented for the gguf (llama.cpp) source; hidden until it is (Marcus, 2026-10-03)'
   label: rune26b_q4_score
   family: rune26b_q4
   serving: 'batched: 12 children, 8 in flight'

@@ -9,7 +9,6 @@
   "2026_09_29_08_47_55_good-midge": "kev27b_timed: Kev-27B batched, 3 x H100, R-1 timers (baseline)",
   "2026_10_03_00_31_36_proper-bee": "rerun_kev_sizes_v1: timed rerun of actual-clam, weights pinned (kev-4b@139fdd9, kev-9b@2629c06, kev-27b@01b8199)",
   "2026_10_03_00_31_36_rested-hermit": "rerun_kev27b_bf16_h100_v1: timed rerun of busy-sawfly bf16 arms, kev-27b@01b8199",
-  "2026_10_03_00_31_36_quick-moray": "rerun_kev27b_c32_h100_v1: timed rerun of cuddly-horse c32 arm, kev-27b@01b8199",
   "2026_10_03_00_31_36_clear-flea": "rerun_kev27b_cheap_gpu_v1: timed rerun of real-koi non-FP8 arms, kev-27b@01b8199",
   "2026_09_29_22_00_38_super-orca": "kev27b_bank_width_full: H-1 wider CUDA-graph buffer, 75 cases",
   "2026_09_29_21_56_46_pumped-egret": "kev27b_vllm_full: H-2 vLLM, 75 cases (readout arm killed)",
@@ -23,8 +22,7 @@
   "2026_10_02_09_49_26_alert-jay": "clef_vs_jev: Cloudflare Clef 27.4B @2f3de3d, 3 x H200, joint schema head (daily 2026-10-02 rerun)",
   "2026_10_02_10_47_08_loving-loon": "autotrust_jev27b_vs_jev: AutoTrust JEV-27B @962701f, 3 x H200, decision head (daily 2026-10-02)",
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
-  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
-  "2026_10_03_04_25_56_helped-shad": "rune_26b_a4b_gguf_vs_jev: owao Rune-26B-A4B System One GGUF Q4_K_M @da27a15, 3 x L40S, llama-server, 8 in flight (hourly 2026-10-03)"
+  "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)"
  },
  "rows": [
   {
@@ -1665,96 +1663,6 @@
   },
   {
    "experiment": "2026_10_03_00_31_36_proper-bee",
-   "reranker": "kev4b_noul",
-   "label": "kev4b_noul",
-   "family": "kev4b",
-   "serving": "first run",
-   "runtime": "PyTorch",
-   "gpu": "L40S",
-   "buffer": "4,096 x 16 (default)",
-   "queries": 75,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.7237242390666667,
-    "100": 0.7801725590533334,
-    "150": 0.83504770196,
-    "200": 0.8836481286533333
-   },
-   "mean_kept_mass": 0.8056481571833334,
-   "cost": {
-    "warm_gpu_s": 1152.6645958423615,
-    "load_s": 169.3755760192871,
-    "warm_usd": 0.6247442109465599,
-    "in_function_usd": 0.717029710858345,
-    "usd_per_query": 0.008329922812620799,
-    "usd_per_1k": 8.329922812620799,
-    "peak_gb": 16.832966144
-   },
-   "latency": {
-    "s_per_query": 15.178573333333334,
-    "p50_s": 10.248,
-    "p95_s": 47.754
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
-    "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
-    "latency": "data/experiments/2026_10_03_00_31_36_proper-bee/latency_2026_10_03_00_31_36_proper-bee.json",
-    "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
-   }
-  },
-  {
-   "experiment": "2026_10_03_00_31_36_proper-bee",
-   "reranker": "kev4b_score",
-   "label": "kev4b_score",
-   "family": "kev4b",
-   "serving": "first run",
-   "runtime": "PyTorch",
-   "gpu": "L40S",
-   "buffer": "4,096 x 16 (default)",
-   "queries": 75,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.7258811613866667,
-    "100": 0.77685993224,
-    "150": 0.82694467864,
-    "200": 0.88125233976
-   },
-   "mean_kept_mass": 0.8027345280066667,
-   "cost": {
-    "warm_gpu_s": 1188.2713046073914,
-    "load_s": 146.1910228729248,
-    "warm_usd": 0.6440430470972061,
-    "in_function_usd": 0.7238105796442031,
-    "usd_per_query": 0.008587240627962747,
-    "usd_per_1k": 8.587240627962748,
-    "peak_gb": 16.822918656
-   },
-   "latency": {
-    "s_per_query": 15.521480000000002,
-    "p50_s": 9.572,
-    "p95_s": 47.905
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
-    "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
-    "latency": "data/experiments/2026_10_03_00_31_36_proper-bee/latency_2026_10_03_00_31_36_proper-bee.json",
-    "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
-   }
-  },
-  {
-   "experiment": "2026_10_03_00_31_36_proper-bee",
    "reranker": "kev9b_noul",
    "label": "kev9b_noul",
    "family": "kev9b",
@@ -1840,51 +1748,6 @@
     "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
     "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
     "latency": "data/experiments/2026_10_03_10_56_19_sought-ibex/latency_2026_10_03_10_56_19_sought-ibex.json",
-    "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
-   }
-  },
-  {
-   "experiment": "2026_10_03_00_31_36_proper-bee",
-   "reranker": "kev27b_noul",
-   "label": "kev27b_noul",
-   "family": "kev27b",
-   "serving": "first run: 25 children, 1 in flight",
-   "runtime": "PyTorch",
-   "gpu": "H200",
-   "buffer": "4,096 x 16 (default)",
-   "queries": 75,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.87835945004,
-    "100": 0.8951102783866667,
-    "150": 0.9195089765333333,
-    "200": 0.94970948768
-   },
-   "mean_kept_mass": 0.91067204816,
-   "cost": {
-    "warm_gpu_s": 2013.247819185257,
-    "load_s": 436.05391240119934,
-    "warm_usd": 3.1107900002922912,
-    "in_function_usd": 3.7862055586554715,
-    "usd_per_query": 0.041477200003897215,
-    "usd_per_1k": 41.47720000389722,
-    "peak_gb": 70.450491392
-   },
-   "latency": {
-    "s_per_query": 26.61904,
-    "p50_s": 18.058,
-    "p95_s": 82.14
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_10_03_00_31_36_proper-bee/kept_mass_2026_10_03_00_31_36_proper-bee.json",
-    "cost": "data/experiments/2026_10_03_00_31_36_proper-bee/costs_2026_10_03_00_31_36_proper-bee.json",
-    "latency": "data/experiments/2026_10_03_00_31_36_proper-bee/latency_2026_10_03_00_31_36_proper-bee.json",
     "config": "data/experiments/2026_10_03_00_31_36_proper-bee/config_2026_10_03_00_31_36_proper-bee.yaml"
    }
   },
@@ -2024,51 +1887,6 @@
    }
   },
   {
-   "experiment": "2026_10_03_00_31_36_quick-moray",
-   "reranker": "kev27b_batched_c32_noul",
-   "label": "kev27b_batched_c32_noul",
-   "family": "kev27b",
-   "serving": "batched: 12 children, 32 in flight",
-   "runtime": "PyTorch",
-   "gpu": "H100",
-   "buffer": "4,096 x 16 (default)",
-   "queries": 75,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.8752001079866667,
-    "100": 0.8926893800933333,
-    "150": 0.9190597416533334,
-    "200": 0.9504117352666667
-   },
-   "mean_kept_mass": 0.90934024125,
-   "cost": {
-    "warm_gpu_s": 958.261233329773,
-    "load_s": 159.93322110176086,
-    "warm_usd": 1.3235120850257494,
-    "in_function_usd": 1.54452781775054,
-    "usd_per_query": 0.017646827800343323,
-    "usd_per_1k": 17.646827800343324,
-    "peak_gb": 70.666049536
-   },
-   "latency": {
-    "s_per_query": 22.21296,
-    "p50_s": 18.937,
-    "p95_s": 49.446
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_10_03_00_31_36_quick-moray/kept_mass_2026_10_03_00_31_36_quick-moray.json",
-    "cost": "data/experiments/2026_10_03_00_31_36_quick-moray/costs_2026_10_03_00_31_36_quick-moray.json",
-    "latency": "data/experiments/2026_10_03_00_31_36_quick-moray/latency_2026_10_03_00_31_36_quick-moray.json",
-    "config": "data/experiments/2026_10_03_00_31_36_quick-moray/config_2026_10_03_00_31_36_quick-moray.yaml"
-   }
-  },
-  {
    "experiment": "2026_10_03_00_31_36_clear-flea",
    "reranker": "kev27b_batched_H100_noul",
    "label": "kev27b_batched_H100_noul",
@@ -2202,99 +2020,9 @@
     "latency": "data/experiments/2026_10_03_07_36_22_super-ghoul/latency_2026_10_03_07_36_22_super-ghoul.json",
     "config": "data/experiments/2026_10_03_00_31_36_clear-flea/config_2026_10_03_00_31_36_clear-flea.yaml"
    }
-  },
-  {
-   "experiment": "2026_10_03_04_25_56_helped-shad",
-   "reranker": "rune26b_q4_noul",
-   "label": "rune26b_q4_noul",
-   "family": "rune26b_q4",
-   "serving": "batched: 12 children, 8 in flight",
-   "runtime": "GGUF (llama.cpp)",
-   "gpu": "L40S",
-   "buffer": "8,192 ctx x 8 slots",
-   "queries": 75,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.82895739212,
-    "100": 0.8465945328666666,
-    "150": 0.8837714134266667,
-    "200": 0.9254677038933333
-   },
-   "mean_kept_mass": 0.8711977605766666,
-   "cost": {
-    "warm_gpu_s": 1995.150395154953,
-    "load_s": 373.86502146720886,
-    "warm_usd": 1.0813715141739844,
-    "in_function_usd": 1.2840063736419676,
-    "usd_per_query": 0.014418286855653125,
-    "usd_per_1k": 14.418286855653125,
-    "peak_gb": null
-   },
-   "latency": {
-    "s_per_query": 40.80908,
-    "p50_s": 30.733,
-    "p95_s": 103.973
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_10_03_04_25_56_helped-shad/kept_mass_2026_10_03_04_25_56_helped-shad.json",
-    "cost": "data/experiments/2026_10_03_04_25_56_helped-shad/costs_2026_10_03_04_25_56_helped-shad.json",
-    "latency": "data/experiments/2026_10_03_04_25_56_helped-shad/latency_2026_10_03_04_25_56_helped-shad.json",
-    "config": "data/experiments/2026_10_03_04_25_56_helped-shad/config_2026_10_03_04_25_56_helped-shad.yaml"
-   }
-  },
-  {
-   "experiment": "2026_10_03_04_25_56_helped-shad",
-   "reranker": "rune26b_q4_score",
-   "label": "rune26b_q4_score",
-   "family": "rune26b_q4",
-   "serving": "batched: 12 children, 8 in flight",
-   "runtime": "GGUF (llama.cpp)",
-   "gpu": "L40S",
-   "buffer": "8,192 ctx x 8 slots",
-   "queries": 75,
-   "tables": [
-    "quality",
-    "cost",
-    "latency"
-   ],
-   "highlight": false,
-   "blank": "-",
-   "kept_mass": {
-    "50": 0.8432985333733334,
-    "100": 0.86589054052,
-    "150": 0.8996757006666667,
-    "200": 0.93495427116
-   },
-   "mean_kept_mass": 0.8859547614300001,
-   "cost": {
-    "warm_gpu_s": 2168.9587738513947,
-    "load_s": 380.1432662010193,
-    "warm_usd": 1.1755756554274557,
-    "in_function_usd": 1.3816133245749471,
-    "usd_per_query": 0.015674342072366076,
-    "usd_per_1k": 15.674342072366077,
-    "peak_gb": null
-   },
-   "latency": {
-    "s_per_query": 47.10017333333333,
-    "p50_s": 37.487,
-    "p95_s": 121.302
-   },
-   "sources": {
-    "kept_mass": "data/experiments/2026_10_03_04_25_56_helped-shad/kept_mass_2026_10_03_04_25_56_helped-shad.json",
-    "cost": "data/experiments/2026_10_03_04_25_56_helped-shad/costs_2026_10_03_04_25_56_helped-shad.json",
-    "latency": "data/experiments/2026_10_03_04_25_56_helped-shad/latency_2026_10_03_04_25_56_helped-shad.json",
-    "config": "data/experiments/2026_10_03_04_25_56_helped-shad/config_2026_10_03_04_25_56_helped-shad.yaml"
-   }
   }
  ],
- "updated": "2026-10-02 21:25 PDT",
+ "updated": "2026-10-02 17:31 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",
