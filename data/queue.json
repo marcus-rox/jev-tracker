@@ -234,18 +234,6 @@
    "evidence": null
   },
   {
-   "config": "configs/rune_26b_a4b_gguf_vs_jev.yaml",
-   "label": "rune_26b_a4b_gguf_vs_jev",
-   "source": "huggingface",
-   "url": "https://huggingface.co/owao/surogate-rune-26b-a4b-systemone",
-   "status": "running",
-   "note": "",
-   "queued_at": "2026-10-03T04:25:32Z",
-   "started_at": "2026-10-03T04:25:53Z",
-   "finished_at": null,
-   "evidence": null
-  },
-  {
    "config": "configs/gutsy_0p8b_vs_jev.yaml",
    "label": "gutsy_0p8b_vs_jev",
    "source": "hackernews",
@@ -253,6 +241,78 @@
    "status": "proposed",
    "note": "gutsy-0.8b v0.4 (kouhxp/gutsy): Qwen3.5-0.8B decision fine-tune, calibrated, shipped as Q8_0 / Q4_K_M GGUF behind its own gutsy-inference runtime (llama-cpp-python, /v1/systemone), not llama-server's decision endpoint; needs a gutsy source adapter",
    "queued_at": "2026-10-03T04:25:32Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/openjevx_vs_jev.yaml",
+   "label": "openjevx_vs_jev",
+   "source": "github",
+   "url": "https://github.com/muthuishere/openjevx",
+   "status": "proposed",
+   "note": "OpenJevX v0.5.2 (HF muthuishere/openjevx): Laya ModernBERT-large fine-tune with its own calibration temperatures, Laya-format checkpoint (model.safetensors, encoder/, tokenizer/, rl_agent_config.json); the laya source only loads the three checkpoints of the pinned convaiinnovations/laya bundle (LAYA_SUBFOLDER), so it needs a laya-source entry for an external repo + revision (batched via forward_batch 64 like Laya)",
+   "queued_at": "2026-10-03T05:25:36Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/api_bailian_decision_vs_jev.yaml",
+   "label": "api_bailian_decision_vs_jev",
+   "source": "github",
+   "url": "https://github.com/Acclerate/decision-model",
+   "status": "proposed",
+   "note": "Alibaba Bailian (Model Studio) Decision Model decision-model-preview: hosted System One endpoint at https://<workspace>.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/systemone; the api source needs a DASHSCOPE_API_KEY + workspace id as a Modal Secret (not provisioned; preview access must be enabled on the Aliyun account)",
+   "queued_at": "2026-10-03T05:25:36Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/anarkali_150m_vs_jev.yaml",
+   "label": "anarkali_150m_vs_jev",
+   "source": "github",
+   "url": "https://github.com/ToufiqQureshi/anarkali",
+   "status": "proposed",
+   "note": "Anarkali 150M (HF toufiqqureshi651/anarkali, Apache-2.0): open typed-decision model, a new family, shipped as ONNX (model.onnx + tokenizer.json + anarkali.json) behind its own Jev-compatible /v1/systemone runtime; the harness has no onnxruntime source. Needs an anarkali source (onnxruntime-gpu, batched forward over many request bodies per call)",
+   "queued_at": "2026-10-03T07:24:17Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/autotrust_jev9b_vs_jev.yaml",
+   "label": "autotrust_jev9b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/autotrust/JEV-9B",
+   "status": "proposed",
+   "note": "AutoTrust JEV-9B (Qwen3.5-9B + LoRA + the same 24-slot decision head / calibration.json layout as the benchmarked JEV-27B): the autotrust source pins model autotrust/JEV-27B and its revision (AutoTrustSource.model Literal, AUTOTRUST_REVISION, H200 GPU map); needs the 9B id + revision b63f651 and an L40S/H100 entry. 27B ran at $79.85/1k, so a 9B is the one that could get under the $63/1k line",
+   "queued_at": "2026-10-03T07:24:17Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/decima_small_vs_jev.yaml",
+   "label": "decima_small_vs_jev",
+   "source": "github",
+   "url": "https://github.com/amyrmahdy/decima",
+   "status": "proposed",
+   "note": "Decima 1.1 (amyrmahdy/decima-small, Apache-2.0): new open 122M Jev-style decision model family, ONNX int8 behind its own TypeSafe-compatible /v1/systemone runtime (python -m decima.serve); the harness has no onnxruntime source. Needs a decima source (onnxruntime-gpu, forward_batch over many request bodies per call)",
+   "queued_at": "2026-10-03T08:24:03Z",
+   "started_at": null,
+   "finished_at": null,
+   "evidence": null
+  },
+  {
+   "config": "configs/startlux_decision_4b_vs_jev.yaml",
+   "label": "startlux_decision_4b_vs_jev",
+   "source": "huggingface",
+   "url": "https://huggingface.co/startlux-models/StartLux-Decision-4B",
+   "status": "proposed",
+   "note": "StartLux-Decision size the startlux source cannot load: StartLuxSource.model and STARTLUX_REVISION pin only startlux-models/StartLux-Decision-9B; needs the 4B id + revision 9302aed and a GPU entry (L40S/H100). JevBench public 204/231; a 4B is the StartLux size most likely to get under the $63/1k line",
+   "queued_at": "2026-10-03T08:24:03Z",
    "started_at": null,
    "finished_at": null,
    "evidence": null

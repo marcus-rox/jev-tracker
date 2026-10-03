@@ -1,0 +1,42 @@
+# surogate/rune-26b-a4b (Gemma 4 MoE decision model) as owao's System One GGUF (Q4_K_M, metadata-only
+# patch: gemma4.decision.type=openjev + tokenizer.chat_template.systemone), served by the harness's
+# llama-server /v1/systemone (gguf source) vs Jev (committed answers) vs production, on the frozen
+# 75 cases, kept-mass@k for k = 50..200 step 10. Batched: 8 llama-server slots in flight per
+# container, 3 L40S shards (within the budget line of configs/kev27b_batched.yaml). Requests are
+# 12 children (~3k tokens) so each stays inside the 8,192-token slot context.
+# Added by the hourly automation (triage 2026-10-03).
+#   uv run python -m jev_tracker.experiment run configs/rune_26b_a4b_gguf_vs_jev.yaml --wait
+name: rune_26b_a4b_gguf_vs_jev
+cases: null
+k: {start: 50, stop: 200, step: 10}
+rerankers:
+  prod:
+    source: production
+  jev_noul:
+    source: answers
+    method: noul_query_in_state
+    path: data/jev/noul_query_in_state.json.gz
+  jev_score:
+    source: answers
+    method: score_query_in_question
+    path: data/jev/score_query_in_question.json.gz
+  rune26b_q4_noul:
+    source: gguf
+    model: owao/surogate-rune-26b-a4b-systemone@da27a1561a0a043eced5731643331f89776726c0
+    file: ggml-model-Q4_K_M.gguf
+    method: noul_query_in_state
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    gpu: L40S
+    concurrency: 8
+  rune26b_q4_score:
+    source: gguf
+    model: owao/surogate-rune-26b-a4b-systemone@da27a1561a0a043eced5731643331f89776726c0
+    file: ggml-model-Q4_K_M.gguf
+    method: score_query_in_question
+    max_items: 12
+    max_chars: 12000
+    shards: 3
+    gpu: L40S
+    concurrency: 8

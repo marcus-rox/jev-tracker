@@ -31,7 +31,8 @@
   "2026_10_02_17_18_05_proven-shiner": "kev08b_ba_lora_vs_jev: Kev-0.8B BA-LoRA @6f3864f, 3 x L4, batched (daily 2026-10-02)",
   "2026_10_02_17_22_11_merry-corgi": "minicpm5_2b_jev_vs_jev: MiniCPM5-2B-Jev @27afc6f, 3 x L4, own model.py (daily 2026-10-02)",
   "2026_10_02_18_00_38_large-corgi": "rsi_jev_v3_2b_vs_jev: RSI-Jev v3.0 Qwen3.5-2B @c778b68, 3 x L40S, own release loader (daily 2026-10-02)",
-  "2026_10_02_20_58_42_vast-filly": "kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)"
+  "2026_10_02_20_58_42_vast-filly": "kev4b_ba_lora_vs_jev: Kev-4B BA-LoRA @3d5932a, 3 x L40S, batched (daily 2026-10-02, approved)",
+  "2026_10_03_04_25_56_helped-shad": "rune_26b_a4b_gguf_vs_jev: owao Rune-26B-A4B System One GGUF Q4_K_M @da27a15, 3 x L40S, llama-server, 8 in flight (hourly 2026-10-03)"
  },
  "rows": [
   {
@@ -3604,9 +3605,99 @@
     "latency": "data/experiments/2026_10_03_07_36_22_super-ghoul/latency_2026_10_03_07_36_22_super-ghoul.json",
     "config": "data/experiments/2026_10_03_00_31_36_clear-flea/config_2026_10_03_00_31_36_clear-flea.yaml"
    }
+  },
+  {
+   "experiment": "2026_10_03_04_25_56_helped-shad",
+   "reranker": "rune26b_q4_noul",
+   "label": "rune26b_q4_noul",
+   "family": "rune26b_q4",
+   "serving": "batched: 12 children, 8 in flight",
+   "runtime": "GGUF (llama.cpp)",
+   "gpu": "L40S",
+   "buffer": "8,192 ctx x 8 slots",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.82895739212,
+    "100": 0.8465945328666666,
+    "150": 0.8837714134266667,
+    "200": 0.9254677038933333
+   },
+   "mean_kept_mass": 0.8711977605766666,
+   "cost": {
+    "warm_gpu_s": 1995.150395154953,
+    "load_s": 373.86502146720886,
+    "warm_usd": 1.0813715141739844,
+    "in_function_usd": 1.2840063736419676,
+    "usd_per_query": 0.014418286855653125,
+    "usd_per_1k": 14.418286855653125,
+    "peak_gb": null
+   },
+   "latency": {
+    "s_per_query": 40.80908,
+    "p50_s": 30.733,
+    "p95_s": 103.973
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_04_25_56_helped-shad/kept_mass_2026_10_03_04_25_56_helped-shad.json",
+    "cost": "data/experiments/2026_10_03_04_25_56_helped-shad/costs_2026_10_03_04_25_56_helped-shad.json",
+    "latency": "data/experiments/2026_10_03_04_25_56_helped-shad/latency_2026_10_03_04_25_56_helped-shad.json",
+    "config": "data/experiments/2026_10_03_04_25_56_helped-shad/config_2026_10_03_04_25_56_helped-shad.yaml"
+   }
+  },
+  {
+   "experiment": "2026_10_03_04_25_56_helped-shad",
+   "reranker": "rune26b_q4_score",
+   "label": "rune26b_q4_score",
+   "family": "rune26b_q4",
+   "serving": "batched: 12 children, 8 in flight",
+   "runtime": "GGUF (llama.cpp)",
+   "gpu": "L40S",
+   "buffer": "8,192 ctx x 8 slots",
+   "queries": 75,
+   "tables": [
+    "quality",
+    "cost",
+    "latency"
+   ],
+   "highlight": false,
+   "blank": "-",
+   "kept_mass": {
+    "50": 0.8432985333733334,
+    "100": 0.86589054052,
+    "150": 0.8996757006666667,
+    "200": 0.93495427116
+   },
+   "mean_kept_mass": 0.8859547614300001,
+   "cost": {
+    "warm_gpu_s": 2168.9587738513947,
+    "load_s": 380.1432662010193,
+    "warm_usd": 1.1755756554274557,
+    "in_function_usd": 1.3816133245749471,
+    "usd_per_query": 0.015674342072366076,
+    "usd_per_1k": 15.674342072366077,
+    "peak_gb": null
+   },
+   "latency": {
+    "s_per_query": 47.10017333333333,
+    "p50_s": 37.487,
+    "p95_s": 121.302
+   },
+   "sources": {
+    "kept_mass": "data/experiments/2026_10_03_04_25_56_helped-shad/kept_mass_2026_10_03_04_25_56_helped-shad.json",
+    "cost": "data/experiments/2026_10_03_04_25_56_helped-shad/costs_2026_10_03_04_25_56_helped-shad.json",
+    "latency": "data/experiments/2026_10_03_04_25_56_helped-shad/latency_2026_10_03_04_25_56_helped-shad.json",
+    "config": "data/experiments/2026_10_03_04_25_56_helped-shad/config_2026_10_03_04_25_56_helped-shad.yaml"
+   }
   }
  ],
- "updated": "2026-10-02 17:31 PDT",
+ "updated": "2026-10-02 21:25 PDT",
  "cards": [
   {
    "label": "best quality (mean kept-mass)",
@@ -3624,5 +3715,5 @@
    "detail": "kev05b_noul \u00b7 Jev 0.21"
   }
  ],
- "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- One model finishes today.\n  - Kev-4B BA-LoRA: 0.748 / 0.891\n  - Kev-4B BA-LoRA costs $0.63.\n  - StartLux-Decision-9B run fails.\n- The top three stay.\n  - Jev, Kev-27B, AutoTrust lead.\n  - Kev-4B BA-LoRA trails Jev.\n  - Production keeps 0.711 at k=50\n"
+ "tldr": "- Jev leads the benchmark.\n  - 0.893 kept-mass at k=50\n  - 0.961 kept-mass at k=200\n- Kev-27B is closest.\n  - 0.887 / 0.953 kept-mass\n  - 0.006 behind at k=50\n- Rune-26B is the latest run.\n  - Rune-26B GGUF: 0.843 / 0.935\n  - Rune-26B costs $1.18.\n  - Rune-26B uses 47.1 s/query.\n- No run finishes this hour.\n  - Search finds 48 candidates.\n  - Two new proposals wait.\n  - Production keeps 0.711 at k=50\n"
 }
