@@ -87,6 +87,8 @@ experiments:
   2026_10_03_13_24_07_trusty-asp: 'fanout_keen_emu_kev4b_score: fan-out latency, 46 x L40S, original requests, one query at a time (1.25 s/query mean)'
   2026_10_03_13_29_45_moving-mayfly: 'fanout_proper_bee_kev27b_noul: fan-out latency, 46 x H200, original requests, one query at a time (2.18 s/query mean)'
   2026_10_03_13_43_10_moved-fox: 'fanout_cachewarm_above_dog_kev08b_noul: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.41 s/query mean)'
+  2026_10_03_15_06_46_usable-hyena: 'fanout_cachewarm_keen_emu_kev4b_score: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (0.93 s/query mean)'
+  2026_10_03_15_00_25_epic-ant: 'fanout_cachewarm_keen_emu_kev4b_noul: cache-warm fan-out latency, 46 x L40S, prime+timed send per query (1.03 s/query mean)'
   2026_10_03_14_56_31_vast-lynx: 'fanout_cachewarm_immune_tick_kev2b_score: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.41 s/query mean)'
   2026_10_03_14_51_52_fit-toucan: 'fanout_cachewarm_immune_tick_kev2b_noul: cache-warm fan-out latency, 46 x L4, prime+timed send per query (0.42 s/query mean)'
   2026_10_03_14_47_47_living-lamb: 'fanout_cachewarm_humble_sawfly_kev9b_score: cache-warm fan-out latency, 46 x H100, prime+timed send per query (0.32 s/query mean)'
@@ -1151,6 +1153,25 @@ rows:
   - quality
   - cost
   - latency
+- experiment: 2026_10_03_15_00_25_epic-ant
+  reranker: keen_emu_kev4b_noul_cachewarm
+  latency_from:
+    experiment: 2026_10_03_15_00_25_epic-ant
+    reranker: keen_emu_kev4b_noul_cachewarm
+  cost_from:
+    experiment: 2026_10_01_23_53_13_keen-emu
+    reranker: kev4b_noul
+  label: kev4b_noul cache warm
+  family: kev4b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
 - experiment: 2026_10_01_23_53_13_keen-emu
   reranker: kev4b_score
   latency_from:
@@ -1159,6 +1180,25 @@ rows:
   label: kev4b_score
   family: kev4b
   serving: first run
+  runtime: PyTorch
+  gpu: L40S
+  buffer: 4,096 x 16 (default)
+  queries: 75
+  tables:
+  - quality
+  - cost
+  - latency
+- experiment: 2026_10_03_15_06_46_usable-hyena
+  reranker: keen_emu_kev4b_score_cachewarm
+  latency_from:
+    experiment: 2026_10_03_15_06_46_usable-hyena
+    reranker: keen_emu_kev4b_score_cachewarm
+  cost_from:
+    experiment: 2026_10_01_23_53_13_keen-emu
+    reranker: kev4b_score
+  label: kev4b_score cache warm
+  family: kev4b
+  serving: 'cache warm: each query sent once untimed first, then timed on the same 46 GPUs'
   runtime: PyTorch
   gpu: L40S
   buffer: 4,096 x 16 (default)

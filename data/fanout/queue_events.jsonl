@@ -194,3 +194,5 @@
 {"event": "result_committed", "config": "fanout_cachewarm_humble_sawfly_kev9b_score.yaml", "note": "cachewarm row hidden: pair hidden; also gate fail 0.0429"}
 {"event": "result_committed", "config": "fanout_cachewarm_immune_tick_kev2b_noul.yaml", "note": "cachewarm row hidden: pair hidden"}
 {"event": "result_committed", "config": "fanout_cachewarm_immune_tick_kev2b_score.yaml", "note": "cachewarm row hidden: pair hidden; also gate fail 0.0379"}
+{"event": "result_committed", "config": "fanout_cachewarm_keen_emu_kev4b_noul.yaml", "note": "cachewarm row public, 1382 hits"}
+{"event": "result_committed", "config": "fanout_cachewarm_keen_emu_kev4b_score.yaml", "note": "cachewarm row public, 1382 hits"}

@@ -1,0 +1,2 @@
+method,queries,mean_s_per_query,median_s_per_query,p95_s_per_query,min_s_per_query,max_s_per_query,mean_calls_per_query
+keen_emu_kev4b_noul_cachewarm,75,1.03,1.05,1.92,0.37,2.32,18.4

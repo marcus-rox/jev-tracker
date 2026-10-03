@@ -4158,5 +4158,59 @@
     "kept_mass_delta": 0.0019004342399999707
    }
   }
+ },
+ {
+  "config": "fanout_cachewarm_keen_emu_kev4b_noul.yaml",
+  "experiment": "2026_10_03_15_00_25_epic-ant",
+  "experiment_dir": "data/experiments/2026_10_03_15_00_25_epic-ant",
+  "status": "ok",
+  "gpu": "L40S",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 1.03,
+   "median_s_per_query": 1.05,
+   "p95_s_per_query": 1.92,
+   "max_s_per_query": 2.32
+  },
+  "prefix_hits": 1382,
+  "prefix_misses": 1443,
+  "paired_cleared_mean": 1.48,
+  "rows": {
+   "2026_10_01_23_53_13_keen-emu/kev4b_noul": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   },
+   "2026_10_03_00_31_36_proper-bee/kev4b_noul": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   }
+  }
+ },
+ {
+  "config": "fanout_cachewarm_keen_emu_kev4b_score.yaml",
+  "experiment": "2026_10_03_15_06_46_usable-hyena",
+  "experiment_dir": "data/experiments/2026_10_03_15_06_46_usable-hyena",
+  "status": "ok",
+  "gpu": "L40S",
+  "shards": 46,
+  "latency": {
+   "mean_s_per_query": 0.93,
+   "median_s_per_query": 0.93,
+   "p95_s_per_query": 1.78,
+   "max_s_per_query": 2.29
+  },
+  "prefix_hits": 1382,
+  "prefix_misses": 1443,
+  "paired_cleared_mean": 1.25,
+  "rows": {
+   "2026_10_01_23_53_13_keen-emu/kev4b_score": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   },
+   "2026_10_03_00_31_36_proper-bee/kev4b_score": {
+    "answer_max": 0.0,
+    "kept_mass_delta": 0.0
+   }
+  }
  }
 ]
