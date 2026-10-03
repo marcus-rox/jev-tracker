@@ -11,8 +11,7 @@
 - No experiments run this hour.
   - 0 queued or running
   - 17 proposals await approval.
-- Search adds one proposal.
-  - 43 new candidates
-  - 6 need adapters.
-  - 37 are not alternatives.
-  - Tasksource-JEV-Nano needs approval.
+- Search adds no proposal.
+  - 53 new candidates
+  - 5 need adapters.
+  - 48 are not alternatives.
