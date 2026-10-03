@@ -31,7 +31,9 @@ def _kept_mass(id: str) -> dict:
 def test_R1_every_config_loads_and_names_committed_answers(config: Path) -> None:
     exp = load_config(config)
     assert exp.name == config.stem
-    assert "prod" in exp.rerankers and exp.rerankers["prod"].source == "production"
+    sweep_only = all(getattr(src, "sweep", None) is not None for src in exp.rerankers.values())
+    if not sweep_only:
+        assert "prod" in exp.rerankers and exp.rerankers["prod"].source == "production"
     for name, src in exp.rerankers.items():
         if src.source == "answers":
             assert (REPO / src.path).exists(), (name, src.path)

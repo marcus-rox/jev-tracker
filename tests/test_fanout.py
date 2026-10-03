@@ -66,6 +66,17 @@ def test_apply_dispatch_rejects_a_record_the_dispatcher_never_sent() -> None:
         apply_dispatch([_record("case_1", 0)], _dispatched([]))
 
 
+def test_apply_dispatch_rejects_a_timed_row_with_no_raw_record() -> None:
+    dispatched = _dispatched(
+        [
+            {"case_id": "case_1", "batch": 0, "sent": 100.0, "recv": 101.0, "warmup": False},
+            {"case_id": "case_1", "batch": 1, "sent": 100.0, "recv": 101.0, "warmup": False},
+        ]
+    )
+    with pytest.raises(ValueError, match="no raw record"):
+        apply_dispatch([_record("case_1", 0)], dispatched)
+
+
 def _rep(
     wall_s: float,
     warmup: bool = False,
@@ -79,6 +90,7 @@ def _rep(
         "rep": 0,
         "case_id": "case_1",
         "children_sent": children * requests if children_sent is None else children_sent,
+        "records": requests,
         "wall_s": wall_s,
         "warmup": warmup,
     }
@@ -105,6 +117,12 @@ def test_sweep_stats_flags_a_point_whose_batches_were_cut_short() -> None:
     rows = [_rep(1.0), _rep(2.0, requests=2, children=8, children_sent=9)]
     stats = {pt["requests"]: pt for pt in sweep_stats(rows)}
     assert stats[2]["short"] and stats[2]["children_sent_min"] == stats[2]["children_sent_max"] == 9
+
+
+def test_sweep_stats_counts_reps_where_a_request_split_into_more_records() -> None:
+    rows = [_rep(1.0), {**_rep(2.0, requests=4, children=12), "records": 7}]
+    stats = {pt["requests"]: pt for pt in sweep_stats(rows)}
+    assert stats[1]["split_reps"] == 0 and stats[4]["split_reps"] == 1
 
 
 def test_laya_fanout_is_rejected() -> None:

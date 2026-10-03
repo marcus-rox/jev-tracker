@@ -594,7 +594,7 @@ class ProgressBar:
 def _answer_shard(
     job: ShardJob,
     done: set[tuple[str, int]],
-    answer: Callable[[DataPoint, int, list[Item]], None],
+    answer: Callable[[DataPoint, int, list[Item]], int],
     reset: Callable[[], None] | None = None,
 ) -> int:
     """Every not-yet-answered batch of the shard's cases, committed to the Volume as it goes.
@@ -627,7 +627,7 @@ def _answer_shard(
 
 def _serve_fanout(
     job: ShardJob,
-    answer: Callable[[DataPoint, int, list[Item]], None],
+    answer: Callable[[DataPoint, int, list[Item]], int],
     reset: Callable[[], None] | None = None,
 ) -> int:
     """Fan-out worker: take (case_id, batch, m) items off the Queue, answer, signal on "done".
@@ -651,12 +651,12 @@ def _serve_fanout(
         try:
             batch = batches(case.input, m, run.max_chars)[bi]
             t0 = time.time()
-            answer(case, bi, batch)
+            written = answer(case, bi, batch)
         except Exception as e:  # noqa: BLE001 - relayed to the dispatcher, which fails the run
             q.put(["error", f"{case.id} batch {bi}: {type(e).__name__}: {e}"], partition="done")
         else:
             n += 1
-            q.put((case.id, bi, t0, time.time() - t0), partition="done")
+            q.put((case.id, bi, t0, time.time() - t0, written), partition="done")
 
     futs: set = set()
     with ThreadPoolExecutor(max_workers=run.concurrency, thread_name_prefix="client") as pool:
@@ -700,23 +700,23 @@ DISPATCH_WARMUP_CASES = 3
 
 def _collect_done(
     q: modal.Queue, pending: int
-) -> dict[tuple[str, int], tuple[float, float, float]]:
-    """Wait for `pending` fan-out answers; (case_id, batch) -> (recv, worker_start, worker_s)."""
-    got: dict[tuple[str, int], tuple[float, float, float]] = {}
+) -> dict[tuple[str, int], tuple[float, float, float, int]]:
+    """Wait for `pending` fan-out answers; (case_id, batch) -> (recv, worker_start, worker_s,
+    records)."""
+    got: dict[tuple[str, int], tuple[float, float, float, int]] = {}
     while len(got) < pending:
         items = q.get_many(1000, partition="done", block=True)
         now = time.time()
         for item in items:
             if item[0] == "error":
                 raise RuntimeError(f"fan-out worker: {item[1]}")
-            got[(item[0], item[1])] = (now, item[2], item[3])
+            got[(item[0], item[1])] = (now, item[2], item[3], item[4])
     return got
 
 
-def _reset_workers(run: ScoringRun, q: modal.Queue) -> None:
+def _reset_workers(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> None:
     """Send every worker the reset control item and wait for all "ack"s (untimed handshake)."""
-    for w in range(run.shards):
-        q.put(("reset",), partition=f"w{w}")
+    list(pool.map(lambda w: q.put(("reset",), partition=f"w{w}"), range(run.shards)))
     got = 0
     while got < run.shards:
         got += len(q.get_many(1000, partition="ack", block=True))
@@ -738,18 +738,26 @@ def _await_workers(run: ScoringRun, q: modal.Queue) -> None:
                 raise TimeoutError(f"{run.reranker}: {got} of {run.shards} workers ready after 2h")
 
 
-def _dispatch_case(run: ScoringRun, q: modal.Queue, case: DataPoint, warmup: bool) -> list[dict]:
+def _dispatch_case(
+    run: ScoringRun,
+    q: modal.Queue,
+    case: DataPoint,
+    warmup: bool,
+    pool: ThreadPoolExecutor,
+) -> list[dict]:
     """Reset the workers, send one case's requests over the pool, collect every answer."""
-    _reset_workers(run, q)
+    _reset_workers(run, q, pool)
     m = fanout_max_items(len(items(case.input)), run.shards, run.max_items)
     n_requests = len(batches(case.input, m, run.max_chars))
     sent: dict[tuple[str, int], float] = {}
-    for w, bis in enumerate(fanout_plan(n_requests, run.shards)):
-        if not bis:
-            continue
+
+    def send(w: int, bis: list[int]) -> None:
         for bi in bis:
             sent[(case.id, bi)] = time.time()
         q.put_many([(case.id, bi, m) for bi in bis], partition=f"w{w}")
+
+    targets = [(w, b) for w, b in enumerate(fanout_plan(n_requests, run.shards)) if b]
+    list(pool.map(lambda t: send(*t), targets))
     recv = _collect_done(q, n_requests)
     return [
         {
@@ -760,24 +768,25 @@ def _dispatch_case(run: ScoringRun, q: modal.Queue, case: DataPoint, warmup: boo
             "worker": bi % run.shards,
             "worker_start": recv[(case.id, bi)][1],
             "worker_s": round(recv[(case.id, bi)][2], 3),
+            "records": recv[(case.id, bi)][3],
             "warmup": warmup,
         }
         for bi in range(n_requests)
     ]
 
 
-def _dispatch_run(run: ScoringRun, q: modal.Queue) -> dict:
+def _dispatch_run(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> dict:
     """3 untimed warm-up cases, a 2 s gap, then every case timed over the pool."""
     cases = load_cases()[: run.cases]
     rows = []
     for case in cases[:DISPATCH_WARMUP_CASES]:
-        rows += _dispatch_case(run, q, case, warmup=True)
+        rows += _dispatch_case(run, q, case, True, pool)
     t_gap = time.time()
     time.sleep(2)
     timed_from = t_gap + 1.0
     with tqdm(cases, desc=f"{run.reranker} dispatch", unit="case", mininterval=5) as bar:
         for case in bar:
-            rows += _dispatch_case(run, q, case, warmup=False)
+            rows += _dispatch_case(run, q, case, False, pool)
             wall = max(r["recv"] for r in rows if r["case_id"] == case.id) - min(
                 r["sent"] for r in rows if r["case_id"] == case.id
             )
@@ -785,7 +794,7 @@ def _dispatch_run(run: ScoringRun, q: modal.Queue) -> dict:
     return {"timed_from": timed_from, "rows": rows}
 
 
-def _dispatch_sweep(run: ScoringRun, q: modal.Queue) -> list[dict]:
+def _dispatch_sweep(run: ScoringRun, q: modal.Queue, pool: ThreadPoolExecutor) -> list[dict]:
     """Per sweep point: 3 warm-up + 20 timed reps, each rep one put_many to worker 0."""
     cases = load_cases()[: run.cases]
     children_of = {c.id: len(items(c.input)) for c in cases}
@@ -801,7 +810,7 @@ def _dispatch_sweep(run: ScoringRun, q: modal.Queue) -> list[dict]:
         for rep in range(SWEEP_WARMUP + SWEEP_REPS):
             case = pool_cases[rep % len(pool_cases)]
             sent_batches = batches(case.input, pt.children, run.max_chars)[: pt.requests]
-            _reset_workers(run, q)
+            _reset_workers(run, q, pool)
             t_send = time.time()
             q.put_many(
                 [(case.id, bi, pt.children) for bi in range(len(sent_batches))], partition="w0"
@@ -814,6 +823,7 @@ def _dispatch_sweep(run: ScoringRun, q: modal.Queue) -> list[dict]:
                     "rep": rep,
                     "case_id": case.id,
                     "children_sent": sum(len(b) for b in sent_batches),
+                    "records": sum(r[3] for r in recv.values()),
                     "wall_s": round(max(r[0] for r in recv.values()) - t_send, 3),
                     "warmup": rep < SWEEP_WARMUP,
                 }
@@ -916,7 +926,7 @@ def score_cases(job_json: str) -> str:
     print(f"loaded {run.model} in {loaded - t0:.0f}s: {ck.path}, {resident_gb:.1f} GB", flush=True)
     write = threading.Lock()  # append_jsonl_gz from the client threads, one at a time
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         req = request(method, case.input.query, batch, "kev-latest")
         kev_req = SystemOneRequest.model_validate(req.body())  # our contract -> kev.api's
         t = time.time()
@@ -926,9 +936,7 @@ def score_cases(job_json: str) -> str:
             if e.status_code != 422 or len(batch) == 1:  # 422 = over Kev's state token limit
                 raise
             half = len(batch) // 2
-            answer(case, bi, batch[:half])
-            answer(case, bi, batch[half:])
-            return
+            return answer(case, bi, batch[:half]) + answer(case, bi, batch[half:])
         latency_s = time.time() - t  # incl. queue wait
         resp = SystemOneResponse.model_validate(body)  # kev.serve's answer -> our contract
         enc = model.encode(
@@ -940,6 +948,7 @@ def score_cases(job_json: str) -> str:
         rec = record(method, case.id, bi, batch, resp, latency_s, t, enc["seg"].count(0))
         with write:
             append_jsonl_gz(out, rec)
+        return 1
 
     def reset() -> None:
         # Fan-out queries are new states: a prefix-cache hit is only legitimate inside a query.
@@ -1093,7 +1102,7 @@ def score_cases_clef(job_json: str) -> str:
     torch.cuda.reset_peak_memory_stats()
     print(f"loaded {run.repo}@{CLEF_REVISION[run.repo][:12]} in {loaded - t0:.0f}s", flush=True)
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, run.model).body()
         t = time.time()
         resp = SystemOneResponse.model_validate(
@@ -1102,6 +1111,7 @@ def score_cases_clef(job_json: str) -> str:
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, resp.usage.input_tokens)
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     scored = time.time()
@@ -1183,7 +1193,7 @@ def score_cases_matilda(job_json: str) -> str:
     torch.cuda.reset_peak_memory_stats()
     print(f"loaded {run.repo}@{MATILDA_REVISION[:12]} in {loaded - t0:.0f}s", flush=True)
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, run.model).body()
         t = time.time()
         distributions, input_tokens = decide(
@@ -1208,6 +1218,7 @@ def score_cases_matilda(job_json: str) -> str:
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, input_tokens)
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
@@ -1256,7 +1267,7 @@ def score_cases_autotrust(job_json: str) -> str:
     torch.cuda.reset_peak_memory_stats()
     print(f"loaded {run.repo}@{AUTOTRUST_REVISION[:12]} in {loaded - t0:.0f}s", flush=True)
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, run.model).body()
         asked = autotrust.prompts(body)
         t = time.time()
@@ -1274,6 +1285,7 @@ def score_cases_autotrust(job_json: str) -> str:
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, tokens)
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
@@ -1309,7 +1321,7 @@ def score_cases_jevany(job_json: str) -> str:
     torch.cuda.reset_peak_memory_stats()
     print(f"loaded {run.repo}@{revision[:12]} as {served} in {loaded - t0:.0f}s", flush=True)
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, served).body()
         t = time.time()
         try:
@@ -1318,12 +1330,11 @@ def score_cases_jevany(job_json: str) -> str:
             if "exceeds" not in str(e) or len(batch) == 1:
                 raise
             half = len(batch) // 2
-            answer(case, bi, batch[:half])
-            answer(case, bi, batch[half:])
-            return
+            return answer(case, bi, batch[:half]) + answer(case, bi, batch[half:])
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, resp.usage.input_tokens)
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
@@ -1464,7 +1475,7 @@ def score_cases_minicpm_jev(job_json: str) -> str:
     torch.cuda.reset_peak_memory_stats()
     print(f"loaded {run.repo}@{revision[:12]} in {loaded - t0:.0f}s", flush=True)
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, run.model).body()
         internal = to_internal_record(body, add_date_facts=True)
         encoded = encode_record(
@@ -1488,6 +1499,7 @@ def score_cases_minicpm_jev(job_json: str) -> str:
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, input_tokens)
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
@@ -1503,7 +1515,7 @@ def _post_answer(
     case: DataPoint,
     bi: int,
     batch: list[Item],
-) -> None:
+) -> int:
     """Post one batch's System One request to `url` and append the record to the shard file.
 
     A batch the endpoint rejects as over its input limit (400/422) is split in two, as
@@ -1519,9 +1531,9 @@ def _post_answer(
         time.sleep(min(API_BACKOFF_S * 2**attempt, API_MAX_WAIT_S))
     if r.status_code in (400, 422) and len(batch) > 1:
         half = len(batch) // 2
-        _post_answer(client, url, out, method, model, write, case, bi, batch[:half])
-        _post_answer(client, url, out, method, model, write, case, bi, batch[half:])
-        return
+        return _post_answer(
+            client, url, out, method, model, write, case, bi, batch[:half]
+        ) + _post_answer(client, url, out, method, model, write, case, bi, batch[half:])
     if r.status_code != 200:
         raise RuntimeError(f"{case.id} batch {bi}: HTTP {r.status_code}: {r.text[:300]}")
     rec = record(
@@ -1529,6 +1541,7 @@ def _post_answer(
     )
     with write:
         append_jsonl_gz(out, rec)
+    return 1
 
 
 @app.function(
@@ -1572,7 +1585,7 @@ def score_cases_startlux(job_json: str) -> str:
         flush=True,
     )
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, run.model).body()
         t = time.time()
         answers, usage = model.decide(body["state"], body["questions"])
@@ -1582,6 +1595,7 @@ def score_cases_startlux(job_json: str) -> str:
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, usage["input_tokens"])
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
@@ -1621,7 +1635,7 @@ def score_cases_von(job_json: str) -> str:
     torch.cuda.reset_peak_memory_stats()
     print(f"loaded {run.repo}@{VON_REVISION[:12]} in {loaded - t0:.0f}s", flush=True)
 
-    def answer(case: DataPoint, bi: int, batch: list[Item]) -> None:
+    def answer(case: DataPoint, bi: int, batch: list[Item]) -> int:
         body = request(method, case.input.query, batch, run.model).body()
         t = time.time()
         result = engine.evaluate(state=body["state"], questions=body["questions"], model=run.model)
@@ -1629,6 +1643,7 @@ def score_cases_von(job_json: str) -> str:
         latency_s = time.time() - t
         rec = record(method, case.id, bi, batch, resp, latency_s, t, resp.usage.input_tokens)
         append_jsonl_gz(out, rec)
+        return 1
 
     n = _answer_shard(job, done, answer)
     return _summary(job, t0, loaded, n, len(done), resident_gb)
@@ -1945,10 +1960,15 @@ def dispatch_cases(job_json: str) -> str:
     q = modal.Queue.from_name(run.queue_name, create_if_missing=True)
     _await_workers(run, q)
     try:
-        if run.sweep:
-            _write_remote_json(run.remote_dir / "sweep.json", _dispatch_sweep(run, q))
-        else:
-            _write_remote_json(run.remote_dir / "dispatch.json", _dispatch_run(run, q))
+        with ThreadPoolExecutor(max_workers=min(run.shards, 64)) as send_pool:
+            if run.sweep:
+                _write_remote_json(
+                    run.remote_dir / "sweep.json", _dispatch_sweep(run, q, send_pool)
+                )
+            else:
+                _write_remote_json(
+                    run.remote_dir / "dispatch.json", _dispatch_run(run, q, send_pool)
+                )
     finally:
         for w in range(run.shards):
             q.put(None, partition=f"w{w}")

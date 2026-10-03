@@ -684,14 +684,19 @@ def apply_dispatch(records: list[RawRecord], dispatched: dict) -> list[RawRecord
         if not d["warmup"]
     }
     out = []
+    seen: set[tuple[str, int]] = set()
     for r in records:
         if r.started_at_s is not None and r.started_at_s < dispatched["timed_from"]:
             continue
         key = (r.case_id, r.batch)
         if key not in times:
             raise ValueError(f"{r.case_id} batch {r.batch}: no dispatch record")
+        seen.add(key)
         sent, recv = times[key]
         out.append(r.model_copy(update={"started_at_s": sent, "latency_s": round(recv - sent, 3)}))
+    missing = [key for key in times if key not in seen]
+    if missing:
+        raise ValueError(f"{len(missing)} timed requests have no raw record: {missing[:5]}")
     return out
 
 
@@ -723,6 +728,13 @@ def sweep_stats(rows: list[dict]) -> list[dict]:
                 "children_sent_min": min(sent_n),
                 "children_sent_max": max(sent_n),
                 "short": any(s != requests_n * children_n for s in sent_n),
+                "split_reps": sum(
+                    1
+                    for r in rows
+                    if not r["warmup"]
+                    and (r["requests"], r["children"]) == (requests_n, children_n)
+                    and r.get("records", r["requests"]) > r["requests"]
+                ),
             }
         )
     base = next((pt["p50_s"] for pt in out if (pt["requests"], pt["children"]) == (1, 1)), None)
