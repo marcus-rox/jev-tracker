@@ -2747,3 +2747,252 @@
   verdict: not_jev
   reason: this automation's own hourly DM to Marcus; no new model
   config: null
+- key: https://github.com/KalvinHarrisCS/Jev-Hospital-Bed-Prototype
+  url: https://github.com/KalvinHarrisCS/Jev-Hospital-Bed-Prototype
+  verdict: not_jev
+  reason: hospital-bed demo app that calls Jev; not a new model
+  config: null
+- key: https://github.com/atostivint/hermes-adaptive-effort
+  url: https://github.com/atostivint/hermes-adaptive-effort
+  verdict: not_jev
+  reason: reasoning-effort router that calls Jev; not a new model
+  config: null
+- key: https://github.com/caiovicentino/jev-risk-check-provider
+  url: https://github.com/caiovicentino/jev-risk-check-provider
+  verdict: not_jev
+  reason: x402 crypto risk-check provider; name match only
+  config: null
+- key: https://github.com/kushals256/jevcache
+  url: https://github.com/kushals256/jevcache
+  verdict: not_jev
+  reason: LLM response cache proxy; not a decision model
+  config: null
+- key: https://github.com/simonjisu/learning-jev
+  url: https://github.com/simonjisu/learning-jev
+  verdict: not_jev
+  reason: personal learning repo, no description; no model
+  config: null
+- key: https://github.com/skorotkiewicz/convents
+  url: https://github.com/skorotkiewicz/convents
+  verdict: not_jev
+  reason: LLM debate app that uses Laya as the selector; not a new model
+  config: null
+- key: https://github.com/yu821138652/GalMagan
+  url: https://github.com/yu821138652/GalMagan
+  verdict: not_jev
+  reason: Android chat-app fork; not a decision model
+  config: null
+- key: https://github.com/mgtf/atoma
+  url: https://github.com/mgtf/atoma
+  verdict: not_jev
+  reason: app / SDK / integration built on the hosted Jev; not a new model
+  config: null
+- key: https://github.com/pouramin/jev-router-windows
+  url: https://github.com/pouramin/jev-router-windows
+  verdict: not_jev
+  reason: Claude Code / Codex router setup script; not a model
+  config: null
+- key: https://github.com/joaogiacometti/readworthy
+  url: https://github.com/joaogiacometti/readworthy
+  verdict: not_jev
+  reason: Karakeep webhook that calls Jev; not a new model
+  config: null
+- key: https://github.com/nilp0inter/jevmira
+  url: https://github.com/nilp0inter/jevmira
+  verdict: not_jev
+  reason: 'empty repository (description only: Jev-compatible API over Jeff / Gemma4); nothing
+    to run'
+  config: null
+- key: https://github.com/alpkeskin/jev-guardrail
+  url: https://github.com/alpkeskin/jev-guardrail
+  verdict: not_jev
+  reason: Go LLM guardrail policy API; not a System One model
+  config: null
+- key: https://github.com/kinoko34077/jev-audit
+  url: https://github.com/kinoko34077/jev-audit
+  verdict: not_jev
+  reason: repo audit CLI that calls the hosted Jev (TYPESAFE_API_KEY); not a new model
+  config: null
+- key: https://github.com/neurogabo/jev-arena
+  url: https://github.com/neurogabo/jev-arena
+  verdict: not_jev
+  reason: Pokemon battle arena demo on Jev; not a new model
+  config: null
+- key: https://github.com/lyejunting/jev-keep-up
+  url: https://github.com/lyejunting/jev-keep-up
+  verdict: not_jev
+  reason: empty README; no model
+  config: null
+- key: https://github.com/ebamberg/typescript_decision_model_jev_example
+  url: https://github.com/ebamberg/typescript_decision_model_jev_example
+  verdict: not_jev
+  reason: TypeScript example client for Jev; not a new model
+  config: null
+- key: https://github.com/gyu-don/humor-skills
+  url: https://github.com/gyu-don/humor-skills
+  verdict: not_jev
+  reason: humor-evaluation agent skills that call Jev; not a new model
+  config: null
+- key: https://github.com/manhua-man/jev-pilot-reflex
+  url: https://github.com/manhua-man/jev-pilot-reflex
+  verdict: not_jev
+  reason: Three.js driving simulator demo on Jev; not a new model
+  config: null
+- key: https://github.com/ajaysurya1221/agent-reliability-ci
+  url: https://github.com/ajaysurya1221/agent-reliability-ci
+  verdict: not_jev
+  reason: agent regression-testing tool; not a model
+  config: null
+- key: https://github.com/danielrvbi/jev_takes_on_llms
+  url: https://github.com/danielrvbi/jev_takes_on_llms
+  verdict: not_jev
+  reason: repeatability experiments of hosted Jev vs LLMs; no new model
+  config: null
+- key: https://github.com/rain915077-hash/kevin-forklift
+  url: https://github.com/rain915077-hash/kevin-forklift
+  verdict: not_jev
+  reason: repo named Kevin; name match only
+  config: null
+- key: https://github.com/kevoroid/kevoroid.github.io
+  url: https://github.com/kevoroid/kevoroid.github.io
+  verdict: not_jev
+  reason: personal website; name match only
+  config: null
+- key: https://github.com/3088239616-code/Kevin
+  url: https://github.com/3088239616-code/Kevin
+  verdict: not_jev
+  reason: repo named Kevin; name match only
+  config: null
+- key: https://github.com/Zerolxgic/kev-decision-benchmark
+  url: https://github.com/Zerolxgic/kev-decision-benchmark
+  verdict: not_jev
+  reason: empty repository; nothing to run
+  config: null
+- key: https://github.com/nachetttt/adsi_kevin
+  url: https://github.com/nachetttt/adsi_kevin
+  verdict: not_jev
+  reason: repo named kevin; name match only
+  config: null
+- key: https://github.com/alfatahusman1-maman/LAYANAN-PENGADUAN-DESA-CEPOKO
+  url: https://github.com/alfatahusman1-maman/LAYANAN-PENGADUAN-DESA-CEPOKO
+  verdict: not_jev
+  reason: Indonesian 'layanan' (service) app; name match only
+  config: null
+- key: https://github.com/Vrynd/Posyandu-terintegrasi-layanan-primer
+  url: https://github.com/Vrynd/Posyandu-terintegrasi-layanan-primer
+  verdict: not_jev
+  reason: Indonesian 'layanan' (service) app; name match only
+  config: null
+- key: https://github.com/zakanysa/laya-trader
+  url: https://github.com/zakanysa/laya-trader
+  verdict: not_jev
+  reason: trading bot that uses the tracked open Laya; not a new model
+  config: null
+- key: https://github.com/putri-glitch/Layanan-penitipan-hewan-peliharaan-
+  url: https://github.com/putri-glitch/Layanan-penitipan-hewan-peliharaan-
+  verdict: not_jev
+  reason: Indonesian 'layanan' (service) app; name match only
+  config: null
+- key: https://github.com/gatorgator77eg-glitch/layaservice
+  url: https://github.com/gatorgator77eg-glitch/layaservice
+  verdict: not_jev
+  reason: empty repo named layaservice; name match only
+  config: null
+- key: https://github.com/shsingh/ai-sec-lab
+  url: https://github.com/shsingh/ai-sec-lab
+  verdict: not_jev
+  reason: AI-security lab using the tracked Laya; not a new model
+  config: null
+- key: https://github.com/datGryphon/systemone-eval
+  url: https://github.com/datGryphon/systemone-eval
+  verdict: not_jev
+  reason: empty README; no model
+  config: null
+- key: https://github.com/Neguiolidas/Conscio
+  url: https://github.com/Neguiolidas/Conscio
+  verdict: not_jev
+  reason: agent memory framework named System One; not a decision model
+  config: null
+- key: https://github.com/jerichosiahaya/naluri
+  url: https://github.com/jerichosiahaya/naluri
+  verdict: needs_adapter
+  reason: 'Naluri: new open System One family (XLM-R base ~280M + head.safetensors, noul/choice/score;
+    HF jerichosiahaya/naluri-xlmr-base @b35ac3d). Needs a naluri source (naluri.py head +
+    batched forward). Weights are CC BY-NC 4.0 (non-commercial), so it cannot replace production.
+    Not proposed'
+  config: null
+- key: hf:nickprock/archai-jev-qwen-1.5b@e4f3964abbc746f164f6cd009104e5213decba80
+  url: https://huggingface.co/nickprock/archai-jev-qwen-1.5b
+  verdict: needs_adapter
+  reason: 'Archai JEV Qwen 1.5B: QLoRA on Qwen2.5-1.5B-Instruct + Q8_0 GGUF; fixed A-D / TRUE-FALSE
+    token readout with its own ChatML prompt, so it cannot answer System One choice requests
+    with >4 options or score scales; no source loads it. Not proposed'
+  config: null
+- key: https://support.holmsecurity.com/knowledge/what-is-cisas-known-exploited-vulnerabilities-catalog
+  url: https://support.holmsecurity.com/knowledge/what-is-cisas-known-exploited-vulnerabilities-catalog
+  verdict: not_jev
+  reason: CISA KEV vulnerability catalog; name match only
+  config: null
+- key: https://x.com/i/article/2101311813908652069
+  url: https://x.com/i/article/2101311813908652069
+  verdict: not_jev
+  reason: article about using the hosted Jev for trading; not a new model
+  config: null
+- key: https://x.com/akshay_pachaar/status/2101037514945597645
+  url: https://x.com/akshay_pachaar/status/2101037514945597645
+  verdict: not_jev
+  reason: explainer of Jev itself; not an alternative
+  config: null
+- key: https://x.com/Jev/status/2054366671163244602
+  url: https://x.com/Jev/status/2054366671163244602
+  verdict: not_jev
+  reason: gaming account named Jev; name match only
+  config: null
+- key: https://x.com/realkevink
+  url: https://x.com/realkevink
+  verdict: not_jev
+  reason: MMA creator named Kevin; name match only
+  config: null
+- key: https://x.com/hashtag/laya
+  url: https://x.com/hashtag/laya
+  verdict: not_jev
+  reason: X hashtag page for laya; no model
+  config: null
+- key: https://x.com/ollama/status/2105152056382345544?lang=ar-x-fm
+  url: https://x.com/ollama/status/2105152056382345544?lang=ar-x-fm
+  verdict: needs_adapter
+  reason: Ollama /v1/systemone decision models; new serving stack (same post tracked 2026-10-02)
+  config: null
+- key: https://x.com/sgl_project/status/2106107442010734869
+  url: https://x.com/sgl_project/status/2106107442010734869
+  verdict: needs_adapter
+  reason: SGLang /v1/decisions endpoint (VLM as scorer); new serving stack, no specific open
+    model named
+  config: null
+- key: https://x.com/jaredpalmer/status/2101717222880067724
+  url: https://x.com/jaredpalmer/status/2101717222880067724
+  verdict: not_jev
+  reason: Kev-0.5B announcement; Kev checkpoints already benchmarked (kev_sizes); nothing
+    new
+  config: null
+- key: https://x.com/jaredpalmer/status/2101037645316898933
+  url: https://x.com/jaredpalmer/status/2101037645316898933
+  verdict: not_jev
+  reason: Kev-0.5B chess demo; Kev checkpoints already benchmarked; nothing new
+  config: null
+- key: https://x.com/jaredpalmer/status/2101713822322962866
+  url: https://x.com/jaredpalmer/status/2101713822322962866
+  verdict: not_jev
+  reason: Kev-0.6B/4B/8B announcement; Kev checkpoints already benchmarked (kev_sizes); nothing
+    new
+  config: null
+- key: https://news.ycombinator.com/item?id=49943387
+  url: https://news.ycombinator.com/item?id=49943387
+  verdict: not_jev
+  reason: HN comment on Goodhart's law; name match only
+  config: null
+- key: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791026733310779
+  url: https://rox-myy1001.slack.com/archives/D0BQSTU6BK7/p1791026733310779
+  verdict: not_jev
+  reason: this automation's own hourly DM to Marcus; no new model
+  config: null
